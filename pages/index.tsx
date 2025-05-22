@@ -1,13 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
+import { motion } from 'framer-motion';
+import { BrandHeroText } from '../src/components/BrandHeroText';
 
 const AnimatedLinesBackground = dynamic(() => import('../components/AnimatedLinesBackground'), { ssr: false });
 
 const sections = [
   {
     id: 'vision',
-    title: '使命與願景 / VISION',
+    title: 'VISION',
     content: [
       '把創意轉化為現實',
       'Crealize 是由 "Creative" × "Realize" 所組成的名字',
@@ -18,7 +20,7 @@ const sections = [
   },
   {
     id: 'projects',
-    title: '創新專案 / PROJECTS',
+    title: 'PROJECTS',
     content: [
       '🎨 藝術品交易平台',
       '智能合約與第三方 KYC 確保信賴',
@@ -43,7 +45,7 @@ const sections = [
   },
   {
     id: 'tech',
-    title: '技術理念 / TECH PHILOSOPHY',
+    title: 'TECH PHILOSOPHY',
     content: [
       '去中心化 × 前端驅動',
       '低維運、高穩定、可擴展',
@@ -55,7 +57,7 @@ const sections = [
   },
   {
     id: 'join',
-    title: '加入我們 / JOIN US',
+    title: 'JOIN US',
     content: [
       '全球招募中，支援全遠端工作',
       '總部設於東京',
@@ -65,7 +67,7 @@ const sections = [
   },
   {
     id: 'contact',
-    title: '聯絡我們 / CONTACT',
+    title: 'CONTACT',
     content: [
       'Crealize合同会社（Crealize LLC）',
       '成立時間：2024年10月9日',
@@ -79,6 +81,65 @@ const sections = [
     ],
   },
 ];
+
+function getGradientColor(idx: number, total: number, start = 17, end = 53) {
+  // 17=#111, 53=#888，最浅也很清晰
+  const light = Math.round(start + ((end - start) * idx) / (total - 1));
+  return `hsl(0, 0%, ${light}%)`;
+}
+
+function BrandSlogan() {
+  const sloganWords = ['Transforming', 'Imagination', 'into', 'Reality'];
+  return (
+    <div style={{
+      fontSize: '4.5em',
+      fontWeight: 900,
+      letterSpacing: 0,
+      lineHeight: 1,
+      marginBottom: '0.2em',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'flex-start',
+    }}>
+      {sloganWords.map((word, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0, x: 60 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{
+            delay: i * 0.12,
+            duration: 0.3,
+            type: 'spring',
+          }}
+          style={{
+            display: 'block',
+            marginBottom: '-0.18em',
+            wordBreak: 'keep-all',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'clip',
+            width: '100%',
+            maxWidth: '100%',
+          }}
+        >
+          {word.split('').map((char, j) => (
+            <span
+              key={j}
+              style={{
+                color: getGradientColor(j, word.length),
+                fontWeight: 900,
+                display: 'inline-block',
+                marginRight: j < word.length - 1 ? '-0.06em' : 0,
+              }}
+            >
+              {char}
+            </span>
+          ))}
+        </motion.div>
+      ))}
+    </div>
+  );
+}
 
 export default function Home() {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -96,7 +157,7 @@ export default function Home() {
   return (
     <>
       {/* 顶部Logo+品牌名 水平居左上角对齐 */}
-      <div className="w-full flex flex-row items-baseline justify-start pt-8 pb-2 pl-8 whitespace-nowrap">
+      <div className="w-full flex flex-row items-baseline justify-start pt-4 pb-1 pl-8 whitespace-nowrap">
         <Image
           src="/image/Crealizelogo1.png"
           alt="Crealize Logo"
@@ -123,11 +184,9 @@ export default function Home() {
           Crealize
         </span>
       </div>
-      <div ref={contentRef} className="relative z-10 w-full max-w-3xl mx-auto px-4 sm:px-8" style={{ minHeight: '100vh', paddingTop: '180px', paddingBottom: '180px' }}>
+      <div ref={contentRef} className="relative z-10 w-full max-w-3xl mx-auto px-4 sm:px-8" style={{ minHeight: '100vh', paddingTop: '50px', paddingBottom: '50px' }}>
         <div className="relative z-10">
-          <p className="text-xl sm:text-2xl text-gray-500 mb-8 leading-relaxed">
-            Transforming Imagination into Reality
-          </p>
+          <BrandHeroText text="Transforming Imagination into Reality" size="4.5em" multiline />
           <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-12">
             以 Web3 × 遊戲化 × AI 技術，重新定義創意落地的可能性。
           </p>
@@ -148,9 +207,7 @@ export default function Home() {
 function Section({ section, idx }: { section: typeof sections[0]; idx: number }) {
   return (
     <section id={section.id} className="mb-10 md:mb-14 text-left w-full">
-      <h2 className="text-xl sm:text-2xl font-bold mb-4 text-gray-900 tracking-wide">
-        {section.title}
-      </h2>
+      <BrandHeroText text={section.title} size="2.2em" />
       <ul className="list-none pl-0 space-y-3 text-gray-700 text-base sm:text-lg leading-relaxed">
         {section.content.map((line, i) =>
           line.trim() === '' ? <li key={i} className="h-2" /> : <li key={i}>{line}</li>
