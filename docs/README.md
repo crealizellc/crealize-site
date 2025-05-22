@@ -215,3 +215,30 @@ src/
 - [网站内容规划](website-content.md)
 - [贡献指南](CONTRIBUTING.md)
 - [更新日志](CHANGELOG.md)
+
+## 设计与体验优化
+
+- 动画、品牌色、排版、logo、交互等均对标一线品牌（如 CLYR 官网 https://www.clyr.co.jp/ ）。
+- 全局采用 CSS 变量统一主色、灰色、品牌色、圆角、阴影、动画时长。
+- logo 优先 SVG，保证品牌感和加载速度。
+- 动画风格淡雅、克制，线条颜色柔和，避免喧宾夺主。
+- 内容区左右留白充足，max-width 1024px。
+- Hero 标题更大更有品牌感，分区内容分点清晰，emoji 适度点缀。
+- 结构极简现代，动画和内容有机结合。
+
+## 首页品牌动画分割线实现说明
+
+- 首页动画分割线采用 `components/AnimatedLinesBackground.tsx` 组件实现，基于 canvas 绘制 24 根极简流动线条。
+- 动画组件采用 `position: fixed; top: 50%; left: 0; transform: translateY(-50%)`，始终固定在屏幕中间，内容滚动时动画不动，品牌感极强。
+- 内容区外层需加 `relative z-10`，并设置 `padding-top` 和 `padding-bottom` 均为 180px，确保内容不会被动画遮挡。
+- 动画线条颜色、数量、透明度可在组件内灵活调整，默认风格参考 CLYR 官网。
+- 动画组件用 `dynamic + ssr: false`，确保 Next.js 静态导出无误。
+- 代码结构极简、易维护，符合团队自动化开发和极简品牌设计规范。
+
+### 品牌字规范（免费字体方案）
+
+- 所有"Crealize"品牌字统一使用 Montserrat SemiBold 600（Google Fonts 免费），风格现代、宽体、品牌感强。
+- 通过全局CSS类 `.font-brand` 控制字体、字重、字间距等，**只允许字号在页面/组件中单独定义**。
+- 字体通过 Google Fonts 在线引入，无需本地上传。
+- 如需更宽体效果，可用 `font-stretch: expanded` 或 `font-variation-settings` 微调。
+- 用法示例：`<span className="font-brand text-4xl">Crealize</span>`。

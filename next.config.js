@@ -7,7 +7,6 @@ const nextConfig = {
   },
   trailingSlash: true,
   // 禁用一些不必要的优化
-  swcMinify: false,
   compress: false,
   poweredByHeader: false,
   reactStrictMode: true,

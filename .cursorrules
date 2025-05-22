@@ -115,6 +115,8 @@ export const Component: FC<Props> = ({ prop1, prop2 }) => {
 - 列出所有 props 的类型和用途
 - 提供使用示例
 
+### 品牌分割线动画需采用全局fixed居中canvas，内容区需留足padding，动画风格参考CLYR官网。
+
 ## 4. 动画规范
 
 ### 动画原则
@@ -128,6 +130,8 @@ export const Component: FC<Props> = ({ prop1, prop2 }) => {
 - 定义统一的动画变量
 - 使用预设的动画曲线
 - 实现平滑的过渡效果
+
+### 品牌分割线动画需采用全局fixed居中canvas，内容区需留足padding，动画风格参考CLYR官网。
 
 ## 5. 国际化规范
 

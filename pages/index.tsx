@@ -1,137 +1,161 @@
-import path from 'path';
-import fs from 'fs';
-import React from 'react';
-import ReactMarkdown from 'react-markdown';
-import { motion } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
-import type { GetStaticProps } from 'next';
+import React, { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
+import dynamic from 'next/dynamic';
+
+const AnimatedLinesBackground = dynamic(() => import('../components/AnimatedLinesBackground'), { ssr: false });
 
 const sections = [
-  { id: 'home', title: '首页' },
-  { id: 'vision', title: '使命与愿景' },
-  { id: 'projects', title: '创新项目' },
-  { id: 'tech', title: '技术理念' },
-  { id: 'join', title: '加入我们' },
-  { id: 'contact', title: '联系我们' },
+  {
+    id: 'vision',
+    title: '使命與願景 / VISION',
+    content: [
+      '把創意轉化為現實',
+      'Crealize 是由 "Creative" × "Realize" 所組成的名字',
+      '「創意若不被實現，只是空談。」',
+      '擅長將點子從 0 執行至 1，經過驗證、反覆打磨，最終變為可觸及的數位產品',
+      'Web3 × 遊戲化 × AI × 價值網路',
+    ],
+  },
+  {
+    id: 'projects',
+    title: '創新專案 / PROJECTS',
+    content: [
+      '🎨 藝術品交易平台',
+      '智能合約與第三方 KYC 確保信賴',
+      '用讚與關注決定市場價格',
+      '評價系統透明開放，由社群共同參與',
+      '',
+      '🌟 偶像與創作者股交易平台',
+      '投票即是支持，影響「市值」',
+      '交易活動回饋手續費予偶像',
+      '正在新加坡進行合規審查',
+      '',
+      '🪙 MARS2049：火星殖民 × GameFi',
+      'Build-to-Earn 機制 × 區塊鏈資產',
+      'Telegram Mini App 全球封測中',
+      '未來支援 NFT 與多鏈互通',
+      '',
+      '🤖 AI 虛擬影響者',
+      '與 x.com API 整合，擷取趨勢新聞',
+      '自動生成評論建議',
+      '將可作為企業代言人或社群操盤角色',
+    ],
+  },
+  {
+    id: 'tech',
+    title: '技術理念 / TECH PHILOSOPHY',
+    content: [
+      '去中心化 × 前端驅動',
+      '低維運、高穩定、可擴展',
+      '靜態前端部署實現零伺服器、零維護費',
+      '區塊鏈整合，實現去中心化身份驗證與資產管理',
+      'AI 多語翻譯系統：使用 Google Apps Script 搭配 GPT',
+      '低成本、高自由的開發模型',
+    ],
+  },
+  {
+    id: 'join',
+    title: '加入我們 / JOIN US',
+    content: [
+      '全球招募中，支援全遠端工作',
+      '總部設於東京',
+      '完全自由的工作環境，專注成果，不看打卡',
+      '我們歡迎工程師、設計師、PM、創意人、遊戲製作人、法務、Web3 領域專才',
+    ],
+  },
+  {
+    id: 'contact',
+    title: '聯絡我們 / CONTACT',
+    content: [
+      'Crealize合同会社（Crealize LLC）',
+      '成立時間：2024年10月9日',
+      '創辦人：Yves CHEN',
+      '銀行：瑞穗銀行（Mizuho Bank）',
+      '地址：東京都澀谷區東1丁目2-9-3',
+      'Shibuya Bridge B-5（Shibuya Startup Support 提供）',
+      '工作地點：東京 + 全球遠端團隊（台灣、新加坡、杜拜、倫敦）',
+      '📩 歡迎來信洽談商業合作、媒體訪問、技術諮詢或加入團隊。',
+      '👉 網站底部附有表單可直接聯繫我們。',
+    ],
+  },
 ];
 
-function splitSections(md: string) {
-  const result: { id: string; content: string }[] = [];
-  let lastIndex = 0;
-  for (let i = 1; i < sections.length; i++) {
-    const cur = md.indexOf(`### ${sections[i].title}`, lastIndex);
-    result.push({
-      id: sections[i - 1].id,
-      content: md.slice(lastIndex, cur === -1 ? undefined : cur),
-    });
-    lastIndex = cur;
-  }
-  result.push({ id: sections[sections.length - 1].id, content: md.slice(lastIndex) });
-  return result;
-}
+export default function Home() {
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [contentHeight, setContentHeight] = useState(0);
 
-function getRandomAnim() {
-  const y = Math.random() * 60 - 30;
-  const scale = 0.95 + Math.random() * 0.1;
-  return {
-    initial: { opacity: 0, y: y * 2, scale: scale * 0.9 },
-    whileInView: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.9, type: 'spring', bounce: 0.35 } },
-    viewport: { once: true, amount: 0.3 },
-  };
-}
+  useEffect(() => {
+    function updateHeight() {
+      if (contentRef.current) setContentHeight(contentRef.current.offsetHeight);
+    }
+    updateHeight();
+    window.addEventListener('resize', updateHeight);
+    return () => window.removeEventListener('resize', updateHeight);
+  }, []);
 
-export const getStaticProps: GetStaticProps = async () => {
-  const markdownPath = path.join(process.cwd(), 'docs/website-content.md');
-  const markdown = fs.readFileSync(markdownPath, 'utf-8');
-  return {
-    props: {
-      markdown,
-    },
-  };
-};
-
-type Props = { markdown: string };
-
-export default function Home({ markdown }: Props) {
-  const sectionContents = splitSections(markdown);
   return (
-    <div className="bg-gradient-to-b from-white to-blue-50 min-h-screen flex flex-col">
-      {/* 顶部导航 */}
-      <nav className="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur border-b border-gray-100 shadow-sm">
-        <div className="container mx-auto flex items-center justify-between px-4 py-2">
-          <span className="font-bold text-xl tracking-widest text-blue-700">Crealize</span>
-          <div className="space-x-4">
-            {sections.map(s => (
-              <a key={s.id} href={`#${s.id}`} className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
-                {s.title}
-              </a>
-            ))}
+    <>
+      {/* 顶部Logo+品牌名 水平居左上角对齐 */}
+      <div className="w-full flex flex-row items-baseline justify-start pt-8 pb-2 pl-8 whitespace-nowrap">
+        <Image
+          src="/image/Crealizelogo1.png"
+          alt="Crealize Logo"
+          width={90}
+          height={48}
+          priority
+          style={{
+            height: 48,
+            width: 'auto',
+            display: 'inline-block',
+            verticalAlign: 'baseline',
+            marginBottom: 0,
+          }}
+        />
+        <span
+          className="font-brand ml-4 leading-[1] align-baseline relative"
+          style={{
+            fontSize: '1.75rem',
+            top: '8px',
+            display: 'inline-block',
+            verticalAlign: 'baseline',
+          }}
+        >
+          Crealize
+        </span>
+      </div>
+      <div ref={contentRef} className="relative z-10 w-full max-w-3xl mx-auto px-4 sm:px-8" style={{ minHeight: '100vh', paddingTop: '180px', paddingBottom: '180px' }}>
+        <div className="relative z-10">
+          <p className="text-xl sm:text-2xl text-gray-500 mb-8 leading-relaxed">
+            Transforming Imagination into Reality
+          </p>
+          <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-12">
+            以 Web3 × 遊戲化 × AI 技術，重新定義創意落地的可能性。
+          </p>
+          {sections.map((sec, idx) => (
+            <Section section={sec} idx={idx} key={sec.id} />
+          ))}
+          <div id="contact-anchor" className="w-full flex justify-center mt-16 mb-2">
+            <a href="#" className="px-6 py-3 rounded-full bg-black text-white text-base font-semibold shadow hover:bg-gray-800 transition">联系我们</a>
           </div>
         </div>
-      </nav>
-      <div className="h-16" /> {/* 占位 */}
-      {/* 内容区块 */}
-      <main className="flex-1">
-        {sectionContents.map(sec => (
-          <Section key={sec.id} id={sec.id} content={sec.content} />
-        ))}
-      </main>
-      {/* 底部仿生流体动画 */}
-      <footer className="relative h-40 w-full overflow-hidden mt-12">
-        <FluidWave />
-      </footer>
-    </div>
-  );
-}
-
-function Section({ id, content }: { id: string; content: string }) {
-  const { ref } = useInView({ triggerOnce: true, threshold: 0.2 });
-  const anim = getRandomAnim();
-  return (
-    <motion.section
-      id={id}
-      ref={ref}
-      initial={anim.initial}
-      whileInView={anim.whileInView}
-      viewport={anim.viewport}
-      className="max-w-3xl mx-auto px-4 py-16"
-    >
-      <div className="prose prose-lg max-w-none">
-        <ReactMarkdown>{content}</ReactMarkdown>
       </div>
-    </motion.section>
+      {/* 红色canvas测试条已移除，恢复动画组件 */}
+      <AnimatedLinesBackground />
+    </>
   );
 }
 
-function FluidWave() {
+function Section({ section, idx }: { section: typeof sections[0]; idx: number }) {
   return (
-    <motion.svg
-      viewBox="0 0 1440 320"
-      className="absolute bottom-0 left-0 w-full h-full"
-      initial={{ y: 40 }}
-      animate={{ y: [40, 0, 40], x: [0, 30, 0] }}
-      transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-    >
-      <defs>
-        <linearGradient id="wave" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#60a5fa" />
-          <stop offset="50%" stopColor="#a78bfa" />
-          <stop offset="100%" stopColor="#f472b6" />
-        </linearGradient>
-      </defs>
-      <motion.path
-        fill="url(#wave)"
-        fillOpacity="0.7"
-        d="M0,160L60,170C120,180,240,200,360,197.3C480,195,600,169,720,154.7C840,140,960,138,1080,154.7C1200,171,1320,213,1380,234.7L1440,256L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"
-        animate={{
-          d: [
-            'M0,160L60,170C120,180,240,200,360,197.3C480,195,600,169,720,154.7C840,140,960,138,1080,154.7C1200,171,1320,213,1380,234.7L1440,256L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z',
-            'M0,180L60,160C120,140,240,180,360,200C480,220,600,200,720,180C840,160,960,140,1080,160C1200,180,1320,220,1380,240L1440,260L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z',
-            'M0,160L60,170C120,180,240,200,360,197.3C480,195,600,169,720,154.7C840,140,960,138,1080,154.7C1200,171,1320,213,1380,234.7L1440,256L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z',
-          ],
-        }}
-        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-      />
-    </motion.svg>
+    <section id={section.id} className="mb-10 md:mb-14 text-left w-full">
+      <h2 className="text-xl sm:text-2xl font-bold mb-4 text-gray-900 tracking-wide">
+        {section.title}
+      </h2>
+      <ul className="list-none pl-0 space-y-3 text-gray-700 text-base sm:text-lg leading-relaxed">
+        {section.content.map((line, i) =>
+          line.trim() === '' ? <li key={i} className="h-2" /> : <li key={i}>{line}</li>
+        )}
+      </ul>
+    </section>
   );
 } 
