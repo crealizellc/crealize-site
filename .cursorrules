@@ -1,4 +1,34 @@
-# Cursor AI 开发规范
+# Cursor AI 自动化友好开发规范
+
+> 本规范支持自动化检测与生成，所有自动化注释均为英文半角，人工规范有详细操作建议。
+
+## 1. 目录结构（可自动检测）
+- src/app/ 下必须有 index.tsx、about.tsx、contact.tsx <!-- auto:check=dir:src/app -->
+- src/components/ui/ 下必须有 Button.tsx <!-- auto:check=file:src/components/ui/Button.tsx -->
+- src/styles/ 下必须有 globals.css <!-- auto:check=file:src/styles/globals.css -->
+
+## 2. 文件命名规范（可自动检测）
+- 页面文件：小写加中划线或 PascalCase <!-- auto:manual;tip=请人工检查页面文件命名 -->
+- 组件文件：PascalCase <!-- auto:manual;tip=请人工检查组件文件命名 -->
+
+## 3. 代码规范（可自动检测）
+- 所有页面和组件必须为函数组件 <!-- auto:manual;tip=请人工检查函数组件实现 -->
+- 必须包含基础注释 <!-- auto:manual;tip=请人工检查注释完整性 -->
+
+## 4. 自动化注释说明
+- <!-- auto:check=xxx --> 由自动化脚本检测
+- <!-- auto:gen=xxx --> 由自动化脚本自动生成
+- <!-- auto:manual;tip=xxx --> 需人工确认并有操作建议
+
+## 5. 需人工确认的规范
+- 代码风格、文档内容、交互体验等 <!-- auto:manual;tip=请人工评估和优化 -->
+
+---
+
+> 相关文档：
+> - [开发任务清单 docs/development/TODO.md](docs/development/TODO.md)
+> - [部署指南 docs/deployment/GITHUB_PAGES.md](docs/deployment/GITHUB_PAGES.md)
+> - [项目结构 docs/README.md](docs/README.md)
 
 ## 1. 项目结构规范
 

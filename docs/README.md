@@ -1,30 +1,42 @@
-# Crealize 项目文档
+# 项目文档说明
+
+> 本文档为 crealize 项目文档入口，包含开发、设计、部署等所有核心文档。
+> 支持自动化检测与人工维护，相关任务和规范请参见 TODO.md、.cursorrules。
 
 ## 文档结构
 
-### 核心文档
-- [`.cursorrules`](../.cursorrules) - AI 开发规范与项目标准
-- [`CONTRIBUTING.md`](./CONTRIBUTING.md) - 项目贡献指南
-- [`CHANGELOG.md`](./CHANGELOG.md) - 版本变更记录
-- [`FAQ.md`](./FAQ.md) - 常见问题解答
+- [开发任务清单](development/TODO.md)
+- [项目规范 .cursorrules](../../.cursorrules)
+- [部署指南](deployment/GITHUB_PAGES.md)
+- [设计系统](design-system/DESIGN_SYSTEM.md)
+- [页面内容规划](website-content.md)
+- [常见问题 FAQ](FAQ.md)
+- [贡献指南](CONTRIBUTING.md)
+- [变更日志](CHANGELOG.md)
 
-### 开发文档
-- [`development/ENVIRONMENT.md`](./development/ENVIRONMENT.md) - 开发环境配置
-- [`development/SECURITY.md`](./development/SECURITY.md) - 安全规范指南
+## 自动化支持说明
 
-### 设计文档
-- [`website-content.md`](./website-content.md) - 网站内容规划
-- [`design-system/`](./design-system/) - 设计系统文档
+- 带有 `<!-- auto:... -->` 注释的任务和规范可由自动化脚本检测和生成。
+- 需人工维护的内容已在注释中标明 `auto:manual`，请根据提示手动补充。
 
-### 部署文档
-- [`deployment/`](./deployment/) - 部署相关文档
+## 人工维护提示
 
-### 架构文档
-- [`architecture/`](./architecture/) - 架构设计文档
+- 文档内容、交互体验、代码风格等需人工评估和优化。
+- 如遇自动化失败，请参考 [AUTO_DEV_ISSUES.md](development/AUTO_DEV_ISSUES.md) 记录并持续优化。
+
+---
+
+> 相关文档互链：
+>
+> - [开发任务清单](development/TODO.md)
+> - [项目规范 .cursorrules](../../.cursorrules)
+> - [部署指南](deployment/GITHUB_PAGES.md)
+> - [自动化开发问题记录](development/AUTO_DEV_ISSUES.md)
 
 ## 文档关系
 
 ### 开发流程
+
 1. 参考 `.cursorrules` 了解开发规范
 2. 按照 `ENVIRONMENT.md` 配置开发环境
 3. 遵循 `SECURITY.md` 确保代码安全
@@ -32,6 +44,7 @@
 5. 使用 `design-system/` 保持设计一致
 
 ### 文档更新
+
 - 所有文档变更需在 `CHANGELOG.md` 中记录
 - 重要决策需在相关文档中更新
 - 保持文档间的引用关系准确
@@ -44,18 +57,22 @@
 4. 遵循 `CONTRIBUTING.md` 提交代码
 
 ## 注意事项
+
 1. 保持文档简洁，避免重复
 2. 及时更新文档，保持同步
 3. 确保文档间的引用关系正确
 4. 遵循统一的文档格式和风格
 
 ## 项目概述
+
 基于Next.js 14的现代化单页面应用（SPA）项目，使用TypeScript、Tailwind CSS和Framer Motion构建。本项目旨在打造一个高性能、易维护的企业级网站，集成Twitter内容展示。
 
 ## 网站内容
+
 详细内容请参考 [网站内容规划](website-content.md)
 
 ## 技术栈
+
 - 前端框架：Next.js 14
 - 开发语言：TypeScript
 - 样式方案：Tailwind CSS
@@ -68,14 +85,17 @@
 - 自动化部署：GitHub Actions
 
 ## 开发方式
+
 本项目采用GitHub Pages预览的开发方式：
 
 1. 直接在GitHub上开发
+
    - 使用GitHub Codespaces
    - 或直接在GitHub上编辑
    - 避免本地环境配置
 
 2. 提交控制
+
    - 完成完整功能后再提交
    - 确保代码质量
    - 避免频繁小改动
@@ -86,6 +106,7 @@
    - 确认无误后继续开发
 
 ## 项目结构
+
 ```
 src/
 ├── app/                    # 应用入口
@@ -115,6 +136,7 @@ src/
 ```
 
 ## 开发规范
+
 - 使用TypeScript进行开发
 - 遵循React最佳实践
 - 使用Tailwind CSS进行样式开发
@@ -125,12 +147,14 @@ src/
 - 使用Twitter API v2获取内容
 
 ## 动画规范
+
 - 页面切换动画：使用Framer Motion的AnimatePresence
 - 滚动动画：使用Framer Motion的useScroll和useTransform
 - 悬停效果：使用Tailwind CSS的transition
 - 加载动画：使用Framer Motion的motion组件
 
 ## Twitter集成
+
 - 使用Twitter API v2获取推文
 - 支持推文列表展示
 - 支持推文交互（点赞、转发）
@@ -139,6 +163,7 @@ src/
 - 支持定时更新
 
 ## 国际化方案
+
 - 使用Google Apps Script处理翻译
 - 支持日语和英语
 - 支持动态切换语言
@@ -147,24 +172,28 @@ src/
 - 支持自动更新翻译
 
 ### Google Apps Script配置
+
 1. 创建Google表单收集翻译内容
 2. 使用Apps Script处理翻译数据
 3. 部署为Web应用
 4. 通过API获取翻译内容
 
 ### 翻译更新流程
+
 1. 更新Google表单内容
 2. 触发Apps Script更新
 3. 自动更新网站翻译
 4. 缓存最新翻译
 
 ## 表单处理
+
 - 使用React Hook Form
 - 支持表单验证
 - 支持错误提示
 - 支持提交状态管理
 
 ## 部署说明
+
 - 使用GitHub Pages进行部署
 - 自动部署通过GitHub Actions实现
 - 部署前自动运行测试和构建
@@ -173,6 +202,7 @@ src/
 - 支持定时更新翻译内容
 
 ## 自动化配置
+
 - 使用GitHub Actions进行CI/CD
 - 自动构建和部署
 - 自动更新Twitter内容
@@ -181,6 +211,7 @@ src/
 - 自动生成静态页面
 
 ## 相关文档
+
 - [网站内容规划](website-content.md)
 - [贡献指南](CONTRIBUTING.md)
-- [更新日志](CHANGELOG.md) 
+- [更新日志](CHANGELOG.md)

@@ -1,6 +1,7 @@
 # 动画设计规范
 
 ## 动画原则
+
 - 流畅自然：动画要符合物理规律，感觉自然
 - 突出重点：动画要引导用户注意力
 - 适度使用：避免过度动画造成干扰
@@ -9,6 +10,7 @@
 ## 页面级动画
 
 ### 1. 页面过渡
+
 ```typescript
 // 页面切换动画
 const pageTransition = {
@@ -30,12 +32,13 @@ const pageTransition = {
 ```
 
 ### 2. 滚动动画
+
 ```typescript
 // 滚动显示动画
 const scrollReveal = {
   hidden: { opacity: 0, y: 30 },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     y: 0,
     transition: {
       duration: 0.6,
@@ -56,6 +59,7 @@ const scrollReveal = {
 ```
 
 ### 3. 视差滚动
+
 ```typescript
 // 视差效果
 const parallaxEffect = {
@@ -79,6 +83,7 @@ const parallaxEffect = {
 ## 组件级动画
 
 ### 1. 悬停效果
+
 ```typescript
 // 卡片悬停效果
 const cardHover = {
@@ -96,6 +101,7 @@ const cardHover = {
 ```
 
 ### 2. 点击效果
+
 ```typescript
 // 按钮点击效果
 const buttonTap = {
@@ -113,6 +119,7 @@ const buttonTap = {
 ```
 
 ## 动画曲线
+
 ```css
 /* 常用动画曲线 */
 --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
@@ -121,6 +128,7 @@ const buttonTap = {
 ```
 
 ## 性能优化
+
 1. 使用 transform 和 opacity 进行动画
 2. 避免动画期间触发重排
 3. 使用 will-change 提示浏览器
@@ -129,21 +137,25 @@ const buttonTap = {
 ## 动画使用场景
 
 ### 首页
+
 - 英雄区域：视差滚动 + 渐入效果
 - 特性展示：滚动显示 + 交错动画
 - 数据展示：数字增长动画
 
 ### 产品页
+
 - 产品展示：3D翻转效果
 - 特性列表：滚动显示
 - 图片展示：视差效果
 
 ### 关于页
+
 - 团队介绍：交错显示
 - 时间线：滚动触发
 - 数据统计：数字动画
 
 ### 联系页
+
 - 表单交互：微动效
 - 地图加载：渐入效果
-- 联系方式：悬停效果 
+- 联系方式：悬停效果

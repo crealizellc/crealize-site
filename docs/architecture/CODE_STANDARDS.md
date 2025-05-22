@@ -3,32 +3,34 @@
 ## TypeScript规范
 
 ### 类型定义
+
 ```typescript
 // 使用接口定义对象类型
 interface User {
   id: string;
   name: string;
   email: string;
-  role: 'admin' | 'user';
+  role: "admin" | "user";
 }
 
 // 使用类型别名定义联合类型
-type Status = 'loading' | 'success' | 'error';
+type Status = "loading" | "success" | "error";
 
 // 使用枚举定义常量
 enum Theme {
-  Light = 'light',
-  Dark = 'dark',
-  System = 'system'
+  Light = "light",
+  Dark = "dark",
+  System = "system",
 }
 ```
 
 ### 组件类型
+
 ```typescript
 // 使用Props接口
 interface ButtonProps {
-  variant: 'primary' | 'secondary';
-  size: 'sm' | 'md' | 'lg';
+  variant: "primary" | "secondary";
+  size: "sm" | "md" | "lg";
   children: React.ReactNode;
   onClick?: () => void;
   disabled?: boolean;
@@ -44,36 +46,38 @@ interface ListProps<T> {
 ## React规范
 
 ### 组件结构
+
 ```typescript
 // 使用函数组件
 const Component: React.FC<Props> = ({ prop1, prop2 }) => {
   // 1. Hooks
   const [state, setState] = useState();
-  
+
   // 2. 计算属性
   const computed = useMemo(() => {}, []);
-  
+
   // 3. 事件处理
   const handleClick = useCallback(() => {}, []);
-  
+
   // 4. 副作用
   useEffect(() => {}, []);
-  
+
   // 5. 渲染
   return <div>{/* JSX */}</div>;
 };
 ```
 
 ### Hooks规范
+
 ```typescript
 // 自定义Hook
 const useCustomHook = (initialValue: string) => {
   const [value, setValue] = useState(initialValue);
-  
+
   const update = useCallback((newValue: string) => {
     setValue(newValue);
   }, []);
-  
+
   return { value, update };
 };
 ```
@@ -81,6 +85,7 @@ const useCustomHook = (initialValue: string) => {
 ## 组件规范
 
 ### 基础组件结构
+
 ```typescript
 interface ButtonProps {
   variant: 'primary' | 'secondary';
@@ -90,7 +95,7 @@ interface ButtonProps {
 
 const Button: React.FC<ButtonProps> = ({ variant, children, onClick }) => {
   return (
-    <button 
+    <button
       className={`btn btn-${variant}`}
       onClick={onClick}
     >
@@ -103,17 +108,17 @@ const Button: React.FC<ButtonProps> = ({ variant, children, onClick }) => {
 ## 样式规范
 
 ### Tailwind CSS
+
 ```tsx
 // 使用Tailwind类名
 <div className="flex items-center justify-between p-4 bg-white shadow-md">
   <h1 className="text-2xl font-bold text-gray-800">标题</h1>
-  <button className="px-4 py-2 bg-blue-500 text-white rounded-md">
-    按钮
-  </button>
+  <button className="px-4 py-2 bg-blue-500 text-white rounded-md">按钮</button>
 </div>
 ```
 
 ### CSS Modules
+
 ```css
 /* Button.module.css */
 .button {
@@ -130,8 +135,9 @@ const Button: React.FC<ButtonProps> = ({ variant, children, onClick }) => {
 ## 动画规范
 
 ### Framer Motion
+
 ```tsx
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 
 const AnimatedComponent = () => {
   return (
@@ -149,29 +155,25 @@ const AnimatedComponent = () => {
 ## 图片优化
 
 ### Next.js Image
-```tsx
-import Image from 'next/image';
 
-<Image
-  src="/image.jpg"
-  alt="描述"
-  width={500}
-  height={300}
-  priority
-/>
+```tsx
+import Image from "next/image";
+
+<Image src="/image.jpg" alt="描述" width={500} height={300} priority />;
 ```
 
 ## 错误处理
 
 ### 基础错误处理
+
 ```typescript
 const fetchData = async () => {
   try {
-    const response = await fetch('/api/data');
-    if (!response.ok) throw new Error('请求失败');
+    const response = await fetch("/api/data");
+    if (!response.ok) throw new Error("请求失败");
     return await response.json();
   } catch (error) {
-    console.error('错误:', error);
+    console.error("错误:", error);
     return null;
   }
 };
@@ -180,13 +182,14 @@ const fetchData = async () => {
 ## 测试规范
 
 ### 单元测试
+
 ```typescript
 describe('Button', () => {
   it('renders correctly', () => {
     render(<Button>Click me</Button>);
     expect(screen.getByText('Click me')).toBeInTheDocument();
   });
-  
+
   it('handles click events', () => {
     const onClick = jest.fn();
     render(<Button onClick={onClick}>Click me</Button>);
@@ -197,6 +200,7 @@ describe('Button', () => {
 ```
 
 ### 集成测试
+
 ```typescript
 describe('UserProfile', () => {
   it('loads and displays user data', async () => {
@@ -211,6 +215,7 @@ describe('UserProfile', () => {
 ## 性能优化
 
 ### 代码分割
+
 ```typescript
 // 动态导入
 const DynamicComponent = dynamic(() => import('./Component'), {
@@ -220,14 +225,15 @@ const DynamicComponent = dynamic(() => import('./Component'), {
 ```
 
 ### 错误边界
+
 ```typescript
 class ErrorBoundary extends React.Component {
   state = { hasError: false };
-  
+
   static getDerivedStateFromError() {
     return { hasError: true };
   }
-  
+
   render() {
     if (this.state.hasError) {
       return <ErrorFallback />;
@@ -238,15 +244,16 @@ class ErrorBoundary extends React.Component {
 ```
 
 ### 异步错误处理
+
 ```typescript
 const fetchData = async () => {
   try {
-    const response = await fetch('/api/data');
-    if (!response.ok) throw new Error('Network response was not ok');
+    const response = await fetch("/api/data");
+    if (!response.ok) throw new Error("Network response was not ok");
     return await response.json();
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error("Error fetching data:", error);
     throw error;
   }
 };
-``` 
+```
