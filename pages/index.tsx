@@ -227,6 +227,20 @@ function Section({ section, idx }: { section: typeof sections[0]; idx: number })
           let clean = line.replace(/^([\uD800-\uDBFF][\uDC00-\uDFFF]|[\u2600-\u27BF]|[\uFE0F]|[\u200D]|[\u2190-\u21FF]|[\u2300-\u23FF]|[\u25A0-\u25FF]|[\u2600-\u26FF]|[\u2700-\u27BF]|[\u2B50-\u2BFF]|[\u1F300-\u1F5FF]|[\u1F600-\u1F64F]|[\u1F680-\u1F6FF]|[\u1F700-\u1F77F]|[\u1F780-\u1F7FF]|[\u1F800-\u1F8FF]|[\u1F900-\u1F9FF]|[\u1FA00-\u1FA6F]|[\u1FA70-\u1FAFF]|[\u1FB00-\u1FBFF]|[\u1FC00-\u1FCFF]|[\u1FD00-\u1FDFF]|[\u1FE00-\u1FEFF]|[\u1FF00-\u1FFFF]|[\u2000-\u206F]|[\u2190-\u21FF]|[\u2300-\u23FF]|[\u25A0-\u25FF]|[\u2600-\u26FF]|[\u2700-\u27BF]|[\u2B50-\u2BFF]|[\u1F004]|[\u1F0CF]|[\u1F170-\u1F251]|[\u1F300-\u1F5FF]|[\u1F600-\u1F64F]|[\u1F680-\u1F6FF]|[\u1F700-\u1F77F]|[\u1F780-\u1F7FF]|[\u1F800-\u1F8FF]|[\u1F900-\u1F9FF]|[\u1FA00-\u1FA6F]|[\u1FA70-\u1FAFF]|[\u1FB00-\u1FBFF]|[\u1FC00-\u1FCFF]|[\u1FD00-\u1FDFF]|[\u1FE00-\u1FEFF]|[\u1FF00-\u1FFFF])+/g, '').trim();
           // 小标题渲染
           if (subTitles.includes(clean)) {
+            // 品牌字特殊处理
+            if (clean === 'Crealize合同会社（Crealize LLC）') {
+              // Crealize 用品牌字 class
+              const brand = <span className="font-brand">Crealize</span>;
+              const rest = '合同会社（Crealize LLC）'.replace('Crealize', '');
+              return (
+                <li key={i} style={{ listStyle: 'none', margin: '1.2em 0' }}>
+                  <BrandHeroText text="" size="1.5em" />
+                  <span style={{ fontSize: '1.5em', fontWeight: 900 }}>
+                    {brand}{rest}
+                  </span>
+                </li>
+              );
+            }
             return (
               <li key={i} style={{ listStyle: 'none', margin: '1.2em 0' }}>
                 <BrandHeroText text={clean} size="1.5em" />
