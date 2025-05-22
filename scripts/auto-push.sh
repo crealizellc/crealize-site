@@ -49,10 +49,12 @@ rsync -av --delete \
 # 提交并推送公开仓库
 cd "$PUBLIC_DIR"
 git add .
-git commit -m "chore: 发布公开版" || {
-    echo -e "${RED}公开仓库提交失败${NC}"
+git commit -m "chore: 发布公开版" || true
+# 推送前自动拉取并 rebase
+if ! git pull --rebase origin main; then
+    echo -e "${RED}公开仓库拉取合并失败，请手动处理冲突${NC}"
     exit 1
-}
+fi
 git push origin main || {
     echo -e "${RED}公开仓库推送失败${NC}"
     exit 1
