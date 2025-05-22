@@ -48,13 +48,13 @@ rsync -av --delete \
 
 # 提交并推送公开仓库
 cd "$PUBLIC_DIR"
+# 终极无人值守：自动 add -A .，确保所有未跟踪文件也被暂存
+if ! git diff --quiet || ! git diff --cached --quiet || [ -n "$(git ls-files --others --exclude-standard)" ]; then
+    git add -A .
+    git commit -m "chore: 自动暂存本地变更（含未跟踪文件）" || true
+fi
 git add .
 git commit -m "chore: 发布公开版" || true
-# 推送前自动暂存所有本地变更，确保 pull --rebase 不被阻断
-if ! git diff --quiet || ! git diff --cached --quiet; then
-    git add .
-    git commit -m "chore: 自动暂存本地变更" || true
-fi
 # 推送前自动拉取并 rebase
 if ! git pull --rebase origin main; then
     echo -e "${RED}公开仓库拉取合并失败，请手动处理冲突${NC}"
