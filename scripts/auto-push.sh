@@ -50,6 +50,11 @@ rsync -av --delete \
 cd "$PUBLIC_DIR"
 git add .
 git commit -m "chore: 发布公开版" || true
+# 推送前自动暂存所有本地变更，确保 pull --rebase 不被阻断
+if ! git diff --quiet || ! git diff --cached --quiet; then
+    git add .
+    git commit -m "chore: 自动暂存本地变更" || true
+fi
 # 推送前自动拉取并 rebase
 if ! git pull --rebase origin main; then
     echo -e "${RED}公开仓库拉取合并失败，请手动处理冲突${NC}"
