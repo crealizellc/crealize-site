@@ -22,6 +22,7 @@ const AnimatedLinesBackground: React.FC = () => {
     }));
     function resize() {
       const dpr = window.devicePixelRatio || 1;
+      if (!canvas) return;
       canvas.width = window.innerWidth * dpr;
       canvas.height = 160 * dpr;
       canvas.style.width = window.innerWidth + 'px';
@@ -31,6 +32,7 @@ const AnimatedLinesBackground: React.FC = () => {
     window.addEventListener('resize', resize);
     function draw(t: number) {
       const dpr = window.devicePixelRatio || 1;
+      if (!canvas || !ctx) return;
       const w = canvas.width;
       const h = canvas.height;
       ctx.clearRect(0, 0, w, h);
@@ -72,8 +74,7 @@ const AnimatedLinesBackground: React.FC = () => {
       style={{
         position: 'fixed',
         left: 0,
-        top: '50%',
-        transform: 'translateY(-50%)',
+        top: '20vh',
         width: '100vw',
         height: '160px',
         zIndex: 0,

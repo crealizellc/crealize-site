@@ -17,7 +17,6 @@ export default function AnimatedCanvasLines({ lineCount = 18 }: { lineCount?: nu
 
     function resize() {
       const dpr = window.devicePixelRatio || 1;
-      if (!canvas || !container) return;
       canvas.width = container.clientWidth * dpr;
       canvas.height = container.clientHeight * dpr;
       canvas.style.width = container.clientWidth + 'px';
@@ -38,7 +37,6 @@ export default function AnimatedCanvasLines({ lineCount = 18 }: { lineCount?: nu
     const container = containerRef.current;
     if (!container) return;
     function onMove(e: MouseEvent) {
-      if (!container) return;
       const rect = container.getBoundingClientRect();
       mouse.current.x = (e.clientX - rect.left) / rect.width;
       mouse.current.y = (e.clientY - rect.top) / rect.height;
@@ -131,16 +129,7 @@ export default function AnimatedCanvasLines({ lineCount = 18 }: { lineCount?: nu
   }, [lineCount]);
 
   return (
-    <div
-      ref={containerRef}
-      className="fixed left-0 z-0 pointer-events-none select-none"
-      style={{
-        top: '10vh',
-        width: '100vw',
-        height: '320px',
-        background: 'rgba(255,0,0,0.15)', // 调试用，后续可去除
-      }}
-    >
+    <div ref={containerRef} className="absolute inset-0 w-full h-full z-0 pointer-events-none select-none">
       <canvas ref={canvasRef} className="w-full h-full" />
     </div>
   );
