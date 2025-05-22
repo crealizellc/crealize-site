@@ -7,14 +7,19 @@ RED='\033[0;31m'
 YELLOW='\033[0;33m'
 NC='\033[0m'
 
-# 获取公开仓库地址（修正为当前目录）
-PUBLIC_REPO=$(node -p "require('./package.json').crealizePublicRepo")
-PUBLIC_DIR="../crealize-public"
+# 获取当前脚本所在目录的绝对路径
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+PUBLIC_DIR="$PROJECT_ROOT/../crealize-public"
+
+# 获取公开仓库地址
+PUBLIC_REPO=$(node -p "require('$PROJECT_ROOT/package.json').crealizePublicRepo")
 
 echo -e "${GREEN}开始自动推送流程...${NC}"
 
 # 1. 推送到私有仓库 (crealizecode)
 echo -e "${GREEN}推送到私有仓库...${NC}"
+cd "$PROJECT_ROOT"
 git add .
 git commit -m "chore: 自动化开发与优化一体化提交" || {
     echo -e "${RED}私有仓库提交失败${NC}"
@@ -37,24 +42,27 @@ fi
 
 # 同步公开内容
 rsync -av --delete \
-    README.md \
-    docs/ \
-    public/ \
-    src/app/ \
-    "$PUBLIC_DIR" || {
+    "$PROJECT_ROOT/README.md" \
+    "$PROJECT_ROOT/docs/" \
+    "$PROJECT_ROOT/public/" \
+    "$PROJECT_ROOT/src/app/" \
+    "$PUBLIC_DIR/" || {
     echo -e "${RED}同步公开内容失败${NC}"
     exit 1
 }
 
 # 提交并推送公开仓库
 cd "$PUBLIC_DIR"
+# 设置 git 只检查当前目录
+export GIT_DIR="$PUBLIC_DIR/.git"
+export GIT_WORK_TREE="$PUBLIC_DIR"
+
 # 终极无人值守：自动 add -A .，确保所有未跟踪文件也被暂存
 if ! git diff --quiet || ! git diff --cached --quiet || [ -n "$(git ls-files --others --exclude-standard)" ]; then
     git add -A .
     git commit -m "chore: 自动暂存本地变更（含未跟踪文件）" || true
 fi
-git add .
-git commit -m "chore: 发布公开版" || true
+
 # 推送前自动拉取并 rebase
 if ! git pull --rebase origin main; then
     echo -e "${RED}公开仓库拉取合并失败，请手动处理冲突${NC}"
