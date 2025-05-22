@@ -207,13 +207,37 @@ export default function Home() {
 }
 
 function Section({ section, idx }: { section: typeof sections[0]; idx: number }) {
+  // 小标题关键词
+  const subTitles = [
+    '把創意轉化為現實',
+    '藝術品交易平台',
+    '偶像與創作者股交易平台',
+    'MARS2049：火星殖民 × GameFi',
+    'AI 虛擬影響者',
+    '去中心化 × 前端驅動',
+    '全球招募中，支援全遠端工作',
+    'Crealize合同会社（Crealize LLC）',
+  ];
   return (
     <section id={section.id} className="mb-10 md:mb-14 text-left w-full">
       <BrandHeroText text={section.title} size="2.2em" />
       <ul className="list-none pl-0 space-y-3 text-gray-700 text-base sm:text-lg leading-relaxed">
-        {section.content.map((line, i) =>
-          line.trim() === '' ? <li key={i} className="h-2" /> : <li key={i}>{line}</li>
-        )}
+        {section.content.map((line, i) => {
+          // 去除 emoji
+          let clean = line.replace(/^([\uD800-\uDBFF][\uDC00-\uDFFF]|[\u2600-\u27BF]|[\uFE0F]|[\u200D]|[\u2190-\u21FF]|[\u2300-\u23FF]|[\u25A0-\u25FF]|[\u2600-\u26FF]|[\u2700-\u27BF]|[\u2B50-\u2BFF]|[\u1F300-\u1F5FF]|[\u1F600-\u1F64F]|[\u1F680-\u1F6FF]|[\u1F700-\u1F77F]|[\u1F780-\u1F7FF]|[\u1F800-\u1F8FF]|[\u1F900-\u1F9FF]|[\u1FA00-\u1FA6F]|[\u1FA70-\u1FAFF]|[\u1FB00-\u1FBFF]|[\u1FC00-\u1FCFF]|[\u1FD00-\u1FDFF]|[\u1FE00-\u1FEFF]|[\u1FF00-\u1FFFF]|[\u2000-\u206F]|[\u2190-\u21FF]|[\u2300-\u23FF]|[\u25A0-\u25FF]|[\u2600-\u26FF]|[\u2700-\u27BF]|[\u2B50-\u2BFF]|[\u1F004]|[\u1F0CF]|[\u1F170-\u1F251]|[\u1F300-\u1F5FF]|[\u1F600-\u1F64F]|[\u1F680-\u1F6FF]|[\u1F700-\u1F77F]|[\u1F780-\u1F7FF]|[\u1F800-\u1F8FF]|[\u1F900-\u1F9FF]|[\u1FA00-\u1FA6F]|[\u1FA70-\u1FAFF]|[\u1FB00-\u1FBFF]|[\u1FC00-\u1FCFF]|[\u1FD00-\u1FDFF]|[\u1FE00-\u1FEFF]|[\u1FF00-\u1FFFF])+/g, '').trim();
+          // 小标题渲染
+          if (subTitles.includes(clean)) {
+            return (
+              <li key={i} style={{ listStyle: 'none', margin: '1.2em 0' }}>
+                <BrandHeroText text={clean} size="1.5em" />
+              </li>
+            );
+          }
+          // 空行
+          if (clean === '') return <li key={i} className="h-2" />;
+          // 普通正文
+          return <li key={i}>{clean}</li>;
+        })}
       </ul>
     </section>
   );
