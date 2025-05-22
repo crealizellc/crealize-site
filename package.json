@@ -1,4 +1,5 @@
 {
+  "crealizePublicRepo": "https://github.com/crealizellc/crealize.git",
   "scripts": {
     "check:todo": "node scripts/check-todo.js",
     "check:rules": "node scripts/check-rules.js",

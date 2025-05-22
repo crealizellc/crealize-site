@@ -6,6 +6,10 @@ GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m'
 
+# 获取公开仓库地址
+PUBLIC_REPO=$(node -p "require('../package.json').crealizePublicRepo")
+PUBLIC_DIR="../crealize-public"
+
 echo -e "${GREEN}开始自动推送流程...${NC}"
 
 # 1. 推送到私有仓库 (crealizecode)
@@ -20,12 +24,14 @@ git push origin main || {
     exit 1
 }
 
-# 2. 推送到公开仓库 (crealize)
-echo -e "${GREEN}推送到公开仓库...${NC}"
-# 假设 ../crealize-public/ 为公开仓库目录
-if [ ! -d "../crealize-public" ]; then
-    echo -e "${RED}公开仓库目录不存在，请先克隆仓库${NC}"
-    exit 1
+# 2. 检查并克隆公开仓库 (crealize)
+echo -e "${GREEN}检查公开仓库目录...${NC}"
+if [ ! -d "$PUBLIC_DIR" ]; then
+    echo -e "${YELLOW}公开仓库目录不存在，自动克隆...${NC}"
+    git clone "$PUBLIC_REPO" "$PUBLIC_DIR" || {
+        echo -e "${RED}公开仓库克隆失败${NC}"
+        exit 1
+    }
 fi
 
 # 同步公开内容
@@ -34,13 +40,13 @@ rsync -av --delete \
     docs/ \
     public/ \
     src/app/ \
-    ../crealize-public/ || {
+    "$PUBLIC_DIR" || {
     echo -e "${RED}同步公开内容失败${NC}"
     exit 1
 }
 
 # 提交并推送公开仓库
-cd ../crealize-public/
+cd "$PUBLIC_DIR"
 git add .
 git commit -m "chore: 发布公开版" || {
     echo -e "${RED}公开仓库提交失败${NC}"
