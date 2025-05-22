@@ -27,11 +27,11 @@ echo -e "${GREEN}推送到私有仓库...${NC}"
 git add .
 git commit -m "chore: 自动化开发与优化一体化提交" || {
     echo -e "${RED}私有仓库提交失败${NC}"
-    exit 1
+    # 不退出，继续执行后续步骤
 }
 git push origin main || {
     echo -e "${RED}私有仓库推送失败${NC}"
-    exit 1
+    # 不退出，继续执行后续步骤
 }
 
 # 2. 检查并克隆公开仓库 (crealize)
