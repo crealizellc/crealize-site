@@ -3,6 +3,7 @@ import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import { BrandHeroText } from '../src/components/BrandHeroText';
+import AnimatedSandParticles from '../components/AnimatedSandParticles';
 
 const AnimatedLinesBackground = dynamic(() => import('../components/AnimatedLinesBackground'), { ssr: false });
 
@@ -200,6 +201,7 @@ export default function Home() {
       </div>
       {/* 红色canvas测试条已移除，恢复动画组件 */}
       <AnimatedLinesBackground />
+      <AnimatedSandParticles />
     </>
   );
 }
