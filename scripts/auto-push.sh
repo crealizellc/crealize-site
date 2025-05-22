@@ -60,10 +60,22 @@ if ! git diff --quiet || ! git diff --cached --quiet || [ -n "$(git ls-files --o
     git add -A .
     git commit -m "chore: 发布静态站点（自动导出）" || true
 fi
+
+# 自动冲突解决逻辑
 if ! git pull --rebase origin main; then
-    echo -e "${RED}公开仓库拉取合并失败，请手动处理冲突${NC}"
-    exit 1
+    echo -e "${YELLOW}检测到冲突，尝试自动解决...${NC}"
+    # 保留本地修改
+    git checkout --ours .
+    git add -A .
+    if git commit -m "chore: 自动解决冲突（保留本地修改）"; then
+        echo -e "${GREEN}冲突解决成功，继续推送...${NC}"
+    else
+        echo -e "${RED}自动冲突解决失败，回滚到远程状态...${NC}"
+        git reset --hard origin/main
+        exit 1
+    fi
 fi
+
 git push origin main || {
     echo -e "${RED}公开仓库推送失败${NC}"
     exit 1
