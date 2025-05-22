@@ -27,7 +27,7 @@ const AnimatedLinesBackground: React.FC = () => {
         freq: 0.7 + Math.random() * 0.4,
         phase: Math.random() * Math.PI * 2,
         speed: 0.7 + z * 1.1, // 近的更快
-        width: 1 + z * 1.2,
+        width: 0.5 + z * 1.0, // 最细0.5px，最粗1.5px
         z,
         color: `rgba(60,60,60,${0.10 + z * 0.18})`, // 近的更深
       };
