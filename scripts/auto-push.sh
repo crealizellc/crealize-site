@@ -45,7 +45,7 @@ if [ ! -d "$PUBLIC_DIR" ]; then
 fi
 
 # 只同步 out/ 目录内容到公开仓库根目录
-rsync -av --delete "$PROJECT_ROOT/out/" "$PUBLIC_DIR/" || {
+rsync -av --delete --exclude .git "$PROJECT_ROOT/out/" "$PUBLIC_DIR/" || {
     echo -e "${RED}同步静态站点内容失败${NC}"
     exit 1
 }
