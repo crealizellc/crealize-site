@@ -11,10 +11,14 @@ const AnimatedSandParticles: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   // 用于风速缓冲
   const windRef = useRef(0);
-  const lastScrollY = useRef(window.scrollY);
-  const lastTimestamp = useRef(performance.now());
+  const lastScrollY = useRef(0);
+  const lastTimestamp = useRef(0);
 
   useEffect(() => {
+    // 只在客户端初始化
+    lastScrollY.current = window.scrollY;
+    lastTimestamp.current = performance.now();
+
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -56,7 +60,6 @@ const AnimatedSandParticles: React.FC = () => {
       const dt = now - lastTimestamp.current;
       if (dt > 0) {
         const v = dy / dt; // px/ms
-        // windRef.current += v * 60; // 放大系数
         windRef.current = Math.max(Math.min(v * 120, 6), -6); // 限制最大风速
       }
       lastScrollY.current = window.scrollY;
