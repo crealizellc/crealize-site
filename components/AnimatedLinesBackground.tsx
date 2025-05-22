@@ -2,24 +2,37 @@ import React, { useRef, useEffect } from 'react';
 
 const AnimatedLinesBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  // 风速联动
+  const windRef = useRef(0);
+  const lastScrollY = useRef(0);
+  const lastTimestamp = useRef(0);
 
   useEffect(() => {
+    // 只在客户端初始化
+    lastScrollY.current = window.scrollY;
+    lastTimestamp.current = performance.now();
+
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
     let running = true;
     const lineCount = 24;
-    const color = 'rgba(0,0,0,0.18)';
-    const opacity = 0.25;
-    const lines = Array.from({ length: lineCount }).map((_, i) => ({
-      baseY: 0.2 + (i * 0.6) / (lineCount - 1),
-      amp: 24 + Math.random() * 16,
-      freq: 0.7 + Math.random() * 0.4,
-      phase: Math.random() * Math.PI * 2,
-      speed: 1.2 + Math.random() * 0.8,
-      width: 1 + Math.random() * 0.5,
-    }));
+    // 线条参数，z分层
+    const lines = Array.from({ length: lineCount }).map((_, i) => {
+      const z = 0.3 + 0.7 * (i / (lineCount - 1)); // 0.3~1，0远1近
+      return {
+        baseY: 0.2 + (i * 0.6) / (lineCount - 1),
+        amp: 14 + z * 26, // 近的振幅更大
+        freq: 0.7 + Math.random() * 0.4,
+        phase: Math.random() * Math.PI * 2,
+        speed: 0.7 + z * 1.1, // 近的更快
+        width: 1 + z * 1.2,
+        z,
+        color: `rgba(60,60,60,${0.10 + z * 0.18})`, // 近的更深
+      };
+    });
+
     function resize() {
       const dpr = window.devicePixelRatio || 1;
       if (!canvas) return;
@@ -30,6 +43,21 @@ const AnimatedLinesBackground: React.FC = () => {
     }
     resize();
     window.addEventListener('resize', resize);
+
+    // 风速与滚动联动
+    function onScroll() {
+      const now = performance.now();
+      const dy = window.scrollY - lastScrollY.current;
+      const dt = now - lastTimestamp.current;
+      if (dt > 0) {
+        const v = dy / dt;
+        windRef.current = Math.max(Math.min(v * 120, 6), -6);
+      }
+      lastScrollY.current = window.scrollY;
+      lastTimestamp.current = now;
+    }
+    window.addEventListener('scroll', onScroll);
+
     function draw(t: number) {
       const dpr = window.devicePixelRatio || 1;
       if (!canvas || !ctx) return;
@@ -42,15 +70,16 @@ const AnimatedLinesBackground: React.FC = () => {
         for (let x = 0; x <= w; x += 8 * dpr) {
           const percent = x / w;
           const baseY = line.baseY * h;
-          const y = baseY + Math.sin(percent * Math.PI * 2 * line.freq + t / (900 / line.speed) + line.phase + idx) * line.amp * dpr * 0.7;
+          // 风速影响 phase，近的受影响更大
+          const windPhase = windRef.current * 0.7 * line.z;
+          const y = baseY + Math.sin(percent * Math.PI * 2 * line.freq + t / (900 / line.speed) + line.phase + idx + windPhase) * line.amp * dpr * 0.7;
           if (x === 0) ctx.moveTo(x, y);
           else ctx.lineTo(x, y);
         }
-        ctx.strokeStyle = color;
-        ctx.globalAlpha = opacity;
+        ctx.strokeStyle = line.color;
+        ctx.globalAlpha = 1;
         ctx.lineWidth = line.width * dpr;
         ctx.stroke();
-        ctx.globalAlpha = 1;
         ctx.restore();
       });
     }
@@ -58,6 +87,8 @@ const AnimatedLinesBackground: React.FC = () => {
     function animate(ts: number) {
       if (!running) return;
       if (!start) start = ts;
+      // 风速缓慢衰减
+      windRef.current *= 0.92;
       draw(ts - start);
       requestAnimationFrame(animate);
     }
@@ -65,6 +96,7 @@ const AnimatedLinesBackground: React.FC = () => {
     return () => {
       running = false;
       window.removeEventListener('resize', resize);
+      window.removeEventListener('scroll', onScroll);
     };
   }, []);
 
