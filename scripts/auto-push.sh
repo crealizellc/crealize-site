@@ -4,10 +4,11 @@ set -e
 # 颜色定义
 GREEN='\033[0;32m'
 RED='\033[0;31m'
+YELLOW='\033[0;33m'
 NC='\033[0m'
 
-# 获取公开仓库地址
-PUBLIC_REPO=$(node -p "require('../package.json').crealizePublicRepo")
+# 获取公开仓库地址（修正为当前目录）
+PUBLIC_REPO=$(node -p "require('./package.json').crealizePublicRepo")
 PUBLIC_DIR="../crealize-public"
 
 echo -e "${GREEN}开始自动推送流程...${NC}"
