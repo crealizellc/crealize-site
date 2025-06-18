@@ -84,15 +84,14 @@ const sections = [
     id: 'contact',
     title: 'CONTACT',
     content: [
-      'Crealize合同会社（Crealize LLC）',
-      '成立時間：2024年10月9日',
-      '創辦人：Yves CHEN',
-      '銀行：瑞穗銀行（Mizuho Bank）',
-      '地址：東京都澀谷區東1丁目2-9-3',
-      'Shibuya Bridge B-5（Shibuya Startup Support 提供）',
-      '工作地點：東京 + 全球遠端團隊（日本、台灣、新加坡、杜拜、倫敦）',
-      '歡迎來信洽談商業合作、媒體訪問、技術諮詢或加入團隊。',
-      '聯繫我們',
+      'Company Name: Crealize合同会社 (Crealize LLC)',
+      'Established: October 9, 2024',
+      'Bank: MIZUHO Bank',
+      'Founder: Yves CHEN',
+      'Registered Address:',
+      'B-5, Shibuya Bridge,',
+      '2-9-3, Higashi 1-Chome,',
+      'Shibuya-ku, Tokyo 150-0011, Japan',
     ],
   },
 ];
@@ -211,10 +210,6 @@ export default function Home() {
             <Section section={sec} idx={idx} key={sec.id} />
           ))}
         </div>
-        {/* 美化聯繫我們表單，增加間距與陰影 */}
-        <div className="mt-16 mb-20">
-          <ContactForm />
-        </div>
       </div>
       {/* 紅色canvas測試條已移除，恢復動畫組件 */}
       <AnimatedLinesBackground />
@@ -250,92 +245,31 @@ function Section({ section, idx }: { section: typeof sections[0]; idx: number })
       <ul className="pl-0 ml-0 text-left list-disc text-gray-700 text-base sm:text-lg leading-[1] break-words whitespace-normal max-w-full">
         {section.content.map((line, i) => {
           let clean = line.trim();
-          if (clean === '合同会社（Crealize LLC）') clean = 'Crealize合同会社（Crealize LLC）';
-          if (clean === 'Build-to-Earn 機制 × 區塊鏈資產') clean = 'Play-to-Earn 機制 × 區塊鏈資產';
-          // 标题行特殊渲染（无点）
-          if (clean.startsWith('标题：')) {
-            const titleText = clean.replace(/^标题：/, '');
+          // Founder: Yves CHEN 行加 Telegram 連結
+          if (section.id === 'contact' && clean === 'Founder: Yves CHEN') {
             return (
               <motion.li
                 key={i}
                 className="break-words whitespace-normal max-w-full"
-                style={{ listStyle: 'none' }}
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.7 }}
                 transition={{ duration: 0.5, delay: i * 0.03, ease: [0.4, 0, 0.2, 1] }}
               >
-                <BrandHeroText text={titleText} size="1.5em" />
-              </motion.li>
-            );
-          }
-          // 小标题渲染（无点）
-          if (subTitles.includes(clean)) {
-            if (clean === 'Crealize合同会社（Crealize LLC）') {
-              const brand = <span className="font-brand">Crealize</span>;
-              const rest = '合同会社（Crealize LLC）'.replace('Crealize', '');
-              return (
-                <motion.li
-                  key={i}
-                  className="break-words whitespace-normal max-w-full"
-                  style={{ listStyle: 'none' }}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.7 }}
-                  transition={{ duration: 0.5, delay: i * 0.03, ease: [0.4, 0, 0.2, 1] }}
+                Founder: Yves CHEN
+                <a
+                  href="https://t.me/yveschen"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ml-3 text-blue-600 underline hover:text-blue-800 transition"
+                  style={{fontSize:'0.95em'}}
                 >
-                  <BrandHeroText text="" size="1.5em" />
-                  <span style={{ fontSize: '1.5em', fontWeight: 900 }}>
-                    {brand}{rest}
-                  </span>
-                </motion.li>
-              );
-            }
-            return (
-              <motion.li
-                key={i}
-                className="break-words whitespace-normal max-w-full"
-                style={{ listStyle: 'none' }}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.7 }}
-                transition={{ duration: 0.5, delay: i * 0.03, ease: [0.4, 0, 0.2, 1] }}
-              >
-                <BrandHeroText text={clean} size="1.5em" />
-              </motion.li>
-            );
-          }
-          // 空行
-          if (clean === '') return <li key={i} className="h-2 break-words whitespace-normal max-w-full" />;
-          // 网址自动转为链接
-          const urlMatch = clean.match(/(https?:\/\/[^\s]+)/);
-          if (urlMatch) {
-            const url = urlMatch[0];
-            const parts = clean.split(url);
-            return (
-              <motion.li
-                key={i}
-                className="break-words whitespace-normal max-w-full"
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.7 }}
-                transition={{ duration: 0.5, delay: i * 0.03, ease: [0.4, 0, 0.2, 1] }}
-              >
-                {parts[0]}
-                <a href={url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-gray-600 transition-colors">
-                  {url}
+                  @yveschen
                 </a>
-                {parts[1]}
               </motion.li>
             );
           }
-          if (clean === '聯繫我們') {
-            return (
-              <li key={i} className="break-words whitespace-normal max-w-full" style={{ listStyle: 'none' }}>
-                <BrandHeroText text="聯繫我們" size="1.5em" />
-              </li>
-            );
-          }
+          // 其餘內容全部正常渲染
           return (
             <motion.li
               key={i}
