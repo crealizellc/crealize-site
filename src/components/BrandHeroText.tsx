@@ -10,61 +10,79 @@ export function BrandHeroText({
   size = '3.2em',
   delay = 0.12,
   multiline = false,
+  nowrap = false,
+  lineHeight = 1,
+  plainColor,
 }: {
   text: string;
   size?: string;
   delay?: number;
   multiline?: boolean;
+  nowrap?: boolean;
+  lineHeight?: number | string;
+  plainColor?: string;
 }) {
   const words = multiline ? text.split(' ') : [text];
-  return (
-    <div style={{
-      fontSize: size,
-      fontWeight: 900,
-      letterSpacing: 0,
-      lineHeight: 1,
-      marginBottom: '0.2em',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'flex-start',
-    }}>
-      {words.map((word, i) => (
-        <motion.div
-          key={`${text}-${i}`}
-          whileInView={{ opacity: 1, x: 0 }}
-          initial={{ opacity: 0, x: 60 }}
-          transition={{ delay: i * delay, duration: 0.3, type: 'spring' }}
-          viewport={{ once: false, amount: 0.33 }}
-          style={{
-            display: 'block',
-            marginBottom: '-0.18em',
-            wordBreak: 'keep-all',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'clip',
-            width: '100%',
-            maxWidth: '100%',
-          }}
-        >
-          {word.split('').map((char, j, arr) => (
+  function renderWord(word: string, i: number) {
+    const regex = /(Crealize)/gi;
+    const parts = word.split(regex);
+    return (
+      <motion.div
+        key={`${text}-${i}`}
+        whileInView={{ opacity: 1, x: 0 }}
+        initial={{ opacity: 0, x: 60 }}
+        transition={{ delay: i * delay, duration: 0.3, type: 'spring' }}
+        viewport={{ once: false, amount: 0.33 }}
+        style={{
+          display: 'block',
+          marginBottom: '-0.18em',
+          wordBreak: nowrap ? 'keep-all' : 'break-word',
+          whiteSpace: nowrap ? 'nowrap' : 'normal',
+          overflow: nowrap ? 'hidden' : 'visible',
+          textOverflow: 'clip',
+          width: '100%',
+          maxWidth: '100%',
+        }}
+      >
+        {parts.map((part, j) => {
+          if (part.toLowerCase() === 'crealize') {
+            return (
+              <span key={`${text}-brand-${i}-${j}`} className="font-brand" style={{ fontWeight: 900, letterSpacing: 0 }}>{part}</span>
+            );
+          }
+          return part.split('').map((char, k, arr) =>
             char === ' ' ? (
-              <span key={`${text}-${i}-${j}`} style={{ display: 'inline-block', width: '0.5em' }}>&nbsp;</span>
+              <span key={`${text}-${i}-${j}-${k}`} style={{ display: 'inline-block', width: '0.5em' }}>&nbsp;</span>
             ) : (
               <span
-                key={`${text}-${i}-${j}`}
+                key={`${text}-${i}-${j}-${k}`}
                 style={{
-                  color: getGradientColor(j, word.length),
+                  color: plainColor ? plainColor : getGradientColor(k, arr.length),
                   fontWeight: 900,
                   display: 'inline-block',
-                  marginRight: j < arr.length - 1 && arr[j + 1] !== ' ' ? '-0.06em' : 0,
+                  marginRight: k < arr.length - 1 && arr[k + 1] !== ' ' ? '-0.06em' : 0,
                 }}
               >
                 {char}
               </span>
             )
-          ))}
-        </motion.div>
-      ))}
+          );
+        })}
+      </motion.div>
+    );
+  }
+  return (
+    <div style={{
+      fontSize: size,
+      fontWeight: 900,
+      letterSpacing: 0,
+      lineHeight: lineHeight,
+      marginBottom: '0.2em',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'flex-start',
+    }}>
+      {words.map(renderWord)}
     </div>
   );
 } 

@@ -1,9 +1,12 @@
 import React, { useRef, useEffect } from 'react';
 
+const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
 const AnimatedLinesBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   // 风速联动
   const windRef = useRef(0);
+  const shrinkRef = useRef(1);
   const lastScrollY = useRef(0);
   const lastTimestamp = useRef(0);
 
@@ -27,7 +30,7 @@ const AnimatedLinesBackground: React.FC = () => {
         freq: 0.7 + Math.random() * 0.4,
         phase: Math.random() * Math.PI * 2,
         speed: 0.7 + z * 1.1, // 近的更快
-        width: 0.5 + z * 1.0, // 最细0.5px，最粗1.5px
+        width: 0.5 + z * 0.5, // 最细0.5px，最粗1px
         z,
         color: `rgba(60,60,60,${0.10 + z * 0.18})`, // 近的更深
       };
@@ -64,15 +67,21 @@ const AnimatedLinesBackground: React.FC = () => {
       const w = canvas.width;
       const h = canvas.height;
       ctx.clearRect(0, 0, w, h);
+      // 计算收缩系数，风速大时收缩，丝滑过渡
+      const wind = windRef.current;
+      const targetShrink = 1 - Math.min(Math.abs(wind) / 6, 0.5); // 最大收缩0.5
+      shrinkRef.current = lerp(shrinkRef.current, targetShrink, 0.12);
       lines.forEach((line, idx) => {
         ctx.save();
         ctx.beginPath();
         for (let x = 0; x <= w; x += 8 * dpr) {
           const percent = x / w;
-          const baseY = line.baseY * h;
-          // 风速影响 phase，近的受影响更大
-          const windPhase = windRef.current * 0.7 * line.z;
-          const y = baseY + Math.sin(percent * Math.PI * 2 * line.freq + t / (900 / line.speed) + line.phase + idx + windPhase) * line.amp * dpr * 0.7;
+          // 收缩时baseY向中心靠拢，amp变小
+          const shrink = shrinkRef.current;
+          const baseY = (line.baseY - 0.5) * shrink + 0.5;
+          const amp = line.amp * shrink;
+          const windPhase = wind * 0.7 * line.z;
+          const y = baseY * h + Math.sin(percent * Math.PI * 2 * line.freq + t / (900 / line.speed) + line.phase + idx + windPhase) * amp * dpr * 0.7;
           if (x === 0) ctx.moveTo(x, y);
           else ctx.lineTo(x, y);
         }

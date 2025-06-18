@@ -63,4 +63,45 @@ section {
 
 a, button {
   transition: color var(--brand-anim), background var(--brand-anim), box-shadow var(--brand-anim), border-color var(--brand-anim);
-} 
+}
+
+/* --- 品牌全局正文排版优化 --- */
+body, .prose {
+  line-height: 1.8;
+  letter-spacing: 0.01em;
+}
+ul, ol {
+  margin-bottom: 1.1em;
+  padding-left: 1.2em;
+}
+ul li, ol li {
+  margin-bottom: 0.7em;
+}
+
+/* --- 品牌超链接下划线滑入动画（黑色字+黑色线，强制权重）--- */
+a {
+  position: relative;
+  color: #111 !important; /* 强制黑色 */
+  text-decoration: none;
+  background-image: linear-gradient(90deg, #111 0%, #111 100%); /* 黑色动画线 */
+  background-repeat: no-repeat;
+  background-size: 0% 2px;
+  background-position: 0 100%;
+  transition: background-size 0.35s cubic-bezier(0.4,0,0.2,1), color 0.2s;
+  cursor: pointer;
+  font-weight: 500;
+  word-break: break-all;
+}
+a:hover, a:focus, a:active {
+  background-size: 100% 2px;
+  color: #111 !important;
+}
+
+/* --- 兼容性说明 --- */
+/*
+- PC端：hover、focus 有动画
+- 手机端：active 有动画，手指按下即反馈
+- 性能高：只用背景渲染，不会触发重排
+- 不影响现有 Framer Motion 动画
+- 兼容所有主流浏览器
+*/ 
