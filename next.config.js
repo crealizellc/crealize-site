@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
-  distDir: 'out',
+  // 移除 output: 'export' 以支持中間件功能
+  // output: 'export',
+  // distDir: 'out',
   images: {
     unoptimized: true,
   },

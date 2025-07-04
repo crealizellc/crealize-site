@@ -2,10 +2,13 @@ export const defaultLocale = "ja";
 export const locales = ["ja", "en", "zh"] as const;
 export type Locale = (typeof locales)[number];
 
-export const localeNames = {
-  ja: "日本語",
+export const localeNames: Record<Locale, string> = {
   en: "English",
-  zh: "中文",
+  ja: "日本語",
+  'zh-TW': "繁體中文",
+  fr: "Français",
+  de: "Deutsch",
+  es: "Español"
 } as const;
 
 // 从Google Sheets获取翻译数据的配置
