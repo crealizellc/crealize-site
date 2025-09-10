@@ -24,7 +24,7 @@ html, body, #__next, #root {
   width: 100% !important;
   overflow-x: hidden !important;
   box-sizing: border-box;
-  background: transparent;
+  background: #fff;
   font-family: 'Noto Sans', sans-serif;
   color: var(--brand-main);
   letter-spacing: 0.01em;

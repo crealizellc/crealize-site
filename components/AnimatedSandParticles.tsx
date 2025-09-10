@@ -1,3 +1,4 @@
+"use client";
 import React, { useRef, useEffect } from 'react';
 
 const PARTICLE_COUNT = 120;
@@ -25,16 +26,19 @@ const AnimatedSandParticles: React.FC = () => {
     if (!ctx) return;
 
     const dpr = window.devicePixelRatio || 1;
-    canvas.width = window.innerWidth * dpr;
-    canvas.height = HEIGHT * dpr;
-    canvas.style.width = window.innerWidth + 'px';
+    const width = window.innerWidth;
+    canvas.width = Math.max(1, Math.floor(width * dpr));
+    canvas.height = Math.max(1, Math.floor(HEIGHT * dpr));
+    canvas.style.width = width + 'px';
     canvas.style.height = HEIGHT + 'px';
 
     function resize() {
       if (!canvas) return;
-      canvas.width = window.innerWidth * dpr;
-      canvas.height = HEIGHT * dpr;
-      canvas.style.width = window.innerWidth + 'px';
+      const dpr = window.devicePixelRatio || 1;
+      const width = window.innerWidth;
+      canvas.width = Math.max(1, Math.floor(width * dpr));
+      canvas.height = Math.max(1, Math.floor(HEIGHT * dpr));
+      canvas.style.width = width + 'px';
       canvas.style.height = HEIGHT + 'px';
     }
     window.addEventListener('resize', resize);
@@ -90,7 +94,10 @@ const AnimatedSandParticles: React.FC = () => {
       }
     }
 
+    let running = true;
+    let rafId = 0;
     function animate() {
+      if (!running) return;
       windRef.current *= 0.92;
       for (const p of particles) {
         // 方向改为从左到右
@@ -101,11 +108,13 @@ const AnimatedSandParticles: React.FC = () => {
         }
       }
       draw();
-      requestAnimationFrame(animate);
+      rafId = requestAnimationFrame(animate);
     }
-    animate();
+    rafId = requestAnimationFrame(animate);
 
     return () => {
+      running = false;
+      if (rafId) cancelAnimationFrame(rafId);
       window.removeEventListener('resize', resize);
       window.removeEventListener('scroll', onScroll);
     };
@@ -117,12 +126,15 @@ const AnimatedSandParticles: React.FC = () => {
       style={{
         position: 'fixed',
         left: 0,
-        bottom: '20vh',
-        width: '100vw',
-        height: `${HEIGHT}px`,
+        bottom: 'calc(33vh - 80px)',
+        width: '100%',
+        right: 0,
+        overflowX: 'hidden',
         zIndex: 0,
         pointerEvents: 'none',
         userSelect: 'none',
+        margin: 0,
+        padding: 0,
         display: 'block',
         background: 'transparent',
       }}

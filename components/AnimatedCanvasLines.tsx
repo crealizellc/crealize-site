@@ -1,3 +1,4 @@
+"use client";
 import React, { useRef, useEffect } from 'react';
 
 /**
@@ -12,23 +13,20 @@ export default function AnimatedCanvasLines({ lineCount = 18 }: { lineCount?: nu
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const container = containerRef.current;
-    if (!canvas || !container) return;
+    if (!canvas) return;
 
     function resize() {
       const dpr = window.devicePixelRatio || 1;
-      if (!canvas || !container) return;
-      canvas.width = container.clientWidth * dpr;
-      canvas.height = container.clientHeight * dpr;
-      canvas.style.width = container.clientWidth + 'px';
-      canvas.style.height = container.clientHeight + 'px';
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      canvas.width = Math.max(1, Math.floor(width * dpr));
+      canvas.height = Math.max(1, Math.floor(height * dpr));
+      canvas.style.width = width + 'px';
+      canvas.style.height = height + 'px';
     }
     resize();
-    const ro = new window.ResizeObserver(resize);
-    if (container) ro.observe(container);
     window.addEventListener('resize', resize);
     return () => {
-      ro.disconnect();
       window.removeEventListener('resize', resize);
     };
   }, []);
@@ -117,22 +115,28 @@ export default function AnimatedCanvasLines({ lineCount = 18 }: { lineCount?: nu
     }
 
     let start: number | null = null;
+    let rafId = 0;
     function animate(ts: number) {
       if (!running) return;
       if (!start) start = ts;
       draw(ts - start);
-      requestAnimationFrame(animate);
+      rafId = requestAnimationFrame(animate);
     }
-    requestAnimationFrame(animate);
+    rafId = requestAnimationFrame(animate);
 
     return () => {
       running = false;
+      if (rafId) cancelAnimationFrame(rafId);
     };
   }, [lineCount]);
 
   return (
-    <div ref={containerRef} className="absolute inset-0 w-full h-full z-0 pointer-events-none select-none">
-      <canvas ref={canvasRef} className="w-full h-full" />
+    <div
+      ref={containerRef}
+      className="pointer-events-none select-none"
+      style={{ position: 'fixed', inset: 0, zIndex: 0, width: '100%', height: '100%' }}
+    >
+      <canvas ref={canvasRef} style={{ display: 'block', width: '100%', height: '100%' }} />
     </div>
   );
 } 

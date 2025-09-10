@@ -62,9 +62,9 @@ function BrandSlogan({ slogan }: { slogan: string[] }) {
   );
 }
 
-function Section({ section, sectionClassName }: { section: typeof homeContent.sections[0], sectionClassName: string }) {
+function Section({ section }: { section: typeof homeContent.sections[0] }) {
   return (
-    <section id={section.id} className={`${sectionClassName} mb-10 md:mb-14 text-left w-full max-w-3xl mx-auto py-12 px-4`}>
+    <section id={section.id} className="mb-10 md:mb-14 text-left w-full max-w-3xl mx-auto py-12 px-4">
       <motion.div
         initial={{ opacity: 0, y: 32 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -132,15 +132,15 @@ export default function Home() {
             {homeContent.brandName}
           </span>
         </div>
-        <div ref={contentRef} className="relative z-10 w-full px-0 pt-12 sm:pt-20 pb-12 sm:pb-20">
-          <div className="relative z-10 w-full">
+        <div ref={contentRef} className="relative z-10 w-full mx-auto px-6 sm:px-10 md:px-16 lg:px-32 pt-12 sm:pt-20 pb-12 sm:pb-20">
+          <div className="relative z-10">
             <div style={{ overflowX: 'auto', width: '100%' }}>
               <BrandSlogan slogan={homeContent.slogan} />
             </div>
             {/* 你可以在这里插入首页副标题或描述 */}
             {/* <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-12">{homeContent.sloganDesc}</p> */}
             {homeContent.sections.map((sec) => (
-              <Section section={sec} key={sec.id} sectionClassName="w-full px-0" />
+              <Section section={sec} key={sec.id} />
             ))}
           </div>
         </div>

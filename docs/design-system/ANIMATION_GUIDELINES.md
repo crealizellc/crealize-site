@@ -134,6 +134,14 @@ const buttonTap = {
 3. 使用 will-change 提示浏览器
 4. 考虑使用 requestAnimationFrame
 
+## Canvas 背景动画实现规范（新增）
+
+- 全局 Canvas 背景需使用 `position: fixed`，不参与文档流，避免撑高页面。
+- 尺寸一律通过 `window.innerWidth/innerHeight` 结合 DPR 计算，避免容器尺寸抖动。
+- 必须在组件卸载时取消 `requestAnimationFrame` 与事件监听，防止热更新后帧循环叠加。
+- 页面主体需预留固定像素上下内边距（建议 240px），不要依赖 `vh`，以避免浏览器 UI（地址栏）出现/隐藏引发的高度抖动。
+- 根级样式禁止使用 `100vw` 固定宽度；统一使用 `width: 100%` 与 `overflow-x: hidden`。
+
 ## 动画使用场景
 
 ### 首页

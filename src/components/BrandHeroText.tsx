@@ -13,6 +13,7 @@ export function BrandHeroText({
   nowrap = false,
   lineHeight = 1,
   plainColor,
+  align = 'center',
 }: {
   text: string;
   size?: string;
@@ -21,6 +22,7 @@ export function BrandHeroText({
   nowrap?: boolean;
   lineHeight?: number | string;
   plainColor?: string;
+  align?: 'left' | 'center' | 'right';
 }) {
   const words = multiline ? text.split(' ') : [text];
   function renderWord(word: string, i: number) {
@@ -71,6 +73,8 @@ export function BrandHeroText({
       </motion.div>
     );
   }
+  const justify = align === 'center' ? 'center' : align === 'right' ? 'flex-end' : 'flex-start'
+  const textAlign = align
   return (
     <div style={{
       fontSize: size,
@@ -80,7 +84,9 @@ export function BrandHeroText({
       marginBottom: '0.2em',
       display: 'flex',
       flexDirection: 'column',
-      alignItems: 'flex-start',
+      alignItems: justify,
+      textAlign,
+      width: '100%'
     }}>
       {words.map(renderWord)}
     </div>

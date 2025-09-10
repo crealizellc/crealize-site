@@ -1,3 +1,4 @@
+"use client";
 import React, { useRef, useEffect } from 'react';
 
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
@@ -39,10 +40,12 @@ const AnimatedLinesBackground: React.FC = () => {
     function resize() {
       const dpr = window.devicePixelRatio || 1;
       if (!canvas) return;
-      canvas.width = window.innerWidth * dpr;
-      canvas.height = 160 * dpr;
-      canvas.style.width = window.innerWidth + 'px';
-      canvas.style.height = '160px';
+      const width = window.innerWidth;
+      const height = 160;
+      canvas.width = Math.max(1, Math.floor(width * dpr));
+      canvas.height = Math.max(1, Math.floor(height * dpr));
+      canvas.style.width = width + 'px';
+      canvas.style.height = height + 'px';
     }
     resize();
     window.addEventListener('resize', resize);
@@ -93,17 +96,19 @@ const AnimatedLinesBackground: React.FC = () => {
       });
     }
     let start: number | null = null;
+    let rafId = 0;
     function animate(ts: number) {
       if (!running) return;
       if (!start) start = ts;
       // 风速缓慢衰减
       windRef.current *= 0.92;
       draw(ts - start);
-      requestAnimationFrame(animate);
+      rafId = requestAnimationFrame(animate);
     }
-    requestAnimationFrame(animate);
+    rafId = requestAnimationFrame(animate);
     return () => {
       running = false;
+      if (rafId) cancelAnimationFrame(rafId);
       window.removeEventListener('resize', resize);
       window.removeEventListener('scroll', onScroll);
     };
@@ -115,12 +120,16 @@ const AnimatedLinesBackground: React.FC = () => {
       style={{
         position: 'fixed',
         left: 0,
-        top: '20vh',
-        width: '100vw',
+        top: 'calc(33vh - 80px)',
+        width: '100%',
+        right: 0,
+        overflowX: 'hidden',
         height: '160px',
         zIndex: 0,
         pointerEvents: 'none',
         userSelect: 'none',
+        margin: 0,
+        padding: 0,
         display: 'block',
         background: 'transparent',
       }}

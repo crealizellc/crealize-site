@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+const withNextIntl = require('next-intl/plugin')();
 const nextConfig = {
   // 移除 output: 'export' 以支持中間件功能
   // output: 'export',
@@ -44,4 +45,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig; 
+module.exports = withNextIntl(nextConfig);

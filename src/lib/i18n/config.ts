@@ -1,5 +1,6 @@
 export const defaultLocale = "ja";
-export const locales = ["ja", "en", "zh"] as const;
+// 仅包含已有消息文件的语言
+export const locales = ["ja", "en", "fr", "de", "es", "zh-TW"] as const;
 export type Locale = (typeof locales)[number];
 
 export const localeNames: Record<Locale, string> = {
@@ -8,7 +9,7 @@ export const localeNames: Record<Locale, string> = {
   'zh-TW': "繁體中文",
   fr: "Français",
   de: "Deutsch",
-  es: "Español"
+  es: "Español",
 } as const;
 
 // 从Google Sheets获取翻译数据的配置

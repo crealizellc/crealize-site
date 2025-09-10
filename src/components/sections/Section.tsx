@@ -1,5 +1,5 @@
-import { type FC, memo } from 'react'
-import { motion } from 'framer-motion'
+import { memo } from 'react'
+import { motion, cubicBezier } from 'framer-motion'
 import { TitleDivider } from '../ui/TitleDivider'
 
 /**
@@ -28,10 +28,11 @@ interface SectionProps {
 }
 
 // 动画配置
+const easeStandard = cubicBezier(0.4, 0, 0.2, 1)
 const CONTENT_ANIMATION = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, ease: [0.4, 0, 0.2, 1] }
+  transition: { duration: 0.6, ease: easeStandard }
 }
 
 export const Section = memo<SectionProps>(({ id, title, children, className = '' }) => {

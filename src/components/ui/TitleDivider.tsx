@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, memo, useCallback } from 'react'
-import { motion, useAnimation } from 'framer-motion'
+import { motion, useAnimation, cubicBezier } from 'framer-motion'
 
 /**
  * 标题分割线组件
@@ -23,14 +23,16 @@ interface TitleDividerProps {
 }
 
 // 动画配置
+const easeEnter = cubicBezier(0.4, 0, 0.2, 1)
+const easeExit = cubicBezier(0.4, 0, 1, 1)
 const ANIMATION_CONFIG = {
   enter: {
     duration: 0.5,
-    ease: [0.4, 0, 0.2, 1]
+    ease: easeEnter,
   },
   exit: {
     duration: 0.3,
-    ease: [0.4, 0, 1, 1]
+    ease: easeExit,
   }
 }
 
