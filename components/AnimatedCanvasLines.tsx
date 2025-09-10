@@ -10,11 +10,16 @@ export default function AnimatedCanvasLines({ lineCount = 18 }: { lineCount?: nu
   const containerRef = useRef<HTMLDivElement>(null);
   // 鼠标位置和整体旋转
   const mouse = useRef({ x: 0.5, y: 0.5 });
+  const motionDisabled = () => {
+    try {
+      const mq = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+      const forced = typeof window !== 'undefined' && window.localStorage && localStorage.getItem('anim') === 'on';
+      return mq?.matches && !forced;
+    } catch { return false; }
+  };
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      return;
-    }
+    if (motionDisabled()) return;
     function resize() {
       const canvas = canvasRef.current;
       if (!canvas) return;
@@ -35,9 +40,7 @@ export default function AnimatedCanvasLines({ lineCount = 18 }: { lineCount?: nu
 
   // 鼠标跟随和整体旋转
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      return;
-    }
+    if (motionDisabled()) return;
     const container = containerRef.current;
     if (!container) return;
     function onMove(e: MouseEvent) {
@@ -59,9 +62,7 @@ export default function AnimatedCanvasLines({ lineCount = 18 }: { lineCount?: nu
   }, []);
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      return;
-    }
+    if (motionDisabled()) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
