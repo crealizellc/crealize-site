@@ -11,7 +11,7 @@ function swapLocale(path: string, target: string) {
 export default function LangSwitchFloating() {
   const path = usePathname() || '/en/';
   return (
-    <div className="fixed bottom-4 right-4 z-[120] pointer-events-auto">
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[140] pointer-events-auto">
       <div className="backdrop-blur supports-[backdrop-filter]:bg-white/55 bg-white/80 border border-neutral-200 rounded-full shadow-sm pl-3 pr-2 py-1 flex items-center gap-2 justify-end text-right min-w-[160px]">
         <Link className="px-3 py-1 text-[12px] leading-none hover:underline" href={swapLocale(path,'en')}>EN</Link>
         <span className="text-neutral-300">·</span>
