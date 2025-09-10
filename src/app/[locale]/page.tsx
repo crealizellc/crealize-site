@@ -1,26 +1,41 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { BrandHeroText } from '@/components/BrandHeroText';
-// 背景動畫已移至 layout 統一渲染
+import Hero from '@/components/Hero';
+import Script from 'next/script';
 
 export default function HomePage() {
   const t = useTranslations();
 
+  const isEn = typeof window !== 'undefined' ? window.location.pathname.split('/')[1] === 'en' : false;
+
   return (
     <div className="min-h-screen relative">
-      
-      {/* Hero 區塊 */}
-      <section className="relative z-10 pt-[28vh] pb-20 px-6">
-        <div className="max-w-5xl mx-auto">
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-            {t('heroTitle')}
-          </h1>
-          <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto">
-            {t('heroDesc')}
-          </p>
-        </div>
-      </section>
+      {isEn && (
+        <>
+          <Hero />
+          <Script id="ld-org" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+            '@context': 'https://schema.org', '@type': 'Organization', name: 'Crealize', url: 'https://your-domain.com/', logo: 'https://your-domain.com/logo.png'
+          }) }} />
+          <Script id="ld-website" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+            '@context': 'https://schema.org', '@type': 'WebSite', name: 'Crealize', url: 'https://your-domain.com/',
+            potentialAction: { '@type': 'SearchAction', target: 'https://your-domain.com/search?q={query}', 'query-input': 'required name=query' }
+          }) }} />
+        </>
+      )}
+      {/* Hero 區塊（其他語言沿用原結構）*/}
+      {!isEn && (
+        <section className="relative z-10 pt-[28vh] pb-20 px-6">
+          <div className="max-w-5xl mx-auto">
+            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+              {t('heroTitle')}
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto">
+              {t('heroDesc')}
+            </p>
+          </div>
+        </section>
+      )}
 
       {/* Vision 區塊 */}
       <section className="relative z-10 py-16 px-6">

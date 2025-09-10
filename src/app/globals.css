@@ -102,3 +102,7 @@ a:hover, a:focus, a:active {
   width: 100%;
   position: relative;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-okay { animation: none !important; transform: none !important; }
+}

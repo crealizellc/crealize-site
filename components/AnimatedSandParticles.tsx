@@ -17,6 +17,9 @@ const AnimatedSandParticles: React.FC = () => {
   const lastTimestamp = useRef(0);
 
   useEffect(() => {
+    if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
     lastScrollY.current = window.scrollY;
     lastTimestamp.current = performance.now();
 
@@ -138,6 +141,7 @@ const AnimatedSandParticles: React.FC = () => {
         display: 'block',
         background: 'transparent',
       }}
+      className="motion-okay"
     />
   );
 };

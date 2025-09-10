@@ -6,6 +6,7 @@ const nextConfig = {
   // distDir: 'out',
   images: {
     unoptimized: true,
+    formats: ['image/avif', 'image/webp'],
   },
   trailingSlash: true,
   // 禁用一些不必要的优化

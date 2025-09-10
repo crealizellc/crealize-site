@@ -12,6 +12,9 @@ const AnimatedLinesBackground: React.FC = () => {
   const lastTimestamp = useRef(0);
 
   useEffect(() => {
+    if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
     // 只在客户端初始化
     lastScrollY.current = window.scrollY;
     lastTimestamp.current = performance.now();
@@ -133,6 +136,7 @@ const AnimatedLinesBackground: React.FC = () => {
         display: 'block',
         background: 'transparent',
       }}
+      className="motion-okay"
     />
   );
 };

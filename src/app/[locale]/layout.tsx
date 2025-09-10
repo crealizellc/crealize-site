@@ -34,6 +34,7 @@ export default async function LocaleLayout({
         <link rel="icon" type="image/png" href="/image/crealize500.png" />
       </head>
       <body className="bg-white">
+        <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:bg-white focus:px-3 focus:py-2 focus:rounded">Skip to main content</a>
         <NextIntlClientProvider messages={messages}>
           {/* 左上角品牌：图标 + 标准字 */}
           <div className="fixed top-4 left-4 z-50 select-none">
@@ -49,7 +50,7 @@ export default async function LocaleLayout({
           <AnimatedSandParticles />
 
           {/* 主要內容留白 */}
-          <main className="content-area relative z-10" style={{ paddingTop: '100px', paddingBottom: '80px' }}>
+          <main id="main" className="content-area relative z-10" style={{ paddingTop: '100px', paddingBottom: '80px' }}>
             <div className="mx-auto w-full max-w-6xl px-8 md:px-12">
               {children}
             </div>

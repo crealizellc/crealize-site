@@ -12,10 +12,12 @@ export default function AnimatedCanvasLines({ lineCount = 18 }: { lineCount?: nu
   const mouse = useRef({ x: 0.5, y: 0.5 });
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
+    if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
     function resize() {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
       const dpr = window.devicePixelRatio || 1;
       const width = window.innerWidth;
       const height = window.innerHeight;
@@ -33,6 +35,9 @@ export default function AnimatedCanvasLines({ lineCount = 18 }: { lineCount?: nu
 
   // 鼠标跟随和整体旋转
   useEffect(() => {
+    if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
     const container = containerRef.current;
     if (!container) return;
     function onMove(e: MouseEvent) {
@@ -54,6 +59,9 @@ export default function AnimatedCanvasLines({ lineCount = 18 }: { lineCount?: nu
   }, []);
 
   useEffect(() => {
+    if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -133,7 +141,7 @@ export default function AnimatedCanvasLines({ lineCount = 18 }: { lineCount?: nu
   return (
     <div
       ref={containerRef}
-      className="pointer-events-none select-none"
+      className="pointer-events-none select-none motion-okay"
       style={{ position: 'fixed', inset: 0, zIndex: 0, width: '100%', height: '100%' }}
     >
       <canvas ref={canvasRef} style={{ display: 'block', width: '100%', height: '100%' }} />
