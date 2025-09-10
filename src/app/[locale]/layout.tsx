@@ -119,8 +119,7 @@ export default async function LocaleLayout({
           <LangSwitchFloatingDyn />
           {/* JSON-LD: Organization & WebSite */}
           <Script id="ld-org" type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-            '@context':'https://schema.org', '@type':'Organization', name:'Crealize', url:'
-            https://crealize.llc/', logo:'https://crealize.llc/image/crealize500.png'
+            '@context':'https://schema.org', '@type':'Organization', name:'Crealize', url:'https://crealize.llc/', logo:'https://crealize.llc/image/crealize500.png'
           }) }} />
           <Script id="ld-website" type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify({
             '@context':'https://schema.org', '@type':'WebSite', name:'Crealize', url:'https://crealize.llc/',
