@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://your-domain.com';
+export const BASE_URL = 'https://crealize.llc';
 import { locales as LOCALES_ARRAY } from '@/lib/i18n/config';
 export const LOCALES = LOCALES_ARRAY;
 export type Locale = typeof LOCALES[number];

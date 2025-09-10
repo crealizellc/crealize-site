@@ -8,6 +8,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import LangSwitchPortal from '@/components/ui/LangSwitchPortal';
 import type { Metadata } from 'next';
+import Script from 'next/script';
 
 const AnimatedCanvasLines = dynamic(() => import('../../../components/AnimatedCanvasLines'), { ssr: false });
 const AnimatedLinesBackground = dynamic(() => import('../../../components/AnimatedLinesBackground'), { ssr: false });
@@ -34,6 +35,7 @@ export async function generateMetadata({ params }: { params: { locale: 'en'|'ja'
     }
   } as const;
   return {
+    metadataBase: new URL('https://crealize.llc'),
     title: meta[l as 'en'|'ja'|'zh-TW'].title,
     description: meta[l as 'en'|'ja'|'zh-TW'].description,
     alternates: {
@@ -93,6 +95,14 @@ export default async function LocaleLayout({
           </main>
           <div id="__lang-switch-floating__"></div>
           <LangSwitchPortal />
+          {/* JSON-LD: Organization & WebSite */}
+          <Script id="ld-org" type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+            '@context':'https://schema.org', '@type':'Organization', name:'Crealize', url:'https://crealize.llc/', logo:'https://crealize.llc/image/crealize500.png'
+          }) }} />
+          <Script id="ld-website" type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+            '@context':'https://schema.org', '@type':'WebSite', name:'Crealize', url:'https://crealize.llc/',
+            potentialAction:{ '@type':'SearchAction', target:'https://crealize.llc/search?q={query}', 'query-input':'required name=query' }
+          }) }} />
         </NextIntlClientProvider>
       </body>
     </html>
