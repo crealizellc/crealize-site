@@ -10,12 +10,14 @@ export default function AnimatedCanvasLines({ lineCount = 18 }: { lineCount?: nu
   const containerRef = useRef<HTMLDivElement>(null);
   // 鼠标位置和整体旋转
   const mouse = useRef({ x: 0.5, y: 0.5 });
-  const motionDisabled = () => {
+  const motionDisabled = (): boolean => {
     try {
-      const mq = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
-      const forced = typeof window !== 'undefined' && window.localStorage && localStorage.getItem('anim') === 'on';
-      return mq?.matches && !forced;
-    } catch { return false; }
+      const forced = (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') ? localStorage.getItem('anim') === 'on' : false;
+      const mq = (typeof window !== 'undefined' && typeof window.matchMedia === 'function') ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+      return !!(mq && mq.matches) && !forced;
+    } catch {
+      return false;
+    }
   };
 
   useEffect(() => {
