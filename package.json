@@ -10,7 +10,7 @@
     "auto:push": "node scripts/auto-dev.js --push",
     "auto:all": "node scripts/auto-dev.js --all",
     "build": "next build",
-    "export": "STATIC_EXPORT=true next build && next export -o dist",
+    "export": "sh -c 'mv middleware.ts middleware.ts.bak 2>/dev/null || true; STATIC_EXPORT=true next build && next export -o dist; mv middleware.ts.bak middleware.ts 2>/dev/null || true'",
     "deploy:gh": "pnpm export && gh-pages -d dist -b gh-pages -t true",
     "dev": "next dev",
     "start": "next start"

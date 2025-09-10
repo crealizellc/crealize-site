@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: { params: { locale: 'en'|'ja'
     openGraph: {
       title: meta[l as 'en'|'ja'|'zh-TW'].title,
       description: meta[l as 'en'|'ja'|'zh-TW'].description,
-      url: `https://your-domain.com/${l}/`,
+      url: `https://crealize.llc/${l}/`,
       siteName: 'Crealize',
       images: [{ url: `/og/og-${l}.jpg`, width: 1200, height: 630 }],
       type: 'website'
