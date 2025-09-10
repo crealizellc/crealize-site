@@ -1,4 +1,3 @@
-"use client"
 import { memo } from 'react'
 import { motion, cubicBezier } from 'framer-motion'
 import { TitleDivider } from '../ui/TitleDivider'

@@ -5,8 +5,6 @@ import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 
 const AnimatedSvgBackground = dynamic(() => import('../../components/AnimatedSvgBackground'), { ssr: false });
-import HeroOverlay from './ui/HeroOverlay';
-import './ui/hero-overlay.css';
 
 export default function Hero() {
   const [mounted, setMounted] = useState(false);
@@ -29,9 +27,14 @@ export default function Hero() {
       </div>
 
       <div className="relative mx-auto max-w-6xl px-6 pt-16 pb-10 sm:pt-20 sm:pb-16">
-        {/* 文案改由 HeroOverlay 渲染，此处保留占位避免结构突变 */}
+        <h1 className="font-extrabold tracking-tight leading-tight [font-size:clamp(2rem,6vw,4.25rem)] max-w-3xl">
+          Transforming Imagination into Reality
+        </h1>
+        <p className="mt-4 max-w-2xl text-base sm:text-lg text-neutral-700">
+          Redefining creative realization with Web3 × Gamification × AI.
+        </p>
+        {/* CTA 与 LCP 图如需零视觉变更可先保持关闭 */}
       </div>
-      <HeroOverlay />
     </header>
   );
 }
