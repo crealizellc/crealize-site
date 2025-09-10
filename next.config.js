@@ -1,21 +1,21 @@
 /** @type {import('next').NextConfig} */
 const withNextIntl = require('next-intl/plugin')();
+
+const isStaticExport = process.env.STATIC_EXPORT === 'true';
+
 const nextConfig = {
-  // 移除 output: 'export' 以支持中間件功能
-  // output: 'export',
-  // distDir: 'out',
+  // GH Pages 静态导出时启用 export
+  ...(isStaticExport ? { output: 'export' } : {}),
   images: {
+    // GH Pages 需关闭优化
     unoptimized: true,
     formats: ['image/avif', 'image/webp'],
   },
   trailingSlash: true,
-  // 禁用一些不必要的优化
   compress: false,
   poweredByHeader: false,
   reactStrictMode: true,
-  // 简化构建输出
   webpack: (config, { dev, isServer }) => {
-    // 生产环境下优化
     if (!dev && !isServer) {
       config.optimization = {
         ...config.optimization,

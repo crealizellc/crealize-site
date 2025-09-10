@@ -10,6 +10,8 @@
     "auto:push": "node scripts/auto-dev.js --push",
     "auto:all": "node scripts/auto-dev.js --all",
     "build": "next build",
+    "export": "STATIC_EXPORT=true next build && next export -o dist",
+    "deploy:gh": "pnpm export && gh-pages -d dist -b gh-pages -t true",
     "dev": "next dev",
     "start": "next start"
   },
