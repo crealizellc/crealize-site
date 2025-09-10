@@ -78,7 +78,7 @@ export default {
     ]},
     { id:'contact', title:'Contact', content:[
       'Crealize LLC — Founded Oct 9, 2024. Founder: Yves CHEN.',
-      'Address: Ryusen 3‑8‑4‑402, Taito‑ku, Tokyo 110‑0012, Japan.',
+      'Address: 3‑8‑4 Ryusen, Han‑Ei Building 402, Taito‑ku, Tokyo 110‑0012, Japan.',
       'Telegram: @yveschen — Locations: Tokyo + remote (Taiwan/Singapore/Dubai/London).'
     ]}
   ]

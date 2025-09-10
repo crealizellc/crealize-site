@@ -7,6 +7,8 @@ import '../globals.css';
 import Image from 'next/image';
 import Link from 'next/link';
 import LangSwitchPortal from '@/components/ui/LangSwitchPortal';
+// 直接動態渲染語言切換（Safari 兜底，不依賴 portal）
+const LangSwitchFloatingDyn = dynamic(() => import('@/components/ui/LangSwitchFloating'), { ssr: false });
 import type { Metadata } from 'next';
 import Script from 'next/script';
 
@@ -72,7 +74,7 @@ export default async function LocaleLayout({
         <meta name="description" content="Redefining the possibilities of creative realization with Web3 × Gamification × AI." />
         <link rel="icon" type="image/png" href="/image/crealize500.png" />
       </head>
-      <body className="bg-white">
+      <body className="bg-transparent">
         <NextIntlClientProvider locale={locale} messages={messages}>
           {/* 左上角品牌：图标 + 标准字 */}
           <div className="fixed top-4 left-4 z-50 select-none">
@@ -83,6 +85,24 @@ export default async function LocaleLayout({
           </div>
 
           {/* 全局背景動畫（fixed） */}
+          {/* 为静态导出环境延迟到浏览器空闲再挂载，避免首屏阻塞/顺序竞争 */}
+          <Script id="init-animations" strategy="afterInteractive">
+            {`
+              (function(){
+                function mount(){
+                  try{
+                    // 由 Next 动态模块渲染，等待一帧再确保挂载
+                    setTimeout(function(){},0);
+                  }catch(e){}
+                }
+                if ('requestIdleCallback' in window) {
+                  (window as any).requestIdleCallback(mount);
+                } else {
+                  setTimeout(mount, 0);
+                }
+              })();
+            `}
+          </Script>
           <AnimatedCanvasLines />
           <AnimatedLinesBackground />
           <AnimatedSandParticles />
@@ -94,7 +114,8 @@ export default async function LocaleLayout({
             </div>
           </main>
           <div id="__lang-switch-floating__"></div>
-          <LangSwitchPortal />
+          {/* Safari 兜底：直接動態渲染浮動語言切換 */}
+          <LangSwitchFloatingDyn />
           {/* JSON-LD: Organization & WebSite */}
           <Script id="ld-org" type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify({
             '@context':'https://schema.org', '@type':'Organization', name:'Crealize', url:'https://crealize.llc/', logo:'https://crealize.llc/image/crealize500.png'
