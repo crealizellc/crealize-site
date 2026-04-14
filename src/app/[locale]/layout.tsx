@@ -18,41 +18,84 @@ export async function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
-export async function generateMetadata({ params }: { params: { locale: 'en'|'ja'|'zh-TW'|string } }): Promise<Metadata> {
-  const l = (params.locale === 'ja' || params.locale === 'zh-TW' || params.locale === 'en') ? params.locale : 'en';
-  const meta = {
-    en: {
-      title: 'Crealize — Transforming Imagination into Reality',
-      description: 'Data‑driven staged delivery for Web3 × Gamification × AI.'
-    },
-    ja: {
-      title: 'Crealize — 想像を現実へ',
-      description: 'Web3 × ゲーミフィケーション × AI をデータ起点で段階的に実装。'
-    },
-    'zh-TW': {
-      title: 'Crealize — 把想像變成現實',
-      description: '以數據驅動的分階段交付，專注 Web3 × 遊戲化 × AI。'
-    }
-  } as const;
+const META = {
+  en: {
+    title: 'Crealize — Web3 × Gamification × AI Product Studio',
+    description: 'Tokyo-based product studio specializing in Telegram Mini Apps, Web3, GameFi and creator economy. 0→1 incubation, community growth, AI localization. Trusted by 10+ teams globally.',
+    keywords: 'Telegram Mini App, Web3, GameFi, product studio, Tokyo, AI, gamification, creator economy, blockchain, TON, Solana',
+  },
+  ja: {
+    title: 'Crealize — Telegram Mini App・Web3・AI プロダクトスタジオ（東京）',
+    description: '東京発のプロダクトスタジオ。Telegram Mini App・GameFi・クリエイター支援に特化。0→1 インキュベーションからコミュニティ運用・AI 多言語化まで対応。10チーム以上の実績。',
+    keywords: 'Telegram Mini App, Web3, GameFi, プロダクトスタジオ, 東京, AI, ゲーミフィケーション, クリエイター, TON, Solana',
+  },
+  'zh-TW': {
+    title: 'Crealize — Web3 × 遊戲化 × AI 產品工作室（東京）',
+    description: '東京產品工作室，專注 Telegram Mini App、Web3、GameFi 與創作者經濟。提供 0→1 孵化、社群運營、AI 多語系在地化。已服務 10+ 團隊。',
+    keywords: 'Telegram Mini App, Web3, GameFi, 產品工作室, 東京, AI, 遊戲化, 創作者, TON, Solana',
+  },
+} as const;
+
+type SupportedLocale = keyof typeof META;
+
+export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
+  const l: SupportedLocale = (params.locale === 'ja' || params.locale === 'zh-TW') ? params.locale : 'en';
+  const m = META[l];
   return {
     metadataBase: new URL('https://crealize.llc'),
-    title: meta[l as 'en'|'ja'|'zh-TW'].title,
-    description: meta[l as 'en'|'ja'|'zh-TW'].description,
+    title: m.title,
+    description: m.description,
+    keywords: m.keywords,
+    authors: [{ name: 'Yves CHEN', url: 'https://crealize.llc' }],
+    robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
     alternates: {
       canonical: `/${l}/`,
-      languages: { en: '/en/', ja: '/ja/', 'zh-TW': '/zh-TW/', 'x-default': '/' }
+      languages: { en: '/en/', ja: '/ja/', 'zh-TW': '/zh-TW/', 'x-default': '/ja/' },
     },
     openGraph: {
-      title: meta[l as 'en'|'ja'|'zh-TW'].title,
-      description: meta[l as 'en'|'ja'|'zh-TW'].description,
+      title: m.title,
+      description: m.description,
       url: `https://crealize.llc/${l}/`,
       siteName: 'Crealize',
-      images: [{ url: `/og/og-${l}.jpg`, width: 1200, height: 630 }],
-      type: 'website'
+      images: [{ url: `/og/og-${l}.jpg`, width: 1200, height: 630, alt: 'Crealize' }],
+      locale: l === 'en' ? 'en_US' : l === 'ja' ? 'ja_JP' : 'zh_TW',
+      type: 'website',
     },
-    twitter: { card: 'summary_large_image' }
+    twitter: { card: 'summary_large_image', title: m.title, description: m.description },
   };
 }
+
+const LD_ORG = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Crealize',
+  alternateName: 'Crealize LLC',
+  url: 'https://crealize.llc/',
+  logo: 'https://crealize.llc/image/crealize500.png',
+  foundingDate: '2024-10-09',
+  founder: { '@type': 'Person', name: 'Yves CHEN' },
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Ryusen 3-8-4-402',
+    addressLocality: 'Taito-ku',
+    addressRegion: 'Tokyo',
+    postalCode: '110-0012',
+    addressCountry: 'JP',
+  },
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'customer support',
+    url: 'https://t.me/yveschen',
+  },
+  sameAs: ['https://t.me/yveschen'],
+};
+
+const LD_WEBSITE = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Crealize',
+  url: 'https://crealize.llc/',
+};
 
 export default async function LocaleLayout({
   children,
@@ -68,13 +111,11 @@ export default async function LocaleLayout({
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Crealize - Transforming Imagination into Reality</title>
-        <meta name="description" content="Redefining the possibilities of creative realization with Web3 × Gamification × AI." />
         <link rel="icon" type="image/png" href="/image/crealize500.png" />
       </head>
       <body className="bg-white">
         <NextIntlClientProvider locale={locale} messages={messages}>
-          {/* 左上角品牌：图标 + 标准字 */}
+          {/* ロゴ + ブランド名（左上固定） */}
           <div className="fixed top-4 left-4 z-50 select-none">
             <Link href={`/${locale}`} aria-label="Go home" className="flex items-center gap-3 h-16">
               <Image src="/image/crealize500.png" alt="Crealize" width={64} height={64} priority className="block" style={{ objectFit: 'contain' }} />
@@ -82,12 +123,12 @@ export default async function LocaleLayout({
             </Link>
           </div>
 
-          {/* 全局背景動畫（fixed） */}
+          {/* 背景アニメーション（fixed） */}
           <AnimatedCanvasLines />
           <AnimatedLinesBackground />
           <AnimatedSandParticles />
 
-          {/* 主要內容留白 */}
+          {/* メインコンテンツ */}
           <main id="main" className="content-area relative z-10" style={{ paddingTop: '100px', paddingBottom: '80px' }}>
             <div className="mx-auto w-full max-w-6xl px-8 md:px-12">
               {children}
@@ -95,16 +136,13 @@ export default async function LocaleLayout({
           </main>
           <div id="__lang-switch-floating__"></div>
           <LangSwitchPortal />
-          {/* JSON-LD: Organization & WebSite */}
-          <Script id="ld-org" type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-            '@context':'https://schema.org', '@type':'Organization', name:'Crealize', url:'https://crealize.llc/', logo:'https://crealize.llc/image/crealize500.png'
-          }) }} />
-          <Script id="ld-website" type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-            '@context':'https://schema.org', '@type':'WebSite', name:'Crealize', url:'https://crealize.llc/',
-            potentialAction:{ '@type':'SearchAction', target:'https://crealize.llc/search?q={query}', 'query-input':'required name=query' }
-          }) }} />
+
+          <Script id="ld-org" type="application/ld+json" strategy="afterInteractive"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(LD_ORG) }} />
+          <Script id="ld-website" type="application/ld+json" strategy="afterInteractive"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(LD_WEBSITE) }} />
         </NextIntlClientProvider>
       </body>
     </html>
   );
-} 
+}

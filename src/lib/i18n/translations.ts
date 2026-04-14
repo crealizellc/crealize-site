@@ -1,4 +1,8 @@
-import { TRANSLATION_SHEET_CONFIG } from "./config";
+const TRANSLATION_SHEET_CONFIG = {
+  sheetId: process.env.NEXT_PUBLIC_TRANSLATION_SHEET_ID,
+  apiKey: process.env.NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY,
+  range: 'Translations!A:Z',
+};
 
 interface TranslationData {
   [key: string]: {
