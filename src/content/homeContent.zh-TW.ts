@@ -17,16 +17,16 @@ export default {
       '社群與頻道代營運：可在短期內將頻道由 0 擴張至 20 萬級（依場景與預算評估）。',
       '一條龍導流：素材與投放、活動設計、導流鏈路梳理與轉化優化。',
       '創作者與資產可信度：整合第三方工具（KYC／風險評級／鏈上資料）強化身份與交易可信度。',
-      'AI 多國語系在地化：納入工程制程：自動翻譯、用語表保護、審核、快取與差異比對；部署後可自動批次與回滾。',
-      '社交真實性（Anti‑Sybil）：結合頭像與社交圖譜比對＋實名驗證，提升用戶真實性與平台健康度。',
-      '紅包／空投擴散：自研 Telegram 紅包外掛 Mini App（可用於 MEME 币或積分），搭配任務牆、邀請碼與防刷機制。',
+      'AI 多國語系在地化：納入工程制程：自動翻譯、用語表保護、審核、快取與差異比對；部署後可自動批次與回退。',
+      '社交真實性（Anti‑Sybil）：結合頭像與社交圖譜比對＋實名驗證，提升使用者真實性與平台健康度。',
+      '紅包／空投擴散：自研 Telegram 紅包外掛 Mini App（可用於 MEME 幣或積分），搭配任務牆、邀請碼與防刷機制。',
       '營運分析與自動化：事件追蹤、漏斗、ROI 看板、告警與日／週報。'
     ]},
     { id:'domains', title:'領域與成果（Domains & Outcomes）', content:[
       '精選四大場景，重點展示我們做了什麼、常見交付、觀測哪些指標、技術亮點。'
     ]},
     { id:'gamefi', title:'1) GameFi（Telegram Mini App）', content:[
-      '我們做了什麼：設計 Build‑to‑Earn／社交玩法、任務牆、排行榜、邀請裂變；多款產品已在全球上線，累計用戶 100 萬＋。',
+      '我們做了什麼：設計 Build‑to‑Earn／社交玩法、任務牆、排行榜、邀請裂變；多款產品已在全球上線，累計使用者 100 萬＋。',
       '典型交付：遊戲核心循環設計、經濟與任務機制、反外掛／防刷方案、活動營運腳本、數據事件方案（D1/D7 留存、轉化、留存任務完成率）。',
       '重點指標：次日／週留存、整體轉化、導流成本（CAC）、每使用者平均收益（ARPU）、活動 ROI。',
       '技術亮點：Telegram Mini App SDK、TON／EVM／Solana 接入、雲端函式與 Webhook、可觀測性（事件回補、版本標記）。'
@@ -61,7 +61,7 @@ export default {
     { id:'tech', title:'技術與合規（Technology & Compliance）', content:[
       '架構取向：前端驅動、積木化組裝；關鍵資料與演算法採嚴謹的集中治理，確保一致性與效率。',
       '核心技術：Next.js／React、TypeScript／tRPC、PostgreSQL；TON SDK／Telegram Mini App SDK；依場景接入 EVM、Solana、TON 等鏈。',
-      'DevOps：CI/CD、自動化部署與監控；事件與版本標記，支援快速回滾。',
+      'DevOps：CI/CD、自動化部署與監控；事件與版本標記，支援快速回退。',
       '隱私與合規：依地區法規（如 APPI／GDPR）落實資料最小化、Cookie 同意、稽核與備援。'
     ]},
     { id:'engagement', title:'合作模式（Engagement）', content:[
@@ -77,11 +77,9 @@ export default {
       '團隊能力與工具？ 全端工程與設計並重；熟悉 Next.js、TON SDK、PostgreSQL 等；具備 CI/CD、監控告警、資料看板 能力，能與您既有系統平滑整合。'
     ]},
     { id:'contact', title:'公司資訊與聯絡（Contact）', content:[
-      'Crealize 合同会社（Crealize LLC）',
-      '成立：2024 年 10 月 9 日｜創辦人：Yves CHEN',
-      '地址：〒110‑0012 東京都台東区竜泉三丁目 8 番 4 号 ハンエイビル 402 号',
-      'Telegram：@yveschen',
-      '工作據點：東京 + 遠端團隊（台灣／新加坡／杜拜／倫敦）'
+      'Crealize 合同会社（Crealize LLC）｜成立：2024 年 10 月 9 日｜創辦人：Yves CHEN',
+      '地址：〒110-0012 東京都台東區龍泉三丁目 8 番 4 號 ハンエイビル 402 號',
+      'Telegram：@yveschen｜工作據點：東京＋遠端團隊（台灣／新加坡／杜拜／倫敦）'
     ]}
   ]
 }
