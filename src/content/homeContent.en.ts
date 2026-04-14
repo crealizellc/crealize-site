@@ -2,86 +2,84 @@ export default {
   brandName: 'Crealize',
   sections: [
     { id:'hero', title:'Transforming Imagination into Reality', content:[
-      'We build verifiable and scalable digital products with Web3 × Gamification × AI. Our approach is data‑driven with staged validation—ship fast, experiment fast—so products grow from 0 → 1 and then 1 → N.'
+      'We build verifiable, scalable digital products powered by Web3, Gamification, and AI. Data-driven and staged — ship fast, learn fast — growing products from 0→1 and beyond.'
     ]},
     { id:'who', title:'Who We Are', content:[
-      'A product studio focused on Telegram Mini Apps and social web products. We value real operating data over heavy plans:',
-      'Launch fast: ship an MVP to the market first.',
-      'Decide by data: retention, conversion, acquisition cost (CAC) and LTV.',
-      'Iterate continuously: each cycle includes ads, community ops and experiment design.',
-      'Track record: served nearly 10 teams and brands (startups/Web3/games).'
+      'A product studio specializing in Telegram Mini Apps and social web products. We prioritize real operating data over lengthy planning documents:',
+      'Launch fast: get an MVP in front of users first.',
+      'Decide by data: retention, conversion, CAC, and LTV drive every decision.',
+      'Iterate continuously: each cycle integrates ads, community ops, and experiment design.',
+      'Track record: served nearly 10 teams and brands across startups, Web3, and games.'
     ]},
     { id:'services', title:'Services', content:[
-      '0→1 product incubation: discovery/assumption testing → MVP → closed/open beta → live iterations.',
-      'Telegram Mini App / Social web: missions, points, leaderboards, invite‑growth, payments.',
-      'Community & channel operations: scale from 0 to 200k in a short time (case dependent).',
-      'Full‑funnel acquisition: creatives and media, campaign design, funnel and conversion optimization.',
-      'Creator & asset trust: 3rd‑party KYC/risk scoring/on‑chain data integrations.',
-      'AI multilingual localization: glossary protection, review, caching, diffs; automated batch and rollback in the pipeline.',
-      'Authenticity (Anti‑Sybil): avatar/graph checks + real‑name verification to improve platform health.',
-      'Red‑packet/airdrop growth: our Telegram mini‑app plugin (for MEME/token/points) with missions, invites and anti‑abuse.',
-      'Ops analytics & automation: events, funnels, ROI dashboards, alerts and daily/weekly reports.'
+      '0→1 product incubation: discovery and assumption validation → MVP → beta phases → live iteration.',
+      'Telegram Mini App & social web: missions, points, leaderboards, invite-driven growth, payments.',
+      'Community & channel operations: scale from 0 to 200k+ followers (timeframe varies by scope).',
+      'Acquisition & growth: creative production, media planning, campaign design, funnel and conversion optimization.',
+      'Creator & asset trust: third-party KYC, risk assessment, and on-chain data integration.',
+      'AI multilingual localization: glossary management, review workflows, caching and diffs — built into the deployment pipeline with automated batch updates and instant rollback.',
+      'Authenticity (Anti-Sybil): avatar and social graph verification combined with real-name authentication to improve platform integrity.',
+      'Red packet & airdrop distribution: proprietary Telegram Mini App plugin (supporting tokens, MEME coins, and points) with mission mechanics, referrals, and abuse prevention.',
+      'Ops analytics & automation: event tracking, funnels, ROI dashboards, alerts, and daily/weekly reports.'
     ]},
     { id:'domains', title:'Domains & Outcomes', content:[
-      'Four representative scenarios with what we deliver, KPIs and technical highlights.'
+      'Four representative scenarios — each with deliverables, KPIs, and technical highlights.'
     ]},
     { id:'gamefi', title:'1) GameFi (Telegram Mini App)', content:[
-      'What we do: B2E/social mechanics, mission walls, leaderboards, invite viral loops; multiple titles live globally with 1M+ cumulative users.',
-      'Deliverables: core loops, economy/mission design, anti‑cheat/anti‑abuse, ops playbooks, analytics events (D1/D7 retention, conversion, mission completion).',
+      'What we do: Build-to-Earn and social mechanics, mission walls, leaderboards, invite viral loops; multiple titles live globally with 1M+ cumulative users.',
+      'Deliverables: core loop design, economy and mission mechanics, anti-cheat and abuse prevention, ops playbooks, analytics event schema (D1/D7 retention, conversion, mission completion).',
       'KPIs: D1/D7 retention, conversion, CAC, ARPU, campaign ROI.',
-      'Tech: Telegram Mini App SDK; TON/EVM/Solana integrations; cloud functions & webhooks; observability (event backfill, version tags).'
+      'Tech: Telegram Mini App SDK; TON, EVM, Solana integrations; cloud functions and webhooks; observability with event backfill and version tagging.'
     ]},
     { id:'creator', title:'2) Creator Support & Fan Economy', content:[
-      'What we do: voting equals backing; points/ranks; redemptions and airdrops; build creator support metrics and returns.',
-      'Deliverables: vote weighting, anti‑abuse score models, redemption/airdrop flows, wallet/payments, community ops.',
-      'KPIs: active‑fan rate, participation, support curve, return rate, fee‑sharing ratio.',
-      'Tech: KYC/risk integrations, on‑chain events, wallet/signing, admin console.'
+      'What we do: voting as a form of backing; points and rankings; redemption and airdrop distribution; creator support metrics and reward design.',
+      'Deliverables: vote weighting strategy, fraud detection models, redemption and airdrop flows, wallet and payment integration, community ops playbook.',
+      'KPIs: active fan rate, participation rate, support curve, return rate, fee-sharing ratio.',
+      'Tech: KYC and risk integrations, on-chain event read/write, wallet and digital signing flows, admin console.'
     ]},
     { id:'art', title:'3) Art Trading', content:[
-      'What we do: mint/consign/appraise, trade and settlement, community‑involved reference pricing.',
-      'Deliverables: listing & review, 3rd‑party KYC, smart contracts (mint/trade), pricing & rating modules, audit reports.',
-      'KPIs: list‑to‑sell cycle, participation, liquidity, success rate, refund rate.',
-      'Tech: contract security checks, KYC/AML providers, payments & wallets, traceability and audits.'
+      'What we do: minting, consignment, and appraisal workflows; trading and clearing; community-involved reference pricing.',
+      'Deliverables: listing and review process, third-party KYC, smart contracts (minting and trading), pricing and rating modules, transaction audit reports.',
+      'KPIs: listing-to-sale cycle, participation, liquidity, success rate, refund rate.',
+      'Tech: contract security audits, KYC and AML provider integration, payments and wallets, traceability and audit trails.'
     ]},
     { id:'growth', title:'4) Growth Engine', content:[
-      'What we do: mission walls, allowlists, leaderboards, achievements, red‑packet virality.',
-      'Deliverables: rule & risk control, creative matrix, funnels, cold‑start plan with KOLs, daily/weekly report templates.',
-      'KPIs: mission completion, new/returning users, conversion/retention, campaign ROI.',
-      'Tech: anti‑abuse & fingerprinting, short‑links and jump strategies, A/B tests, real‑time monitoring & alerts.'
+      'What we do: mission walls, allowlists, leaderboards, achievements, red packet and referral campaigns.',
+      'Deliverables: campaign rules and risk controls, creative templates, user conversion paths, cold-start playbook with KOL partnerships, daily/weekly report templates.',
+      'KPIs: mission completion rate, new and returning users, conversion and retention, campaign ROI.',
+      'Tech: abuse prevention and device fingerprinting, short-link routing and redirect mechanics, A/B testing, real-time monitoring and alerts.'
     ]},
     { id:'process', title:'Process (From idea to launch)', content:[
-      'Discover: user scenarios, constraints, compliance; define the North‑Star metric.',
-      'Define: feature slicing, milestones, data plan and A/B experiments.',
-      'Prototype: interactive flows to validate key assumptions first.',
-      'Build: frontend‑driven, modular integration of APIs/on‑chain; unit/E2E tests.',
-      'Validate (soft‑launch): closed/open beta, events/funnels, cost & ROI analysis.',
-      'Operate (growth): automated reports, alerts, content/campaign schedule, review & next experiments.',
-      'Promo snapshot: review → official/KOL → content matrix → mission wall + red‑packet → funnel optimization → paid push → iterate by retention/conversion/attrition.'
+      'Discover: user scenarios, constraints, compliance requirements; define the North Star metric.',
+      'Define: feature slicing, milestones, analytics strategy, and A/B experiment design.',
+      'Prototype: interactive prototypes to validate key assumptions early.',
+      'Build: frontend-driven, modular integration of APIs and blockchain capabilities; unit and E2E tests.',
+      'Validate (soft launch): closed and open beta, event tracking and funnel analytics, cost and ROI analysis.',
+      'Operate (growth): automated reports, alerts, content and campaign scheduling, retrospectives and next experiments.',
+      'Go-to-market playbook: review and approval → official channels and KOL outreach → creative distribution (articles, GIFs, tutorials) → mission mechanics and red packet incentives → conversion path optimization → paid campaigns → iterate based on retention, conversion, and churn.'
     ]},
     { id:'tech', title:'Technology & Compliance', content:[
-      'Architecture: frontend‑driven, modular; centralized governance for critical data/algorithms.',
-      'Stack: Next.js/React, TypeScript/tRPC, PostgreSQL; TON SDK/Telegram Mini App SDK; integrate EVM/Solana/TON as needed.',
-      'DevOps: CI/CD & monitoring; event/version tags, quick rollback.',
-      'Privacy & compliance: APPI/GDPR; data minimization, consent, audit and backup.'
+      'Architecture: frontend-driven, modular design; centralized governance for critical data assets and business logic.',
+      'Tech stack: Next.js and React, TypeScript with tRPC, PostgreSQL; TON SDK and Telegram Mini App SDK; blockchain integration with EVM, Solana, and TON as required.',
+      'DevOps: CI/CD with monitoring; event and version tagging for quick rollback.',
+      'Privacy & compliance: APPI and GDPR; data minimization, consent management, audit logging, and backup.'
     ]},
-    { id:'engagement', title:'Engagement', content:[
-      'Kickoff: align product frame and hypotheses to validate.',
-      'MVP: ~10–12 weeks to ship a production‑ready MVP (with analytics).',
-      'Go‑to‑Market: ~8 weeks to ignite acquisition & community; observe early retention/conversion.',
-      'Iterations: every 4–8 weeks; focus on D1 retention, pay rate, ad view‑through and payback.'
+    { id:'engagement', title:'How We Work', content:[
+      'Kickoff: align on product framework and define key hypotheses to validate.',
+      'MVP: ~10–12 weeks to deliver a production-grade MVP with analytics instrumentation.',
+      'Go-to-Market: ~8 weeks to launch acquisition and community growth; measure early retention and conversion.',
+      'Iterations: every 4–8 weeks; focus on day-1 retention, monetization rate, ad performance, and payback period.'
     ]},
     { id:'faq', title:'FAQ (B2B)', content:[
-      'Stacks & SDKs? TON/Solana/EVM; TON SDK, Telegram Mini App SDK, Next.js/React, TypeScript/tRPC, PostgreSQL; oracles/wallets/cross‑chain as needed.',
-      'Process & fees? Milestones; scope pricing or monthly ops; potential revenue‑share for specific lines.',
-      'How to measure success? Retention, conversion, CAC, LTV, ROI; review every 4–12 weeks.',
-      'Team capability? Full‑stack + design; CI/CD, monitoring, dashboards; smooth integration.'
+      'What tech stacks and SDKs do you support? TON, Solana, and EVM ecosystems (Ethereum, Polygon, BNB, and more). Our stack includes Next.js, React, TypeScript with tRPC, and PostgreSQL; we integrate oracles, wallets, and cross-chain solutions as needed.',
+      'What is your engagement model and pricing? We work milestone-by-milestone: kickoff → MVP (~10–12 weeks) → go-to-market (~8 weeks) → iterations every 4–8 weeks. Pricing options include scope-based, monthly retainer, or revenue sharing for specific product verticals.',
+      'How do you measure success? Core metrics are retention, conversion, CAC, LTV, and ROI — tracked via event analytics and funnel analysis, with strategic reviews every 4–12 weeks.',
+      'What are your team capabilities? Full-stack engineering with design expertise. We maintain CI/CD automation, monitoring, and analytics dashboards, with integrations designed to fit seamlessly into your existing systems.'
     ]},
     { id:'contact', title:'Contact', content:[
-      'Crealize LLC — Founded Oct 9, 2024. Founder: Yves CHEN.',
-      'Address: Ryusen 3‑8‑4‑402, Taito‑ku, Tokyo 110‑0012, Japan.',
-      'Telegram: @yveschen — Locations: Tokyo + remote (Taiwan/Singapore/Dubai/London).'
+      'Crealize LLC — Founded October 9, 2024. Founder: Yves CHEN.',
+      'Address: Hanei Building 402, 3-8-4 Ryusen, Taito-ku, Tokyo 110-0012, Japan.',
+      'Telegram: @yveschen — Based in Tokyo with remote teams in Taiwan, Singapore, Dubai, and London.'
     ]}
   ]
 }
-
-
