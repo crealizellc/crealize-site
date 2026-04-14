@@ -40,4 +40,17 @@ next-env.d.ts
 
 # OS
 .DS_Store
-Thumbs.db 
+Thumbs.db
+
+# local env explicit
+.env.local
+
+# temp workdir
+.tmp-crealize-pages/
+.tmp-*/
+.tmp*/
+
+# backup files
+*.snowbak.tsx
+*.snowbak
+*.bak
