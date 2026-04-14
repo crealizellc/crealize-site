@@ -14,15 +14,13 @@ export default function HomePage() {
   return (
     <>
       {isEn ? <Hero /> : (
-        <section className="relative z-10 pt-[28vh] pb-20 px-6">
-          <div className="max-w-5xl mx-auto">
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              {t('heroTitle')}
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto">
-              {t('heroDesc')}
-            </p>
-          </div>
+        <section className="relative z-10 pt-[28vh] pb-20">
+          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            {t('heroTitle')}
+          </h1>
+          <p className="text-xl md:text-2xl text-gray-600 max-w-3xl">
+            {t('heroDesc')}
+          </p>
         </section>
       )}
       <SectionsIntl />

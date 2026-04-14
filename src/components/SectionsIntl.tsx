@@ -18,7 +18,7 @@ export default function SectionsIntl(){
   const data = norm === 'ja' ? ja : norm === 'zh-TW' || norm.startsWith('zh') ? zh : en;
   const sections = (data.sections || []).filter((s:any)=>!SKIP_TITLES.includes(String(s.title||'')));
   return (
-    <div className="mx-auto max-w-6xl px-6 pb-16">
+    <div className="pb-16">
       {sections.map((s:any) => (
         <section key={s.id} className="mb-16">
           <h2 className="text-neutral-900 font-[800] tracking-[-0.01em] leading-tight [font-size:clamp(1.7rem,2.9vw,2.3rem)]">

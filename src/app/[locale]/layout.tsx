@@ -97,6 +97,55 @@ const LD_WEBSITE = {
   url: 'https://crealize.llc/',
 };
 
+const LD_FAQ = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What blockchain networks does Crealize support?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Crealize supports TON, Solana, and EVM-compatible chains (Ethereum, Polygon, BNB, and others). We integrate oracles, wallets, and cross-chain solutions as needed.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'How does Crealize price its projects?',
+      acceptedAnswer: { '@type': 'Answer', text: 'We use milestone-based pricing. Options include scope/fixed pricing, monthly ops retainers, or revenue-share arrangements for specific product lines.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'How long does it take to build an MVP with Crealize?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Approximately 10–12 weeks for a production-ready MVP including analytics and event tracking. Go-to-Market takes an additional ~8 weeks.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'How does Crealize measure project success?',
+      acceptedAnswer: { '@type': 'Answer', text: 'We track D1/D7 retention, conversion rates, CAC, LTV, and campaign ROI. Results are reviewed every 4–12 weeks with detailed event analytics.' },
+    },
+  ],
+};
+
+const LD_SERVICE = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'Telegram Mini App & Web3 Product Development',
+  provider: { '@type': 'Organization', name: 'Crealize', url: 'https://crealize.llc/' },
+  serviceType: 'Product Studio',
+  areaServed: 'Worldwide',
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Crealize Services',
+    itemListElement: [
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: '0→1 Product Incubation' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Telegram Mini App Development' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Community & Channel Operations' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Full-Funnel Acquisition' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'AI Multilingual Localization' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Web3 / GameFi Development' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Ops Analytics & Automation' } },
+    ],
+  },
+};
+
 export default async function LocaleLayout({
   children,
   params: { locale }
@@ -141,6 +190,10 @@ export default async function LocaleLayout({
             dangerouslySetInnerHTML={{ __html: JSON.stringify(LD_ORG) }} />
           <Script id="ld-website" type="application/ld+json" strategy="afterInteractive"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(LD_WEBSITE) }} />
+          <Script id="ld-faq" type="application/ld+json" strategy="afterInteractive"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(LD_FAQ) }} />
+          <Script id="ld-service" type="application/ld+json" strategy="afterInteractive"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(LD_SERVICE) }} />
         </NextIntlClientProvider>
       </body>
     </html>

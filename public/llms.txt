@@ -1,0 +1,71 @@
+# Crealize
+
+> Tokyo-based product studio specializing in Telegram Mini Apps, Web3, GameFi, and the creator economy. Founded October 9, 2024. Founder: Yves CHEN.
+
+Crealize (Crealize LLC / Crealize 合同会社) builds verifiable and scalable digital products combining Web3 × Gamification × AI. We operate on real data over heavy plans: launch an MVP fast, decide by retention/conversion/CAC/LTV, iterate every 4–8 weeks. We have served nearly 10 teams and brands across startups, Web3, and gaming.
+
+## Pages
+
+- [English](/en/): Full company overview — services, technology stack, engagement model, FAQ, and contact
+- [日本語](/ja/): 日本語版：サービス、技術、進め方、FAQ、連絡先
+- [繁體中文](/zh-TW/): 繁體中文版：服務、技術、合作模式、FAQ、聯絡方式
+
+## Company Information
+
+- **Legal name**: Crealize LLC (Crealize 合同会社)
+- **Founded**: October 9, 2024
+- **Founder**: Yves CHEN
+- **Address**: Ryusen 3-8-4-402, Taito-ku, Tokyo 110-0012, Japan
+- **Contact**: Telegram @yveschen
+- **Locations**: Tokyo (HQ) + remote teams in Taiwan, Singapore, Dubai, London
+
+## Services
+
+1. **0→1 Product Incubation** — discovery/assumption testing → MVP → closed/open beta → live iterations
+2. **Telegram Mini App & Social Web** — missions, points, leaderboards, invite-growth loops, payments
+3. **Community & Channel Operations** — scale from 0 to 200,000+ in short time (case dependent)
+4. **Full-Funnel Acquisition** — creatives and media buying, campaign design, funnel and conversion optimization
+5. **Creator & Asset Trust** — 3rd-party KYC, risk scoring, on-chain data integrations
+6. **AI Multilingual Localization** — glossary protection, review, caching, diffs; automated batch pipeline and rollback
+7. **Authenticity (Anti-Sybil)** — avatar/graph checks + real-name verification to improve platform health
+8. **Red-Packet / Airdrop Growth** — proprietary Telegram Mini App plugin (MEME/token/points) with missions, invites, and anti-abuse
+9. **Ops Analytics & Automation** — event tracking, funnels, ROI dashboards, alerts, daily/weekly automated reports
+
+## Technology Stack
+
+- **Architecture**: Frontend-driven, modular; centralized governance for critical data and algorithms
+- **Frontend**: Next.js / React, TypeScript / tRPC
+- **Database**: PostgreSQL
+- **Blockchain**: TON SDK, Telegram Mini App SDK; EVM (Ethereum, Polygon, BNB), Solana, TON as needed
+- **DevOps**: CI/CD, monitoring; event/version tags, quick rollback
+- **Compliance**: APPI (Japan) / GDPR; data minimization, consent management, audit trails and backup
+
+## Engagement Model
+
+| Phase | Duration | Goal |
+|-------|----------|------|
+| Kickoff | 1–2 weeks | Align product frame and hypotheses |
+| MVP | ~10–12 weeks | Production-ready MVP with analytics |
+| Go-to-Market | ~8 weeks | Acquisition ignition and community ops |
+| Iterations | Every 4–8 weeks | Optimize by retention, pay rate, ROI |
+
+## FAQ
+
+**Q: What blockchain networks do you support?**
+A: TON, Solana, EVM (Ethereum, Polygon, BNB, and others). We integrate oracles, wallets, and cross-chain solutions as needed.
+
+**Q: How do you price projects?**
+A: Milestone-based. Options: scope/fixed pricing, monthly ops retainer, or revenue-share for specific product lines.
+
+**Q: How do you measure success?**
+A: Retention (D1/D7), conversion, CAC, LTV, campaign ROI — reviewed every 4–12 weeks with detailed event analytics.
+
+**Q: What is your team capable of?**
+A: Full-stack engineering + design; CI/CD, monitoring dashboards; smooth integration with existing systems.
+
+## Domain Expertise
+
+- **GameFi (Telegram Mini App)**: Build-to-Earn / social mechanics, mission walls, leaderboards, invite virality — multiple titles live globally with 1M+ cumulative users
+- **Creator Support & Fan Economy**: voting-as-backing, points/ranks, redemptions, airdrops, wallet/payment integrations
+- **Art Trading**: mint/consign/appraise, smart contracts, community-involved reference pricing, KYC/AML
+- **Growth Engine**: mission walls, allowlists, leaderboards, achievements, red-packet virality with anti-abuse
