@@ -1,0 +1,50 @@
+{
+  "name": "crealize-site",
+  "version": "0.1.0",
+  "crealizePublicRepo": "https://github.com/crealizellc/crealize.git",
+  "scripts": {
+    "check:todo": "node scripts/check-todo.js",
+    "check:rules": "node scripts/check-rules.js",
+    "check:all": "npm run check:todo && npm run check:rules",
+    "dev:guide": "node scripts/dev-guide.js",
+    "auto:dev": "node scripts/auto-dev.js --dev",
+    "auto:opt": "node scripts/auto-dev.js --opt",
+    "auto:push": "node scripts/auto-dev.js --push",
+    "auto:all": "node scripts/auto-dev.js --all",
+    "build": "next build",
+    "export": "sh -c 'mv middleware.ts middleware.ts.bak 2>/dev/null || true; STATIC_EXPORT=true next build; mv middleware.ts.bak middleware.ts 2>/dev/null || true'",
+    "deploy:gh": "pnpm export && cp -f public/CNAME out/CNAME 2>/dev/null || true && gh-pages -d out -b gh-pages -t true",
+    "env:login": "bash scripts/load-env.sh",
+    "pages:ensure": "bash scripts/pages-ensure.sh",
+    "dev": "next dev",
+    "start": "next start"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.27.0",
+    "@tailwindcss/postcss": "^4.1.10",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.27.0",
+    "gh-pages": "^6.3.0",
+    "globals": "^16.1.0",
+    "postcss": "^8.5.6",
+    "prettier": "^3.5.3",
+    "tailwindcss": "^4.1.10",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.32.1"
+  },
+  "dependencies": {
+    "@tsparticles/engine": "^3.8.1",
+    "@tsparticles/react": "^3.0.0",
+    "@tsparticles/slim": "^3.8.1",
+    "@types/node": "^22.15.21",
+    "@types/react": "^19.1.5",
+    "@types/react-dom": "^19.1.5",
+    "framer-motion": "^12.18.1",
+    "next": "^14.2.0",
+    "next-intl": "^4.3.7",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-intersection-observer": "^9.16.0",
+    "react-markdown": "^10.1.0"
+  }
+}

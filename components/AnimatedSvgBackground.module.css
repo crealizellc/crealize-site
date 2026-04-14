@@ -1,0 +1,30 @@
+.animatedBg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.18;
+}
+.wave1 { animation: waveMove1 8s linear infinite alternate; }
+.wave2 { animation: waveMove2 10s linear infinite alternate; }
+.wave3 { animation: waveMove3 12s linear infinite alternate; }
+.wave4 { animation: waveMove4 14s linear infinite alternate; }
+
+@keyframes waveMove1 {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(16px) scaleX(1.01); }
+}
+@keyframes waveMove2 {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(-12px) scaleX(0.99); }
+}
+@keyframes waveMove3 {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(10px) scaleX(1.02); }
+}
+@keyframes waveMove4 {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(-8px) scaleX(0.98); }
+} 
