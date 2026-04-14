@@ -1,36 +1,49 @@
 {
   "heroTitle": "Transformando la imaginación en realidad",
-  "heroDesc": "Redefiniendo las posibilidades de realización creativa con Web3 × Gamificación × IA.",
-  "visionTitle": "Misión y Visión",
+  "heroDesc": "Construimos productos digitales verificables y escalables con Web3 × Gamificación × IA. Orientados a datos, validación por etapas — lanzar rápido, experimentar rápido — 0→1 y 1→N.",
+  "visionTitle": "Quiénes somos",
   "vision": [
-    "Transformar la creatividad en realidad. Crealize es un nombre compuesto por \"Creative\" × \"Realize\".",
-    "\"La creatividad sin implementación es solo charla.\" Somos expertos en ejecutar ideas de 0 a 1, a través de validación y refinamiento, para convertirlas en productos digitales tangibles.",
-    "Al combinar Web3, gamificación, IA y redes de valor, proporcionamos a los creadores herramientas y oportunidades sin precedentes."
+    "Un estudio de productos especializado en Telegram Mini Apps y productos web sociales. Valoramos datos operativos reales sobre planes extensos:",
+    "Lanzar rápido: llevar un MVP al mercado primero.",
+    "Decidir por datos: retención, conversión, costo de adquisición (CAC) y LTV.",
+    "Iterar continuamente: cada ciclo incluye ads, ops de comunidad y diseño de experimentos.",
+    "Historial: hemos servido a cerca de 10 equipos y marcas (startups / Web3 / juegos)."
   ],
-  "projectsTitle": "Proyectos de Innovación",
+  "projectsTitle": "Servicios",
   "projects": [
-    "Plataforma de Trading de Arte - Contratos inteligentes y KYC de terceros aseguran confianza, likes y follows determinan precios de mercado, sistema de evaluación transparente abierto a participación comunitaria.",
-    "Plataforma de Trading de Acciones de Idol & Creador - La votación es apoyo, afectando el \"valor de mercado\", las actividades de trading devuelven tarifas a los ídolos, actualmente bajo revisión de cumplimiento en Singapur.",
-    "MARS2049: Colonización Marciana × GameFi - Mecanismo Build-to-Earn × activos blockchain, Telegram Mini App en beta cerrada global, soporte futuro para NFT e interoperabilidad multi-cadena.",
-    "Influencer Virtual IA - Integrado con API de x.com, captura noticias de tendencias, generación automática de sugerencias de comentarios, puede servir como portavoz corporativo o gerente de comunidad."
+    "Incubación 0→1: descubrimiento / prueba de hipótesis → MVP → beta cerrada/abierta → iteraciones en vivo.",
+    "Telegram Mini App / Web social: misiones, puntos, tablas de clasificación, crecimiento por invitación, pagos.",
+    "Operaciones de comunidad y canal: escalar de 0 a 200k en poco tiempo (según el caso).",
+    "Adquisición full-funnel: creatividades y medios, diseño de campañas, optimización de embudo y conversión.",
+    "Confianza en creadores y activos: KYC de terceros / puntuación de riesgo / integraciones de datos on-chain.",
+    "Localización multilingüe con IA: protección de glosario, revisión, caché, diffs; batch y rollback automatizados.",
+    "Autenticidad (Anti-Sybil): verificaciones de avatar/grafo + verificación de nombre real para mejorar la salud de la plataforma.",
+    "Crecimiento por sobre rojo / airdrop: nuestro plugin Telegram Mini App (MEME / token / puntos) con misiones, invitaciones y anti-abuso.",
+    "Análisis ops y automatización: eventos, embudos, dashboards de ROI, alertas e informes diarios/semanales."
   ],
-  "techTitle": "Filosofía Tecnológica",
+  "techTitle": "Tecnología y Cumplimiento",
   "tech": [
-    "Descentralizado × Impulsado por Frontend - Filosofía de diseño de bajo mantenimiento, alta estabilidad, escalable.",
-    "Despliegue frontend estático logra cero servidores, cero costos de mantenimiento, integración blockchain permite verificación de identidad descentralizada y gestión de activos.",
-    "Sistema de traducción multi-idioma IA: Uso de Google Apps Script con GPT, modelo de desarrollo de bajo costo y alta libertad."
+    "Arquitectura: orientada al frontend, modular; gobernanza centralizada para datos / algoritmos críticos.",
+    "Stack: Next.js / React, TypeScript / tRPC, PostgreSQL; TON SDK / Telegram Mini App SDK; integrar EVM / Solana / TON según sea necesario.",
+    "DevOps: CI/CD & monitoreo; etiquetas de evento / versión, rollback rápido.",
+    "Privacidad y cumplimiento: APPI / GDPR; minimización de datos, consentimiento, auditoría y backup."
   ],
-  "joinTitle": "Únete a Nosotros",
+  "joinTitle": "Cómo trabajamos",
   "join": [
-    "Reclutamiento global, apoyo para trabajo completamente remoto, sede en Tokio.",
-    "Entorno de trabajo completamente libre, enfocado en resultados, sin requisitos de registro de tiempo.",
-    "Necesitamos ingenieros, diseñadores, PMs, creativos, productores de juegos, profesionales legales, especialistas Web3."
+    "Kickoff: alinear el marco del producto e hipótesis a validar.",
+    "MVP: ~10–12 semanas para lanzar un MVP listo para producción (con analítica).",
+    "Go-to-Market: ~8 semanas para activar adquisición y comunidad; observar retención / conversión temprana.",
+    "Iteraciones: cada 4–8 semanas; foco en retención D1, tasa de pago, visualización de anuncios y recuperación.",
+    "¿Stacks y SDKs? TON / Solana / EVM; TON SDK, Telegram Mini App SDK, Next.js / React, TypeScript / tRPC, PostgreSQL.",
+    "¿Proceso y tarifas? Hitos; precio por alcance u ops mensuales; potencial de reparto de ingresos en líneas específicas.",
+    "¿Cómo medir el éxito? Retención, conversión, CAC, LTV, ROI; revisión cada 4–12 semanas.",
+    "¿Capacidad del equipo? Full-stack + diseño; CI/CD, monitoreo, dashboards; integración fluida."
   ],
-  "contactTitle": "Contáctanos",
+  "contactTitle": "Contacto",
   "contact": [
-    "Crealize LLC establecido el 9 de octubre de 2024, Fundador: Yves CHEN.",
-    "Dirección: 1-2-9-3 Higashi, Shibuya-ku, Tokio, Shibuya Bridge B-5 (proporcionado por Shibuya Startup Support).",
-    "Ubicaciones de trabajo: Tokio + equipos remotos globales (Taiwán, Singapur, Dubái, Londres)."
+    "Crealize LLC — Fundada el 9 de octubre de 2024. Fundador: Yves CHEN.",
+    "Dirección: Ryusen 3-8-4-402, Taito-ku, Tokio 110-0012, Japón.",
+    "Telegram: @yveschen — Ubicaciones: Tokio + remoto (Taiwán / Singapur / Dubái / Londres)."
   ],
   "telegram": "Contáctanos a través de Telegram"
-} 
+}

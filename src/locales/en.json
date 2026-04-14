@@ -1,36 +1,49 @@
 {
   "heroTitle": "Transforming Imagination into Reality",
-  "heroDesc": "Redefining the possibilities of creative realization with Web3 × Gamification × AI.",
-  "visionTitle": "Mission & Vision",
+  "heroDesc": "We build verifiable and scalable digital products with Web3 × Gamification × AI. Data-driven, staged validation — ship fast, experiment fast — 0→1 and 1→N.",
+  "visionTitle": "Who We Are",
   "vision": [
-    "Transforming creativity into reality. Crealize is a name composed of \"Creative\" × \"Realize\".",
-    "\"Creativity without implementation is just talk.\" We excel at executing ideas from 0 to 1, through validation and refinement, ultimately becoming tangible digital products.",
-    "By combining Web3, gamification, AI, and value networks, we provide creators with unprecedented tools and opportunities."
+    "A product studio focused on Telegram Mini Apps and social web products. We value real operating data over heavy plans:",
+    "Launch fast: ship an MVP to the market first.",
+    "Decide by data: retention, conversion, acquisition cost (CAC) and LTV.",
+    "Iterate continuously: each cycle includes ads, community ops and experiment design.",
+    "Track record: served nearly 10 teams and brands (startups / Web3 / games)."
   ],
-  "projectsTitle": "Innovation Projects",
+  "projectsTitle": "Services",
   "projects": [
-    "Art Trading Platform - Smart contracts and third-party KYC ensure trust, likes and follows determine market prices, transparent evaluation system open to community participation.",
-    "Idol & Creator Stock Trading Platform - Voting is support, affecting \"market value\", trading activities return fees to idols, currently under compliance review in Singapore.",
-    "MARS2049: Mars Colonization × GameFi - Build-to-Earn mechanism × blockchain assets, Telegram Mini App in global closed beta, future support for NFT and multi-chain interoperability.",
-    "AI Virtual Influencer - Integrated with x.com API, capturing trending news, auto-generating comment suggestions, can serve as corporate spokespersons or community managers."
+    "0→1 product incubation: discovery / assumption testing → MVP → closed/open beta → live iterations.",
+    "Telegram Mini App / Social web: missions, points, leaderboards, invite-growth, payments.",
+    "Community & channel operations: scale from 0 to 200k in a short time (case dependent).",
+    "Full-funnel acquisition: creatives and media, campaign design, funnel and conversion optimization.",
+    "Creator & asset trust: 3rd-party KYC / risk scoring / on-chain data integrations.",
+    "AI multilingual localization: glossary protection, review, caching, diffs; automated batch and rollback in the pipeline.",
+    "Authenticity (Anti-Sybil): avatar / graph checks + real-name verification to improve platform health.",
+    "Red-packet / airdrop growth: our Telegram mini-app plugin (for MEME / token / points) with missions, invites and anti-abuse.",
+    "Ops analytics & automation: events, funnels, ROI dashboards, alerts and daily/weekly reports."
   ],
-  "techTitle": "Technology Philosophy",
+  "techTitle": "Technology & Compliance",
   "tech": [
-    "Decentralized × Frontend-driven - Low maintenance, high stability, scalable design philosophy.",
-    "Static frontend deployment achieves zero servers, zero maintenance costs, blockchain integration enables decentralized identity verification and asset management.",
-    "AI multi-language translation system: Using Google Apps Script with GPT, low-cost, high-freedom development model."
+    "Architecture: frontend-driven, modular; centralized governance for critical data / algorithms.",
+    "Stack: Next.js / React, TypeScript / tRPC, PostgreSQL; TON SDK / Telegram Mini App SDK; integrate EVM / Solana / TON as needed.",
+    "DevOps: CI/CD & monitoring; event / version tags, quick rollback.",
+    "Privacy & compliance: APPI / GDPR; data minimization, consent, audit and backup."
   ],
-  "joinTitle": "Join Us",
+  "joinTitle": "How We Work",
   "join": [
-    "Global recruitment, supporting full remote work, headquarters in Tokyo.",
-    "Completely free work environment, focusing on results, no clock-in requirements.",
-    "We need engineers, designers, PMs, creatives, game producers, legal professionals, Web3 specialists."
+    "Kickoff: align product frame and hypotheses to validate.",
+    "MVP: ~10–12 weeks to ship a production-ready MVP (with analytics).",
+    "Go-to-Market: ~8 weeks to ignite acquisition & community; observe early retention / conversion.",
+    "Iterations: every 4–8 weeks; focus on D1 retention, pay rate, ad view-through and payback.",
+    "Stacks & SDKs? TON / Solana / EVM; TON SDK, Telegram Mini App SDK, Next.js / React, TypeScript / tRPC, PostgreSQL; oracles / wallets / cross-chain as needed.",
+    "Process & fees? Milestones; scope pricing or monthly ops; potential revenue-share for specific lines.",
+    "How to measure success? Retention, conversion, CAC, LTV, ROI; review every 4–12 weeks.",
+    "Team capability? Full-stack + design; CI/CD, monitoring, dashboards; smooth integration."
   ],
-  "contactTitle": "Contact Us",
+  "contactTitle": "Contact",
   "contact": [
-    "Crealize LLC established on October 9, 2024, Founder: Yves CHEN.",
-    "Address: 1-2-9-3 Higashi, Shibuya-ku, Tokyo, Shibuya Bridge B-5 (provided by Shibuya Startup Support).",
-    "Work locations: Tokyo + global remote teams (Taiwan, Singapore, Dubai, London)."
+    "Crealize LLC — Founded Oct 9, 2024. Founder: Yves CHEN.",
+    "Address: Ryusen 3-8-4-402, Taito-ku, Tokyo 110-0012, Japan.",
+    "Telegram: @yveschen — Locations: Tokyo + remote (Taiwan / Singapore / Dubai / London)."
   ],
   "telegram": "Contact us via Telegram"
-} 
+}

@@ -1,36 +1,49 @@
 {
   "heroTitle": "Transformer l'imagination en réalité",
-  "heroDesc": "Redéfinir les possibilités de réalisation créative avec Web3 × Gamification × IA.",
-  "visionTitle": "Mission & Vision",
+  "heroDesc": "Nous construisons des produits numériques vérifiables et évolutifs avec Web3 × Gamification × IA. Orientés données, validation par étapes — lancer vite, expérimenter vite — 0→1 et 1→N.",
+  "visionTitle": "Qui nous sommes",
   "vision": [
-    "Transformer la créativité en réalité. Crealize est un nom composé de \"Creative\" × \"Realize\".",
-    "\"La créativité sans implémentation n'est que du bavardage.\" Nous excellons dans l'exécution d'idées de 0 à 1, à travers validation et raffinement, pour devenir des produits numériques tangibles.",
-    "En combinant Web3, gamification, IA et réseaux de valeur, nous fournissons aux créateurs des outils et opportunités sans précédent."
+    "Un studio produit spécialisé dans les Telegram Mini Apps et les produits web sociaux. Nous privilégions les données opérationnelles réelles aux plans volumineux :",
+    "Lancer vite : d'abord mettre un MVP sur le marché.",
+    "Décider par les données : rétention, conversion, coût d'acquisition (CAC) et LTV.",
+    "Itérer en continu : chaque cycle inclut ads, ops communautaires et conception d'expériences.",
+    "Références : environ 10 équipes et marques accompagnées (startups / Web3 / jeux)."
   ],
-  "projectsTitle": "Projets d'Innovation",
+  "projectsTitle": "Services",
   "projects": [
-    "Plateforme de Trading d'Art - Contrats intelligents et KYC tiers assurent la confiance, likes et follows déterminent les prix du marché, système d'évaluation transparent ouvert à la participation communautaire.",
-    "Plateforme de Trading d'Actions Idol & Créateur - Le vote est un soutien, affectant la \"valeur marchande\", les activités de trading retournent les frais aux idoles, actuellement sous examen de conformité à Singapour.",
-    "MARS2049 : Colonisation Martienne × GameFi - Mécanisme Build-to-Earn × actifs blockchain, Telegram Mini App en bêta fermée mondiale, support futur pour NFT et interopérabilité multi-chaînes.",
-    "Influenceur Virtuel IA - Intégré avec l'API x.com, capture des nouvelles tendances, génération automatique de suggestions de commentaires, peut servir de porte-parole d'entreprise ou de gestionnaire de communauté."
+    "Incubation 0→1 : découverte / tests d'hypothèses → MVP → bêta fermée/ouverte → itérations en production.",
+    "Telegram Mini App / Web social : missions, points, classements, croissance par invitation, paiements.",
+    "Opérations communauté & canal : passer de 0 à 200k en peu de temps (selon les cas).",
+    "Acquisition full-funnel : créatifs et médias, conception de campagnes, optimisation du funnel et de la conversion.",
+    "Confiance créateurs & actifs : KYC tiers / scoring de risque / intégrations de données on-chain.",
+    "Localisation multilingue IA : protection du glossaire, révision, cache, diffs ; batch et rollback automatisés.",
+    "Authenticité (Anti-Sybil) : vérifications avatar/graphe + vérification du nom réel pour la santé de la plateforme.",
+    "Croissance enveloppe rouge / airdrop : notre plugin Telegram Mini App (MEME / token / points) avec missions, invitations et anti-abus.",
+    "Analytique ops & automatisation : événements, funnels, dashboards ROI, alertes et rapports quotidiens/hebdomadaires."
   ],
-  "techTitle": "Philosophie Technologique",
+  "techTitle": "Technologie & Conformité",
   "tech": [
-    "Décentralisé × Piloté par Frontend - Philosophie de conception à faible maintenance, haute stabilité, évolutive.",
-    "Déploiement frontend statique atteint zéro serveur, zéro coût de maintenance, intégration blockchain permet vérification d'identité décentralisée et gestion d'actifs.",
-    "Système de traduction multi-langues IA : Utilisation de Google Apps Script avec GPT, modèle de développement à faible coût et haute liberté."
+    "Architecture : orientée frontend, modulaire ; gouvernance centralisée pour les données / algorithmes critiques.",
+    "Stack : Next.js / React, TypeScript / tRPC, PostgreSQL ; TON SDK / Telegram Mini App SDK ; EVM / Solana / TON selon les besoins.",
+    "DevOps : CI/CD & monitoring ; tags d'événement / version, rollback rapide.",
+    "Confidentialité & conformité : APPI / RGPD ; minimisation des données, consentement, audit et sauvegarde."
   ],
-  "joinTitle": "Rejoignez-nous",
+  "joinTitle": "Comment nous travaillons",
   "join": [
-    "Recrutement mondial, soutien au travail entièrement à distance, siège à Tokyo.",
-    "Environnement de travail complètement libre, axé sur les résultats, pas d'exigence de pointage.",
-    "Nous avons besoin d'ingénieurs, designers, PMs, créatifs, producteurs de jeux, professionnels juridiques, spécialistes Web3."
+    "Kickoff : aligner le cadre produit et les hypothèses à valider.",
+    "MVP : ~10–12 semaines pour livrer un MVP prêt pour la production (avec analytics).",
+    "Go-to-Market : ~8 semaines pour activer l'acquisition & la communauté ; observer la rétention / conversion initiale.",
+    "Itérations : toutes les 4–8 semaines ; focus sur la rétention D1, taux de paiement, vue d'annonce et retour sur investissement.",
+    "Stacks & SDKs ? TON / Solana / EVM ; TON SDK, Telegram Mini App SDK, Next.js / React, TypeScript / tRPC, PostgreSQL.",
+    "Processus & tarifs ? Jalons ; tarification au périmètre ou ops mensuelles ; partage de revenus potentiel sur des lignes spécifiques.",
+    "Comment mesurer le succès ? Rétention, conversion, CAC, LTV, ROI ; revue toutes les 4–12 semaines.",
+    "Capacité de l'équipe ? Full-stack + design ; CI/CD, monitoring, dashboards ; intégration fluide."
   ],
-  "contactTitle": "Contactez-nous",
+  "contactTitle": "Contact",
   "contact": [
-    "Crealize LLC établi le 9 octobre 2024, Fondateur : Yves CHEN.",
-    "Adresse : 1-2-9-3 Higashi, Shibuya-ku, Tokyo, Shibuya Bridge B-5 (fourni par Shibuya Startup Support).",
-    "Lieux de travail : Tokyo + équipes à distance mondiales (Taiwan, Singapour, Dubaï, Londres)."
+    "Crealize LLC — Fondée le 9 octobre 2024. Fondateur : Yves CHEN.",
+    "Adresse : Ryusen 3-8-4-402, Taito-ku, Tokyo 110-0012, Japon.",
+    "Telegram : @yveschen — Sites : Tokyo + télétravail (Taïwan / Singapour / Dubaï / Londres)."
   ],
   "telegram": "Contactez-nous via Telegram"
-} 
+}
