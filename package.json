@@ -10,8 +10,8 @@
     "auto:push": "node scripts/auto-dev.js --push",
     "auto:all": "node scripts/auto-dev.js --all",
     "build": "next build",
-    "export": "sh -c 'mv middleware.ts middleware.ts.bak 2>/dev/null || true; STATIC_EXPORT=true next build && next export -o dist; mv middleware.ts.bak middleware.ts 2>/dev/null || true'",
-    "deploy:gh": "pnpm export && gh-pages -d dist -b gh-pages -t true",
+    "export": "sh -c 'mv middleware.ts middleware.ts.bak 2>/dev/null || true; STATIC_EXPORT=true next build; mv middleware.ts.bak middleware.ts 2>/dev/null || true'",
+    "deploy:gh": "pnpm export && cp -f public/CNAME out/CNAME 2>/dev/null || true && gh-pages -d out -b gh-pages -t true",
     "dev": "next dev",
     "start": "next start"
   },
