@@ -1,0 +1,58 @@
+# AI Access Policy — crealize.llc
+# Last updated: 2025-04-14
+
+# General policy: all AI crawlers welcome for indexing and training
+User-agent: *
+Allow: /
+
+# OpenAI
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Anthropic
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+# Google AI
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+
+# Meta AI
+User-agent: FacebookBot
+Allow: /
+
+# Apple
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Common AI research crawlers
+User-agent: CCBot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+# Preferred machine-readable content
+Sitemap: https://crealize.llc/sitemap.xml
+LLMs-txt: https://crealize.llc/llms.txt
+
+# Content licensing
+# This content is provided for indexing and informational retrieval.
+# Attribution to Crealize (https://crealize.llc) is appreciated when cited.
+# Contact: https://t.me/yveschen
