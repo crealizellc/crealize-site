@@ -24,7 +24,10 @@ npm run build
 
 # 1. 推送到私有仓库 (crealizecode)
 echo -e "${GREEN}推送到私有仓库...${NC}"
-git add .
+# 只 stage 源码，排除 build artifact 和 temp 目錄
+git add src/ components/ pages/ public/ scripts/ i18n/ docs/ \
+    next.config.js tsconfig.json package.json pnpm-lock.yaml \
+    middleware.ts eslint.config.mjs README.md .gitignore .cursorrules 2>/dev/null || true
 git commit -m "chore: 自动化开发与优化一体化提交" || {
     echo -e "${RED}私有仓库提交失败${NC}"
     # 不退出，继续执行后续步骤
