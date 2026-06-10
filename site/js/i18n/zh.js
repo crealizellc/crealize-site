@@ -9,7 +9,7 @@ window.CRZ_I18N = {
       img: '../assets/shots/puritylens.webp',
       pos: 'center 32%',
       alt: 'PurityLens App — 成分掃描結果畫面',
-      stack: ['Flutter', 'AI OCR', 'Cloudflare Workers', 'D1'],
+      stack: ['Flutter', 'AI OCR', 'Serverless API'],
       status: 'shipped',
     },
     {
@@ -19,7 +19,7 @@ window.CRZ_I18N = {
       img: '../assets/shots/fudeto.webp',
       pos: 'center 18%',
       alt: 'Fudeto App — 一筆畫謎題畫面',
-      stack: ['Flutter', 'Cloudflare Workers', 'D1'],
+      stack: ['Flutter', 'Puzzle generator', 'Serverless API'],
       status: 'shipped',
     },
     {
@@ -39,7 +39,17 @@ window.CRZ_I18N = {
       img: '../assets/shots/qiflux.webp',
       pos: 'center 35%',
       alt: 'QiFlux App — 週期日曆畫面',
-      stack: ['Flutter', 'Riverpod', 'Cloudflare Workers', 'Hono', 'D1'],
+      stack: ['Flutter', 'Riverpod', 'Local-first', 'Serverless API'],
+      status: 'shipped',
+    },
+    {
+      name: 'moonpacket', jp: '月へ、紅包を', tag: 'Web3 · Telegram',
+      line: 'Telegram 上的加密貨幣紅包 — <em>幾秒發出、即領即到。</em>非託管，支援 USDT・TON・SOL・ETH。',
+      ph: 'moonpacket — 紅包 UI',
+      img: '../assets/shots/moonpacket.webp',
+      pos: 'center 20%',
+      alt: 'moonpacket 網頁應用 — 加密貨幣紅包',
+      stack: ['Telegram Mini App', 'Non-custodial', 'Multi-chain'],
       status: 'shipped',
     },
     {
@@ -49,7 +59,7 @@ window.CRZ_I18N = {
       img: '../assets/shots/idokuta.webp',
       pos: 'center 22%',
       alt: 'iDokuta App — 即時翻譯問診畫面',
-      stack: ['Flutter', '6-locale i18n', 'Cloudflare'],
+      stack: ['Flutter', 'Realtime translation', '6-locale i18n'],
       status: 'wip',
     },
     {
@@ -59,7 +69,7 @@ window.CRZ_I18N = {
       img: '../assets/shots/mairi.webp',
       pos: 'center 25%',
       alt: 'Mairi App — 歡迎畫面',
-      stack: ['Flutter', 'Next.js', 'LINE'],
+      stack: ['Flutter', 'Next.js', 'LINE integration'],
       status: 'wip',
     },
     {
@@ -69,7 +79,7 @@ window.CRZ_I18N = {
       img: '../assets/shots/tendo.webp',
       pos: 'center 30%',
       alt: 'Tendo Web App — 漢米爾頓路徑謎題畫面',
-      stack: ['Web', 'Cloudflare Workers', 'D1'],
+      stack: ['Vanilla JS', 'Serverless API'],
       status: 'wip',
     },
   ],

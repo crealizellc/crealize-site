@@ -9,7 +9,7 @@ window.CRZ_I18N = {
       img: 'assets/shots/puritylens.webp',
       pos: 'center 32%',
       alt: 'PurityLens app — ingredient scan result screen',
-      stack: ['Flutter', 'AI OCR', 'Cloudflare Workers', 'D1'],
+      stack: ['Flutter', 'AI OCR', 'Serverless API'],
       status: 'shipped',
     },
     {
@@ -19,7 +19,7 @@ window.CRZ_I18N = {
       img: 'assets/shots/fudeto.webp',
       pos: 'center 18%',
       alt: 'Fudeto app — daily one-stroke puzzle board',
-      stack: ['Flutter', 'Cloudflare Workers', 'D1'],
+      stack: ['Flutter', 'Puzzle generator', 'Serverless API'],
       status: 'shipped',
     },
     {
@@ -39,7 +39,17 @@ window.CRZ_I18N = {
       img: 'assets/shots/qiflux.webp',
       pos: 'center 35%',
       alt: 'QiFlux app — cycle calendar screen',
-      stack: ['Flutter', 'Riverpod', 'Cloudflare Workers', 'Hono', 'D1'],
+      stack: ['Flutter', 'Riverpod', 'Local-first', 'Serverless API'],
+      status: 'shipped',
+    },
+    {
+      name: 'moonpacket', jp: '月へ、紅包を', tag: 'Web3 · Telegram',
+      line: 'Crypto red packets for Telegram — <em>send in seconds, claim instantly.</em> Non-custodial, across USDT · TON · SOL · ETH.',
+      ph: 'moonpacket — red packet UI',
+      img: 'assets/shots/moonpacket.webp',
+      pos: 'center 20%',
+      alt: 'moonpacket web app — crypto red packet landing',
+      stack: ['Telegram Mini App', 'Non-custodial', 'Multi-chain'],
       status: 'shipped',
     },
     {
@@ -49,7 +59,7 @@ window.CRZ_I18N = {
       img: 'assets/shots/idokuta.webp',
       pos: 'center 22%',
       alt: 'iDokuta app — live translation consultation screen',
-      stack: ['Flutter', '6-locale i18n', 'Cloudflare'],
+      stack: ['Flutter', 'Realtime translation', '6-locale i18n'],
       status: 'wip',
     },
     {
@@ -59,7 +69,7 @@ window.CRZ_I18N = {
       img: 'assets/shots/mairi.webp',
       pos: 'center 25%',
       alt: 'Mairi app — welcome screen',
-      stack: ['Flutter', 'Next.js', 'LINE'],
+      stack: ['Flutter', 'Next.js', 'LINE integration'],
       status: 'wip',
     },
     {
@@ -69,7 +79,7 @@ window.CRZ_I18N = {
       img: 'assets/shots/tendo.webp',
       pos: 'center 30%',
       alt: 'Tendo web app — daily Hamiltonian path puzzle',
-      stack: ['Web', 'Cloudflare Workers', 'D1'],
+      stack: ['Vanilla JS', 'Serverless API'],
       status: 'wip',
     },
   ],

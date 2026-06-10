@@ -20,13 +20,17 @@ const LOCALES = {
   en: {
     dir: '', base: '', htmlLang: 'en', ogLocale: 'en_US',
     title: 'Crealize — Transforming Imagination into Reality | Tokyo Product Studio',
-    desc: 'Crealize is a Tokyo-based independent product studio. We carry products from 0 to 1 — validate, build, ship, polish. Flutter, Next.js, Cloudflare, AI.',
+    desc: 'Crealize is a Tokyo-based independent product studio. We carry products from 0 to 1 — validate, build, ship, polish. Flutter, Next.js, TypeScript, AI.',
+    stackLabel: 'Engineering principles / 設計原則',
+    principles: ['Atomicity — one change, one meaning', 'Explicit dependencies', 'Module boundaries', 'Type-safe by default', 'Zero-dependency bias', 'Code as craft'],
     t: {}, // EN = source copy, no replacements
   },
   ja: {
     dir: 'ja', base: '../', htmlLang: 'ja', ogLocale: 'ja_JP',
+    stackLabel: 'エンジニアリング原則 / Principles',
+    principles: ['原子性 — 1つの変更に1つの意味', '依存関係の明示', 'モジュール境界', '型安全がデフォルト', 'ゼロ依存志向', 'コードは工芸品'],
     title: 'Crealize — 想像を、現実に。| 東京のプロダクトスタジオ',
-    desc: 'Crealize は東京の独立系プロダクトスタジオ。プロダクトを 0 から 1 へ — 検証、構築、リリース、磨き込み。Flutter、Next.js、Cloudflare、AI。',
+    desc: 'Crealize は東京の独立系プロダクトスタジオ。プロダクトを 0 から 1 へ — 検証、構築、リリース、磨き込み。Flutter、Next.js、TypeScript、AI。',
     t: {
       '東京 / Tokyo — Independent Product Studio': '東京の独立系プロダクトスタジオ',
       'Transforming imagination into reality.': '想像を、現実に。',
@@ -63,8 +67,10 @@ const LOCALES = {
   },
   zh: {
     dir: 'zh', base: '../', htmlLang: 'zh-Hant', ogLocale: 'zh_TW',
+    stackLabel: '工程原則 / Principles',
+    principles: ['原子化 — 一個改動，一個意義', '依賴顯式化', '模組邊界', '型別安全為預設', '零依賴傾向', '程式碼即工藝'],
     title: 'Crealize — 把想像變成現實 | 東京獨立產品工作室',
-    desc: 'Crealize 是位於東京的獨立產品工作室。我們把產品從 0 帶到 1 — 驗證、打造、上線、打磨。Flutter、Next.js、Cloudflare、AI。',
+    desc: 'Crealize 是位於東京的獨立產品工作室。我們把產品從 0 帶到 1 — 驗證、打造、上線、打磨。Flutter、Next.js、TypeScript、AI。',
     t: {
       '東京 / Tokyo — Independent Product Studio': '東京・獨立產品工作室',
       'Transforming imagination into reality.': '把想像，變成現實。',
@@ -86,7 +92,6 @@ const LOCALES = {
       'Selected Work / 制作実績': 'Selected Work / 代表作品',
       'Method / 進め方': 'Method / 工作方法',
       'Join / Contact — 採用・お問い合わせ': 'Join / Contact — 加入我們・聯絡',
-      'Stack we master / 常用技術': '我們的技術棧 / Stack',
       '<span class="k">Base</span>': '<span class="k">據點</span>',
       '<span class="k">Roles</span>': '<span class="k">職位</span>',
       '<span class="k">Contact</span>': '<span class="k">聯絡</span>',
@@ -112,6 +117,7 @@ const PRODUCTS = [
   { name: 'iDokuta', cat: 'MedicalApplication', os: 'iOS, Android', desc: { en: 'Multilingual telehealth for foreigners in Japan (in development).', ja: '在日外国人向け多言語オンライン診療（開発中）。', zh: '在日外國人多語線上診療（開發中）。' } },
   { name: 'Mairi', cat: 'HealthApplication', os: 'iOS, Android', desc: { en: 'Daily personal health record × hospital integration (in development).', ja: '毎日の健康記録 × 病院連携（開発中）。', zh: '每日健康紀錄 × 醫院整合（開發中）。' } },
   { name: 'Tendo', cat: 'GameApplication', os: 'Web', desc: { en: 'Daily Hamiltonian-path puzzle (in development).', ja: '一日一道のハミルトン路パズル（開発中）。', zh: '每日漢米爾頓路徑謎題（開發中）。' } },
+  { name: 'moonpacket', cat: 'FinanceApplication', os: 'Web, Telegram', desc: { en: 'Crypto red packets for Telegram communities — non-custodial, USDT / TON / SOL / ETH.', ja: 'Telegram コミュニティ向けクリプト紅包 — ノンカストディアル、USDT / TON / SOL / ETH 対応。', zh: 'Telegram 社群的加密貨幣紅包 — 非託管，支援 USDT / TON / SOL / ETH。' } },
 ];
 
 function jsonLd(loc, key) {
@@ -221,6 +227,16 @@ for (const [key, loc] of Object.entries(LOCALES)) {
 
   // 6. nav logo asset path
   html = html.replaceAll('src="assets/crealize-mark.png"', `src="${loc.base}assets/crealize-mark.png"`);
+
+  // 6.5 common rewrites (all locales): products count + engineering principles strip
+  html = html.replace('>07 products<', '>08 products<');
+  html = html.replace(
+    /<span class="method__stack-label">Stack we master \/ 常用技術<\/span>\s*<ul class="method__stack-list">[\s\S]*?<\/ul>/,
+    `<span class="method__stack-label">${loc.stackLabel}</span>
+        <ul class="method__stack-list">
+          ${loc.principles.map((p) => `<li>${p}</li>`).join('\n          ')}
+        </ul>`
+  );
 
   // 7. locale copy replacements
   for (const [from, to] of Object.entries(loc.t)) {
