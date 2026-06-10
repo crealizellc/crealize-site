@@ -291,13 +291,13 @@
 
   // delegation: cards are injected by site.js
   document.addEventListener('click', (e) => {
-    const c = e.target.closest('.work-card[data-work-index]');
+    const c = e.target.closest('.work-card[data-work-index], .index-row[data-work-index]');
     if (c) { open(Number(c.dataset.workIndex)); return; }
     if (e.target.closest('[data-close]')) close();
   });
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && !modal.hidden) close();
-    if ((e.key === 'Enter' || e.key === ' ') && document.activeElement?.matches?.('.work-card[data-work-index]')) {
+    if ((e.key === 'Enter' || e.key === ' ') && document.activeElement?.matches?.('.work-card[data-work-index], .index-row[data-work-index]')) {
       e.preventDefault();
       open(Number(document.activeElement.dataset.workIndex));
     }

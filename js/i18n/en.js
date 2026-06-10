@@ -3,7 +3,7 @@ window.CRZ_I18N = {
   lang: 'en',
   work: [
     {
-      name: 'PurityLens', jp: '成分をひと目で', tag: 'AI · Consumer Health',
+      name: 'PurityLens', featured: true, jp: '成分をひと目で', tag: 'AI · Consumer Health',
       line: 'Read the fine print on your skin — <em>photo → OCR → verdict</em>, before anything touches it.',
       ph: 'PurityLens — scan result UI',
       img: 'assets/shots/puritylens.webp',
@@ -13,7 +13,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'Fudeto', jp: '一筆書き', tag: 'Puzzle · Daily ritual',
+      name: 'Fudeto', featured: true, jp: '一筆書き', tag: 'Puzzle · Daily ritual',
       line: 'One stroke, one graph, every morning — <em>a small infinity before coffee.</em>',
       ph: 'Fudeto — daily puzzle UI',
       img: 'assets/shots/fudeto.webp',
@@ -33,7 +33,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'QiFlux', jp: '静かな記録', tag: 'Health · Privacy-first',
+      name: 'QiFlux', featured: true, jp: '静かな記録', tag: 'Health · Privacy-first',
       line: 'The quiet, privacy-first cycle tracker — <em>a diary your body writes,</em> kept on your device.',
       ph: 'QiFlux — tracking UI',
       img: 'assets/shots/qiflux.webp',
@@ -43,7 +43,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'moonpacket', jp: '月へ、紅包を', tag: 'Web3 · Telegram',
+      name: 'moonpacket', featured: true, jp: '月へ、紅包を', tag: 'Web3 · Telegram',
       line: 'Crypto red packets for Telegram — <em>send in seconds, claim instantly.</em> Non-custodial, across USDT · TON · SOL · ETH.',
       ph: 'moonpacket — red packet UI',
       img: 'assets/shots/moonpacket.webp',
@@ -91,6 +91,8 @@ window.CRZ_I18N = {
   ],
   ui: {
     wipBadge: 'in development · 開発中',
+    featuredLabel: 'Featured / 代表作',
+    indexLabel: 'The Index / 全製品目録',
     shippedLabel: 'Shipped / 出荷済み',
     wipLabel: 'In development / 開発中',
     formErr: 'Please fill the required fields marked in orange.',

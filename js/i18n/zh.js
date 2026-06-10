@@ -3,7 +3,7 @@ window.CRZ_I18N = {
   lang: 'zh',
   work: [
     {
-      name: 'PurityLens', jp: '成分をひと目で', tag: 'AI · Consumer Health',
+      name: 'PurityLens', featured: true, jp: '成分をひと目で', tag: 'AI · Consumer Health',
       line: '擦上臉之前，先看懂成分表 — <em>拍張照，AI 幫你判定安全性。</em>',
       ph: 'PurityLens — 掃描結果 UI',
       img: '../assets/shots/puritylens.webp',
@@ -13,7 +13,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'Fudeto', jp: '一筆書き', tag: 'Puzzle · Daily ritual',
+      name: 'Fudeto', featured: true, jp: '一筆書き', tag: 'Puzzle · Daily ritual',
       line: '每天早上一道一筆畫謎題 — <em>喝咖啡前的小小腦力體操。</em>',
       ph: 'Fudeto — 每日謎題 UI',
       img: '../assets/shots/fudeto.webp',
@@ -33,7 +33,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'QiFlux', jp: '静かな記録', tag: 'Health · Privacy-first',
+      name: 'QiFlux', featured: true, jp: '静かな記録', tag: 'Health · Privacy-first',
       line: '安靜、隱私優先的週期記錄 — <em>所有資料只留在你的裝置上，</em>不上傳雲端。',
       ph: 'QiFlux — 記錄 UI',
       img: '../assets/shots/qiflux.webp',
@@ -43,7 +43,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'moonpacket', jp: '月へ、紅包を', tag: 'Web3 · Telegram',
+      name: 'moonpacket', featured: true, jp: '月へ、紅包を', tag: 'Web3 · Telegram',
       line: 'Telegram 上的加密貨幣紅包 — <em>幾秒發出、即領即到。</em>非託管，支援 USDT・TON・SOL・ETH。',
       ph: 'moonpacket — 紅包 UI',
       img: '../assets/shots/moonpacket.webp',
@@ -91,6 +91,8 @@ window.CRZ_I18N = {
   ],
   ui: {
     wipBadge: 'in development · 開發中',
+    featuredLabel: 'Featured / 代表作',
+    indexLabel: 'The Index / 全部作品索引',
     shippedLabel: 'Shipped / 已上線',
     wipLabel: 'In development / 開發中',
     formErr: '請填寫以橘色標示的必填欄位。',

@@ -24,13 +24,13 @@
       </div>`;
   }
 
-  function cardHTML(w, i, wip) {
+  function cardHTML(w, globalIdx, wip) {
     return `
-      <article class="work-card reveal" data-work-index="${i}" tabindex="0" role="button"
+      <article class="work-card reveal" data-work-index="${globalIdx}" tabindex="0" role="button"
                aria-label="Open ${w.name}">
         <div class="work-card__shot">
           <div class="work-card__zoom">${shotHTML(w)}</div>
-          <span class="work-card__idx">0${i + 1}</span>
+          <span class="work-card__idx">${String(globalIdx + 1).padStart(2, '0')}</span>
           ${wip ? `<span class="work-card__badge">${UI.wipBadge}</span>` : ''}
         </div>
         <div class="work-card__meta">
@@ -45,16 +45,95 @@
       </article>`;
   }
 
+  // short registry tokens for the index stack column
+  const token = (s) => s.toLowerCase()
+    .replace('google workspace api', 'workspace')
+    .replace('serverless api', 'serverless')
+    .replace('telegram mini app', 'tg-mini-app')
+    .replace('realtime translation', 'rt-translate')
+    .replace('6-locale i18n', 'i18n×6')
+    .replace(/\s+—\s+|\s+/g, '-');
+
+  function rowHTML(w, i) {
+    const st = w.status === 'wip'
+      ? '<span class="index-row__status" data-status="wip">◌ in dev</span>'
+      : '<span class="index-row__status" data-status="shipped">● shipped</span>';
+    return `
+      <li class="index-row" data-work-index="${i}" tabindex="0" role="button"
+          aria-label="Open ${w.name}" style="--d:${Math.min(i * 24, 360)}ms"
+          data-haystack="${(w.name + ' ' + w.jp + ' ' + w.tag + ' ' + w.stack.join(' ')).toLowerCase()}">
+        <span class="index-row__no">${String(i + 1).padStart(3, '0')}</span>
+        <span class="index-row__name">${w.name}</span>
+        <span class="index-row__jp jp-accent">${w.jp}</span>
+        <span class="index-row__cat">${w.tag}</span>
+        ${st}
+        <span class="index-row__stack">${w.stack.map(token).join(' · ')}</span>
+      </li>`;
+  }
+
   const grid = document.getElementById('work-grid');
   if (grid) {
-    const shipped = WORK.filter((w) => w.status === 'shipped');
-    const wip = WORK.filter((w) => w.status === 'wip');
+    const featured = WORK.filter((w) => w.featured);
     grid.innerHTML = `
-      <div class="work__sub"><span class="work__sub-label">${UI.shippedLabel}</span><span class="work__sub-n">0${shipped.length}</span></div>
-      <div class="work__grid">${shipped.map((w, i) => cardHTML(w, i, false)).join('')}</div>
-      <div class="work__sub work__sub--wip"><span class="work__sub-label">${UI.wipLabel}</span><span class="work__sub-n">0${wip.length}</span></div>
-      <div class="work__grid work__grid--wip">${wip.map((w, i) => cardHTML(w, i + shipped.length, true)).join('')}</div>
+      <div class="work__sub"><span class="work__sub-label">${UI.featuredLabel}</span><span class="work__sub-n">0${featured.length}</span></div>
+      <div class="work__grid">${featured.map((w) => cardHTML(w, WORK.indexOf(w), w.status === 'wip')).join('')}</div>
+
+      <div class="work__index" id="work-index">
+        <div class="work__sub work__sub--index"><span class="work__sub-label">${UI.indexLabel}</span><span class="work__sub-n" id="index-count">${String(WORK.length).padStart(2, '0')} / ${String(WORK.length).padStart(2, '0')}</span></div>
+        <label class="index__prompt">
+          <span class="index__ps1">$ filter:</span>
+          <input id="index-filter" type="text" autocomplete="off" spellcheck="false"
+                 placeholder="name · category · stack" aria-label="Filter products" />
+          <span class="index__hint">esc clears</span>
+        </label>
+        <div class="index__head" aria-hidden="true">
+          <span>#</span><span>name</span><span>名</span><span>category</span><span>status</span><span>stack</span>
+        </div>
+        <ol class="index__list" id="index-list">
+          ${WORK.map((w, i) => rowHTML(w, i)).join('')}
+        </ol>
+        <p class="index__empty" id="index-empty" hidden>0 results — nothing materialized · esc to reset</p>
+      </div>
     `;
+    const count = document.querySelector('.work .sec-head__count');
+    if (count) count.textContent = String(WORK.length).padStart(2, '0') + ' products';
+  }
+
+  // ---------- THE INDEX : type-to-filter (fuzzy subsequence) ----------
+  const filterInput = document.getElementById('index-filter');
+  if (filterInput) {
+    const rows = Array.from(document.querySelectorAll('.index-row'));
+    const counter = document.getElementById('index-count');
+    const empty = document.getElementById('index-empty');
+    const total = String(rows.length).padStart(2, '0');
+
+    const fuzzy = (q, hay) => {
+      let j = 0;
+      for (const ch of hay) { if (ch === q[j]) j++; if (j === q.length) return true; }
+      return false;
+    };
+
+    const apply = () => {
+      const q = filterInput.value.trim().toLowerCase().replace(/\s+/g, ' ');
+      let n = 0;
+      for (const row of rows) {
+        const hit = !q || fuzzy(q, row.dataset.haystack);
+        row.hidden = !hit;
+        if (hit) n++;
+      }
+      counter.textContent = String(n).padStart(2, '0') + ' / ' + total;
+      counter.classList.toggle('is-filtered', !!q && n < rows.length);
+      empty.hidden = n !== 0;
+    };
+
+    filterInput.addEventListener('input', apply);
+    filterInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (filterInput.value) e.stopPropagation();
+        filterInput.value = '';
+        apply();
+      }
+    });
   }
 
   // expose for the materialize modal
@@ -75,7 +154,7 @@
 
   // ---------- Condensation reveals (scroll-driven; robust where IO is throttled) ----------
   const pending = new Set(
-    document.querySelectorAll('.reveal, .reveal-child, .method-step, .sec-head')
+    document.querySelectorAll('.reveal, .reveal-child, .method-step, .sec-head, .work__index')
   );
   function checkReveals() {
     const vh = window.innerHeight;
