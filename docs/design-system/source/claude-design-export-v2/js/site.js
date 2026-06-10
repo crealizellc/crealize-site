@@ -1,37 +1,103 @@
 /* ============================================================
    CREALIZE — SITE BEHAVIOR
    nav state · work cards · method strip · condensation reveals · form
-   i18n: data comes from js/i18n/<lang>.js (window.CRZ_I18N),
-   loaded before this file by each locale page.
    ============================================================ */
 (function () {
   'use strict';
 
-  const I18N = window.CRZ_I18N || { work: [], method: [], ui: {} };
-  const WORK = I18N.work;
-  const METHOD = I18N.method;
-  const UI = I18N.ui;
-
   // ---------- WORK : case-study cards ----------
-  function shotHTML(w) {
-    if (w.img) {
-      return `<img class="work-card__img" src="${w.img}" alt="${w.alt || w.name}" loading="lazy" decoding="async" width="720" height="1560" style="object-position:${w.pos || 'top center'}" />`;
-    }
-    return `
-      <div class="work-card__ph">
-        <b>[ ${w.ph} ]</b>
-        <span>product screenshot · drop here</span>
-      </div>`;
-  }
+  const WORK = [
+    {
+      name: 'PurityLens',
+      jp: '成分をひと目で',
+      tag: 'AI · Consumer Health',
+      line: 'Read the fine print on your skin — <em>photo → OCR → verdict</em>, before anything touches it.',
+      ph: 'PurityLens — scan result UI',
+      stack: ['Flutter', 'AI OCR', 'Cloudflare Workers', 'D1'],
+      status: 'shipped',
+      featured: true,
+    },
+    {
+      name: 'Fudeto',
+      jp: '一筆書き',
+      tag: 'Puzzle · Daily ritual',
+      line: 'One stroke, one graph, every morning — <em>a small infinity before coffee.</em>',
+      ph: 'Fudeto — daily puzzle UI',
+      stack: ['Flutter', 'Cloudflare Workers', 'D1'],
+      status: 'shipped',
+      featured: true,
+    },
+    {
+      name: 'Kichitto',
+      jp: 'きちっと',
+      tag: 'Fintech · Solo founders',
+      line: 'Receipts dissolve into ledgers — <em>photo → AI OCR → filed to Drive + Sheets.</em> Bookkeeping, garbage-collected.',
+      ph: 'Kichitto — receipt capture UI',
+      stack: ['Flutter', 'Gemini AI', 'Google Workspace API'],
+      status: 'shipped',
+    },
+    {
+      name: 'QiFlux',
+      jp: '静かな記録',
+      tag: 'Health · Privacy-first',
+      line: 'The quiet, privacy-first cycle tracker — <em>a diary your body writes,</em> kept on your device.',
+      ph: 'QiFlux — tracking UI',
+      stack: ['Flutter', 'Riverpod', 'Cloudflare Workers', 'Hono', 'D1'],
+      status: 'shipped',
+      featured: true,
+    },
+    {
+      name: 'moonpacket',
+      jp: '月へ小包',
+      tag: 'Tools · P2P sharing',
+      line: 'Files that travel light — <em>end-to-end, peer-to-peer,</em> no cloud in between.',
+      ph: 'moonpacket — transfer UI',
+      stack: ['Flutter', 'WebRTC', 'Cloudflare'],
+      status: 'shipped',
+      featured: true,
+    },
+    {
+      name: 'iDokuta',
+      jp: '言葉を越える診療',
+      tag: 'Telehealth · i18n',
+      line: 'Telehealth across language borders — <em>consultations mediated by live translation,</em> six locales deep.',
+      ph: 'iDokuta — consultation UI',
+      stack: ['Flutter', '6-locale i18n', 'Cloudflare'],
+      status: 'wip',
+    },
+    {
+      name: 'Mairi',
+      jp: '毎日のカルテ',
+      tag: 'Health · Hospital-integrated',
+      line: 'A daily health record that <em>speaks hospital</em> — personal logs, clinically integrated.',
+      ph: 'Mairi — daily record UI',
+      stack: ['Flutter', 'Next.js', 'LINE'],
+      status: 'wip',
+    },
+    {
+      name: 'Tendo',
+      jp: '一日一道',
+      tag: 'Puzzle · Daily ritual',
+      line: 'Fudeto’s sister title — <em>one Hamiltonian path a day</em> keeps entropy away.',
+      ph: 'Tendo — daily path UI',
+      stack: ['Web', 'Cloudflare Workers', 'D1'],
+      status: 'wip',
+    },
+  ];
 
-  function cardHTML(w, globalIdx, wip) {
+  function cardHTML(w, displayIdx, dataIdx) {
     return `
-      <article class="work-card reveal" data-work-index="${globalIdx}" tabindex="0" role="button"
-               aria-label="Open ${w.name}">
+      <article class="work-card reveal" data-work-index="${dataIdx}" tabindex="0" role="button"
+               aria-label="Open ${w.name}" data-screen-label="work: ${w.name}">
         <div class="work-card__shot">
-          <div class="work-card__zoom">${shotHTML(w)}</div>
-          <span class="work-card__idx">${String(globalIdx + 1).padStart(2, '0')}</span>
-          ${wip ? `<span class="work-card__badge">${UI.wipBadge}</span>` : ''}
+          <div class="work-card__zoom">
+            <div class="work-card__ph">
+              <b>[ ${w.ph} ]</b>
+              <span>product screenshot · drop here</span>
+            </div>
+          </div>
+          <span class="work-card__idx">0${displayIdx + 1}</span>
+          ${w.status === 'wip' ? '<span class="work-card__badge">in development · 開発中</span>' : ''}
         </div>
         <div class="work-card__meta">
           <span class="work-card__name">${w.name}</span>
@@ -45,12 +111,10 @@
       </article>`;
   }
 
-  // short registry tokens for the index stack column
+  // short registry tokens: 'Cloudflare Workers' → workers, 'AI OCR' → ai-ocr …
   const token = (s) => s.toLowerCase()
+    .replace('cloudflare workers', 'workers')
     .replace('google workspace api', 'workspace')
-    .replace('serverless api', 'serverless')
-    .replace('telegram mini app', 'tg-mini-app')
-    .replace('realtime translation', 'rt-translate')
     .replace('6-locale i18n', 'i18n×6')
     .replace(/\s+—\s+|\s+/g, '-');
 
@@ -75,11 +139,11 @@
   if (grid) {
     const featured = WORK.filter((w) => w.featured);
     grid.innerHTML = `
-      <div class="work__sub"><span class="work__sub-label">${UI.featuredLabel}</span><span class="work__sub-n">0${featured.length}</span></div>
-      <div class="work__grid">${featured.map((w) => cardHTML(w, WORK.indexOf(w), w.status === 'wip')).join('')}</div>
+      <div class="work__sub"><span class="work__sub-label">Featured / 代表作</span><span class="work__sub-n">0${featured.length}</span></div>
+      <div class="work__grid">${featured.map((w, i) => cardHTML(w, i, WORK.indexOf(w))).join('')}</div>
 
       <div class="work__index" id="work-index">
-        <div class="work__sub work__sub--index"><span class="work__sub-label">${UI.indexLabel}</span><span class="work__sub-n" id="index-count">${String(WORK.length).padStart(2, '0')} / ${String(WORK.length).padStart(2, '0')}</span></div>
+        <div class="work__sub work__sub--index"><span class="work__sub-label">The Index / 全製品目録</span><span class="work__sub-n" id="index-count">${String(WORK.length).padStart(2, '0')} / ${String(WORK.length).padStart(2, '0')}</span></div>
         <label class="index__prompt">
           <span class="index__ps1">$ filter:</span>
           <input id="index-filter" type="text" autocomplete="off" spellcheck="false"
@@ -140,6 +204,13 @@
   window.CRZ_WORK = WORK;
 
   // ---------- METHOD : 0→1 strip ----------
+  const METHOD = [
+    { n: 'Validate', jp: '検証', d: 'Every idea is a hypothesis. We write the test first — and run it on humans, not dashboards.' },
+    { n: 'Build', jp: '構築', d: 'A small senior team writes the real thing. No throwaway code, no theater.' },
+    { n: 'Ship', jp: '出荷', d: 'Software is literature that runs. Publish early — readers are the only honest critics.' },
+    { n: 'Polish', jp: '研磨', d: 'The last 4% is the soul — latency, copy, motion. Craft is retention.' },
+  ];
+
   const strip = document.getElementById('method-strip');
   if (strip) {
     strip.innerHTML = METHOD.map((m, i) => `
@@ -184,6 +255,7 @@
 
   function onScroll() {
     if (nav) nav.classList.toggle('is-stuck', window.scrollY > 24);
+    // active link
     let active = -1;
     const mid = window.innerHeight * 0.5;
     sections.forEach((sec, i) => {
@@ -195,7 +267,7 @@
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  // ---------- Language menu (globe) — real locale navigation ----------
+  // ---------- Language menu (globe) — visual only ----------
   const langWrap = document.getElementById('lang-switch');
   if (langWrap) {
     const globe = langWrap.querySelector('.nav__globe');
@@ -207,6 +279,13 @@
     globe.addEventListener('click', (e) => {
       e.stopPropagation();
       setOpen(!langWrap.classList.contains('is-open'));
+    });
+    menu.querySelectorAll('button').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        menu.querySelectorAll('button').forEach((b) => b.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        setOpen(false);
+      });
     });
     document.addEventListener('click', (e) => {
       if (!langWrap.contains(e.target)) setOpen(false);
@@ -220,8 +299,8 @@
   const buildLine = document.getElementById('build-line');
   if (buildLine) {
     const stamp = () => {
-      const navEntry = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
-      const ms = navEntry && navEntry.domContentLoadedEventEnd ? navEntry.domContentLoadedEventEnd : performance.now();
+      const nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+      const ms = nav && nav.domContentLoadedEventEnd ? nav.domContentLoadedEventEnd : performance.now();
       buildLine.innerHTML =
         `[ok] materialized in ${(ms / 1000).toFixed(2)}s · vanilla js · 0 deps · transform/opacity only <i class="cursor" aria-hidden="true"></i>`;
     };
@@ -229,12 +308,11 @@
     else window.addEventListener('load', stamp);
   }
 
-  // ---------- JOIN : form → opens the visitor's mail app (no backend, no pretending) ----------
+  // ---------- JOIN : form ----------
   const form = document.getElementById('join-form');
   if (form) {
     const note = document.getElementById('f-note');
     const submit = document.getElementById('f-submit');
-    const defaultNote = note ? note.textContent : '';
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       let valid = true;
@@ -246,27 +324,22 @@
         if (bad) valid = false;
       });
       if (!valid) {
-        note.textContent = UI.formErr;
+        note.textContent = 'Please fill the required fields marked in orange.';
         note.classList.remove('is-sent');
         return;
       }
-      const v = (id) => (form.querySelector(id) ? form.querySelector(id).value.trim() : '');
-      const body = [
-        v('#f-msg'),
-        '',
-        '—',
-        `Name: ${v('#f-name')}`,
-        `Email: ${v('#f-email')}`,
-        v('#f-link') ? `Link: ${v('#f-link')}` : '',
-      ].filter(Boolean).join('\n');
-      note.textContent = UI.formOpening;
-      window.location.href =
-        `mailto:support@crealize.llc?subject=${encodeURIComponent(UI.mailSubject)}&body=${encodeURIComponent(body)}`;
+      submit.disabled = true;
+      submit.querySelector('.btn__label').textContent = 'Sending…';
       setTimeout(() => {
-        note.textContent = UI.formOpened;
+        submit.querySelector('.btn__label').textContent = 'Sent';
+        note.textContent = 'Message sent — ありがとうございます. We reply within two working days.';
         note.classList.add('is-sent');
-        setTimeout(() => { note.textContent = defaultNote; note.classList.remove('is-sent'); }, 8000);
-      }, 600);
+        form.querySelectorAll('input, textarea').forEach((i) => { i.value = ''; });
+        setTimeout(() => {
+          submit.disabled = false;
+          submit.querySelector('.btn__label').textContent = 'Send message';
+        }, 2600);
+      }, 900);
     });
     form.querySelectorAll('input, textarea').forEach((input) => {
       input.addEventListener('input', () => input.closest('.field').classList.remove('is-error'));

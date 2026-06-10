@@ -3,7 +3,7 @@ window.CRZ_I18N = {
   lang: 'ja',
   work: [
     {
-      name: 'PurityLens', jp: '成分をひと目で', tag: 'AI · Consumer Health',
+      name: 'PurityLens', featured: true, jp: '成分をひと目で', tag: 'AI · Consumer Health',
       line: '肌にのせる前に、成分表示を読み解く — <em>撮影すると、AI が安全性を判定します。</em>',
       ph: 'PurityLens — スキャン結果 UI',
       img: '../assets/shots/puritylens.webp',
@@ -13,7 +13,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'Fudeto', jp: '一筆書き', tag: 'Puzzle · Daily ritual',
+      name: 'Fudeto', featured: true, jp: '一筆書き', tag: 'Puzzle · Daily ritual',
       line: '毎朝ひとつの一筆書きパズル — <em>コーヒーの前の、ちいさな頭の体操。</em>',
       ph: 'Fudeto — デイリーパズル UI',
       img: '../assets/shots/fudeto.webp',
@@ -33,7 +33,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'QiFlux', jp: '静かな記録', tag: 'Health · Privacy-first',
+      name: 'QiFlux', featured: true, jp: '静かな記録', tag: 'Health · Privacy-first',
       line: '静かな、プライバシー第一の周期トラッカー。<em>記録はすべて、あなたの端末の中だけに。</em>',
       ph: 'QiFlux — トラッキング UI',
       img: '../assets/shots/qiflux.webp',
@@ -43,7 +43,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'moonpacket', jp: '月へ、紅包を', tag: 'Web3 · Telegram',
+      name: 'moonpacket', featured: true, jp: '月へ、紅包を', tag: 'Web3 · Telegram',
       line: 'Telegram で贈るクリプト紅包 — <em>数秒で送って、すぐ受け取れる。</em>ノンカストディアルで USDT・TON・SOL・ETH に対応。',
       ph: 'moonpacket — 紅包 UI',
       img: '../assets/shots/moonpacket.webp',
@@ -91,6 +91,8 @@ window.CRZ_I18N = {
   ],
   ui: {
     wipBadge: 'in development · 開発中',
+    featuredLabel: 'Featured / 代表作',
+    indexLabel: 'The Index / 全製品目録',
     shippedLabel: 'Shipped / 出荷済み',
     wipLabel: 'In development / 開発中',
     formErr: 'オレンジ色の必須項目をご記入ください。',

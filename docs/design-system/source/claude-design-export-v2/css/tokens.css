@@ -1,0 +1,71 @@
+/* ============================================================
+   CREALIZE — DESIGN TOKENS
+   Japanese-Swiss editorial · monochrome + International Orange
+   ============================================================ */
+
+:root {
+  /* ---- Color : warm near-black on paper white ---- */
+  --paper:        #FAFAF8;   /* low-chroma warm white */
+  --paper-2:      #F2F1EC;   /* slightly deeper panel  */
+  --ink:          #121110;   /* warm near-black        */
+  --ink-70:       rgba(18,17,16,.70);
+  --ink-55:       rgba(18,17,16,.55);
+  --ink-40:       rgba(18,17,16,.40);
+  --ink-25:       rgba(18,17,16,.25);
+  --line:         rgba(18,17,16,.14);
+  --line-soft:    rgba(18,17,16,.08);
+
+  /* ---- The one accent : International Orange ---- */
+  --accent:       #FF4F00;
+  --accent-ink:   #FFFFFF;   /* text on accent */
+  --accent-tint:  rgba(255,79,0,.10);
+
+  /* ---- Inverse (dark panels) ---- */
+  --ink-paper:    #F6F5F1;   /* paper text on ink */
+  --ink-paper-55: rgba(246,245,241,.55);
+  --ink-paper-25: rgba(246,245,241,.22);
+  --ink-line:     rgba(246,245,241,.16);
+
+  /* ---- Type families ---- */
+  --font-display: 'Space Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-body:    'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-serif:   'Newsreader', Georgia, 'Times New Roman', serif;
+  --font-jp:      'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
+  --font-mono:    'Space Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --font-wordmark:'Bricolage Grotesque', 'Space Grotesk', 'Helvetica Neue', sans-serif;
+
+  /* ---- Fluid display scale (clamped to 1440 design) ---- */
+  --fs-mega:   clamp(52px, 10.4vw, 150px);
+  --fs-h1:     clamp(44px, 7vw, 104px);
+  --fs-h2:     clamp(34px, 4.6vw, 68px);
+  --fs-h3:     clamp(24px, 2.4vw, 36px);
+  --fs-lead:   clamp(20px, 1.7vw, 27px);
+  --fs-body:   17px;
+  --fs-sm:     14px;
+  --fs-xs:     12px;
+  --fs-eyebrow:11.5px;
+
+  /* ---- Spacing (8px base) ---- */
+  --s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px;
+  --s-5: 24px; --s-6: 32px; --s-7: 48px; --s-8: 64px;
+  --s-9: 96px; --s-10:128px; --s-11:192px;
+
+  /* ---- Layout ---- */
+  --maxw: 1440px;
+  --gutter: clamp(20px, 4.4vw, 88px);
+  --col-gap: clamp(16px, 1.6vw, 28px);
+
+  /* ---- Radius (Swiss = near-sharp) ---- */
+  --r-0: 0px; --r-1: 2px; --r-2: 4px; --r-3: 8px; --r-pill: 999px;
+
+  /* ---- Motion ---- */
+  --motion: 1;                       /* 0..1, driven by Tweaks */
+  --ease-cond: cubic-bezier(.22,1,.36,1);   /* condensation: out-expo-ish */
+  --ease-in-cond: cubic-bezier(.6,.04,.98,.34);
+  --dur-1: 360ms; --dur-2: 620ms; --dur-3: 1100ms;
+
+  --nav-h: 72px;
+}
+
+/* JP accents off → hide vertical Japanese ornaments */
+:root[data-jp="off"] .jp-accent { display: none !important; }

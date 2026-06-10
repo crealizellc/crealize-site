@@ -214,13 +214,9 @@
   let raf = null, t0 = 0, lastFocus = null;
 
   function fill(w, i) {
-    const shot = modal.querySelector('.work-modal__shot');
-    if (w.img) {
-      shot.innerHTML = `<img class="work-modal__img" src="${w.img}" alt="${w.alt || w.name}" decoding="async" style="object-position:${w.pos || 'top center'}" />`;
-    } else {
-      shot.innerHTML = `<div class="work-card__ph"><b>[ ${w.ph} ]</b><span>product screenshot · drop here</span></div>`;
-    }
-    els.idx.textContent = String(i + 1).padStart(2, '0') + ' / ' + String((window.CRZ_WORK || []).length).padStart(2, '0');
+    const total = String((window.CRZ_WORK || []).length).padStart(2, '0');
+    els.ph.textContent = `[ ${w.ph} ]`;
+    els.idx.textContent = String(i + 1).padStart(2, '0') + ' / ' + total;
     els.badge.hidden = w.status !== 'wip';
     els.name.textContent = w.name;
     els.jp.textContent = w.jp;
@@ -289,7 +285,7 @@
     if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
   }
 
-  // delegation: cards are injected by site.js
+  // delegation: cards + index rows are injected by site.js
   document.addEventListener('click', (e) => {
     const c = e.target.closest('.work-card[data-work-index], .index-row[data-work-index]');
     if (c) { open(Number(c.dataset.workIndex)); return; }
