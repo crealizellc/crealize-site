@@ -4,7 +4,7 @@ window.CRZ_I18N = {
   work: [
     {
       name: 'PurityLens', jp: '成分をひと目で', tag: 'AI · Consumer Health',
-      line: '擦上肌膚之前，先讀懂成分的細則 — <em>拍照 → OCR → 判定。</em>',
+      line: '擦上臉之前，先看懂成分表 — <em>拍張照，AI 幫你判定安全性。</em>',
       ph: 'PurityLens — 掃描結果 UI',
       img: '../assets/shots/puritylens.webp',
       pos: 'center 32%',
@@ -14,7 +14,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Fudeto', jp: '一筆書き', tag: 'Puzzle · Daily ritual',
-      line: '一筆、一圖、每個早晨 — <em>咖啡之前的小小無限。</em>',
+      line: '每天早上一道一筆畫謎題 — <em>喝咖啡前的小小腦力體操。</em>',
       ph: 'Fudeto — 每日謎題 UI',
       img: '../assets/shots/fudeto.webp',
       pos: 'center 18%',
@@ -24,7 +24,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Kichitto', jp: 'きちっと', tag: 'Fintech · Solo founders',
-      line: '收據溶解成帳本 — <em>拍照 → AI OCR → 自動歸檔到 Drive + Sheets。</em>記帳，交給垃圾回收。',
+      line: '收據拍一下就好 — <em>AI 自動辨識，歸檔進 Drive 和 Sheets。</em>記帳雜務，歸零。',
       ph: 'Kichitto — 收據擷取 UI',
       img: '../assets/shots/kichitto.webp',
       pos: 'center 12%',
@@ -34,7 +34,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'QiFlux', jp: '静かな記録', tag: 'Health · Privacy-first',
-      line: '安靜、隱私優先的週期記錄 — <em>身體寫的日記，</em>只留在你的裝置上。',
+      line: '安靜、隱私優先的週期記錄 — <em>所有資料只留在你的裝置上，</em>不上傳雲端。',
       ph: 'QiFlux — 記錄 UI',
       img: '../assets/shots/qiflux.webp',
       pos: 'center 35%',
@@ -44,7 +44,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'iDokuta', jp: '言葉を越える診療', tag: 'Telehealth · i18n',
-      line: '跨越語言邊界的線上診療 — <em>即時翻譯中介的問診，</em>深入六種語言。',
+      line: '跨越語言隔閡的線上診療 — <em>即時翻譯陪你看診，</em>支援六種語言。',
       ph: 'iDokuta — 問診 UI',
       img: '../assets/shots/idokuta.webp',
       pos: 'center 22%',
@@ -54,7 +54,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Mairi', jp: '毎日のカルテ', tag: 'Health · Hospital-integrated',
-      line: '聽得懂醫院的每日健康紀錄 — <em>個人日誌，臨床整合。</em>',
+      line: '每天的健康紀錄，直接接上醫院 — <em>把個人記錄帶進診間。</em>',
       ph: 'Mairi — 每日紀錄 UI',
       img: '../assets/shots/mairi.webp',
       pos: 'center 25%',
@@ -64,7 +64,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Tendo', jp: '一日一道', tag: 'Puzzle · Daily ritual',
-      line: 'Fudeto 的姊妹作 — <em>每天一條漢米爾頓路徑，</em>讓熵遠離。',
+      line: 'Fudeto 的姊妹作 — <em>每天一題，把所有的點用一條路串起來。</em>',
       ph: 'Tendo — 每日路徑 UI',
       img: '../assets/shots/tendo.webp',
       pos: 'center 30%',
@@ -74,15 +74,15 @@ window.CRZ_I18N = {
     },
   ],
   method: [
-    { n: 'Validate', jp: '検証', d: '每個點子都是假說。先寫測試 — 跑在真人身上，不是儀表板上。' },
-    { n: 'Build', jp: '構築', d: '小而資深的團隊直接寫真傢伙。沒有丟棄式代碼，沒有表演。' },
-    { n: 'Ship', jp: '出荷', d: '軟體是會跑的文學。早點出版 — 唯一誠實的書評來自讀者。' },
-    { n: 'Polish', jp: '研磨', d: '最後的 4% 是靈魂 — 延遲、文案、動效。工藝就是留存。' },
+    { n: 'Validate', jp: '検証', d: '每個點子都先當假說看待。先驗證再動手 — 答案來自真實用戶，不是儀表板。' },
+    { n: 'Build', jp: '構築', d: '小而資深的團隊，從第一行就寫正式品質的程式碼，不做丟棄式原型。' },
+    { n: 'Ship', jp: '出荷', d: '儘早上線 — 最誠實的回饋，永遠來自真正使用它的人。' },
+    { n: 'Polish', jp: '研磨', d: '最後幾 % 的細節是靈魂 — 速度、文案、動效。把細節磨亮，用戶才會留下來。' },
   ],
   ui: {
-    wipBadge: 'in development · 開発中',
-    shippedLabel: 'Shipped / 出荷済み',
-    wipLabel: 'In development / 開発中',
+    wipBadge: 'in development · 開發中',
+    shippedLabel: 'Shipped / 已上線',
+    wipLabel: 'In development / 開發中',
     formErr: '請填寫以橘色標示的必填欄位。',
     formOpening: '正在開啟郵件程式…',
     formOpened: '郵件程式應已開啟 — 或直接來信：support@crealize.llc',
