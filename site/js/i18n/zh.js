@@ -3,7 +3,7 @@ window.CRZ_I18N = {
   lang: 'zh',
   work: [
     {
-      name: 'PurityLens', featured: true, jp: '成分をひと目で', tag: 'AI · Consumer Health',
+      name: 'PurityLens', featured: true, jp: '成分一目了然', tag: 'AI · 消費者健康',
       line: '擦上臉之前，先看懂成分表 — <em>拍張照，AI 幫你判定安全性。</em>',
       ph: 'PurityLens — 掃描結果 UI',
       img: '../assets/shots/puritylens.webp',
@@ -13,7 +13,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'Fudeto', featured: true, jp: '一筆書き', tag: 'Puzzle · Daily ritual',
+      name: 'Fudeto', featured: true, jp: '一筆畫', tag: '解謎 · 每日習慣',
       line: '每天早上一道一筆畫謎題 — <em>喝咖啡前的小小腦力體操。</em>',
       ph: 'Fudeto — 每日謎題 UI',
       img: '../assets/shots/fudeto.webp',
@@ -23,7 +23,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'Kichitto', jp: 'きちっと', tag: 'Fintech · Solo founders',
+      name: 'Kichitto', jp: '收據好好記', tag: '金融 · 一人公司',
       line: '收據拍一下就好 — <em>AI 自動辨識，歸檔進 Drive 和 Sheets。</em>記帳雜務，歸零。',
       ph: 'Kichitto — 收據擷取 UI',
       img: '../assets/shots/kichitto.webp',
@@ -33,7 +33,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'QiFlux', featured: true, jp: '静かな記録', tag: 'Health · Privacy-first',
+      name: 'QiFlux', featured: true, jp: '安靜的記錄', tag: '健康 · 隱私優先',
       line: '安靜、隱私優先的週期記錄 — <em>所有資料只留在你的裝置上，</em>不上傳雲端。',
       ph: 'QiFlux — 記錄 UI',
       img: '../assets/shots/qiflux.webp',
@@ -53,7 +53,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'iDokuta', jp: '言葉を越える診療', tag: 'Telehealth · i18n',
+      name: 'iDokuta', jp: '跨語言看診', tag: '遠距醫療 · 多語言',
       line: '跨越語言隔閡的線上診療 — <em>即時翻譯陪你看診，</em>支援六種語言。',
       ph: 'iDokuta — 問診 UI',
       img: '../assets/shots/idokuta.webp',
@@ -63,7 +63,7 @@ window.CRZ_I18N = {
       status: 'wip',
     },
     {
-      name: 'Mairi', jp: '毎日のカルテ', tag: 'Health · Hospital-integrated',
+      name: 'Mairi', jp: '每日健康紀錄', tag: '健康 · 醫院整合',
       line: '每天的健康紀錄，直接接上醫院 — <em>把個人記錄帶進診間。</em>',
       ph: 'Mairi — 每日紀錄 UI',
       img: '../assets/shots/mairi.webp',
@@ -73,7 +73,7 @@ window.CRZ_I18N = {
       status: 'wip',
     },
     {
-      name: 'Tendo', jp: '一日一道', tag: 'Puzzle · Daily ritual',
+      name: 'Tendo', jp: '一日一道', tag: '解謎 · 每日習慣',
       line: 'Fudeto 的姊妹作 — <em>每天一題，把所有的點用一條路串起來。</em>',
       ph: 'Tendo — 每日路徑 UI',
       img: '../assets/shots/tendo.webp',
@@ -84,15 +84,23 @@ window.CRZ_I18N = {
     },
   ],
   method: [
-    { n: 'Validate', jp: '検証', d: '每個點子都先當假說看待。先驗證再動手 — 答案來自真實用戶，不是儀表板。' },
-    { n: 'Build', jp: '構築', d: '小而資深的團隊，從第一行就寫正式品質的程式碼，不做丟棄式原型。' },
-    { n: 'Ship', jp: '出荷', d: '儘早上線 — 最誠實的回饋，永遠來自真正使用它的人。' },
-    { n: 'Polish', jp: '研磨', d: '最後幾 % 的細節是靈魂 — 速度、文案、動效。把細節磨亮，用戶才會留下來。' },
+    { n: '驗證', jp: '', d: '每個點子都先當假說看待。先驗證再動手 — 答案來自真實用戶，不是儀表板。' },
+    { n: '打造', jp: '', d: '小而資深的團隊，從第一行就寫正式品質的程式碼，不做丟棄式原型。' },
+    { n: '上線', jp: '', d: '儘早上線 — 最誠實的回饋，永遠來自真正使用它的人。' },
+    { n: '打磨', jp: '', d: '最後幾 % 的細節是靈魂 — 速度、文案、動效。把細節磨亮，用戶才會留下來。' },
   ],
   ui: {
-    wipBadge: 'in development · 開發中',
-    featuredLabel: 'Featured / 代表作',
-    indexLabel: 'The Index / 全部作品索引',
+    wipBadge: '開發中',
+    featuredLabel: '精選作品',
+    indexLabel: '作品索引',
+    productsSuffix: ' 個產品',
+    statusShipped: '● 已上線',
+    statusWip: '◌ 開發中',
+    filterPlaceholder: '名稱・分類・技術',
+    filterHint: 'esc 清除',
+    emptyText: '0 筆 — 沒有結果 · esc 重設',
+    indexHead: ["#", "名稱", "副名", "分類", "狀態", "技術"],
+    phases: ["想像", "凝結", "實現"],
     shippedLabel: 'Shipped / 已上線',
     wipLabel: 'In development / 開發中',
     formErr: '請填寫以橘色標示的必填欄位。',
