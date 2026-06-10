@@ -1,19 +1,4 @@
-User-Agent: *
-Allow: /
-
-User-Agent: GPTBot
-Allow: /
-
-User-Agent: ClaudeBot
-Allow: /
-
-User-Agent: Google-Extended
-Allow: /
-
-User-Agent: PerplexityBot
-Allow: /
-
-User-Agent: Applebot-Extended
+User-agent: *
 Allow: /
 
 Sitemap: https://crealize.llc/sitemap.xml
