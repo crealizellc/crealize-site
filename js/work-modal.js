@@ -39,7 +39,7 @@
         <div class="work-modal__body">
           <div class="work-modal__top">
             <span class="work-modal__idx"></span>
-            <span class="work-modal__badge" hidden>in development · 開発中</span>
+            <span class="work-modal__badge" hidden></span>
           </div>
           <h3 class="work-modal__name"></h3>
           <span class="work-modal__jp jp-accent"></span>
@@ -222,6 +222,7 @@
     }
     els.idx.textContent = String(i + 1).padStart(2, '0') + ' / ' + String((window.CRZ_WORK || []).length).padStart(2, '0');
     els.badge.hidden = w.status !== 'wip';
+    els.badge.textContent = (window.CRZ_I18N && window.CRZ_I18N.ui.wipBadge) || 'in development';
     els.name.textContent = w.name;
     els.jp.textContent = w.jp;
     els.tag.textContent = w.tag;

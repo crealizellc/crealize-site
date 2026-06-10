@@ -56,8 +56,8 @@
 
   function rowHTML(w, i) {
     const st = w.status === 'wip'
-      ? '<span class="index-row__status" data-status="wip">◌ in dev</span>'
-      : '<span class="index-row__status" data-status="shipped">● shipped</span>';
+      ? `<span class="index-row__status" data-status="wip">${UI.statusWip}</span>`
+      : `<span class="index-row__status" data-status="shipped">${UI.statusShipped}</span>`;
     return `
       <li class="index-row" data-work-index="${i}" tabindex="0" role="button"
           aria-label="Open ${w.name}" style="--d:${Math.min(i * 24, 360)}ms"
@@ -83,20 +83,20 @@
         <label class="index__prompt">
           <span class="index__ps1">$ filter:</span>
           <input id="index-filter" type="text" autocomplete="off" spellcheck="false"
-                 placeholder="name · category · stack" aria-label="Filter products" />
-          <span class="index__hint">esc clears</span>
+                 placeholder="${UI.filterPlaceholder}" aria-label="Filter products" />
+          <span class="index__hint">${UI.filterHint}</span>
         </label>
         <div class="index__head" aria-hidden="true">
-          <span>#</span><span>name</span><span>名</span><span>category</span><span>status</span><span>stack</span>
+          ${(UI.indexHead || ['#','name','aka','category','status','stack']).map((h) => `<span>${h}</span>`).join('')}
         </div>
         <ol class="index__list" id="index-list">
           ${WORK.map((w, i) => rowHTML(w, i)).join('')}
         </ol>
-        <p class="index__empty" id="index-empty" hidden>0 results — nothing materialized · esc to reset</p>
+        <p class="index__empty" id="index-empty" hidden>${UI.emptyText}</p>
       </div>
     `;
     const count = document.querySelector('.work .sec-head__count');
-    if (count) count.textContent = String(WORK.length).padStart(2, '0') + ' products';
+    if (count) count.textContent = String(WORK.length).padStart(2, '0') + (UI.productsSuffix || ' products');
   }
 
   // ---------- THE INDEX : type-to-filter (fuzzy subsequence) ----------
@@ -146,7 +146,7 @@
       <div class="method-step reveal">
         <i class="method-step__bar" aria-hidden="true"></i>
         <span class="method-step__idx">0${i + 1}${i < 3 ? ' →' : ''}</span>
-        <h3 class="method-step__name">${m.n} <span class="method-step__jp jp-accent">${m.jp}</span></h3>
+        <h3 class="method-step__name">${m.n}${m.jp ? ` <span class="method-step__jp jp-accent">${m.jp}</span>` : ''}</h3>
         <p class="method-step__desc">${m.d}</p>
       </div>
     `).join('');

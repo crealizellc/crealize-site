@@ -3,7 +3,7 @@ window.CRZ_I18N = {
   lang: 'ja',
   work: [
     {
-      name: 'PurityLens', featured: true, jp: '成分をひと目で', tag: 'AI · Consumer Health',
+      name: 'PurityLens', featured: true, jp: '成分をひと目で', tag: 'AI・ヘルスケア',
       line: '肌にのせる前に、成分表示を読み解く — <em>撮影すると、AI が安全性を判定します。</em>',
       ph: 'PurityLens — スキャン結果 UI',
       img: '../assets/shots/puritylens.webp',
@@ -13,7 +13,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'Fudeto', featured: true, jp: '一筆書き', tag: 'Puzzle · Daily ritual',
+      name: 'Fudeto', featured: true, jp: '一筆書き', tag: 'パズル・毎日の習慣',
       line: '毎朝ひとつの一筆書きパズル — <em>コーヒーの前の、ちいさな頭の体操。</em>',
       ph: 'Fudeto — デイリーパズル UI',
       img: '../assets/shots/fudeto.webp',
@@ -23,7 +23,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'Kichitto', jp: 'きちっと', tag: 'Fintech · Solo founders',
+      name: 'Kichitto', jp: 'きちっと', tag: 'フィンテック・個人事業主',
       line: '領収書は撮るだけ — <em>AI が読み取り、Drive と Sheets に自動で帳簿化。</em>経理の雑務をゼロに。',
       ph: 'Kichitto — 領収書キャプチャ UI',
       img: '../assets/shots/kichitto.webp',
@@ -33,7 +33,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'QiFlux', featured: true, jp: '静かな記録', tag: 'Health · Privacy-first',
+      name: 'QiFlux', featured: true, jp: '静かな記録', tag: 'ヘルスケア・プライバシー第一',
       line: '静かな、プライバシー第一の周期トラッカー。<em>記録はすべて、あなたの端末の中だけに。</em>',
       ph: 'QiFlux — トラッキング UI',
       img: '../assets/shots/qiflux.webp',
@@ -43,7 +43,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'moonpacket', featured: true, jp: '月へ、紅包を', tag: 'Web3 · Telegram',
+      name: 'moonpacket', featured: true, jp: '月へ、紅包を', tag: 'Web3・Telegram',
       line: 'Telegram で贈るクリプト紅包 — <em>数秒で送って、すぐ受け取れる。</em>ノンカストディアルで USDT・TON・SOL・ETH に対応。',
       ph: 'moonpacket — 紅包 UI',
       img: '../assets/shots/moonpacket.webp',
@@ -53,7 +53,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'iDokuta', jp: '言葉を越える診療', tag: 'Telehealth · i18n',
+      name: 'iDokuta', jp: '言葉を越える診療', tag: '遠隔医療・多言語',
       line: '言葉の壁を越えるオンライン診療 — <em>リアルタイム翻訳を介した診察を、</em>6 言語で。',
       ph: 'iDokuta — 診察 UI',
       img: '../assets/shots/idokuta.webp',
@@ -63,7 +63,7 @@ window.CRZ_I18N = {
       status: 'wip',
     },
     {
-      name: 'Mairi', jp: '毎日のカルテ', tag: 'Health · Hospital-integrated',
+      name: 'Mairi', jp: '毎日のカルテ', tag: 'ヘルスケア・病院連携',
       line: '毎日の健康記録を、そのまま病院へ — <em>個人の記録を診療につなげます。</em>',
       ph: 'Mairi — デイリーレコード UI',
       img: '../assets/shots/mairi.webp',
@@ -73,7 +73,7 @@ window.CRZ_I18N = {
       status: 'wip',
     },
     {
-      name: 'Tendo', jp: '一日一道', tag: 'Puzzle · Daily ritual',
+      name: 'Tendo', jp: '一日一道', tag: 'パズル・毎日の習慣',
       line: 'Fudeto の姉妹作 — <em>一日一題、すべての点を一本の道でつなぐ</em>パズル。',
       ph: 'Tendo — デイリーパス UI',
       img: '../assets/shots/tendo.webp',
@@ -84,15 +84,23 @@ window.CRZ_I18N = {
     },
   ],
   method: [
-    { n: 'Validate', jp: '検証', d: 'アイデアはすべて仮説として扱います。まず検証から — 答えはダッシュボードではなく、実際のユーザーから得ます。' },
-    { n: 'Build', jp: '構築', d: '少数精鋭のチームが、最初から本番品質のコードを書きます。使い捨てのプロトタイプはつくりません。' },
-    { n: 'Ship', jp: '出荷', d: 'できるだけ早く世に出します。本当に正直なフィードバックは、実際に使う人からしか得られないからです。' },
-    { n: 'Polish', jp: '研磨', d: '最後の数％に魂が宿ります — 速度、文言、アニメーション。その磨き込みが、使い続けたくなる理由になります。' },
+    { n: '検証', jp: '', d: 'アイデアはすべて仮説として扱います。まず検証から — 答えはダッシュボードではなく、実際のユーザーから得ます。' },
+    { n: '構築', jp: '', d: '少数精鋭のチームが、最初から本番品質のコードを書きます。使い捨てのプロトタイプはつくりません。' },
+    { n: 'リリース', jp: '', d: 'できるだけ早く世に出します。本当に正直なフィードバックは、実際に使う人からしか得られないからです。' },
+    { n: '磨き込み', jp: '', d: '最後の数％に魂が宿ります — 速度、文言、アニメーション。その磨き込みが、使い続けたくなる理由になります。' },
   ],
   ui: {
-    wipBadge: 'in development · 開発中',
-    featuredLabel: 'Featured / 代表作',
-    indexLabel: 'The Index / 全製品目録',
+    wipBadge: '開発中',
+    featuredLabel: '代表作',
+    indexLabel: '全製品目録',
+    productsSuffix: ' 製品',
+    statusShipped: '● 公開中',
+    statusWip: '◌ 開発中',
+    filterPlaceholder: '名前・カテゴリ・技術',
+    filterHint: 'esc でクリア',
+    emptyText: '0 件 — 該当なし · esc でリセット',
+    indexHead: ["#", "名前", "和名", "カテゴリ", "状態", "技術"],
+    phases: ["想像", "凝縮", "実現"],
     shippedLabel: 'Shipped / 出荷済み',
     wipLabel: 'In development / 開発中',
     formErr: 'オレンジ色の必須項目をご記入ください。',

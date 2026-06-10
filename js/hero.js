@@ -398,9 +398,9 @@
   }
 
   const PHASES = [
-    [0.0, 'imagination · 想像'],
-    [0.33, 'condensing · 凝縮'],
-    [0.72, 'reality · 実現'],
+    [0.0, ((window.CRZ_I18N || {}).ui || {}).phases ? window.CRZ_I18N.ui.phases[0] : 'imagination · 想像'],
+    [0.33, ((window.CRZ_I18N || {}).ui || {}).phases ? window.CRZ_I18N.ui.phases[1] : 'condensing · 凝縮'],
+    [0.72, ((window.CRZ_I18N || {}).ui || {}).phases ? window.CRZ_I18N.ui.phases[2] : 'reality · 実現'],
   ];
   let lastPhase = '';
 
