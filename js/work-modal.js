@@ -220,7 +220,7 @@
     } else {
       shot.innerHTML = `<div class="work-card__ph"><b>[ ${w.ph} ]</b><span>product screenshot · drop here</span></div>`;
     }
-    els.idx.textContent = '0' + (i + 1) + ' / 07';
+    els.idx.textContent = String(i + 1).padStart(2, '0') + ' / ' + String((window.CRZ_WORK || []).length).padStart(2, '0');
     els.badge.hidden = w.status !== 'wip';
     els.name.textContent = w.name;
     els.jp.textContent = w.jp;

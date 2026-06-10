@@ -9,21 +9,23 @@ Languages: English (/), 日本語 (/ja/), 繁體中文 (/zh/)
 
 ## Shipped products
 
-- PurityLens — AI skincare-ingredient safety scanner: photo → OCR → analysis (Flutter, AI OCR, Cloudflare Workers, D1)
-- Fudeto — daily one-stroke puzzle game (Flutter, Cloudflare Workers, D1)
+- PurityLens — AI skincare-ingredient safety scanner: photo → OCR → AI safety verdict (Flutter, AI OCR, serverless API)
+- Fudeto — daily one-stroke puzzle game (Flutter, puzzle generator, serverless API)
 - Kichitto — receipt capture for solo founders: photo → AI OCR → auto-filed to Google Drive + Sheets (Flutter, Gemini AI, Google Workspace API)
-- QiFlux — quiet, privacy-first cycle tracker (Flutter, Riverpod, Cloudflare Workers, Hono, D1)
+- QiFlux — quiet, privacy-first cycle tracker; data stays on device (Flutter, Riverpod, local-first)
+- moonpacket — crypto red packets for Telegram communities; non-custodial, USDT / TON / SOL / ETH (Telegram Mini App, multi-chain) — https://moonpacket.com/
 
 ## In development
 
-- iDokuta — multilingual telehealth for foreigners in Japan (Flutter, 6-locale i18n, Cloudflare)
-- Mairi — daily personal health record × hospital integration (Flutter, Next.js, LINE)
-- Tendo — daily Hamiltonian-path puzzle, Fudeto's sister title (Web, Cloudflare Workers, D1)
+- iDokuta — multilingual telehealth for foreigners in Japan; realtime-translation consultations in 6 languages (Flutter)
+- Mairi — daily personal health record × hospital integration (Flutter, Next.js, LINE integration)
+- Tendo — daily Hamiltonian-path puzzle, Fudeto's sister title (vanilla JS web)
 
 ## Method
 
-Validate → Build → Ship → Polish. Stack: Flutter, Next.js, TypeScript,
-Cloudflare Workers/D1/R2, AI integration (Claude, Gemini, GPT), CI/CD.
+Validate → Build → Ship → Polish.
+Engineering principles: atomicity (one change, one meaning), explicit dependencies,
+module boundaries, type-safe by default, zero-dependency bias, code as craft.
 
 ## Hiring
 
