@@ -26,23 +26,25 @@ const LOCALES = {
   ja: {
     dir: 'ja', base: '../', htmlLang: 'ja', ogLocale: 'ja_JP',
     title: 'Crealize — 想像を、現実に。| 東京のプロダクトスタジオ',
-    desc: 'Crealize は東京のインディペンデント・プロダクトスタジオ。プロダクトを 0→1 へ — 検証、構築、出荷、研磨。Flutter、Next.js、Cloudflare、AI。',
+    desc: 'Crealize は東京の独立系プロダクトスタジオ。プロダクトを 0 から 1 へ — 検証、構築、リリース、磨き込み。Flutter、Next.js、Cloudflare、AI。',
     t: {
-      '東京 / Tokyo — Independent Product Studio': '東京 — インディペンデント・プロダクトスタジオ',
+      '東京 / Tokyo — Independent Product Studio': '東京の独立系プロダクトスタジオ',
       'Transforming imagination into reality.': '想像を、現実に。',
       'Creative <span class="x">×</span> Realize — ideas are vapor; we condense them to <b>1.0</b>.':
-        'Creative <span class="x">×</span> Realize — アイデアは蒸気。私たちはそれを <b>1.0</b> に凝縮する。',
-      'Scroll to materialize': 'スクロールで実体化',
+        'Creative <span class="x">×</span> Realize — 曖昧なアイデアを、動く <b>1.0</b> に仕上げます。',
+      'Scroll to materialize': 'スクロールすると、かたちになります',
       '<span class="line">An idea weighs nothing <em>until it ships.</em></span>':
-        '<span class="line">アイデアは、出荷されるまで<em>質量を持たない。</em></span>',
+        '<span class="line">アイデアは、<em>リリースされるまで</em>価値を持ちません。</span>',
       '<span class="line">We carry products from <span class="accent">0&thinsp;→&thinsp;1</span> — validate, build, ship, polish.</span>':
-        '<span class="line">私たちはプロダクトを <span class="accent">0&thinsp;→&thinsp;1</span> へ運ぶ — 検証、構築、出荷、研磨。</span>',
+        '<span class="line">私たちはプロダクトを <span class="accent">0&thinsp;→&thinsp;1</span> へ — 検証し、つくり、世に出し、磨き上げます。</span>',
       'Everything interesting happens between&nbsp;0&nbsp;and&nbsp;1.':
-        '面白いことはぜんぶ、0 と 1 のあいだで起こる。',
+        '面白いことはすべて、0 と 1 のあいだで起こる。',
       'We hire <span class="accent">makers</span>,<br/>not résumés.':
-        '履歴書ではなく、<br/><span class="accent">「作る人」</span>を採用する。',
+        '履歴書より、<br/><span class="accent">あなたがつくったもの</span>を見せてください。',
       'A small constellation — remote-first, asynchronous, allergic to theater. Tokyo is our origin point; your timezone is whatever your terminal says. Bring one thing you shipped and still love.':
-        '小さな星座 — リモートファースト、非同期、芝居アレルギー。原点は東京。あなたのタイムゾーンは、ターミナルが示すまま。「出荷して、今も愛している何か」をひとつ持ってきてください。',
+        '私たちは少人数のリモートチームです。会議や形式より、動くものをつくることを大切にしています。拠点は東京、働く時間帯は自由。応募の際は、自分でつくって今も気に入っているものを、ひとつ見せてください。',
+      '<span class="v">Remote-first · Tokyo HQ <span class="jp-accent" aria-hidden="true">東京</span></span>': '<span class="v">リモートファースト · 東京本社</span>',
+      '<span class="v">Design · Engineering · Growth</span>': '<span class="v">デザイン · エンジニアリング · グロース</span>',
       '<span class="k">Base</span>': '<span class="k">拠点</span>',
       '<span class="k">Roles</span>': '<span class="k">職種</span>',
       '<span class="k">Contact</span>': '<span class="k">連絡先</span>',
@@ -62,23 +64,29 @@ const LOCALES = {
   zh: {
     dir: 'zh', base: '../', htmlLang: 'zh-Hant', ogLocale: 'zh_TW',
     title: 'Crealize — 把想像變成現實 | 東京獨立產品工作室',
-    desc: 'Crealize 是位於東京的獨立產品工作室。我們把產品從 0 帶到 1 — 驗證、構築、出貨、打磨。Flutter、Next.js、Cloudflare、AI。',
+    desc: 'Crealize 是位於東京的獨立產品工作室。我們把產品從 0 帶到 1 — 驗證、打造、上線、打磨。Flutter、Next.js、Cloudflare、AI。',
     t: {
-      '東京 / Tokyo — Independent Product Studio': '東京 — 獨立產品工作室',
+      '東京 / Tokyo — Independent Product Studio': '東京・獨立產品工作室',
       'Transforming imagination into reality.': '把想像，變成現實。',
       'Creative <span class="x">×</span> Realize — ideas are vapor; we condense them to <b>1.0</b>.':
-        'Creative <span class="x">×</span> Realize — 點子是蒸氣；我們把它凝結成 <b>1.0</b>。',
-      'Scroll to materialize': '捲動以實體化',
+        'Creative <span class="x">×</span> Realize — 把還很模糊的點子，做成能上線的 <b>1.0</b>。',
+      'Scroll to materialize': '往下捲動，看想像成形',
       '<span class="line">An idea weighs nothing <em>until it ships.</em></span>':
-        '<span class="line">點子在出貨之前，<em>沒有重量。</em></span>',
+        '<span class="line">點子在上線之前，<em>都還不算數。</em></span>',
       '<span class="line">We carry products from <span class="accent">0&thinsp;→&thinsp;1</span> — validate, build, ship, polish.</span>':
-        '<span class="line">我們把產品從 <span class="accent">0&thinsp;→&thinsp;1</span> — 驗證、構築、出貨、打磨。</span>',
+        '<span class="line">我們把產品從 <span class="accent">0&thinsp;→&thinsp;1</span> — 驗證、打造、上線、打磨。</span>',
       'Everything interesting happens between&nbsp;0&nbsp;and&nbsp;1.':
         '所有有趣的事，都發生在 0 與 1 之間。',
       'We hire <span class="accent">makers</span>,<br/>not résumés.':
-        '我們僱用<span class="accent">創作者</span>，<br/>不是履歷。',
+        '我們看<span class="accent">作品</span>，<br/>不看履歷。',
       'A small constellation — remote-first, asynchronous, allergic to theater. Tokyo is our origin point; your timezone is whatever your terminal says. Bring one thing you shipped and still love.':
-        '一個小小的星座 — 遠端優先、非同步、對表演過敏。東京是我們的原點；你的時區，就是你終端機顯示的那個。帶一件你出貨過、至今仍深愛的作品來。',
+        '我們是一支小而精的遠端團隊：重成果、輕形式，不開沒必要的會。據點在東京，工作時區由你自己決定。應徵時，請帶上一件你親手做過、至今仍引以為傲的作品。',
+      '<span class="v">Remote-first · Tokyo HQ <span class="jp-accent" aria-hidden="true">東京</span></span>': '<span class="v">遠端優先 · 東京總部</span>',
+      '<span class="v">Design · Engineering · Growth</span>': '<span class="v">設計 · 工程 · 成長</span>',
+      'Selected Work / 制作実績': 'Selected Work / 代表作品',
+      'Method / 進め方': 'Method / 工作方法',
+      'Join / Contact — 採用・お問い合わせ': 'Join / Contact — 加入我們・聯絡',
+      'Stack we master / 常用技術': '我們的技術棧 / Stack',
       '<span class="k">Base</span>': '<span class="k">據點</span>',
       '<span class="k">Roles</span>': '<span class="k">職位</span>',
       '<span class="k">Contact</span>': '<span class="k">聯絡</span>',
@@ -91,7 +99,7 @@ const LOCALES = {
       'placeholder="What do you want to build with us?"': 'placeholder="想跟我們一起做什麼？"',
       '<span class="btn__label">Send message</span>': '<span class="btn__label">送出訊息</span>',
       'We reply within two working days · Tokyo (JST).': '兩個工作天內回覆 · 東京 (JST)',
-      '>Start a project</a>': '>開始一個專案</a>',
+      '>Start a project</a>': '>洽談專案</a>',
     },
   },
 };

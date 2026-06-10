@@ -4,7 +4,7 @@ window.CRZ_I18N = {
   work: [
     {
       name: 'PurityLens', jp: '成分をひと目で', tag: 'AI · Consumer Health',
-      line: '肌につける前に、成分の「細則」を読む — <em>撮影 → OCR → 判定。</em>',
+      line: '肌にのせる前に、成分表示を読み解く — <em>撮影すると、AI が安全性を判定します。</em>',
       ph: 'PurityLens — スキャン結果 UI',
       img: '../assets/shots/puritylens.webp',
       pos: 'center 32%',
@@ -14,7 +14,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Fudeto', jp: '一筆書き', tag: 'Puzzle · Daily ritual',
-      line: '一筆、一グラフ、毎朝 — <em>コーヒーの前の小さな無限。</em>',
+      line: '毎朝ひとつの一筆書きパズル — <em>コーヒーの前の、ちいさな頭の体操。</em>',
       ph: 'Fudeto — デイリーパズル UI',
       img: '../assets/shots/fudeto.webp',
       pos: 'center 18%',
@@ -24,7 +24,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Kichitto', jp: 'きちっと', tag: 'Fintech · Solo founders',
-      line: '領収書は帳簿に溶ける — <em>撮影 → AI OCR → Drive + Sheets へ自動整理。</em>経理を、ガベージコレクション。',
+      line: '領収書は撮るだけ — <em>AI が読み取り、Drive と Sheets に自動で帳簿化。</em>経理の雑務をゼロに。',
       ph: 'Kichitto — 領収書キャプチャ UI',
       img: '../assets/shots/kichitto.webp',
       pos: 'center 12%',
@@ -34,7 +34,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'QiFlux', jp: '静かな記録', tag: 'Health · Privacy-first',
-      line: '静かでプライバシー第一の周期トラッカー — <em>身体が綴る日記を、</em>端末の中だけに。',
+      line: '静かな、プライバシー第一の周期トラッカー。<em>記録はすべて、あなたの端末の中だけに。</em>',
       ph: 'QiFlux — トラッキング UI',
       img: '../assets/shots/qiflux.webp',
       pos: 'center 35%',
@@ -44,7 +44,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'iDokuta', jp: '言葉を越える診療', tag: 'Telehealth · i18n',
-      line: '言語の境界を越える診療 — <em>ライブ翻訳が仲介する診察、</em>6 ロケール対応。',
+      line: '言葉の壁を越えるオンライン診療 — <em>リアルタイム翻訳を介した診察を、</em>6 言語で。',
       ph: 'iDokuta — 診察 UI',
       img: '../assets/shots/idokuta.webp',
       pos: 'center 22%',
@@ -54,7 +54,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Mairi', jp: '毎日のカルテ', tag: 'Health · Hospital-integrated',
-      line: '病院と「話せる」毎日の健康記録 — <em>個人のログを、臨床へつなぐ。</em>',
+      line: '毎日の健康記録を、そのまま病院へ — <em>個人の記録を診療につなげます。</em>',
       ph: 'Mairi — デイリーレコード UI',
       img: '../assets/shots/mairi.webp',
       pos: 'center 25%',
@@ -64,7 +64,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Tendo', jp: '一日一道', tag: 'Puzzle · Daily ritual',
-      line: 'Fudeto の姉妹作 — <em>一日一本のハミルトン路</em>がエントロピーを遠ざける。',
+      line: 'Fudeto の姉妹作 — <em>一日一題、すべての点を一本の道でつなぐ</em>パズル。',
       ph: 'Tendo — デイリーパス UI',
       img: '../assets/shots/tendo.webp',
       pos: 'center 30%',
@@ -74,10 +74,10 @@ window.CRZ_I18N = {
     },
   ],
   method: [
-    { n: 'Validate', jp: '検証', d: 'すべてのアイデアは仮説。先にテストを書く — 走らせる相手はダッシュボードではなく、人間。' },
-    { n: 'Build', jp: '構築', d: '少数精鋭のチームが「本物」を書く。捨てコードも、芝居もなし。' },
-    { n: 'Ship', jp: '出荷', d: 'ソフトウェアは「動く文学」。早く出版する — 正直な批評家は読者だけ。' },
-    { n: 'Polish', jp: '研磨', d: '最後の 4% が魂 — レイテンシ、文言、モーション。クラフトこそがリテンション。' },
+    { n: 'Validate', jp: '検証', d: 'アイデアはすべて仮説として扱います。まず検証から — 答えはダッシュボードではなく、実際のユーザーから得ます。' },
+    { n: 'Build', jp: '構築', d: '少数精鋭のチームが、最初から本番品質のコードを書きます。使い捨てのプロトタイプはつくりません。' },
+    { n: 'Ship', jp: '出荷', d: 'できるだけ早く世に出します。本当に正直なフィードバックは、実際に使う人からしか得られないからです。' },
+    { n: 'Polish', jp: '研磨', d: '最後の数％に魂が宿ります — 速度、文言、アニメーション。その磨き込みが、使い続けたくなる理由になります。' },
   ],
   ui: {
     wipBadge: 'in development · 開発中',
