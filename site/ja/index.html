@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ja" data-jp="on">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Crealize — 想像を、現実に。| 東京のプロダクトスタジオ</title>
+<meta name="description" content="Crealize は東京のインディペンデント・プロダクトスタジオ。プロダクトを 0→1 へ — 検証、構築、出荷、研磨。Flutter、Next.js、Cloudflare、AI。" />
+<link rel="canonical" href="https://crealize.llc/ja/" />
+<link rel="alternate" hreflang="en" href="https://crealize.llc/" />
+<link rel="alternate" hreflang="ja" href="https://crealize.llc/ja/" />
+<link rel="alternate" hreflang="zh-Hant" href="https://crealize.llc/zh/" />
+<link rel="alternate" hreflang="x-default" href="https://crealize.llc/" />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Crealize" />
+<meta property="og:title" content="Crealize — 想像を、現実に。| 東京のプロダクトスタジオ" />
+<meta property="og:description" content="Crealize は東京のインディペンデント・プロダクトスタジオ。プロダクトを 0→1 へ — 検証、構築、出荷、研磨。Flutter、Next.js、Cloudflare、AI。" />
+<meta property="og:url" content="https://crealize.llc/ja/" />
+<meta property="og:image" content="https://crealize.llc/assets/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content="ja_JP" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Crealize — 想像を、現実に。| 東京のプロダクトスタジオ" />
+<meta name="twitter:description" content="Crealize は東京のインディペンデント・プロダクトスタジオ。プロダクトを 0→1 へ — 検証、構築、出荷、研磨。Flutter、Next.js、Cloudflare、AI。" />
+<meta name="twitter:image" content="https://crealize.llc/assets/og.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Bricolage+Grotesque:wght@600;700&family=Newsreader:ital,opsz,wght@1,18,400;1,18,500;0,18,400&family=Noto+Sans+JP:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+<link rel="icon" type="image/png" href="../assets/crealize-mark.png" />
+<link rel="apple-touch-icon" href="../assets/crealize-mark.png" />
+<link rel="stylesheet" href="../css/tokens.css" />
+<link rel="stylesheet" href="../css/site.css" />
+<link rel="stylesheet" href="../css/sections.css" />
+<link rel="stylesheet" href="../css/work-modal.css" />
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://crealize.llc/#org","name":"Crealize LLC","url":"https://crealize.llc/","logo":"https://crealize.llc/assets/crealize-mark.png","email":"support@crealize.llc","slogan":"想像を、現実に。","address":{"@type":"PostalAddress","addressLocality":"Tokyo","addressCountry":"JP"}},{"@type":"WebSite","@id":"https://crealize.llc/#website","url":"https://crealize.llc/","name":"Crealize","publisher":{"@id":"https://crealize.llc/#org"},"inLanguage":"ja"},{"@type":"SoftwareApplication","name":"PurityLens","applicationCategory":"HealthApplication","operatingSystem":"iOS","description":"撮影 → OCR → 判定。スキンケア成分のAI安全分析。","author":{"@id":"https://crealize.llc/#org"}},{"@type":"SoftwareApplication","name":"Fudeto","applicationCategory":"GameApplication","operatingSystem":"iOS, Android","description":"一筆、一グラフ、毎朝の一筆書きパズル。","author":{"@id":"https://crealize.llc/#org"}},{"@type":"SoftwareApplication","name":"Kichitto","applicationCategory":"FinanceApplication","operatingSystem":"iOS","description":"領収書を撮影 → AI OCR → Drive + Sheets へ自動整理。","author":{"@id":"https://crealize.llc/#org"}},{"@type":"SoftwareApplication","name":"QiFlux","applicationCategory":"HealthApplication","operatingSystem":"iOS","description":"静かでプライバシー第一の周期トラッカー。","author":{"@id":"https://crealize.llc/#org"}},{"@type":"SoftwareApplication","name":"iDokuta","applicationCategory":"MedicalApplication","operatingSystem":"iOS, Android","description":"在日外国人向け多言語オンライン診療（開発中）。","author":{"@id":"https://crealize.llc/#org"}},{"@type":"SoftwareApplication","name":"Mairi","applicationCategory":"HealthApplication","operatingSystem":"iOS, Android","description":"毎日の健康記録 × 病院連携（開発中）。","author":{"@id":"https://crealize.llc/#org"}},{"@type":"SoftwareApplication","name":"Tendo","applicationCategory":"GameApplication","operatingSystem":"Web","description":"一日一道のハミルトン路パズル（開発中）。","author":{"@id":"https://crealize.llc/#org"}}]}</script>
+</head>
+<body>
+
+<!-- ░░░ ATMOSPHERE : site-wide sumi-e ink-flow + particles ░░░ -->
+<canvas id="atmosphere" aria-hidden="true"></canvas>
+
+<!-- ░░░ NAV ░░░ -->
+<header class="nav" id="nav" data-screen-label="nav">
+  <a class="nav__brand" href="#hero" aria-label="Crealize home">
+    <img class="nav__logo" src="../assets/crealize-mark.png" alt="Crealize mark" />
+    <span class="nav__word">Crealize</span>
+    <span class="nav__tm">LLC</span>
+  </a>
+  <nav class="nav__links" aria-label="Primary">
+    <a href="#vision"><span class="nav__idx">01</span> Vision</a>
+    <a href="#work"><span class="nav__idx">02</span> Work</a>
+    <a href="#method"><span class="nav__idx">03</span> Method</a>
+    <a href="#join"><span class="nav__idx">04</span> Join</a>
+  </nav>
+  <div class="nav__right">
+    <div class="nav__lang" id="lang-switch">
+      <button class="nav__globe" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Language">
+        <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true">
+          <circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.3"></circle>
+          <ellipse cx="10" cy="10" rx="3.6" ry="8" fill="none" stroke="currentColor" stroke-width="1.1"></ellipse>
+          <line x1="2.4" y1="10" x2="17.6" y2="10" stroke="currentColor" stroke-width="1.1"></line>
+        </svg>
+      </button>
+      <div class="nav__langmenu" role="menu">
+        <a role="menuitem" class="" href="../" hreflang="en" lang="en">English</a>
+        <a role="menuitem" class="is-active" href="../ja/" hreflang="ja" lang="ja">日本語</a>
+        <a role="menuitem" class="" href="../zh/" hreflang="zh-Hant" lang="zh-Hant">繁體中文</a>
+      </div>
+    </div>
+    <a class="btn btn--accent nav__cta" href="#join">プロジェクトの相談</a>
+  </div>
+</header>
+
+<main>
+
+  <!-- ░░░ 1 · HERO ░░░ -->
+  <section class="hero" id="hero" data-screen-label="01 Hero">
+    <div class="hero__sticky">
+      <!-- the materializing product UI -->
+      <div class="hero__stage">
+        <canvas id="hero-canvas" aria-label="Imagination materializing into a product interface"></canvas>
+        <span class="jp-accent hero__jp" aria-hidden="true">創造と実現</span>
+      </div>
+
+      <!-- choreographed editorial type -->
+      <div class="hero__type">
+        <p class="hero__eyebrow">
+          <span class="dot" aria-hidden="true"></span>
+          東京 — インディペンデント・プロダクトスタジオ
+        </p>
+        <div class="hero__display" aria-hidden="true">
+          <span class="hero__word hero__word--a" data-word="imagination">Imagination</span>
+          <span class="hero__word hero__word--b" data-word="reality">Reality.</span>
+        </div>
+        <h1 class="hero__tagline">想像を、現実に。</h1>
+        <p class="hero__sub">Creative <span class="x">×</span> Realize — アイデアは蒸気。私たちはそれを <b>1.0</b> に凝縮する。</p>
+      </div>
+
+      <!-- scroll + progress -->
+      <div class="hero__scroll">
+        <span class="hero__scroll-label">スクロールで実体化</span>
+        <div class="hero__progress"><i id="hero-progress-bar"></i></div>
+        <span class="hero__pval" id="hero-p">p=0.00</span>
+        <span class="hero__phase" id="hero-phase">imagination</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ░░░ 2 · VISION ░░░ -->
+  <section class="vision" id="vision" data-screen-label="02 Vision">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-head__idx">01</span>
+        <h2 class="sec-head__kicker">Vision / 理念</h2>
+        <span class="jp-accent sec-head__jp" aria-hidden="true">創造 × 実現</span>
+      </div>
+      <p class="vision__statement reveal">
+        <span class="line">Creative <span class="accent">×</span> Realize.</span>
+        <span class="line">アイデアは、出荷されるまで<em>質量を持たない。</em></span>
+        <span class="line">私たちはプロダクトを <span class="accent">0&thinsp;→&thinsp;1</span> へ運ぶ — 検証、構築、出荷、研磨。</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- ░░░ 3 · WORK ░░░ -->
+  <section class="work" id="work" data-screen-label="03 Work">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-head__idx">02</span>
+        <h2 class="sec-head__kicker">Selected Work / 制作実績</h2>
+        <span class="sec-head__count">07 products</span>
+      </div>
+
+      <div class="work__groups" id="work-grid"><!-- groups injected by site.js --></div>
+    </div>
+  </section>
+
+  <!-- ░░░ 4 · METHOD ░░░ -->
+  <section class="method" id="method" data-screen-label="04 Method">
+    <div class="wrap">
+      <div class="sec-head sec-head--inv">
+        <span class="sec-head__idx">03</span>
+        <h2 class="sec-head__kicker">Method / 進め方</h2>
+        <span class="sec-head__count">0 → 1</span>
+      </div>
+      <p class="method__title reveal">面白いことはぜんぶ、0 と 1 のあいだで起こる。</p>
+      <div class="method__strip" id="method-strip"><!-- steps injected --></div>
+
+      <div class="method__stack reveal">
+        <span class="method__stack-label">Stack we master / 常用技術</span>
+        <ul class="method__stack-list">
+          <li>Flutter</li>
+          <li>Next.js</li>
+          <li>TypeScript</li>
+          <li>Cloudflare Workers · D1 · R2</li>
+          <li>AI — Claude · Gemini · GPT</li>
+          <li>CI/CD</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ░░░ 5 · JOIN / CONTACT ░░░ -->
+  <section class="join" id="join" data-screen-label="05 Join">
+    <div class="wrap join__grid">
+      <div class="join__lead">
+        <div class="sec-head">
+          <span class="sec-head__idx">04</span>
+          <h2 class="sec-head__kicker">Join / Contact — 採用・お問い合わせ</h2>
+        </div>
+        <p class="join__title reveal">履歴書ではなく、<br/><span class="accent">「作る人」</span>を採用する。</p>
+        <p class="join__copy">小さな星座 — リモートファースト、非同期、芝居アレルギー。原点は東京。あなたのタイムゾーンは、ターミナルが示すまま。「出荷して、今も愛している何か」をひとつ持ってきてください。</p>
+        <ul class="join__facts">
+          <li><span class="k">拠点</span><span class="v">Remote-first · Tokyo HQ <span class="jp-accent" aria-hidden="true">東京</span></span></li>
+          <li><span class="k">職種</span><span class="v">Design · Engineering · Growth</span></li>
+          <li><span class="k">連絡先</span><span class="v"><a href="mailto:support@crealize.llc">support@crealize.llc</a></span></li>
+        </ul>
+      </div>
+
+      <form class="join__form" id="join-form" novalidate>
+        <div class="field">
+          <label for="f-name">お名前 <span class="req">*</span></label>
+          <input id="f-name" name="name" type="text" autocomplete="name" placeholder="お名前" required />
+        </div>
+        <div class="field">
+          <label for="f-email">メール <span class="req">*</span></label>
+          <input id="f-email" name="email" type="email" autocomplete="email" placeholder="you@studio.com" required />
+        </div>
+        <div class="field">
+          <label for="f-link">リンク <span class="opt">任意</span></label>
+          <input id="f-link" name="link" type="text" placeholder="あなたが出荷したもの" />
+        </div>
+        <div class="field">
+          <label for="f-msg">メッセージ <span class="req">*</span></label>
+          <textarea id="f-msg" name="message" rows="3" placeholder="私たちと何をつくりたいですか？" required></textarea>
+        </div>
+        <button class="btn btn--accent btn--block" type="submit" id="f-submit">
+          <span class="btn__label">メッセージを送る</span>
+          <span class="btn__arrow" aria-hidden="true">→</span>
+        </button>
+        <p class="join__formnote" id="f-note" aria-live="polite">2営業日以内に返信します · 東京 (JST)</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<!-- ░░░ FOOTER ░░░ -->
+<footer class="foot" data-screen-label="footer">
+  <div class="wrap foot__grid">
+    <div class="foot__brand">
+      <img class="foot__logo" src="../assets/crealize-mark.png" alt="Crealize mark" />
+      <span class="foot__word">Crealize</span>
+      <p class="foot__tag"><em>想像を、現実に。</em></p>
+    </div>
+    <div class="foot__col">
+      <span class="foot__h">Studio</span>
+      <a href="#vision">Vision</a>
+      <a href="#work">Work</a>
+      <a href="#method">Method</a>
+      <a href="#join">Join</a>
+    </div>
+    <div class="foot__col">
+      <span class="foot__h">Contact</span>
+      <a href="mailto:support@crealize.llc">support@crealize.llc</a>
+      <span class="foot__muted">Tokyo, Japan <span class="jp-accent" aria-hidden="true">日本・東京</span></span>
+      <span class="foot__muted">Remote-first</span>
+    </div>
+    <div class="foot__meta">
+      <span class="foot__muted">© 2026 Crealize LLC</span>
+      <span class="foot__build" id="build-line">$ crealize --materialize <i class="cursor" aria-hidden="true"></i></span>
+      <span class="foot__muted">創造 × 実現</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ── scripts ── -->
+<script src="../js/atmosphere.js" defer></script>
+<script src="../js/hero.js" defer></script>
+<script src="../js/i18n/ja.js"></script>
+<script src="../js/site.js" defer></script>
+<script src="../js/work-modal.js" defer></script>
+
+</body>
+</html>

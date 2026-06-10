@@ -17,14 +17,17 @@ fi
 
 REPO_URL="https://${GH_TOKEN}@github.com/crealizellc/crealize-site.git"
 
-echo "▶ Building static export..."
+echo "▶ Building trilingual static site (site/)..."
 cd "$REPO_ROOT"
-pnpm export
+node scripts/build-site.mjs
 
-echo "▶ Copying CNAME..."
-cp -f public/CNAME out/CNAME 2>/dev/null || true
+echo "▶ Sanity checks..."
+for f in site/index.html site/ja/index.html site/zh/index.html site/CNAME site/robots.txt site/sitemap.xml site/llms.txt site/assets/og.png; do
+  [ -f "$f" ] || { echo "❌ missing $f" >&2; exit 1; }
+done
+grep -q "application/ld+json" site/index.html || { echo "❌ JSON-LD missing" >&2; exit 1; }
 
-echo "▶ Deploying to gh-pages..."
-./node_modules/.bin/gh-pages -d out -b gh-pages -t -r "$REPO_URL"
+echo "▶ Deploying site/ to gh-pages..."
+./node_modules/.bin/gh-pages -d site -b gh-pages -t -r "$REPO_URL"
 
 echo "✅ Deployed to crealize.llc"

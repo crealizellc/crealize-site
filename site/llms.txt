@@ -1,0 +1,30 @@
+# Crealize
+
+> Crealize LLC is a Tokyo-based independent product studio. We carry products
+> from 0 to 1 — validate, build, ship, polish. Brand: "Creative × Realize —
+> transforming imagination into reality."
+
+Contact: support@crealize.llc
+Languages: English (/), 日本語 (/ja/), 繁體中文 (/zh/)
+
+## Shipped products
+
+- PurityLens — AI skincare-ingredient safety scanner: photo → OCR → analysis (Flutter, AI OCR, Cloudflare Workers, D1)
+- Fudeto — daily one-stroke puzzle game (Flutter, Cloudflare Workers, D1)
+- Kichitto — receipt capture for solo founders: photo → AI OCR → auto-filed to Google Drive + Sheets (Flutter, Gemini AI, Google Workspace API)
+- QiFlux — quiet, privacy-first cycle tracker (Flutter, Riverpod, Cloudflare Workers, Hono, D1)
+
+## In development
+
+- iDokuta — multilingual telehealth for foreigners in Japan (Flutter, 6-locale i18n, Cloudflare)
+- Mairi — daily personal health record × hospital integration (Flutter, Next.js, LINE)
+- Tendo — daily Hamiltonian-path puzzle, Fudeto's sister title (Web, Cloudflare Workers, D1)
+
+## Method
+
+Validate → Build → Ship → Polish. Stack: Flutter, Next.js, TypeScript,
+Cloudflare Workers/D1/R2, AI integration (Claude, Gemini, GPT), CI/CD.
+
+## Hiring
+
+Remote-first, Tokyo HQ. Roles: Design, Engineering, Growth.
