@@ -216,7 +216,7 @@
   function fill(w, i) {
     const shot = modal.querySelector('.work-modal__shot');
     if (w.img) {
-      shot.innerHTML = `<img class="work-modal__img" src="${w.img}" alt="${w.alt || w.name}" decoding="async" />`;
+      shot.innerHTML = `<img class="work-modal__img" src="${w.img}" alt="${w.alt || w.name}" decoding="async" style="object-position:${w.pos || 'top center'}" />`;
     } else {
       shot.innerHTML = `<div class="work-card__ph"><b>[ ${w.ph} ]</b><span>product screenshot · drop here</span></div>`;
     }

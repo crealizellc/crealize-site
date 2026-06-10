@@ -15,7 +15,7 @@
   // ---------- WORK : case-study cards ----------
   function shotHTML(w) {
     if (w.img) {
-      return `<img class="work-card__img" src="${w.img}" alt="${w.alt || w.name}" loading="lazy" decoding="async" width="720" height="1560" />`;
+      return `<img class="work-card__img" src="${w.img}" alt="${w.alt || w.name}" loading="lazy" decoding="async" width="720" height="1560" style="object-position:${w.pos || 'top center'}" />`;
     }
     return `
       <div class="work-card__ph">
