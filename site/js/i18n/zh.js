@@ -43,7 +43,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'moonpacket', featured: true, jp: '月へ、紅包を', tag: 'Web3 · Telegram',
+      name: 'moonpacket', featured: true, jp: '加密紅包', tag: 'Web3 · Telegram',
       line: 'Telegram 上的加密貨幣紅包 — <em>幾秒發出、即領即到。</em>非託管，支援 USDT・TON・SOL・ETH。',
       ph: 'moonpacket — 紅包 UI',
       img: '../assets/shots/moonpacket.webp',
