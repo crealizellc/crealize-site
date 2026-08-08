@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8" />
+<title>Crealize — Work Key Visual Posters</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;padding:0;background:#8C8C87}
+  .kv{
+    width:1600px;height:1200px;margin:0 auto 40px;position:relative;overflow:hidden;
+    display:grid;grid-template-columns:1fr 1fr;align-items:center;
+    background:linear-gradient(150deg,var(--bg1) 0%,var(--bg2) 100%);
+    font-family:'Space Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif;
+  }
+  .kv:last-child{margin-bottom:0}
+
+  /* 光束：自裝置後方放射的細光條，被徑向遮罩收在中心 —— 這是讓畫面「有能量」的關鍵，
+     v3 第一版缺的就是它（平淡漸層讀起來像簡報底圖）。 */
+  .beams{
+    position:absolute;inset:-30%;
+    background:repeating-conic-gradient(from 0deg at 62% 44%,
+      var(--beam) 0deg 1.1deg, transparent 1.1deg 8deg);
+    opacity:.30;
+    -webkit-mask-image:radial-gradient(circle at 62% 44%, #000 0%, transparent 62%);
+    mask-image:radial-gradient(circle at 62% 44%, #000 0%, transparent 62%);
+    filter:blur(2px);
+  }
+  /* 環境光：裝置背後的大面積品牌色光暈 */
+  .glow{
+    position:absolute;width:1240px;height:1240px;border-radius:999px;
+    right:-140px;top:-220px;
+    background:radial-gradient(circle,var(--glow) 0%,transparent 66%);
+    opacity:.55;filter:blur(30px);
+  }
+
+  .left{position:relative;padding:0 0 0 118px;z-index:3}
+  /* logo 外圈發光，讓它從背景浮起來 */
+  .markwrap{
+    width:138px;height:138px;border-radius:10px;position:relative;
+    box-shadow:0 0 0 1px rgba(255,255,255,.14),
+               0 26px 54px rgba(0,0,0,.32),
+               0 0 70px -10px var(--glow);
+  }
+  .mark{width:100%;height:100%;border-radius:10px;display:block}
+  .mark--type{
+    display:grid;place-items:center;font-size:68px;font-weight:700;
+    background:var(--glow);color:var(--bg1);border-radius:10px;
+  }
+  .slogan{
+    margin-top:60px;font-size:72px;line-height:1.08;font-weight:600;
+    letter-spacing:-.03em;color:var(--ink);max-width:540px;
+    text-shadow:0 2px 30px rgba(0,0,0,.14);
+  }
+  .rule{margin-top:46px;width:104px;height:6px;border-radius:2px;
+        background:var(--glow);box-shadow:0 0 24px -2px var(--glow)}
+
+  .right{position:relative;display:grid;place-items:center;z-index:3}
+  .stage{position:relative;transform:rotate(-7deg) translateY(10px)}
+  /* 裝置：真實截圖 + 邊緣高光 + 深落影（帶品牌色調） */
+  .phone{
+    width:466px;height:980px;border-radius:54px;overflow:hidden;
+    background:#0A0A0B;padding:11px;box-sizing:border-box;position:relative;
+    box-shadow:
+      inset 0 0 0 1px rgba(255,255,255,.22),
+      0 8px 20px rgba(0,0,0,.30),
+      0 70px 110px rgba(0,0,0,.45),
+      0 0 120px -20px var(--glow);
+  }
+  .phone img{width:100%;height:100%;object-fit:cover;object-position:top center;
+             display:block;border-radius:44px}
+  /* 反射：裝置下方的鏡射淡出 */
+  .reflect{
+    position:absolute;left:0;top:100%;width:466px;height:280px;
+    border-radius:54px;overflow:hidden;transform:scaleY(-1);opacity:.20;
+    -webkit-mask-image:linear-gradient(to top, transparent 0%, #000 96%);
+    mask-image:linear-gradient(to top, transparent 0%, #000 96%);
+  }
+  .reflect img{width:466px;height:980px;object-fit:cover;object-position:top center;display:block}
+</style></head><body>
+
+<div class="kv" id="kv-puritylens" style="--bg1:#EEF3F8;--bg2:#C6D4E2;--ink:#1B2A38;--glow:#9AB0C6;--beam:#5B7C9E">
+  <div class="beams"></div>
+  <div class="glow"></div>
+  <div class="left">
+    <div class="markwrap"><img class="mark" src="file:///Users/yves/Projects/crealize/site-assets/icons/puritylens.png" alt=""></div>
+    <div class="slogan">Know what’s in it.</div>
+    <div class="rule"></div>
+  </div>
+  <div class="right">
+    <div class="stage">
+      <div class="phone"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/puritylens.png" alt=""></div>
+      <div class="reflect"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/puritylens.png" alt=""></div>
+    </div>
+  </div>
+</div>
+
+<div class="kv" id="kv-fudeto" style="--bg1:#FBF9F2;--bg2:#EDE2C4;--ink:#1A1A1A;--glow:#EAB308;--beam:#B98A05">
+  <div class="beams"></div>
+  <div class="glow"></div>
+  <div class="left">
+    <div class="markwrap"><img class="mark" src="file:///Users/yves/Projects/crealize/site-assets/icons/fudeto.png" alt=""></div>
+    <div class="slogan">One stroke. Every morning.</div>
+    <div class="rule"></div>
+  </div>
+  <div class="right">
+    <div class="stage">
+      <div class="phone"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/fudeto.png" alt=""></div>
+      <div class="reflect"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/fudeto.png" alt=""></div>
+    </div>
+  </div>
+</div>
+
+<div class="kv" id="kv-kichitto" style="--bg1:#FDF3ED;--bg2:#F3CDB8;--ink:#3A1D0E;--glow:#E97B47;--beam:#C25A28">
+  <div class="beams"></div>
+  <div class="glow"></div>
+  <div class="left">
+    <div class="markwrap"><img class="mark" src="file:///Users/yves/Projects/crealize/site-assets/icons/kichitto.png" alt=""></div>
+    <div class="slogan">Receipts, filed by AI.</div>
+    <div class="rule"></div>
+  </div>
+  <div class="right">
+    <div class="stage">
+      <div class="phone"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/kichitto.png" alt=""></div>
+      <div class="reflect"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/kichitto.png" alt=""></div>
+    </div>
+  </div>
+</div>
+
+<div class="kv" id="kv-qiflux" style="--bg1:#F7DDE4;--bg2:#5B2A63;--ink:#FFFFFF;--glow:#F2BBBB;--beam:#8E4A86">
+  <div class="beams"></div>
+  <div class="glow"></div>
+  <div class="left">
+    <div class="markwrap"><img class="mark" src="file:///Users/yves/Projects/crealize/site-assets/icons/qiflux.png" alt=""></div>
+    <div class="slogan">Your cycle, kept quiet.</div>
+    <div class="rule"></div>
+  </div>
+  <div class="right">
+    <div class="stage">
+      <div class="phone"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/qiflux.png" alt=""></div>
+      <div class="reflect"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/qiflux.png" alt=""></div>
+    </div>
+  </div>
+</div>
+
+<div class="kv" id="kv-meishitto" style="--bg1:#EFEFFB;--bg2:#C3C4F0;--ink:#1B1B4A;--glow:#5254E0;--beam:#3B3CB8">
+  <div class="beams"></div>
+  <div class="glow"></div>
+  <div class="left">
+    <div class="markwrap"><img class="mark" src="file:///Users/yves/Projects/crealize/site-assets/icons/meishitto.png" alt=""></div>
+    <div class="slogan">Cards become contacts.</div>
+    <div class="rule"></div>
+  </div>
+  <div class="right">
+    <div class="stage">
+      <div class="phone"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/meishitto.png" alt=""></div>
+      <div class="reflect"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/meishitto.png" alt=""></div>
+    </div>
+  </div>
+</div>
+
+<div class="kv" id="kv-rythix2048" style="--bg1:#F7DCE9;--bg2:#CFCFFA;--ink:#2A1B33;--glow:#F2C6DC;--beam:#9B6FB5">
+  <div class="beams"></div>
+  <div class="glow"></div>
+  <div class="left">
+    <div class="markwrap"><img class="mark" src="file:///Users/yves/Projects/crealize/site-assets/icons/rythix2048.png" alt=""></div>
+    <div class="slogan">Merge on the beat.</div>
+    <div class="rule"></div>
+  </div>
+  <div class="right">
+    <div class="stage">
+      <div class="phone"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/rythix2048.png" alt=""></div>
+      <div class="reflect"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/rythix2048.png" alt=""></div>
+    </div>
+  </div>
+</div>
+
+<div class="kv" id="kv-tendo" style="--bg1:#2A241C;--bg2:#14100B;--ink:#F5F1E8;--glow:#C9A961;--beam:#C9A961">
+  <div class="beams"></div>
+  <div class="glow"></div>
+  <div class="left">
+    <div class="markwrap"><img class="mark" src="file:///Users/yves/Projects/crealize/site-assets/icons/tendo.png" alt=""></div>
+    <div class="slogan">One path. Every dot.</div>
+    <div class="rule"></div>
+  </div>
+  <div class="right">
+    <div class="stage">
+      <div class="phone"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/tendo.png" alt=""></div>
+      <div class="reflect"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/tendo.png" alt=""></div>
+    </div>
+  </div>
+</div>
+
+<div class="kv" id="kv-xunni" style="--bg1:#1A1712;--bg2:#09090B;--ink:#F6EBD6;--glow:#F59E0B;--beam:#F59E0B">
+  <div class="beams"></div>
+  <div class="glow"></div>
+  <div class="left">
+    <div class="markwrap"><img class="mark" src="file:///Users/yves/Projects/crealize/site-assets/icons/xunni.png" alt=""></div>
+    <div class="slogan">Where charts align.</div>
+    <div class="rule"></div>
+  </div>
+  <div class="right">
+    <div class="stage">
+      <div class="phone"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/xunni.png" alt=""></div>
+      <div class="reflect"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/xunni.png" alt=""></div>
+    </div>
+  </div>
+</div>
+
+<div class="kv" id="kv-dicex3d" style="--bg1:#E7F0E5;--bg2:#9DBE9C;--ink:#16281A;--glow:#2E7D32;--beam:#2E7D32">
+  <div class="beams"></div>
+  <div class="glow"></div>
+  <div class="left">
+    <div class="markwrap"><img class="mark" src="file:///Users/yves/Projects/crealize/site-assets/icons/dicex3d.png" alt=""></div>
+    <div class="slogan">Roll the bones.</div>
+    <div class="rule"></div>
+  </div>
+  <div class="right">
+    <div class="stage">
+      <div class="phone"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/dicex3d.png" alt=""></div>
+      <div class="reflect"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/dicex3d.png" alt=""></div>
+    </div>
+  </div>
+</div>
+
+<div class="kv" id="kv-moonpacket" style="--bg1:#16304F;--bg2:#0A1626;--ink:#FFE9C7;--glow:#FFBA00;--beam:#FFBA00">
+  <div class="beams"></div>
+  <div class="glow"></div>
+  <div class="left">
+    <div class="markwrap"><img class="mark" src="file:///Users/yves/Projects/crealize/site-assets/icons/moonpacket.png" alt=""></div>
+    <div class="slogan">Red packets, on-chain.</div>
+    <div class="rule"></div>
+  </div>
+  <div class="right">
+    <div class="stage">
+      <div class="phone"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/moonpacket.png" alt=""></div>
+      <div class="reflect"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/moonpacket.png" alt=""></div>
+    </div>
+  </div>
+</div>
+
+<div class="kv" id="kv-idokuta" style="--bg1:#E6F5F3;--bg2:#A9DCD6;--ink:#06322F;--glow:#04A29E;--beam:#037F7C">
+  <div class="beams"></div>
+  <div class="glow"></div>
+  <div class="left">
+    <div class="markwrap"><img class="mark" src="file:///Users/yves/Projects/crealize/site-assets/icons/idokuta.png" alt=""></div>
+    <div class="slogan">Care across languages.</div>
+    <div class="rule"></div>
+  </div>
+  <div class="right">
+    <div class="stage">
+      <div class="phone"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/idokuta.png" alt=""></div>
+      <div class="reflect"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/idokuta.png" alt=""></div>
+    </div>
+  </div>
+</div>
+
+<div class="kv" id="kv-mairi" style="--bg1:#FBF3EE;--bg2:#EFCFC2;--ink:#3B1C12;--glow:#C95A3F;--beam:#A8452E">
+  <div class="beams"></div>
+  <div class="glow"></div>
+  <div class="left">
+    <div class="markwrap"><div class="mark mark--type">M</div></div>
+    <div class="slogan">Your health, day by day.</div>
+    <div class="rule"></div>
+  </div>
+  <div class="right">
+    <div class="stage">
+      <div class="phone"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/mairi.png" alt=""></div>
+      <div class="reflect"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/mairi.png" alt=""></div>
+    </div>
+  </div>
+</div>
+
+<div class="kv" id="kv-meguru" style="--bg1:#FBF5EF;--bg2:#E9CBD6;--ink:#3A0A1E;--glow:#B51452;--beam:#8E0F3F">
+  <div class="beams"></div>
+  <div class="glow"></div>
+  <div class="left">
+    <div class="markwrap"><img class="mark" src="file:///Users/yves/Projects/crealize/site-assets/icons/meguru.png" alt=""></div>
+    <div class="slogan">Commerce in circulation.</div>
+    <div class="rule"></div>
+  </div>
+  <div class="right">
+    <div class="stage">
+      <div class="phone"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/meguru.png" alt=""></div>
+      <div class="reflect"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/meguru.png" alt=""></div>
+    </div>
+  </div>
+</div>
+</body></html>

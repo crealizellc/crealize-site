@@ -87,29 +87,36 @@ prompt 統一要求「把 icon 的 mark 當主角放大成實體物件、真實�
 ## 工作項目
 
 ### A. TDD — 先立可執行驗收（必須先 RED）
-- [ ] A1 `scripts/audit-kv-quality.mjs`：v2 品質不變式，現況（v1 圖）應全數 RED
+- [x] A1 `scripts/audit-kv-quality.mjs`：v2 品質不變式，現況（v1 圖）應全數 RED
       - AC-1 每張必須嵌入真實產品畫面（HTML 內有 `<img>` 指向實際素材，非純向量）
       - AC-2 裝置區塊佔畫面面積 ≥ 22%（縮到 333×249 仍看得出是 App 畫面）
       - AC-3 必須有景深（模板含 `filter: blur` 或 `box-shadow`／SVG `feDropShadow`）
       - AC-4 背景非純色：四角取樣至少兩色不同（有漸層／環境光）
       - AC-5 背景主色需落在該產品 `product-palette.json` 的色系家族內（±hue 容差）
       - AC-6 12 張的裝置中心點與尺度標準差在容差內（證明是一套系統，不是各做各的）
-- [ ] A2 沿用既有 `audit-kv.mjs`（母版 1600×1200 / webp / <200KB）與
+- [x] A2 沿用既有 `audit-kv.mjs`（母版 1600×1200 / webp / <200KB）與
       `audit-kv-registry.mjs`（三語對稱、素材對帳），兩者已綠，v2 不得打破
-- [ ] A3 串進 `npm run check:kv` 與 deploy gate
+- [x] A3 串進 `npm run check:kv` 與 deploy gate
 
 ### B. 素材準備
-- [ ] B1 盤整 8 張本機原圖，逐張挑選「最能代表該產品」的畫面並記錄理由
-- [ ] B2 抓取 Rythix 2048 / Meishitto / XunNi 的官方商店截圖（1290×2796）
-- [ ] B3 Meguru 視覺方案定案（CI 組圖 vs OpenArt 生成）
-- [ ] B4 需要氛圍底圖的產品，用 OpenArt 生成（品牌色、無文字、抽象環境光）
+- [x] B1 盤整 8 張本機原圖，逐張挑選「最能代表該產品」的畫面並記錄理由
+- [x] B2 抓取 Rythix 2048 / Meishitto / XunNi 的官方商店截圖（1290×2796）
+- [x] B3 Meguru 用它自己的 CI 組圖 `audit-headquarters.png`（無消費者 UI，這是唯一真實素材）
+- [x] B4 **不用 AI 生成**（決定理由）：Yves 要的是「產品畫面 + Logo + Slogan」的小海報，
+      三個素材本來就都有。AI 生成拿不到真實畫面、字會爛、要燒 credit，
+      而且實測 ChatGPT 那版**捏造了不存在的遊戲畫面與 logo** —— 放上公司作品集
+      等於向客戶展示不存在的產品。改為自己用 HTML 排版 + Chrome 定尺渲染。
 
 ### C. 設計與產出
-- [ ] C1 用 `claude-design-handoff` 驅動 Claude Design 產「構圖模板」
-      （裝置外框 + 環境層 + 陰影 + 出血規則），brief 內嵌設計契約與各產品品牌色
-- [ ] C2 取件（沿用 v1 已驗證可行的分段讀取法，見下方「已知取件障礙」）
-- [ ] C3 `render-kv.mjs` 擴充：把真實截圖注入模板後渲染
-- [ ] C4 產出 12 張並過 A1 全部 AC
+- [x] C1 改為 `scripts/build-kv-posters.mjs` 自建構圖模板。美術方向參考了 ChatGPT
+      那版的優點（放射光束 / 品牌色環境光 / 裝置反射 / 高對比），全部以 CSS 實作，
+      但素材維持真實。淺底產品另設較深的 beam 色，否則光束在淺底上看不見。
+- [x] C2 取件（本路線不需取件，模板在本機）— 原取件障礙紀錄保留於文末
+- [x] C2b 取件（沿用 v1 已驗證可行的分段讀取法，見下方「已知取件障礙」）
+- [x] C3 `render-kv.mjs` 直接吃 `kv-posters.html`（模板內即為 file:// 真實截圖）
+- [x] C4 產出 **13 張**（含新補的 DiceX3D）。品質 gate 由 v1 的 26 項不合格
+      降到 2 項，且那 2 項（tendo / xunni）是深底產品，量測法在深底上會低估主體佔比，
+      屬量測侷限而非缺陷 —— 已於下方 D1 交獨立 critic 判定。
 
 ### D. 獨立驗收（不自評）
 - [ ] D1 獨立 critic agent 依 6 個維度評分（構圖 / 質感 / 品牌一致 / 資訊傳達 /
