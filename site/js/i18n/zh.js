@@ -21,7 +21,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'Kichitto', jp: '收據好好記', tag: '金融 · 一人公司',
+      name: 'Kichitto', featured: true, jp: '收據好好記', tag: '金融 · 一人公司',
       line: '收據拍一下就好 — <em>AI 自動辨識，歸檔進 Drive 和 Sheets。</em>記帳雜務，歸零。',
       ph: 'Kichitto — 收據擷取 UI',
       img: '../assets/kv/kichitto.webp',
@@ -39,7 +39,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'moonpacket', jp: '加密紅包', tag: 'Web3 · Telegram',
+      name: 'moonpacket', featured: true, jp: '加密紅包', tag: 'Web3 · Telegram',
       line: 'Telegram 上的加密貨幣紅包 — <em>幾秒發出、即領即到。</em>非託管，支援 USDT・TON・SOL・ETH。',
       ph: 'moonpacket — 紅包 UI',
       img: '../assets/kv/moonpacket.webp',
@@ -48,7 +48,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'iDokuta', jp: '跨語言看診', tag: '遠距醫療 · 多語言',
+      name: 'iDokuta', featured: true, jp: '跨語言看診', tag: '遠距醫療 · 多語言',
       line: '跨越語言隔閡的線上診療 — <em>即時翻譯陪你看診，</em>支援六種語言。',
       ph: 'iDokuta — 問診 UI',
       img: '../assets/kv/idokuta.webp',
@@ -57,7 +57,7 @@ window.CRZ_I18N = {
       status: 'wip',
     },
     {
-      name: 'Mairi', jp: '每日健康紀錄', tag: '健康 · 醫院整合',
+      name: 'Mairi', featured: true, jp: '每日健康紀錄', tag: '健康 · 醫院整合',
       line: '每天的健康紀錄，直接接上醫院 — <em>把個人記錄帶進診間。</em>',
       ph: 'Mairi — 每日紀錄 UI',
       img: '../assets/kv/mairi.webp',
@@ -66,7 +66,7 @@ window.CRZ_I18N = {
       status: 'wip',
     },
     {
-      name: 'Tendo', jp: '一日一道', tag: '解謎 · 每日習慣',
+      name: 'Tendo', featured: true, jp: '一日一道', tag: '解謎 · 每日習慣',
       line: 'Fudeto 的姊妹作 — <em>每天一題，把所有的點用一條路串起來。</em>',
       ph: 'Tendo — 每日路徑 UI',
       img: '../assets/kv/tendo.webp',
@@ -84,7 +84,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'Meishitto', jp: '名刺っと', tag: 'B2B · 生產力',
+      name: 'Meishitto', featured: true, jp: '名刺っと', tag: 'B2B · 生產力',
       line: '名片直接化成資料 — <em>而人脈始終是你的。</em>',
       ph: 'Meishitto — 主視覺',
       img: '../assets/kv/meishitto.webp',
@@ -93,7 +93,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'XunNi', jp: '尋你', tag: 'AI · 命理',
+      name: 'XunNi', featured: true, jp: '尋你', tag: 'AI · 命理',
       line: '兩張命盤，一次解讀 — <em>看你們的星座在哪裡交會。</em>',
       ph: 'XunNi — 主視覺',
       img: '../assets/kv/xunni.webp',
@@ -102,7 +102,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'Meguru', jp: 'めぐる', tag: '平台 · 跨境電商',
+      name: 'Meguru', featured: true, jp: 'めぐる', tag: '平台 · 跨境電商',
       line: '店面背後那一圈循環 — <em>上架、接單、對帳，一路轉回來。</em>',
       ph: 'Meguru — 主視覺',
       img: '../assets/kv/meguru.webp',
@@ -111,7 +111,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'DiceX3D', jp: 'さいころ', tag: '遊戲 · 休閒',
+      name: 'DiceX3D', featured: true, jp: 'さいころ', tag: '遊戲 · 休閒',
       line: '吹牛骰及更多玩法 — <em>搖、喊、唬。</em>',
       ph: 'DiceX3D — 主視覺',
       img: '../assets/kv/dicex3d.webp',

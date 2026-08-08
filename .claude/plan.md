@@ -124,7 +124,8 @@ prompt 統一要求「把 icon 的 mark 當主角放大成實體物件、真實�
 - [ ] D2 未達標 → 回 C1 修 brief 重生，不在 repo 端手改遮蓋
 
 ### E. 上線
-- [ ] E1 gate 全綠 → commit → push
+- [x] E1 三道 gate 全綠（母版規格 / 三語對帳 / 品質不變式）；已 commit 並 push 到
+      `crealizellc/crealize-site` public-main（0152094）
 - [ ] E2 部署 + curl 驗證（三語 200、12 張 200、線上 sha256 = 本地 build）
 
 ## 已知取件障礙（v1 踩過，v2 直接沿用解法，不重踩）

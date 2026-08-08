@@ -21,7 +21,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'Kichitto', jp: 'きちっと', tag: 'フィンテック・個人事業主',
+      name: 'Kichitto', featured: true, jp: 'きちっと', tag: 'フィンテック・個人事業主',
       line: '領収書は撮るだけ — <em>AI が読み取り、Drive と Sheets に自動で帳簿化。</em>経理の雑務をゼロに。',
       ph: 'Kichitto — 領収書キャプチャ UI',
       img: '../assets/kv/kichitto.webp',
@@ -39,7 +39,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'moonpacket', jp: '月へ、紅包を', tag: 'Web3・Telegram',
+      name: 'moonpacket', featured: true, jp: '月へ、紅包を', tag: 'Web3・Telegram',
       line: 'Telegram で贈るクリプト紅包 — <em>数秒で送って、すぐ受け取れる。</em>ノンカストディアルで USDT・TON・SOL・ETH に対応。',
       ph: 'moonpacket — 紅包 UI',
       img: '../assets/kv/moonpacket.webp',
@@ -48,7 +48,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'iDokuta', jp: '言葉を越える診療', tag: '遠隔医療・多言語',
+      name: 'iDokuta', featured: true, jp: '言葉を越える診療', tag: '遠隔医療・多言語',
       line: '言葉の壁を越えるオンライン診療 — <em>リアルタイム翻訳を介した診察を、</em>6 言語で。',
       ph: 'iDokuta — 診察 UI',
       img: '../assets/kv/idokuta.webp',
@@ -57,7 +57,7 @@ window.CRZ_I18N = {
       status: 'wip',
     },
     {
-      name: 'Mairi', jp: '毎日のカルテ', tag: 'ヘルスケア・病院連携',
+      name: 'Mairi', featured: true, jp: '毎日のカルテ', tag: 'ヘルスケア・病院連携',
       line: '毎日の健康記録を、そのまま病院へ — <em>個人の記録を診療につなげます。</em>',
       ph: 'Mairi — デイリーレコード UI',
       img: '../assets/kv/mairi.webp',
@@ -66,7 +66,7 @@ window.CRZ_I18N = {
       status: 'wip',
     },
     {
-      name: 'Tendo', jp: '一日一道', tag: 'パズル・毎日の習慣',
+      name: 'Tendo', featured: true, jp: '一日一道', tag: 'パズル・毎日の習慣',
       line: 'Fudeto の姉妹作 — <em>一日一題、すべての点を一本の道でつなぐ</em>パズル。',
       ph: 'Tendo — デイリーパス UI',
       img: '../assets/kv/tendo.webp',
@@ -84,7 +84,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'Meishitto', jp: '名刺っと', tag: 'B2B・生産性',
+      name: 'Meishitto', featured: true, jp: '名刺っと', tag: 'B2B・生産性',
       line: '名刺が、そのままデータに — <em>連絡先の持ち主は、あなたのまま。</em>',
       ph: 'Meishitto — キービジュアル',
       img: '../assets/kv/meishitto.webp',
@@ -93,7 +93,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'XunNi', jp: '尋你', tag: 'AI・占星',
+      name: 'XunNi', featured: true, jp: '尋你', tag: 'AI・占星',
       line: 'ふたつの命盤を、ひとつの読み解きに — <em>星が重なるところ。</em>',
       ph: 'XunNi — キービジュアル',
       img: '../assets/kv/xunni.webp',
@@ -102,7 +102,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'Meguru', jp: 'めぐる', tag: 'プラットフォーム・越境EC',
+      name: 'Meguru', featured: true, jp: 'めぐる', tag: 'プラットフォーム・越境EC',
       line: '店頭の裏側でめぐる仕組み — <em>出品、受注、精算がひと巡り。</em>',
       ph: 'Meguru — キービジュアル',
       img: '../assets/kv/meguru.webp',
@@ -111,7 +111,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'DiceX3D', jp: 'さいころ', tag: 'ゲーム・カジュアル',
+      name: 'DiceX3D', featured: true, jp: 'さいころ', tag: 'ゲーム・カジュアル',
       line: 'ライアーズダイスほか — <em>振って、宣言して、はったりを。</em>',
       ph: 'DiceX3D — キービジュアル',
       img: '../assets/kv/dicex3d.webp',
