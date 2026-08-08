@@ -1,0 +1,204 @@
+#!/usr/bin/env node
+/* ============================================================
+   audit-kv-quality — Selected Work 主視覺的「品質」不變式（v2）
+
+   為何需要這支：audit-kv.mjs 只驗尺寸/格式/檔案大小，audit-kv-registry.mjs
+   只驗資料對帳。兩者對「圖好不好看、有沒有意義」完全無感 —— v1 的 12 張
+   扁平向量圖示在那兩道 gate 下是全綠的，卻被使用者退回。
+
+   本檔把「世界級產品卡」拆成可機械量測的代理指標。它不能判斷美，
+   但能擋掉 v1 那種失敗模式：沒有真實產品畫面、沒有景深、純色背景、
+   12 張各做各的。真正的美醜由獨立 critic agent 判定（見 .claude/plan.md § D）。
+
+   量測方式誠實標註：
+   - 「主體佔比」用「與四角背景色差異顯著的像素比例」近似，不是真的做物件偵測。
+   - 「系統一致性」比較 12 張主體外接框的中心與尺度離散度。
+
+   用法：node scripts/audit-kv-quality.mjs [--template <kv-source.html>]
+   退出：0=全過 / 2=有不合格
+   ============================================================ */
+import { readFileSync, existsSync, readdirSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { tmpdir } from 'node:os';
+
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+const KV_DIR = join(ROOT, 'site/assets/kv');
+const PALETTE = join(ROOT, 'docs/design-system/product-palette.json');
+
+const tplIdx = process.argv.indexOf('--template');
+const TEMPLATE = tplIdx > -1 ? join(ROOT, process.argv[tplIdx + 1]) : null;
+
+const SPEC = {
+  minSubjectArea: 0.22,   // AC-2 主體至少佔畫面 22%
+  minCornerColors: 2,     // AC-4 四角至少兩種不同顏色（非純色背景）
+  cornerDeltaMin: 8,      // 判定「不同」的最小色差
+  centerStdMax: 0.10,     // AC-6 主體中心點（正規化）標準差上限
+  scaleStdMax: 0.12,      // AC-6 主體尺度（正規化）標準差上限
+  hueTolerance: 28,       // AC-5 背景色與品牌色的 hue 容差（度）
+};
+
+/* ---------- 影像量測（PIL，透過 python3；不新增 node 依賴） ---------- */
+function measure(files) {
+  const py = `
+import sys, json, colorsys
+from PIL import Image
+out = {}
+for path in sys.argv[1:]:
+    im = Image.open(path).convert('RGB')
+    W, H = im.size
+    im_s = im.resize((200, 150), Image.LANCZOS)
+    px = im_s.load()
+    w, h = im_s.size
+    corners = [px[2,2], px[w-3,2], px[2,h-3], px[w-3,h-3]]
+    def d(a,b): return max(abs(a[i]-b[i]) for i in range(3))
+    uniq = []
+    for c in corners:
+        if not any(d(c,u) <= ${SPEC.cornerDeltaMin} for u in uniq): uniq.append(c)
+    bg = corners[0]
+    xs, ys, n = [], [], 0
+    for y in range(h):
+        for x in range(w):
+            if d(px[x,y], bg) > 26:
+                n += 1; xs.append(x); ys.append(y)
+    area = n / (w*h)
+    if xs:
+        bx0, bx1, by0, by1 = min(xs), max(xs), min(ys), max(ys)
+        cx, cy = (bx0+bx1)/2/w, (by0+by1)/2/h
+        scale = ((bx1-bx0)/w + (by1-by0)/h) / 2
+    else:
+        cx = cy = scale = 0.0
+    r,g,b = [v/255 for v in bg]
+    hh, ss, vv = colorsys.rgb_to_hsv(r,g,b)
+    out[path] = {'w':W,'h':H,'cornerColors':len(uniq),'subjectArea':round(area,4),
+                 'cx':round(cx,4),'cy':round(cy,4),'scale':round(scale,4),
+                 'bgHue':round(hh*360,1),'bgSat':round(ss,3),'bgVal':round(vv,3)}
+print(json.dumps(out))
+`;
+  const tmp = join(tmpdir(), `kvq-${process.pid}.py`);
+  execFileSync('/bin/sh', ['-c', `cat > ${tmp} <<'PYEOF'\n${py}\nPYEOF`]);
+  const res = execFileSync('python3', [tmp, ...files], { encoding: 'utf8', maxBuffer: 1 << 24 });
+  return JSON.parse(res);
+}
+
+function toPng(webp) {
+  const png = join(tmpdir(), `kvq-${process.pid}-${webp.split('/').pop()}.png`);
+  execFileSync('dwebp', ['-quiet', webp, '-o', png]);
+  return png;
+}
+
+function hueDelta(a, b) {
+  const d = Math.abs(a - b) % 360;
+  return d > 180 ? 360 - d : d;
+}
+
+/* ---------- 主流程 ---------- */
+const errors = [];
+const notes = [];
+
+if (!existsSync(KV_DIR)) {
+  console.log('ℹ️  audit-kv-quality — site/assets/kv/ 不存在，跳過');
+  process.exit(0);
+}
+const webps = readdirSync(KV_DIR).filter((f) => f.endsWith('.webp')).sort();
+if (webps.length === 0) {
+  console.log('ℹ️  audit-kv-quality — 無主視覺，跳過');
+  process.exit(0);
+}
+
+// AC-1 / AC-3：模板層檢查（需要 --template）
+if (TEMPLATE && existsSync(TEMPLATE)) {
+  const tpl = readFileSync(TEMPLATE, 'utf8');
+  const imgs = (tpl.match(/<img[^>]+src=/gi) || []).length;
+  if (imgs < webps.length) {
+    errors.push(
+      `AC-1 真實產品畫面：模板只有 ${imgs} 個 <img>，應每張主視覺至少一個` +
+        `（v1 失敗模式＝純向量圖示，看不出是什麼產品）`
+    );
+  }
+  const hasDepth = /box-shadow|feDropShadow|filter:\s*blur|feGaussianBlur/i.test(tpl);
+  if (!hasDepth) errors.push('AC-3 景深：模板無任何 box-shadow / feDropShadow / blur');
+} else {
+  notes.push('AC-1 / AC-3 未檢查（未提供 --template）');
+}
+
+const palette = existsSync(PALETTE) ? JSON.parse(readFileSync(PALETTE, 'utf8')).products : {};
+const nameBySlug = Object.fromEntries(
+  Object.keys(palette).map((k) => [k.toLowerCase().replace(/[^a-z0-9]/g, ''), k])
+);
+
+const pngs = webps.map((f) => toPng(join(KV_DIR, f)));
+const m = measure(pngs);
+const rows = [];
+
+webps.forEach((f, i) => {
+  const d = m[pngs[i]];
+  const slug = f.replace('.webp', '');
+  rows.push({ slug, ...d });
+
+  if (d.subjectArea < SPEC.minSubjectArea) {
+    errors.push(
+      `AC-2 主體佔比 [${slug}]：${(d.subjectArea * 100).toFixed(1)}% < ${SPEC.minSubjectArea * 100}%` +
+        `（縮到 333×249 會看不出是什麼）`
+    );
+  }
+  if (d.cornerColors < SPEC.minCornerColors) {
+    errors.push(`AC-4 背景層次 [${slug}]：四角同色，為純色填充，無環境光／漸層`);
+  }
+
+  const key = nameBySlug[slug.replace(/[^a-z0-9]/g, '')];
+  const pal = key && palette[key] && palette[key].palette;
+  if (pal && d.bgSat > 0.12) {
+    const hexes = Object.values(pal).filter((v) => typeof v === 'string' && /^#/.test(v));
+    const hues = hexes.map((hx) => {
+      const n = parseInt(hx.slice(1), 16);
+      const r = ((n >> 16) & 255) / 255, g = ((n >> 8) & 255) / 255, b = (n & 255) / 255;
+      const mx = Math.max(r, g, b), mn = Math.min(r, g, b), c = mx - mn;
+      let h = 0;
+      if (c) h = mx === r ? ((g - b) / c) % 6 : mx === g ? (b - r) / c + 2 : (r - g) / c + 4;
+      return ((h * 60) + 360) % 360;
+    });
+    if (hues.length && !hues.some((h) => hueDelta(h, d.bgHue) <= SPEC.hueTolerance)) {
+      errors.push(
+        `AC-5 品牌色 [${slug}]：背景 hue ${d.bgHue}° 不在品牌色系內（${hexes.join(' ')}）`
+      );
+    }
+  }
+});
+
+// AC-6 系統一致性
+const std = (a) => {
+  const mu = a.reduce((x, y) => x + y, 0) / a.length;
+  return Math.sqrt(a.reduce((s, v) => s + (v - mu) ** 2, 0) / a.length);
+};
+const cxStd = std(rows.map((r) => r.cx));
+const cyStd = std(rows.map((r) => r.cy));
+const scStd = std(rows.map((r) => r.scale));
+if (Math.max(cxStd, cyStd) > SPEC.centerStdMax) {
+  errors.push(
+    `AC-6 系統一致性：主體中心離散度過高（cx σ=${cxStd.toFixed(3)}, cy σ=${cyStd.toFixed(3)}，` +
+      `上限 ${SPEC.centerStdMax}）—— 讀起來像 12 張各做各的，不是一套`
+  );
+}
+if (scStd > SPEC.scaleStdMax) {
+  errors.push(`AC-6 系統一致性：主體尺度離散度過高（σ=${scStd.toFixed(3)}，上限 ${SPEC.scaleStdMax}）`);
+}
+
+console.log('量測結果（主體佔比 / 四角色數 / 背景 hue·sat / 中心 / 尺度）：');
+for (const r of rows) {
+  console.log(
+    `  ${r.slug.padEnd(13)} area=${(r.subjectArea * 100).toFixed(1).padStart(5)}%  ` +
+      `corners=${r.cornerColors}  bg=${String(r.bgHue).padStart(5)}°/${r.bgSat.toFixed(2)}  ` +
+      `c=(${r.cx.toFixed(2)},${r.cy.toFixed(2)})  s=${r.scale.toFixed(2)}`
+  );
+}
+console.log(`  σ: cx=${cxStd.toFixed(3)} cy=${cyStd.toFixed(3)} scale=${scStd.toFixed(3)}\n`);
+for (const n of notes) console.log(`ℹ️  ${n}`);
+
+if (errors.length) {
+  console.error(`❌ audit-kv-quality — ${errors.length} 項不合格\n`);
+  for (const e of errors) console.error(`   • ${e}`);
+  process.exit(2);
+}
+console.log('✅ audit-kv-quality — 全部品質不變式通過');
