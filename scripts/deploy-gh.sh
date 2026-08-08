@@ -88,6 +88,23 @@ else
   [ "$LIVE" = "$LOCAL" ] || { echo "❌ 仍不一致 —— 部署未真正生效" >&2; fail=1; }
 fi
 
+# 3) 資產層：主視覺的線上位元必須等於本地。
+#    2026-08-08 踩到 —— 原本只比對 index.html 雜湊，圖換了但 CDN 還吐舊版時仍報綠燈。
+#    「部署成功 ≠ 上線成功」對資產同樣成立。
+echo "▶ 主視覺資產比對（CDN 可能落後，最多重試 6 次）..."
+for attempt in 1 2 3 4 5 6; do
+  stale=""
+  for f in site/assets/kv/*.webp; do
+    n=$(basename "$f")
+    lh=$(curl -s -H "Cache-Control: no-cache" "https://crealize.llc/assets/kv/$n" | shasum -a256 | cut -d' ' -f1)
+    bh=$(shasum -a256 "$f" | cut -d' ' -f1)
+    [ "$lh" = "$bh" ] || stale="$stale $n"
+  done
+  [ -z "$stale" ] && { echo "   ✓ $(ls site/assets/kv/*.webp | wc -l | tr -d ' ') 張主視覺線上位元一致"; break; }
+  [ "$attempt" = "6" ] && { echo "❌ CDN 未更新：$stale" >&2; fail=1; break; }
+  sleep 20
+done
+
 [ "$fail" = "0" ] || { echo "❌ 上線驗證失敗 —— 請 rollback 或 forward-fix" >&2; exit 1; }
 
 echo "✅ Deployed to crealize.llc（三語 200；gh-pages 無多餘 dotfile；內容雜湊相符）"
