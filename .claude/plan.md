@@ -27,17 +27,26 @@
       「公開 repo 是否建立」，每跑一次就把正確狀態翻錯並寫回 TODO.md。已移出自動檢測；連跑兩次零汙染。
 
 ### B. 素材與設計
-- [ ] B1 盤點 12 產品的美術素材（icon / 品牌色 / 字體 / 既有美術），產出素材清單
-- [ ] B2 從既有 export 萃取設計契約 `docs/design-system/tokens/*.json`（目前不存在，是跨 batch 漂移的根因）
+- [x] B1 盤點 12 產品的美術素材 → 完成。三個決定性約束：
+      ① 12 個產品中 6 個（PurityLens / Kichitto / QiFlux / Tendo / Rythix 2048 / 部分 iDokuta）
+         **原始碼不在本機**，主色只能從商店官方 icon 取樣或二手記載
+      ② Mairi **零視覺資產**，只有一份自註「未鎖定」的 brand brief → 這張要從零設計
+      ③ App Store 有 6 個官方 1024px icon 可直接取用，是最一致的 icon 來源
+- [x] B2 萃取設計契約 `docs/design-system/tokens/crealize.tokens.json`（DTCG）
+      → 並在 CLAUDE.md 補上注入點與強制點（契約三處同在才不漂移）
+- [ ] B2.5 從 6 個商店官方 icon 取樣主色，補齊 PurityLens / QiFlux 缺失的 hex
 - [ ] B3 用 `claude-design-handoff` 驅動 Claude Design canvas，注入契約 + 12 產品素材，產出 12 張 KV 設計
 - [ ] B4 export 下載 → 產圖 → 落到 `site/assets/kv/<locale>/`
 
 ### C. 資料與版面
-- [ ] C1 `site/js/i18n/{en,ja,zh}.js` work registry：新增 Rythix 2048 / Meishitto / XunNi / Meguru
-- [ ] C2 修正 Tendo 狀態 `wip` → Android shipped（Play `com.kkdstudios.tendo` 實測已上架，iOS lookup=0）
-- [ ] C3 registry 改用 KV 路徑，移除所有 `pos`（object-position）欄位
-- [ ] C4 `build-site.mjs` 的 hardcode `>08 products<` 改為從 registry 計算
-- [ ] C5 `build-site.mjs` 的 SRC 指向當前 export（現指向 v1，v2 存在但從未被使用）
+- [ ] C1 work registry 新增 Rythix 2048 / Meishitto / XunNi / Meguru（**與 B4 同批做**，
+      否則 registry 指向不存在的 KV，站會壞；deploy gate 會擋，但不該讓 repo 停在該狀態）
+- [x] C2 Tendo `wip` → `shipped`、JSON-LD `os` `Web` → `Android`、描述移除「開發中」
+      （Play 實測已上架含否定對照組；iOS lookup=0。未有 Web 版第一手證據故不沿用 'Web'）
+- [ ] C3 registry 改用 KV 路徑，移除所有 `pos`（object-position）欄位 → 與 B4 同批
+- [x] C4 產品數改為從 registry 計算 + PRODUCTS↔registry 交叉驗證（負面測試已跑，輸出位元不變）
+- [ ] C5 釐清 `claude-design-export` 與 `-v2` 何者為準（兩者主 HTML 位元相同，
+      builder 只用 v1；v2 從未被使用）→ 以說明檔標註，不刪除資料
 
 ### D. 收尾
 - [ ] D1 三支 checker 全 GREEN

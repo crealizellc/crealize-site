@@ -1,0 +1,120 @@
+{
+  "$description": "12 個 Crealize 產品的品牌調色盤與美術素材索引。用途：組 Claude Design brief 產生 Selected Work 卡片主視覺（key visual）時，作為各產品的視覺原料清單。",
+  "$warning": "刻意不放在 docs/design-system/tokens/ 之下。那個目錄是『本網站』的設計契約，check:design 會拿它當合法色白名單；把產品品牌色混進去，等於讓任何顏色都能通過站點漂移檢查。本檔只餵 brief，不參與 lint。",
+  "$provenance": {
+    "source-verified": "我在本機以 sed/grep 讀出該行原文，附 file:line",
+    "icon-sampled": "自 App Store 官方 1024px icon 取樣（iTunes lookup API 取得，sellerName 已確認為 Crealize LLC）",
+    "secondhand": "來自 memory / 文件記載，未能第一手複驗 —— 使用前需再確認",
+    "none": "查無任何可用色值"
+  },
+  "$meta": { "created": "2026-08-08", "keyVisualSpec": "1600x1200 / 4:3 / webp — 見 tokens/crealize.tokens.json § keyVisual" },
+
+  "products": {
+    "PurityLens": {
+      "provenance": "icon-sampled",
+      "palette": { "dominant": "#9AB0C6", "support": "#A5BBD1", "note": "icon 無高飽和色，整體是淡藍灰虹彩水晶漸層" },
+      "fonts": null,
+      "assets": { "icon1024": "App Store id6762415650", "storeShots": 5, "repoOnThisMachine": false },
+      "tone": "淡藍灰虹彩、磨砂水晶質感、潔淨感",
+      "risk": "無任何可讀 hex，主色靠 icon 取樣；原始碼不在本機"
+    },
+    "Fudeto": {
+      "provenance": "source-verified",
+      "palette": { "gold": "#eab308", "ink": "#1a1a1a", "paper": "#fafafa" },
+      "$evidence": "/Users/yves/Projects/FUTEDO/web/src/styles/tokens.css:20 → `--color-gold: #eab308;`",
+      "iconSampleCrossCheck": "icon 取樣得 #E7B000（同色系，互相印證）",
+      "fonts": "無 webfont，系統字堆疊",
+      "assets": { "logoSvg": "/Users/yves/Projects/FUTEDO/assets/fudeto-logo-master.svg", "icon1024": "App Store id6772628821", "extra": "assets/logo-candidates/_archive/ 8 個 1024² 標記" },
+      "tone": "紙上墨跡極簡 — 近黑單筆一劃，全畫面只有一點金色標記終點"
+    },
+    "Kichitto": {
+      "provenance": "icon-sampled",
+      "palette": { "orange": "#E97B47", "orangeFromIcon": "#D16E42", "paper": "#FAFAF7", "incomeGreen": "#16A34A" },
+      "note": "#E97B47 出自 Claude Design export 的 kichitto-tokens.css（未在本機複驗）；#D16E42 是我自 icon 取樣，同色系",
+      "fonts": "Noto Sans JP + Inter",
+      "assets": { "icon1024": "/Applications/Kichitto.app/.../flutter_assets/assets/images/logo.png、App Store id6766059578（日本區）", "repoOnThisMachine": false },
+      "tone": "暖白紙面 + 單一暖橘重點 + 細灰線 + 等寬數字，安靜的收據帳本感"
+    },
+    "QiFlux": {
+      "provenance": "icon-sampled",
+      "palette": { "pink": "#F2BBBB", "deepPurple": "#4D2163", "night": "#2C164D" },
+      "fonts": null,
+      "assets": { "icon1024": "App Store id6770532808", "storeShots": 6, "repoOnThisMachine": false },
+      "tone": "粉→紫夜色漸層 + 玻璃擬態，安靜私密",
+      "risk": "原始碼不在本機，無可讀 hex；色值全來自 icon 取樣"
+    },
+    "moonpacket": {
+      "provenance": "source-verified",
+      "palette": { "red": "#E32521", "gold": "#FFBA00", "navy": "#0C1E3A" },
+      "$evidence": "/Users/yves/Downloads/cursor/moonpacket-site/tailwind.config.js:11 → `primary: '#E32521',`",
+      "fonts": "Sora（標題）+ Inter（內文）+ IBM Plex Sans（數字）",
+      "assets": { "logo1024": "moonpacket-site/public/favicon-source.png", "figures": "moonpacket-site/public/images/figure/ — 42 個情緒角色插畫", "packets": "moonpacket-mirror/src/assets/images/ — 7 張紅包渲染" },
+      "tone": "農曆年紅包喜氣 — crimson + 金 + 深藍，圓潤角色群像沖淡加密產品的金融冷感",
+      "conflict": "Mini App 本體用藍 #016FEE，與行銷站紅金不共用。卡片以行銷站紅金為準"
+    },
+    "iDokuta": {
+      "provenance": "source-verified",
+      "palette": { "teal": "#04A29E", "offWhite": "#FAFAF8" },
+      "$evidence": "/Users/yves/Downloads/iDokuta Care Marketing Site (offline).html — grep 命中 #04A29E",
+      "fonts": "Geist（wordmark）+ Inter + Noto Sans JP",
+      "assets": { "icon1024": "/Users/yves/Downloads/idokuta.png（未標來源）", "marketingHtml": "/Users/yves/Downloads/iDokuta Care Marketing Site (offline).html — 1.36MB 自帶資源完整頁" },
+      "tone": "單一飽和 teal 大面積鋪底 + off-white，緊字距幾何無襯線，臨床但帶溫度",
+      "status": "未上架，無官方商店 icon"
+    },
+    "Mairi": {
+      "provenance": "source-verified",
+      "palette": { "vermilion": "#C95A3F", "ink": "#1A2B3C", "pearl": "#FAF8F5", "vitalGreen": "#4A9068" },
+      "$evidence": "/Users/yves/Projects/omnihealth-phr/docs/brand.md:95 → `| **Mairi Vermilion** | `#C95A3F` | ブランドカラー、CTA |`",
+      "fonts": "Noto Serif JP（品牌標題）+ Plus Jakarta Sans（拉丁/數字）",
+      "assets": { "icon": null, "extra": null },
+      "tone": "參拜般的暖朱紅 + 珍珠白留白，日文襯線、數據幾何無襯線，排斥冷調臨床語彙",
+      "risk": "零視覺資產。logo 仍是三個未定案概念，brand.md 自註色票『是方向不是鎖定』。這張卡等於從零設計"
+    },
+    "Tendo": {
+      "provenance": "secondhand",
+      "palette": { "paper": "#F5F1E8", "vellum": "#1F1A14", "gold": "#C9A961" },
+      "$evidence": "Chronicle memory project_tendo.md:115 —— 未能第一手複驗（原始碼不在本機）",
+      "fonts": "襯線斜體標題（具體字體名查無）",
+      "assets": { "icon": null, "localShots": ["/Users/yves/Downloads/tendo-shot.png"], "repoOnThisMachine": false },
+      "tone": "紙上墨跡 — 米色紙對近黑，單一古金重點。與 Fudeto 同族但更暗",
+      "status": "Android 已上架（Play com.kkdstudios.tendo 實測），iOS 未上架 → 無官方 icon"
+    },
+    "Rythix2048": {
+      "provenance": "icon-sampled",
+      "palette": { "pastelPink": "#F2C6DC", "lavender": "#BBBBFD", "blush": "#E7D1DC" },
+      "note": "重要：實際 icon 是粉彩調。素材盤點推論的『深空霓虹』來自姊妹作 RythixVerse（#FFD84D / #38e1c4 / #0b0d12），套到本作會錯。以 icon 取樣為準",
+      "fonts": "Space Grotesk（與本站 --font-display 相同，可呼應）",
+      "assets": { "icon1024": "App Store id6784661615", "storeShots": 4, "repoOnThisMachine": false },
+      "tone": "粉彩節奏解謎，柔和而非硬派電音"
+    },
+    "Meishitto": {
+      "provenance": "source-verified",
+      "palette": { "indigo": "#5254E0", "indigoFromIcon": "#3737BB" },
+      "$evidence": "/Users/yves/Projects/meishitto/app/lib/core/theme/app_colors.dart:20 → `static const primary500 = Color(0xFF5254E0); // base`",
+      "fonts": "Noto Sans JP + Space Mono（數字/代碼）",
+      "assets": { "icon1024": "App Store id6792575822（日本區）+ app/assets/icon/meishitto_icon.png", "storeAssets": "app/store-assets/ios-6.9-<locale>/ — 12 語 × 7 張 1320×2868 成品圖" },
+      "tone": "靛藍調灰階系統，大圓角，數字 Space Mono；刻意拒絕警報紅，用暖琥珀",
+      "blocker": "repo 為 sparse-checkout，272 張圖僅存 git blob。要用需先 `git sparse-checkout disable`（寫入操作）。商店官方 icon 可立即取用，不受此限"
+    },
+    "XunNi": {
+      "provenance": "source-verified",
+      "palette": { "gold": "#F59E0B", "night": "#09090b" },
+      "$evidence": "/Users/yves/Downloads/XunNi-APP/apps/webapp/tailwind.config.js:34 → `DEFAULT: '#F59E0B', // Medium Gold`",
+      "fonts": "Montserrat（品牌，字距 0.2em）+ Inter + Noto Sans JP",
+      "assets": { "icon1024": "XunNi-APP/apps/native/ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png", "logoSvg": "apps/webapp/public/logo.svg" },
+      "tone": "宇宙神祕感 — 金 on 近黑 + 光暈 + 緩慢閃爍，寬字距 Montserrat",
+      "conflict": "同時並存 4 個金：#F59E0B（tailwind DEFAULT）、#D4AF37（註解說這個才貼近實際 logo）、#FBBF24（legacy）、#F4C430（TG 主題）。卡片統一用 #F59E0B",
+      "status": "Android + Web 已上線，iOS 未上架"
+    },
+    "Meguru": {
+      "provenance": "source-verified",
+      "palette": { "magenta": "#B51452", "warmWhite": "#FAF7F2", "ink": "#0E0E10" },
+      "$evidence": "/Users/yves/Projects/admin-portal/assets/from-claude-design-meguru/meguru-design-standards.md:39 → `| `--accent` | `#B51452` | 品牌洋紅 |`",
+      "fonts": "Plus Jakarta Sans 600（字距 -0.03em，小寫 wordmark）+ Noto Sans JP/TC",
+      "assets": { "logoSvg": ["meguru-favicon.svg", "meguru-mark.svg（打開的紙箱翻蓋）"], "ci": "/Users/yves/Projects/meguru/audit-{tanuki-figure,headquarters,uniform-vehicle,merchandise,event-space}.png" },
+      "tone": "克制的日式市集編輯風 — 暖米白 + 近黑墨 + 單一紀律性洋紅，小寫幾何 wordmark",
+      "designRule": "該產品自己的規範明訂：每畫面重點色最多出現 3–5 次",
+      "note": "平台型，非消費者 App。是唯一寫了完整設計規範文件的產品，素材最成體系"
+    }
+  }
+}
