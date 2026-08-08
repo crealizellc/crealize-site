@@ -171,6 +171,10 @@ const PRODUCTS = [
   // 未取得公開 Web 版網址的第一手證據，故 os 只寫已驗證的 Android。
   { name: 'Tendo', cat: 'GameApplication', os: 'Android', desc: { en: 'Daily Hamiltonian-path puzzle: connect every dot in one unbroken path.', ja: '一日一道 — すべての点を一本の道でつなぐハミルトン路パズル。', zh: '每日漢米爾頓路徑謎題 — 把所有的點用一條路串起來。' } },
   { name: 'moonpacket', cat: 'FinanceApplication', os: 'Web, Telegram', desc: { en: 'Crypto red packets for Telegram communities — non-custodial, USDT / TON / SOL / ETH.', ja: 'Telegram コミュニティ向けクリプト紅包 — ノンカストディアル、USDT / TON / SOL / ETH 対応。', zh: 'Telegram 社群的加密貨幣紅包 — 非託管，支援 USDT / TON / SOL / ETH。' } },
+  { name: 'Rythix 2048', cat: 'GameApplication', os: 'iOS, Android', desc: { en: 'Music-driven 2048: numbers merge on the beat.', ja: 'ビートに乗って数字が重なる音楽パズル 2048。', zh: '跟著節拍合併數字的音樂解謎 2048。' } },
+  { name: 'Meishitto', cat: 'BusinessApplication', os: 'iOS, Android', desc: { en: 'Business-card scanner with on-device OCR — your contacts stay yours.', ja: '端末内 OCR の名刺スキャン — 連絡先の持ち主はあなたのまま。', zh: '裝置端 OCR 名片掃描 — 人脈始終是你的。' } },
+  { name: 'XunNi', cat: 'LifestyleApplication', os: 'Android, Web', desc: { en: 'AI astrology and relationship readings across two charts.', ja: 'ふたつの命盤を読み解く AI 占星・相性鑑定。', zh: '解讀兩張命盤的 AI 占星與關係分析。' } },
+  { name: 'Meguru', cat: 'BusinessApplication', os: 'Web', desc: { en: 'Cross-border commerce platform: listings, orders and settlement in one loop.', ja: '越境ECプラットフォーム — 出品・受注・精算をひと巡り。', zh: '跨境電商平台 — 上架、接單、對帳一路循環。' } },
 ];
 
 /* 交叉驗證：JSON-LD 中繼資料表必須與卡片 registry 的產品完全對應。
