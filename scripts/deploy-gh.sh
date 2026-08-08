@@ -46,26 +46,47 @@ fi
 [ -f site/.nojekyll ] || { echo "❌ 缺 site/.nojekyll（GitHub Pages 需要）" >&2; exit 1; }
 
 echo "▶ Deploying site/ to gh-pages..."
-# --remove '**' 讓 gh-pages 先清掉目的地既有檔案，否則歷史殘留（如上述 .cursorrules）
-# 會永遠留在分支上 —— 預設的 --remove '.' 清不掉它們，這正是外洩持續存在的原因。
-./node_modules/.bin/gh-pages -d site -b gh-pages -t --remove '**' -r "$REPO_URL"
+# 註：不要期待 gh-pages 的 --remove 能清掉目的地的 dotfile —— 2026-08-08 實測
+# `--remove '**'` 對 .cursorrules / .gitignore 完全無效（glob 預設不匹配 dotfile，
+# 與 token-drift-lint 正則漏掉引號是同一類缺陷）。目的地殘留只能靠下方的
+# 分支層檢查抓出來，再用 git 直接移除。
+./node_modules/.bin/gh-pages -d site -b gh-pages -t -r "$REPO_URL"
 
 echo "▶ Post-deploy verification（部署成功 ≠ 上線成功）..."
-sleep 5
 fail=0
+
+# 1) 分支層：gh-pages 上除 .nojekyll 外不得有任何 dotfile。
+#    這是通用檢查 —— 比逐一 curl 已知檔名可靠，能抓到未來新增的殘留。
+git fetch -q "$REPO_URL" gh-pages
+STRAY=$(git ls-tree -r FETCH_HEAD --name-only | grep '^\.' | grep -v '^\.nojekyll$' || true)
+if [ -n "$STRAY" ]; then
+  echo "❌ gh-pages 上有會被公開發佈的 dotfile：" >&2
+  echo "$STRAY" >&2
+  echo "   → 於 gh-pages 分支 git rm 後重推（gh-pages 工具的 --remove 清不掉 dotfile）" >&2
+  fail=1
+else
+  echo "   ✓ gh-pages 無多餘 dotfile"
+fi
+
+# 2) HTTP 層：三語可達，且線上內容確實是本次 build 的產物
+sleep 5
 for path in "" "ja/" "zh/"; do
   code=$(curl -s -o /dev/null -w "%{http_code}" "https://crealize.llc/$path")
   [ "$code" = "200" ] || { echo "❌ https://crealize.llc/$path → HTTP $code" >&2; fail=1; }
 done
-# 外洩檔必須是 404
-for leak in .cursorrules .gitignore; do
-  code=$(curl -s -o /dev/null -w "%{http_code}" "https://crealize.llc/$leak")
-  if [ "$code" = "200" ]; then
-    echo "❌ https://crealize.llc/$leak 仍可公開讀取（HTTP 200）" >&2; fail=1
-  else
-    echo "   ✓ /$leak → HTTP $code"
-  fi
-done
+LIVE=$(curl -s https://crealize.llc/ | shasum -a256 | cut -d' ' -f1)
+LOCAL=$(shasum -a256 site/index.html | cut -d' ' -f1)
+if [ "$LIVE" = "$LOCAL" ]; then
+  echo "   ✓ 線上內容 = 本次 build 產物（${LIVE:0:16}…）"
+else
+  echo "⚠️  線上 sha256 與本地 build 不同（CDN 可能尚未失效）" >&2
+  echo "    live=${LIVE:0:16}…  local=${LOCAL:0:16}…" >&2
+  echo "    30 秒後重試一次…" >&2
+  sleep 30
+  LIVE=$(curl -s https://crealize.llc/ | shasum -a256 | cut -d' ' -f1)
+  [ "$LIVE" = "$LOCAL" ] || { echo "❌ 仍不一致 —— 部署未真正生效" >&2; fail=1; }
+fi
+
 [ "$fail" = "0" ] || { echo "❌ 上線驗證失敗 —— 請 rollback 或 forward-fix" >&2; exit 1; }
 
-echo "✅ Deployed to crealize.llc（三語 200；.cursorrules / .gitignore 已不可讀）"
+echo "✅ Deployed to crealize.llc（三語 200；gh-pages 無多餘 dotfile；內容雜湊相符）"

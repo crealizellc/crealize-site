@@ -47,7 +47,7 @@
       **關鍵修正**：Rythix 2048 真實 icon 是粉彩調（#F2C6DC / #BBBBFD），
       素材盤點推的「深空霓虹」來自姊妹作 RythixVerse，套上去會錯。
 - [ ] B3 用 `claude-design-handoff` 驅動 Claude Design canvas，注入契約 + 12 產品素材，產出 12 張 KV 設計
-- [ ] B4 export 下載 → 產圖 → 落到 `site/assets/kv/<locale>/`
+- [ ] B4 export 下載 → 產圖 → 落到 `site/assets/kv/`（12 張，語言中性）
 
 ### C. 資料與版面
 - [ ] C1 work registry 新增 Rythix 2048 / Meishitto / XunNi / Meguru（**與 B4 同批做**，
@@ -56,8 +56,9 @@
       （Play 實測已上架含否定對照組；iOS lookup=0。未有 Web 版第一手證據故不沿用 'Web'）
 - [ ] C3 registry 改用 KV 路徑，移除所有 `pos`（object-position）欄位 → 與 B4 同批
 - [x] C4 產品數改為從 registry 計算 + PRODUCTS↔registry 交叉驗證（負面測試已跑，輸出位元不變）
-- [ ] C5 釐清 `claude-design-export` 與 `-v2` 何者為準（兩者主 HTML 位元相同，
-      builder 只用 v1；v2 從未被使用）→ 以說明檔標註，不刪除資料
+- [x] C5 `docs/design-system/source/README.md`：逐檔 sha256/cmp 比對表 + 標明 v1 為
+      builder 實際使用者；並警告 export 不是線上樣式真相源（樣式在手工 CSS，
+      `atmosphere.js` 是唯一仍與 export 同步的檔）。兩份都保留，不刪資料。
 
 ### E. 計畫外發現（沿途抓到的真缺陷）
 - [x] E1 `check-todo.js` 假指標：`fs.existsSync("../../.git")` 判斷「公開 repo 是否建立」，
@@ -66,7 +67,12 @@
       → 已修 + 負面測試矩陣 + 兩專案真實路徑回歸（dotfiles `891eaa3`）
 - [x] E3 CLAUDE.md 架構論斷經獨立 verifier 反駁：1 條錯（`atmosphere.js` 其實與 export 相同）、
       3 條講太滿 → 已全數修正（`adff208`）
-- [!] **E4 線上 dotfile 外洩** —— `https://crealize.llc/.cursorrules` HTTP 200 / 8229 bytes，
+- [x] **E4 線上 dotfile 外洩（已解除）** —— 2026-08-08 19:41 實測 `.cursorrules` 與
+      `.gitignore` 皆轉為 HTTP 404（部署後第 40 秒生效）。過程：`gh-pages --remove '**'`
+      對 dotfile 無效（glob 預設不匹配 `.` 開頭檔名），故改以 git 直接在 gh-pages 分支
+      `git rm`。部署腳本的驗證已改為**分支層通用檢查**（列出 gh-pages 上的 dotfile，
+      斷言只剩 `.nojekyll`），不再只 curl 兩個已知檔名。
+      原始描述： —— `https://crealize.llc/.cursorrules` HTTP 200 / 8229 bytes，
       公司內部開發規範全文公開可讀；`.gitignore` 同樣 200。（`.env` / `.env.local` 為 404，
       無金鑰外洩。）修補程式已進 `adff208`（白名單 guard + `--remove '**'` + 部署後 curl 驗證），
       **但實際清除必須跑一次部署**。crealize 未登記 Full-Auto，
@@ -75,7 +81,8 @@
 ### D. 收尾
 - [x] D1 gate 全部接好並經負面測試（KV 兩支仍為預期 RED，待 B4 產出素材後轉綠）
 - [x] D2 本機 build + 三語 output 檢查（產品數 / JSON-LD / 位元對比皆已驗）
-- [!] D3 部署 gh-pages + curl 驗證 —— 同 E4，需授權
+- [x] D3 已部署並驗證（Yves 2026-08-08 授權）：三語皆 200、外洩檔 404、
+      線上 sha256 = 本地 build 產物 `edf6e5b6…`、Tendo 狀態變更已在線上生效
 - [x] D4 commit（5 個原子 commit）；push 到 public-main 已於本 session 稍早完成
 - [x] D5 Chronicle memory 已更新並推上遠端（已用 `git show origin/main:` 複驗）：
       ① `project_crealize.md` 頂部 description/TL;DR 的「Next.js 14」stale 記載改為第一手事實
