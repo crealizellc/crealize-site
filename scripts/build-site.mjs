@@ -11,6 +11,19 @@ import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+/* 產品清單真相源 = site/js/i18n/en.js 的 CRZ_I18N.work（卡片實際渲染的那份）。
+   本檔的 PRODUCTS 只補 registry 沒有、且與語言無關的 schema.org 中繼資料
+   （applicationCategory / operatingSystem）+ 三語描述。兩者以名稱交叉驗證，
+   不一致就中止建置 —— 以前兩份清單各自維護，且產品數是寫死的字串替換
+   （'>07 products<' → '>08 products<'），加一個產品要記得改三個地方。 */
+function loadWorkRegistry(root) {
+  const src = readFileSync(join(root, 'site/js/i18n/en.js'), 'utf8');
+  const win = {};
+  new Function('window', src)(win);
+  if (!win.CRZ_I18N?.work?.length) throw new Error('site/js/i18n/en.js 未產生 CRZ_I18N.work');
+  return win.CRZ_I18N.work;
+}
+
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = join(ROOT, 'docs/design-system/source/claude-design-export/Crealize Corporate Site.html');
 const OUT = join(ROOT, 'site');
@@ -153,9 +166,31 @@ const PRODUCTS = [
   { name: 'QiFlux', cat: 'HealthApplication', os: 'iOS', desc: { en: 'The quiet, privacy-first cycle tracker.', ja: '静かでプライバシー第一の周期トラッカー。', zh: '安靜、隱私優先的週期記錄。' } },
   { name: 'iDokuta', cat: 'MedicalApplication', os: 'iOS, Android', desc: { en: 'Multilingual telehealth for foreigners in Japan (in development).', ja: '在日外国人向け多言語オンライン診療（開発中）。', zh: '在日外國人多語線上診療（開發中）。' } },
   { name: 'Mairi', cat: 'HealthApplication', os: 'iOS, Android', desc: { en: 'Daily personal health record × hospital integration (in development).', ja: '毎日の健康記録 × 病院連携（開発中）。', zh: '每日健康紀錄 × 醫院整合（開發中）。' } },
-  { name: 'Tendo', cat: 'GameApplication', os: 'Web', desc: { en: 'Daily Hamiltonian-path puzzle (in development).', ja: '一日一道のハミルトン路パズル（開発中）。', zh: '每日漢米爾頓路徑謎題（開發中）。' } },
+  // os 原記 'Web' 且描述標「開發中」，但 2026-08-08 實測 Google Play com.kkdstudios.tendo
+  // 已公開上架（developer=Crealize）；iOS id6781214609 lookup resultCount=0，確實未上架。
+  // 未取得公開 Web 版網址的第一手證據，故 os 只寫已驗證的 Android。
+  { name: 'Tendo', cat: 'GameApplication', os: 'Android', desc: { en: 'Daily Hamiltonian-path puzzle: connect every dot in one unbroken path.', ja: '一日一道 — すべての点を一本の道でつなぐハミルトン路パズル。', zh: '每日漢米爾頓路徑謎題 — 把所有的點用一條路串起來。' } },
   { name: 'moonpacket', cat: 'FinanceApplication', os: 'Web, Telegram', desc: { en: 'Crypto red packets for Telegram communities — non-custodial, USDT / TON / SOL / ETH.', ja: 'Telegram コミュニティ向けクリプト紅包 — ノンカストディアル、USDT / TON / SOL / ETH 対応。', zh: 'Telegram 社群的加密貨幣紅包 — 非託管，支援 USDT / TON / SOL / ETH。' } },
 ];
+
+/* 交叉驗證：JSON-LD 中繼資料表必須與卡片 registry 的產品完全對應。
+   任一邊加了產品而另一邊沒加，就在建置時中止 —— 不要等 SEO 靜默少一筆才發現。 */
+const WORK = loadWorkRegistry(ROOT);
+{
+  const inRegistry = WORK.map((w) => w.name);
+  const inMeta = PRODUCTS.map((p) => p.name);
+  const missingMeta = inRegistry.filter((n) => !inMeta.includes(n));
+  const orphanMeta = inMeta.filter((n) => !inRegistry.includes(n));
+  if (missingMeta.length || orphanMeta.length) {
+    throw new Error(
+      '產品清單不同步：\n' +
+        (missingMeta.length ? `  registry 有但 PRODUCTS 缺（JSON-LD 會少）：${missingMeta.join(', ')}\n` : '') +
+        (orphanMeta.length ? `  PRODUCTS 有但 registry 缺（卡片不會顯示）：${orphanMeta.join(', ')}\n` : '') +
+        '  → 兩處都要加。registry: site/js/i18n/*.js；中繼資料: scripts/build-site.mjs 的 PRODUCTS'
+    );
+  }
+}
+const PRODUCT_COUNT = String(WORK.length).padStart(2, '0');
 
 function jsonLd(loc, key) {
   const org = {
@@ -266,7 +301,14 @@ for (const [key, loc] of Object.entries(LOCALES)) {
   html = html.replaceAll('src="assets/crealize-mark.png"', `src="${loc.base}assets/crealize-mark.png"`);
 
   // 6.5 common rewrites (all locales): products count + engineering principles strip
-  html = html.replace('>07 products<', '>08 products<');
+  // 產品數從 registry 算，不再寫死字串（原本是 '>07 products<' → '>08 products<'，
+  // 每加一個產品都要記得回來改這行，且改錯不會有任何錯誤訊息）
+  const countBefore = html;
+  html = html.replace(
+    /(<span class="sec-head__count">)\s*\d+(\s*products<\/span>)/,
+    `$1${PRODUCT_COUNT}$2`
+  );
+  if (html === countBefore) throw new Error('找不到 sec-head__count 產品數節點，來源 HTML 結構已變');
   html = html.replace(
     /<span class="method__stack-label">Stack we master \/ 常用技術<\/span>\s*<ul class="method__stack-list">[\s\S]*?<\/ul>/,
     `<span class="method__stack-label">${loc.stackLabel}</span>
