@@ -5,7 +5,9 @@
   "scripts": {
     "check:todo": "node scripts/check-todo.js",
     "check:rules": "node scripts/check-rules.js",
-    "check:all": "npm run check:todo && npm run check:rules",
+    "check:kv": "node scripts/audit-kv.mjs && node scripts/audit-kv-registry.mjs",
+    "check:design": "bash ~/.claude/scripts/token-drift-lint.sh docs/design-system/tokens site/css/tokens.css site/css/site.css site/css/sections.css site/css/work-modal.css",
+    "check:all": "npm run check:todo && npm run check:rules && npm run check:kv",
     "dev:guide": "node scripts/dev-guide.js",
     "auto:dev": "node scripts/auto-dev.js --dev",
     "auto:opt": "node scripts/auto-dev.js --opt",

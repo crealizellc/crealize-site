@@ -27,6 +27,10 @@ for f in site/index.html site/ja/index.html site/zh/index.html site/CNAME site/r
 done
 grep -q "application/ld+json" site/index.html || { echo "❌ JSON-LD missing" >&2; exit 1; }
 
+echo "▶ Key-visual audit (母版規格 + 三語 registry 對帳)..."
+node scripts/audit-kv.mjs
+node scripts/audit-kv-registry.mjs
+
 echo "▶ Deploying site/ to gh-pages..."
 ./node_modules/.bin/gh-pages -d site -b gh-pages -t -r "$REPO_URL"
 

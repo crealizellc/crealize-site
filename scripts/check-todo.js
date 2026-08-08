@@ -14,10 +14,10 @@ function checkTask(line, checkers) {
 
 // 可扩展的任务检测器
 const checkers = [
-  {
-    pattern: /创建公开仓库 crealize/,
-    done: fs.existsSync(path.resolve(__dirname, "../../.git")),
-  },
+  // 「创建公开仓库 crealize」原本用 fs.existsSync("../../.git") 判斷 —— 檢查的是本 repo
+  // 上一層目錄有無 .git，與「GitHub 上公開 repo 是否存在」無關，每次執行都把已完成翻成未完成
+  // 並寫回檔案（假指標 + 檔案汙染）。本機無法離線驗證遠端 repo，故移出自動檢測，維持人工狀態。
+  // 事實：crealizellc/crealize 存在（2026-08-08 `gh repo list crealizellc` 實查）。
   {
     pattern: /创建私有仓库 crealizecode/,
     done: true, // 假定已完成
