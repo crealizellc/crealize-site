@@ -175,14 +175,17 @@ const std = (a) => {
 const cxStd = std(rows.map((r) => r.cx));
 const cyStd = std(rows.map((r) => r.cy));
 const scStd = std(rows.map((r) => r.scale));
+/* AC-6 於 2026-08-08 由「錯誤」降為「提示」：Yves 明確表示
+   「你先不相干沒關係，本來就是不同產品」—— 13 個不同產品本來就該有各自的視覺個性，
+   強求同一套構圖骨架反而會讓作品集顯得單調。保留量測以便觀察漂移，但不再擋。 */
 if (Math.max(cxStd, cyStd) > SPEC.centerStdMax) {
-  errors.push(
+  notes.push(
     `AC-6 系統一致性：主體中心離散度過高（cx σ=${cxStd.toFixed(3)}, cy σ=${cyStd.toFixed(3)}，` +
       `上限 ${SPEC.centerStdMax}）—— 讀起來像 12 張各做各的，不是一套`
   );
 }
 if (scStd > SPEC.scaleStdMax) {
-  errors.push(`AC-6 系統一致性：主體尺度離散度過高（σ=${scStd.toFixed(3)}，上限 ${SPEC.scaleStdMax}）`);
+  notes.push(`AC-6 主體尺度離散度 σ=${scStd.toFixed(3)}（參考值 ${SPEC.scaleStdMax}）—— 僅提示，不擋`);
 }
 
 console.log('量測結果（主體佔比 / 四角色數 / 背景 hue·sat / 中心 / 尺度）：');
