@@ -80,7 +80,7 @@ window.CRZ_I18N = {
       pos: 'center 30%',
       alt: 'Tendo Web App — 漢米爾頓路徑謎題畫面',
       stack: ['Vanilla JS', 'Serverless API'],
-      status: 'wip',
+      status: 'shipped',
     },
   ],
   method: [

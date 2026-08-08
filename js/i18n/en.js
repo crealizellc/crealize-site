@@ -80,7 +80,7 @@ window.CRZ_I18N = {
       pos: 'center 30%',
       alt: 'Tendo web app — daily Hamiltonian path puzzle',
       stack: ['Vanilla JS', 'Serverless API'],
-      status: 'wip',
+      status: 'shipped',
     },
   ],
   method: [
