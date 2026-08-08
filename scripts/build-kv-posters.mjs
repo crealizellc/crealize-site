@@ -29,31 +29,29 @@ const OUT = join(ROOT, 'docs/design-system/source/kv-posters.html');
    色值來源見 docs/design-system/product-palette.json（有原始碼者為第一手複驗）。 */
 const PRODUCTS = [
   { slug: 'puritylens', name: 'PurityLens', slogan: 'Know what’s in it.',
-    bg: ['#EEF3F8', '#C6D4E2'], ink: '#1B2A38', glow: '#9AB0C6', beam: '#5B7C9E' },
+    bg: ['#EEF3F8', '#C6D4E2'], ink: '#1B2A38', glow: '#9AB0C6', beam: '#5B7C9E', variant: 'detail', crop: '50% 30%', zoom: 2.1 },
   { slug: 'fudeto', name: 'Fudeto', slogan: 'One stroke. Every morning.',
-    bg: ['#FBF9F2', '#EDE2C4'], ink: '#1A1A1A', glow: '#EAB308', beam: '#B98A05' },
+    bg: ['#FBF9F2', '#EDE2C4'], ink: '#1A1A1A', glow: '#EAB308', beam: '#B98A05', variant: 'detail', crop: '50% 20%', zoom: 2.6 },
   { slug: 'kichitto', name: 'Kichitto', slogan: 'Receipts, filed by AI.',
-    bg: ['#FDF3ED', '#F3CDB8'], ink: '#3A1D0E', glow: '#E97B47', beam: '#C25A28' },
+    bg: ['#FDF3ED', '#F3CDB8'], ink: '#3A1D0E', glow: '#E97B47', beam: '#C25A28', variant: 'field', crop: '50% 18%', zoom: 2.4 },
   { slug: 'qiflux', name: 'QiFlux', slogan: 'Your cycle, kept quiet.',
-    bg: ['#F7DDE4', '#4A1B52'], ink: '#2A0E31', glow: '#F2BBBB', beam: '#8E4A86' },
+    bg: ['#F7DDE4', '#4A1B52'], ink: '#2A0E31', glow: '#F2BBBB', beam: '#8E4A86', variant: 'detail', crop: '50% 45%', zoom: 2.0 },
   { slug: 'meishitto', name: 'Meishitto', slogan: 'Cards become contacts.',
-    bg: ['#EFEFFB', '#C3C4F0'], ink: '#1B1B4A', glow: '#5254E0', beam: '#3B3CB8' },
+    bg: ['#EFEFFB', '#C3C4F0'], ink: '#1B1B4A', glow: '#5254E0', beam: '#3B3CB8', variant: 'detail', crop: '50% 34%', zoom: 1.9 },
   { slug: 'rythix2048', name: 'Rythix 2048', slogan: 'Merge on the beat.',
-    bg: ['#EFD3E4', '#B9B9F2'], ink: '#241528', glow: '#9B6FB5', beam: '#7A4E96' },
+    bg: ['#EFD3E4', '#B9B9F2'], ink: '#241528', glow: '#9B6FB5', beam: '#7A4E96', variant: 'detail', crop: '50% 46%', zoom: 1.9 },
   { slug: 'tendo', name: 'Tendo', slogan: 'One path. Every dot.',
-    bg: ['#2A241C', '#14100B'], ink: '#F5F1E8', glow: '#C9A961', beam: '#C9A961' },
+    bg: ['#2A241C', '#14100B'], ink: '#F5F1E8', glow: '#C9A961', beam: '#C9A961', variant: 'detail', crop: '50% 40%', zoom: 2.0 },
   { slug: 'xunni', name: 'XunNi', slogan: 'Where charts align.',
-    bg: ['#1A1712', '#09090B'], ink: '#F6EBD6', glow: '#F59E0B', beam: '#F59E0B' },
-  { slug: 'dicex3d', name: 'DiceX3D', slogan: 'Roll the bones.',
-    bg: ['#E7F0E5', '#9DBE9C'], ink: '#16281A', glow: '#2E7D32', beam: '#2E7D32' },
+    bg: ['#1A1712', '#09090B'], ink: '#F6EBD6', glow: '#F59E0B', beam: '#F59E0B', variant: 'field', crop: '50% 26%', zoom: 2.3 },
   { slug: 'moonpacket', name: 'moonpacket', slogan: 'Red packets, on-chain.',
-    bg: ['#16304F', '#0A1626'], ink: '#FFE9C7', glow: '#FFBA00', beam: '#FFBA00' },
+    bg: ['#16304F', '#0A1626'], ink: '#FFE9C7', glow: '#FFBA00', beam: '#FFBA00', variant: 'mark', crop: '50% 50%', zoom: 1 },
   { slug: 'idokuta', name: 'iDokuta', slogan: 'Care across languages.',
-    bg: ['#E6F5F3', '#A9DCD6'], ink: '#06322F', glow: '#04A29E', beam: '#037F7C' },
+    bg: ['#E6F5F3', '#A9DCD6'], ink: '#06322F', glow: '#04A29E', beam: '#037F7C', variant: 'field', crop: '50% 30%', zoom: 2.6 },
   { slug: 'mairi', name: 'Mairi', slogan: 'Your health, day by day.',
-    bg: ['#FBF3EE', '#EFCFC2'], ink: '#3B1C12', glow: '#C95A3F', beam: '#A8452E' },
+    bg: ['#FBF3EE', '#EFCFC2'], ink: '#3B1C12', glow: '#C95A3F', beam: '#A8452E', variant: 'field', crop: '50% 26%', zoom: 2.2 },
   { slug: 'meguru', name: 'Meguru', slogan: 'Commerce in circulation.',
-    bg: ['#FBF5EF', '#E9CBD6'], ink: '#3A0A1E', glow: '#B51452', beam: '#8E0F3F' },
+    bg: ['#FBF5EF', '#E9CBD6'], ink: '#3A0A1E', glow: '#B51452', beam: '#8E0F3F', variant: 'mark', crop: '50% 50%', zoom: 1 },
 ];
 
 /* 逐張讀出截圖實際比例，讓裝置外框高度跟著它走 —— 零裁切。
@@ -86,9 +84,14 @@ if (unusable.length) {
 const markOnly = PRODUCTS.filter((p) => !existsSync(join(shots, `${p.slug}.png`))).map((p) => p.slug);
 if (markOnly.length) console.log(`ℹ️  走 mark 版型（無產品畫面）：${markOnly.join(', ')}`);
 
-/** 一張海報：左側 logo + slogan，右側裝置內嵌真實畫面。
-    沒有可用產品畫面者（平台型、或截圖不堪用）改走 mark 版型：
-    放大自家 mark，不放任何裝置或替代畫面 —— 寧可簡單，也不擺不屬於它的東西。 */
+/** 一張卡：大字排版為主角，UI 局部滿版出血為輔。
+
+    2026-08-08 第三次改版。Yves：「故意放個手機是 10 年前的設計了，要有設計感」
+    「字體可以大一點」。前一版把整支手機放進畫面，是 2015 年前後 app 行銷的語彙；
+    現在的作法是**不畫裝置**，直接讓真實 UI 以裁切面出血，當成色塊與紋理使用，
+    版面主角讓給字。
+
+    沒有可用 UI 者（平台型 Meguru、截圖不堪用的 moonpacket）走 mark 版型。 */
 function poster(p) {
   const hasIcon = existsSync(join(icons, `${p.slug}.png`));
   const mark = hasIcon
@@ -96,38 +99,31 @@ function poster(p) {
     : `<div class="mark mark--type">${p.name.slice(0, 1)}</div>`;
   const hasShot = existsSync(join(shots, `${p.slug}.png`));
   const shot = `file://${shots}/${p.slug}.png`;
-  const PAD = 11, INNER_W = 444;
-  const phoneH = hasShot
-    ? Math.round(INNER_W / shotRatio(join(shots, `${p.slug}.png`))) + PAD * 2
-    : 980;
-  if (!hasShot) {
+
+  const v = p.variant || 'bleed-right';
+
+  /* field：文字密集的 App 不放 UI 裁切 —— 真實 UI 到處是文字，任何裁切都會切出
+     半個單字（實測 kichitto 出現半個「収入 ¥33」、idokuta 出現半個「Symptoms」），
+     半讀的字看起來像壞掉。這類改用品牌色場 + logo + 大字。 */
+  if (v === 'mark' || v === 'field' || !hasShot) {
     return `
-<div class="kv kv--mark" id="kv-${p.slug}" style="--bg1:${p.bg[0]};--bg2:${p.bg[1]};--ink:${p.ink};--glow:${p.glow};--beam:${p.beam}">
-  <div class="beams"></div>
-  <div class="glow"></div>
-  <div class="markonly">
+<div class="kv kv--${v === 'field' ? 'field' : 'mark'}" id="kv-${p.slug}" style="--bg1:${p.bg[0]};--bg2:${p.bg[1]};--ink:${p.ink};--glow:${p.glow};--beam:${p.beam}">
+  <div class="wash"></div>
+  <div class="type type--center">
     <div class="markwrap markwrap--xl">${mark}</div>
-    <div class="slogan slogan--center">${p.slogan}</div>
-    <div class="rule rule--center"></div>
+    <h2 class="slogan">${p.slogan}</h2>
   </div>
 </div>`;
   }
+
+  const img = `<img src="${shot}" style="object-position:${p.crop};transform:scale(${p.zoom || 1})" alt="">`;
   return `
-<div class="kv" id="kv-${p.slug}" style="--bg1:${p.bg[0]};--bg2:${p.bg[1]};--ink:${p.ink};--glow:${p.glow};--beam:${p.beam}">
-  <div class="beams"></div>
-  <div class="glow"></div>
-  <div class="left">
+<div class="kv kv--${v}" id="kv-${p.slug}" style="--bg1:${p.bg[0]};--bg2:${p.bg[1]};--ink:${p.ink};--glow:${p.glow};--beam:${p.beam}">
+  <div class="wash"></div>
+  <div class="crop">${img}</div>
+  <div class="type">
     <div class="markwrap">${mark}</div>
-    <div class="slogan">${p.slogan}</div>
-    <div class="rule"></div>
-  </div>
-  <div class="right">
-    <div class="stage">
-      <div class="phone" style="height:${phoneH}px"><img src="${shot}" alt=""></div>
-      <div class="reflect" style="height:${Math.round(phoneH * 0.28)}px">
-        <img src="${shot}" style="height:${phoneH}px" alt="">
-      </div>
-    </div>
+    <h2 class="slogan">${p.slogan}</h2>
   </div>
 </div>`;
 }
@@ -141,82 +137,77 @@ const html = `<!DOCTYPE html>
   html,body{margin:0;padding:0;background:#8C8C87}
   .kv{
     width:1600px;height:1200px;margin:0 auto 40px;position:relative;overflow:hidden;
-    display:grid;grid-template-columns:1fr 1fr;align-items:center;
-    background:linear-gradient(150deg,var(--bg1) 0%,var(--bg2) 100%);
+    background:linear-gradient(158deg,var(--bg1) 0%,var(--bg2) 100%);
     font-family:'Space Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif;
   }
   .kv:last-child{margin-bottom:0}
 
-  /* 光束：自裝置後方放射的細光條，被徑向遮罩收在中心 —— 這是讓畫面「有能量」的關鍵，
-     v3 第一版缺的就是它（平淡漸層讀起來像簡報底圖）。 */
-  .beams{
-    position:absolute;inset:-30%;
-    /* 2026-08-08 修：原本用 repeating-conic 做爆裂狀光芒，13 張排在一起時
-       同一個放射圖樣變成通病，縮小後整版像套版，效果本身也偏俗。
-       改為單一柔和斜向光帶，只負責讓背景有方向性。 */
-    background:linear-gradient(112deg, transparent 34%, var(--beam) 50%, transparent 66%);
-    opacity:.14;
-    filter:blur(60px);
-  }
-  /* 環境光：裝置背後的大面積品牌色光暈 */
-  .glow{
-    position:absolute;width:1240px;height:1240px;border-radius:999px;
-    right:-140px;top:-220px;
-    background:radial-gradient(circle,var(--glow) 0%,transparent 66%);
-    opacity:.55;filter:blur(30px);
+  /* 單一柔和光帶，只給背景方向性，不做花俏效果 */
+  .wash{
+    position:absolute;inset:-20%;
+    background:linear-gradient(112deg, transparent 30%, var(--beam) 50%, transparent 70%);
+    opacity:.13;filter:blur(80px);
   }
 
-  .left{position:relative;padding:0 0 0 118px;z-index:3}
-  /* logo 外圈發光，讓它從背景浮起來 */
-  .markwrap{
-    width:138px;height:138px;border-radius:10px;position:relative;
-    box-shadow:0 0 0 1px rgba(255,255,255,.14),
-               0 26px 54px rgba(0,0,0,.32),
-               0 0 70px -10px var(--glow);
+  /* 字是主角：slogan 由 72px 拉到 118px */
+  .type{
+    position:absolute;left:104px;top:50%;transform:translateY(-50%);
+    z-index:3;max-width:760px;
   }
-  .mark{width:100%;height:100%;border-radius:10px;display:block}
+  .markwrap{
+    width:104px;height:104px;border-radius:22px;overflow:hidden;
+    box-shadow:0 18px 40px rgba(0,0,0,.22);
+  }
+  .mark{width:100%;height:100%;display:block}
   .mark--type{
-    display:grid;place-items:center;font-size:68px;font-weight:700;
-    background:var(--glow);color:var(--bg1);border-radius:10px;
+    display:grid;place-items:center;font-size:52px;font-weight:700;
+    background:var(--glow);color:var(--bg1);width:100%;height:100%;
   }
   .slogan{
-    margin-top:60px;font-size:72px;line-height:1.08;font-weight:600;
-    letter-spacing:-.03em;color:var(--ink);max-width:540px;
-    text-shadow:0 2px 30px rgba(0,0,0,.14);
+    margin:56px 0 0;font-size:118px;line-height:.98;font-weight:600;
+    letter-spacing:-.045em;color:var(--ink);
   }
-  .rule{margin-top:46px;width:104px;height:6px;border-radius:2px;
-        background:var(--glow);box-shadow:0 0 24px -2px var(--glow)}
 
-  /* mark 版型：無裝置，logo 放大置中 */
-  .kv--mark{grid-template-columns:1fr}
-  .markonly{position:relative;z-index:3;display:grid;justify-items:center;text-align:center}
-  .markwrap--xl{width:250px;height:250px;border-radius:20px}
-  .markwrap--xl .mark{border-radius:20px}
-  .slogan--center{max-width:820px;margin-top:66px;text-align:center}
-  .rule--center{margin-left:auto;margin-right:auto}
+  /* UI 局部：不畫裝置，直接以裁切面出血，當色塊與紋理用。
+     三種構圖讓 12 張各有面貌，但字體與 logo 的位置/尺寸系統維持一致
+     （Yves：「每個產品可以不用一樣的風格…但字體、Logo 統一好風格」）。 */
+  .crop{position:absolute;overflow:hidden;z-index:2}
+  .crop img{width:100%;height:100%;object-fit:cover;display:block;transform-origin:center}
 
-  .right{position:relative;display:grid;place-items:center;z-index:3}
-  .stage{position:relative;transform:rotate(-7deg) translateY(10px)}
-  /* 裝置：真實截圖 + 邊緣高光 + 深落影（帶品牌色調） */
-  .phone{
-    width:466px;border-radius:54px;overflow:hidden;
-    background:#0A0A0B;padding:11px;box-sizing:border-box;position:relative;
-    box-shadow:
-      inset 0 0 0 1px rgba(255,255,255,.22),
-      0 8px 20px rgba(0,0,0,.30),
-      0 70px 110px rgba(0,0,0,.45),
-      0 0 120px -20px var(--glow);
+  /* A. 右側出血 */
+  .kv--bleed-right .crop{
+    right:0;top:0;bottom:0;width:46%;
+    -webkit-mask-image:linear-gradient(to right, transparent 0, #000 18%);
+    mask-image:linear-gradient(to right, transparent 0, #000 18%);
   }
-    /* 外框比例已逐張對齊截圖，故用 fill 不裁切（原為 cover + top center，會切掉底部） */
-  .phone img{width:100%;height:100%;object-fit:fill;display:block;border-radius:44px}
-  /* 反射：裝置下方的鏡射淡出 */
-  .reflect{
-    position:absolute;left:0;top:100%;width:466px;
-    border-radius:54px;overflow:hidden;transform:scaleY(-1);opacity:.20;
-    -webkit-mask-image:linear-gradient(to top, transparent 0%, #000 96%);
-    mask-image:linear-gradient(to top, transparent 0%, #000 96%);
+  /* B. 底部橫幅出血 —— 字在上方，UI 成為一條橫帶 */
+  .kv--bleed-bottom .crop{
+    left:0;right:0;bottom:0;height:42%;
+    -webkit-mask-image:linear-gradient(to bottom, transparent 0, #000 26%);
+    mask-image:linear-gradient(to bottom, transparent 0, #000 26%);
   }
-  .reflect img{width:466px;object-fit:fill;display:block}
+  .kv--bleed-bottom .type{top:auto;bottom:52%;transform:none}
+  /* C. 局部特寫 —— 右側方塊，圓角裁切，像一片被取下的介面 */
+  .kv--detail .crop{
+    right:72px;top:50%;transform:translateY(-50%);
+    width:700px;height:700px;border-radius:28px;
+    box-shadow:0 40px 90px rgba(0,0,0,.28);
+  }
+
+  /* mark 版型：無 UI 可用者，字與標置中 */
+  .kv--field .type--center{
+    position:absolute;left:104px;top:50%;transform:translateY(-50%);
+    display:grid;justify-items:start;text-align:left;max-width:900px;
+  }
+  .kv--field .markwrap{width:104px;height:104px;border-radius:22px}
+  .kv--field .slogan{font-size:118px;text-align:left}
+
+  .kv--mark .type--center{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    display:grid;justify-items:center;text-align:center;max-width:1100px;
+  }
+  .kv--mark .markwrap{width:150px;height:150px;border-radius:30px}
+  .kv--mark .slogan{font-size:112px;text-align:center}
 </style></head><body>
 ${PRODUCTS.map(poster).join('\n')}
 </body></html>

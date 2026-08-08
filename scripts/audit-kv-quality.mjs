@@ -129,6 +129,17 @@ if (TEMPLATE && existsSync(TEMPLATE)) {
   notes.push('AC-1 / AC-3 未檢查（未提供 --template）');
 }
 
+/* 逐張讀出它用的是哪種版型。AC-2「主體佔比」只對帶 UI 特寫的卡片成立 ——
+   色場（field）與純標（mark）版型本來就刻意不放 UI，主體就是 logo 與大字，
+   佔比自然低。拿同一把尺去量會把「刻意的克制」誤判成「內容不足」。
+   這兩種版型的可讀性由字級與對比保證，不由面積保證。 */
+const variantBySlug = {};
+if (TEMPLATE && existsSync(TEMPLATE)) {
+  const tpl = readFileSync(TEMPLATE, 'utf8');
+  for (const m of tpl.matchAll(/class="kv kv--([a-z-]+)" id="kv-([a-z0-9-]+)"/g)) variantBySlug[m[2]] = m[1];
+  for (const m of tpl.matchAll(/class="kv" id="kv-([a-z0-9-]+)"/g)) variantBySlug[m[1]] = 'detail';
+}
+
 const palette = existsSync(PALETTE) ? JSON.parse(readFileSync(PALETTE, 'utf8')).products : {};
 const nameBySlug = Object.fromEntries(
   Object.keys(palette).map((k) => [k.toLowerCase().replace(/[^a-z0-9]/g, ''), k])
@@ -143,9 +154,13 @@ webps.forEach((f, i) => {
   const slug = f.replace('.webp', '');
   rows.push({ slug, ...d });
 
+  const variant = variantBySlug[slug] || 'detail';
+  const carriesUI = variant === 'detail' || variant === 'bleed-right' || variant === 'bleed-bottom';
   const isDark = d.bgVal < SPEC.darkBgThreshold;
   const areaMin = isDark ? SPEC.minSubjectAreaDark : SPEC.minSubjectArea;
-  if (d.subjectArea < areaMin) {
+  if (!carriesUI) {
+    notes.push(`AC-2 [${slug}] 版型 ${variant}（刻意不放 UI），不適用主體佔比（實測 ${(d.subjectArea * 100).toFixed(1)}%）`);
+  } else if (d.subjectArea < areaMin) {
     errors.push(
       `AC-2 主體佔比 [${slug}]：${(d.subjectArea * 100).toFixed(1)}% < ${(areaMin * 100).toFixed(0)}%` +
         `（縮到 333×249 會看不出是什麼${isDark ? '；深底門檻' : ''}）`
