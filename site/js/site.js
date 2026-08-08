@@ -12,37 +12,11 @@
   const METHOD = I18N.method;
   const UI = I18N.ui;
 
-  // ---------- WORK : case-study cards ----------
-  function shotHTML(w) {
-    if (w.img) {
-      return `<img class="work-card__img" src="${w.img}" alt="${w.alt || w.name}" loading="lazy" decoding="async" width="1600" height="1200" />`;
-    }
-    return `
-      <div class="work-card__ph">
-        <b>[ ${w.ph} ]</b>
-        <span>product screenshot · drop here</span>
-      </div>`;
-  }
-
-  function cardHTML(w, globalIdx, wip) {
-    return `
-      <article class="work-card reveal" data-work-index="${globalIdx}" tabindex="0" role="button"
-               aria-label="Open ${w.name}">
-        <div class="work-card__shot">
-          <div class="work-card__zoom">${shotHTML(w)}</div>
-          <span class="work-card__idx">${String(globalIdx + 1).padStart(2, '0')}</span>
-          ${wip ? `<span class="work-card__badge">${UI.wipBadge}</span>` : ''}
-        </div>
-        <div class="work-card__meta">
-          <span class="work-card__name">${w.name}</span>
-          <span class="work-card__jp jp-accent">${w.jp}</span>
-          <span class="work-card__tag">${w.tag}</span>
-        </div>
-        <ul class="work-card__stack" aria-label="Tech stack">
-          ${w.stack.map((s) => `<li>${s}</li>`).join('')}
-        </ul>
-      </article>`;
-  }
+  // ---------- WORK : 產品卡 ----------
+  // 2026-08-09：產品卡改由 js/work-v3.js 渲染進 #work-cards（Claude Design 的 Work v3
+  // ——per-product motif + 各自的動畫 + 三語各自撰寫的說明）。原本這裡的
+  // shotHTML() / cardHTML() 只出 8 張 featured 截圖卡，已整組移除；
+  // 兩套同時寫同一個容器只會互相覆蓋。本檔仍負責下方的 THE INDEX 註冊表。
 
   // short registry tokens for the index stack column
   const token = (s) => s.toLowerCase()
@@ -72,11 +46,7 @@
 
   const grid = document.getElementById('work-grid');
   if (grid) {
-    const featured = WORK.filter((w) => w.featured);
     grid.innerHTML = `
-      <div class="work__sub"><span class="work__sub-label">${UI.featuredLabel}</span><span class="work__sub-n">0${featured.length}</span></div>
-      <div class="work__grid">${featured.map((w) => cardHTML(w, WORK.indexOf(w), w.status === 'wip')).join('')}</div>
-
       <div class="work__index" id="work-index">
         <div class="work__sub work__sub--index"><span class="work__sub-label">${UI.indexLabel}</span><span class="work__sub-n" id="index-count">${String(WORK.length).padStart(2, '0')} / ${String(WORK.length).padStart(2, '0')}</span></div>
         <label class="index__prompt">

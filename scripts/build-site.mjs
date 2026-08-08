@@ -298,6 +298,7 @@ for (const [key, loc] of Object.entries(LOCALES)) {
 <script src="${loc.base}js/hero.js" defer></script>
 <script src="${loc.base}js/i18n/${key}.js"></script>
 <script src="${loc.base}js/site.js" defer></script>
+<script src="${loc.base}js/work-v3.js" defer></script>
 <script src="${loc.base}js/work-modal.js" defer></script>`
   );
 

@@ -139,7 +139,45 @@ prompt 統一要求「把 icon 的 mark 當主角放大成實體物件、真實�
       面積為改版前 571×428 的 51%）、線上 sha256 = 本地 build 產物。
       `loading="lazy"` 使首屏未載入圖屬正常，強制載入回 1600×1200 / HTTP 200。
 
-## 已知取件障礙（v1 踩過，v2 直接沿用解法，不重踩）
+## v4 — Selected Work 整區改版（2026-08-09，Yves 第四輪指示，強制 Claude Design）
+
+Yves 原話：「一開始就叫你用 Claude Design 你一直不聽話，然後浪費我的 Token。**強制你使用 Claude Design**」
+另加四點：① 基於真正理解產品再設計 ② **每一頁搭配動畫** ③ **透過元件組成，呈現原子化概念**
+（官網是我們的技術展示）④ 產品說明太少、要更優雅，**多語版本要更像人話**。
+
+- [x] V1 取件 —— `DesignSync` MCP `get_file`（project `dbbc5234-c185-49b2-97b2-09bf8b59aaf0`，
+      path `Work v3.html`，`truncated:false`）。**這是取件問題的正解**，
+      文末那四道障礙全部繞開，不必再用分段讀取。已逐字落檔至
+      `docs/design-system/source/claude-design-export/Work v3.html`
+- [x] V2 內容驗證：契約 token 精確（`--ec:cubic-bezier(.22,1,.36,1)`／`--d1:360ms`
+      `--d2:620ms`／`--d3:1100ms`／`#FF4F00`／Space Grotesk・Newsreader・Space Mono），
+      12 產品三語**各自撰寫**（非直譯），per-product SVG motif 取自真實機制，
+      per-product 動畫取自核心動作，`prefers-reduced-motion` 有處理，
+      各產品品牌規範被遵守（fudeto/tendo `data-flat`、meguru `border`+`nophone`）
+- [x] V3 接軌 build 鏈。DOM 進 export HTML 的 `#work`（保留 `sec-head__count`，
+      移除 runtime 語言切換，新增 `#work-lede` / `#work-legend` / `#work-cards`）·
+      CSS 併入 `site/css/sections.css`（全部 scope 在 `#work` 之下；canvas 自帶的
+      `:root` token **刻意不移植**，改對映到 tokens.css 既有名稱 `--ease-cond`
+      `--dur-1..3` `--font-*`，值逐一比對相同）· `site/js/work-v3.js` **由
+      `scripts/gen-work-v3.mjs` 從 canvas 原檔切出 M 與 P 生成**（手抄 14KB 等於
+      給自己一次轉錄漂移的機會，且下次改版還要再抄）· 移除 `site/js/site.js` 的
+      `shotHTML`/`cardHTML`（兩套同時寫 `#work-grid` 只會互相覆蓋），THE INDEX 保留
+- [x] V3b 手機縮圖用**直立截圖**。實拍抓到我接軌時的錯：把 1600×1200 的橫向主視覺
+      塞進 9:19.5 的手機框，`object-fit:cover` 把字裁成一半（「s, filed by」
+      「ted packets on-chain」）。canvas 原本就是要 `shots/<slug>.png`，
+      本機 `site-assets/shots/` 11 張直立圖長寬比 0.460–0.462，與框幾乎吻合。
+      新增 `scripts/build-shots.mjs` → `site/assets/shots/*.webp`（480px，13–35KB）
+- [x] V4 驗收：`.claude/ac.md` 7 條 AC + `scripts/audit-work-v3.mjs` 可一句指令跑完，
+      全綠；`check:kv` 三道 gate 綠；`check:design` token-drift 0 漂移；
+      三語 1440 實拍目視確認。**AC-6 修掉一個假綠燈**：Chrome headless 在 macOS
+      把視窗寬夾在 500px（390/360/500 的 innerWidth 都回 500），原本拿被夾過的寬度
+      自我對照永遠相等 —— 改用 iframe 量真視口，並加上「量到的寬度 ≠ 要求的寬度就不算通過」
+- [!] V5 上線 —— **只有 Yves 能決定**。他第四輪明確要求「我要先看一下你打開給我看」，
+      版面美感屬創作品味；且 `deploy:gh` 一跑就是對外發佈到 crealize.llc。
+      本機已備妥：三語截圖在 scratchpad，`deploy-gh.sh` 已把 `audit-work-v3` 與
+      `assets/shots` 位元比對納入 gate。點頭即可 `npm run deploy:gh`。
+
+## 已知取件障礙（v1/v2 踩過 —— **v4 起已由 `DesignSync` MCP 取代，不必再用**）
 
 Claude Design 的產物取回本機有四道阻礙，**已驗證的唯一可行路徑**是最後一項：
 1. Share → Export → 下載：落在無法列舉的 Chrome profile（macOS TCC 擋 `ls`，

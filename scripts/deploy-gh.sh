@@ -32,6 +32,9 @@ node scripts/audit-kv.mjs
 node scripts/audit-kv-registry.mjs
 node scripts/audit-kv-quality.mjs --template docs/design-system/source/kv-posters.html
 
+echo "▶ Selected Work v3 驗收 (AC 見 .claude/ac.md)..."
+node scripts/audit-work-v3.mjs
+
 # 我們用 -t/--dotfiles 是因為 GitHub Pages 需要 .nojekyll。代價是 site/ 裡任何
 # dotfile 都會被公開發佈。2026-08-08 發現 gh-pages 上殘留 .cursorrules（8229 bytes，
 # 公司內部開發規範）與 .gitignore，兩者皆 HTTP 200 可公開讀取。
@@ -91,16 +94,16 @@ fi
 # 3) 資產層：主視覺的線上位元必須等於本地。
 #    2026-08-08 踩到 —— 原本只比對 index.html 雜湊，圖換了但 CDN 還吐舊版時仍報綠燈。
 #    「部署成功 ≠ 上線成功」對資產同樣成立。
-echo "▶ 主視覺資產比對（CDN 可能落後，最多重試 6 次）..."
+echo "▶ 圖片資產比對（主視覺 + 手機縮圖；CDN 可能落後，最多重試 6 次）..."
 for attempt in 1 2 3 4 5 6; do
   stale=""
-  for f in site/assets/kv/*.webp; do
-    n=$(basename "$f")
-    lh=$(curl -s -H "Cache-Control: no-cache" "https://crealize.llc/assets/kv/$n" | shasum -a256 | cut -d' ' -f1)
+  for f in site/assets/kv/*.webp site/assets/shots/*.webp; do
+    rel="${f#site/}"
+    lh=$(curl -s -H "Cache-Control: no-cache" "https://crealize.llc/$rel" | shasum -a256 | cut -d' ' -f1)
     bh=$(shasum -a256 "$f" | cut -d' ' -f1)
-    [ "$lh" = "$bh" ] || stale="$stale $n"
+    [ "$lh" = "$bh" ] || stale="$stale $rel"
   done
-  [ -z "$stale" ] && { echo "   ✓ $(ls site/assets/kv/*.webp | wc -l | tr -d ' ') 張主視覺線上位元一致"; break; }
+  [ -z "$stale" ] && { echo "   ✓ $(ls site/assets/kv/*.webp site/assets/shots/*.webp | wc -l | tr -d ' ') 張圖片線上位元一致"; break; }
   [ "$attempt" = "6" ] && { echo "❌ CDN 未更新：$stale" >&2; fail=1; break; }
   sleep 20
 done

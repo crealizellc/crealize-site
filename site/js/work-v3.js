@@ -1,0 +1,263 @@
+/* ============================================================
+   CREALIZE — SELECTED WORK v3
+   ⚠️ 本檔由 scripts/gen-work-v3.mjs 生成，請勿手改。
+   真相源：docs/design-system/source/claude-design-export/Work v3.html
+   （Claude Design 專案 dbbc5234-c185-49b2-97b2-09bf8b59aaf0，
+     2026-08-09 以 DesignSync get_file 取回，truncated:false）
+
+   相對 canvas 原檔的三處差異，以及為什麼：
+
+   1. 拿掉 runtime 語言切換器。線上站是三個 per-locale 靜態頁，語言由
+      <html lang> 決定，只 render 一次。canvas 需要那個切換器，是為了在
+      單一畫布預覽三語；正式站有它反而會與 URL 的語言狀態打架。
+
+   2. 圖片改吃 window.CRZ_I18N.work[].img，不用原檔的 'shots/<slug>.png'。
+      per-locale 的 i18n 檔已經帶了正確的相對路徑（en 是 'assets/…'，
+      ja/zh 是 '../assets/…'），所以不需要另做 base path 管線。
+
+   3. 每張卡帶 class="work-card" 與 data-work-index，讓 work-modal.js 既有的
+      事件委派（'.work-card[data-work-index], .index-row[data-work-index]'）繼續有效。
+
+   M（motif SVG）與 P（三語文案）由生成器從 canvas 原檔原樣切出，未改一個 byte。
+   樣式在 site/css/sections.css 的「WORK v3」區塊，全部 scope 在 #work 之下；
+   token 一律用 site/css/tokens.css 的既有名稱（--ease-cond / --dur-1..3 / --font-*），
+   canvas 自帶的那份 :root 刻意不移植 —— tokens.css 是唯一真相源。
+   ============================================================ */
+(function () {
+  'use strict';
+
+  var host = document.getElementById('work-cards');
+  if (!host) return;
+
+  var REG = (window.CRZ_I18N && window.CRZ_I18N.work) || [];
+
+  /* 語言：<html lang> 是唯一來源。zh-Hant → zh。 */
+  var lang = (document.documentElement.getAttribute('lang') || 'en').toLowerCase();
+  var L = lang.indexOf('ja') === 0 ? 'ja' : lang.indexOf('zh') === 0 ? 'zh' : 'en';
+
+  var LEDE = {
+    en: "Twelve products. Each one is a mechanism we thought should exist — so we built the smallest honest version of it and shipped.",
+    ja: "12のプロダクト。どれも「この仕組みはあるべきだ」という一点から始め、いちばん小さくて誠実な形にして世に出しました。",
+    zh: "十二個產品。每一個都始於「這個機制應該存在」，然後做成最小、也最誠實的那個版本，送出去。"
+  };
+
+  var LEGEND = {
+    en: [['live', 'shipped'], ['dev', 'in development'], ['ops', 'in operation']],
+    ja: [['live', '公開中'], ['dev', '開発中'], ['ops', '運営中']],
+    zh: [['live', '已上線'], ['dev', '開發中'], ['ops', '營運中']]
+  };
+
+  var UNRELEASED = { en: 'unreleased', ja: '未リリース', zh: '尚未上架' };
+
+/* ── motifs: authored from each product's real mechanism（原樣自 canvas 切出） ── */
+var M={
+puritylens:'<svg class="m" viewBox="0 0 320 240"><defs><radialGradient id="plB" cx="34%" cy="30%" r="74%"><stop offset="0" stop-color="#fff"/><stop offset=".38" stop-color="#DCEAF2"/><stop offset="1" stop-color="#7BB8D4"/></radialGradient></defs>'
++'<g class="pl-ball m-vb" style="transform-origin:112px 120px"><circle cx="112" cy="120" r="66" fill="url(#plB)"/><circle cx="90" cy="98" r="15" fill="#fff" opacity=".72"/></g>'
++'<g fill="#7BB8D4"><rect class="pl-row" x="186" y="70" width="104" height="9" rx="2"/><rect class="pl-row" style="animation-delay:80ms" x="186" y="92" width="82" height="9" rx="2" opacity=".72"/><rect class="pl-row" style="animation-delay:160ms" x="186" y="114" width="96" height="9" rx="2" opacity=".54"/><rect class="pl-row" style="animation-delay:240ms" x="186" y="136" width="68" height="9" rx="2" opacity=".38"/></g>'
++'<circle class="pl-dial m-draw m-vb" style="--len:396" cx="112" cy="120" r="84" fill="none" stroke="#4E8FB0" stroke-width="7" stroke-linecap="round" transform="rotate(-90 112 120)"/></svg>',
+
+fudeto:'<svg class="m" viewBox="0 0 320 240"><path class="fd-spiral m-draw" style="--len:820" d="M300 44 C230 6 128 14 76 68 C24 122 34 196 96 214 C158 232 214 190 206 146 C198 102 148 92 128 118 C108 144 126 172 150 168 C168 165 174 148 164 138" fill="none" stroke="#1A1A1A" stroke-width="6" stroke-linecap="round"/><circle class="fd-gold m-vb" cx="164" cy="138" r="9" fill="#EAB308" style="transform-origin:164px 138px"/></svg>',
+
+kichitto:'<svg class="m" viewBox="0 0 320 240"><g class="ki-receipt"><path d="M40 26 L56 16 L72 26 L88 16 L104 26 L120 16 L136 26 L136 130 L40 130 Z" fill="#E97B47"/><rect x="54" y="48" width="68" height="7" fill="#FAFAF8"/><rect x="54" y="68" width="44" height="7" fill="#FAFAF8"/><rect x="54" y="88" width="68" height="7" fill="#FAFAF8"/></g>'
++'<rect class="ki-row" x="40" y="176" width="176" height="26" rx="2" fill="#E97B47" opacity=".9"/>'
++'<g class="ki-fab m-vb" style="transform-origin:262px 58px"><circle cx="262" cy="58" r="22" fill="#E97B47"/><circle cx="262" cy="58" r="8" fill="#FAFAF8"/></g></svg>',
+
+qiflux:'<svg class="m" viewBox="0 0 320 240"><defs><radialGradient id="qfP" cx="28%" cy="26%" r="82%"><stop offset="0" stop-color="#FDF2F1"/><stop offset=".34" stop-color="#E38497"/><stop offset="1" stop-color="#261849"/></radialGradient></defs><g class="qf-breathe m-vb" style="transform-origin:160px 120px"><circle cx="160" cy="120" r="74" fill="url(#qfP)"/></g></svg>',
+
+meishitto:'<svg class="m" viewBox="0 0 320 240"><path d="M36 108 H172 V206 A6 6 0 0 1 166 212 H42 A6 6 0 0 1 36 206 Z" fill="none" stroke="#5254E0" stroke-width="4" opacity=".4"/>'
++'<g class="me-card"><rect x="48" y="60" width="112" height="70" rx="4" fill="#5254E0"/></g>'
++'<g fill="#5254E0"><rect class="me-row" style="animation-delay:.4s" x="192" y="86" width="72" height="12" rx="2"/><rect class="me-row" style="animation-delay:.48s" x="192" y="108" width="58" height="12" rx="2" opacity=".6"/><rect class="me-row" style="animation-delay:.56s" x="192" y="130" width="44" height="12" rx="2" opacity=".34"/></g></svg>',
+
+rythix2048:'<svg class="m" viewBox="0 0 320 240"><defs><linearGradient id="rxN" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#F2C6DC"/><stop offset="1" stop-color="#BBBBFD"/></linearGradient></defs>'
++'<rect class="rx-a" x="40" y="42" width="56" height="56" rx="4" fill="#F2C6DC"/><rect x="104" y="42" width="56" height="56" rx="4" fill="#BBBBFD"/>'
++'<rect class="rx-b m-vb" x="104" y="42" width="56" height="56" rx="4" fill="url(#rxN)" style="transform-origin:132px 70px"/>'
++'<g fill="url(#rxN)">'
++['0','.05s','.1s','.15s','.2s','.25s','.3s','.35s'].map(function(d,i){return '<rect class="rx-bar" style="animation-delay:'+d+'" x="'+(44+i*34)+'" y="'+(200-(i%3===0?66:i%3===1?46:84))+'" width="18" height="'+(i%3===0?66:i%3===1?46:84)+'" rx="2"/>'}).join('')
++'</g></svg>',
+
+tendo:'<svg class="m" viewBox="0 0 320 240"><path class="td-path m-draw" style="--len:940" d="M62 54 L160 54 L160 118 L62 118 L62 182 L160 182 L258 182 L258 118 L258 54" fill="none" stroke="#C9A961" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>'
++'<g fill="#C9A961">'
++[[62,54],[160,54],[160,118],[62,118],[62,182],[160,182],[258,182],[258,118],[258,54]].map(function(p,i){return '<circle class="td-node" style="animation-delay:'+(i*0.26).toFixed(2)+'s" cx="'+p[0]+'" cy="'+p[1]+'" r="10"/>'}).join('')
++'</g></svg>',
+
+xunni:'<svg class="m" viewBox="0 0 320 240"><defs><radialGradient id="xnG" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#F4C430" stop-opacity=".22"/><stop offset="1" stop-color="#F4C430" stop-opacity="0"/></radialGradient></defs>'
++'<g class="xn-shell m-vb" style="transform-origin:160px 118px"><circle cx="160" cy="118" r="96" fill="url(#xnG)"/><circle cx="160" cy="118" r="82" fill="none" stroke="#F4C430" stroke-width="1.5" opacity=".5"/></g>'
++'<polygon class="xn-r1" points="160,52 218,104 196,178 124,178 102,104" fill="none" stroke="#F4C430" stroke-width="4"/>'
++'<polygon class="xn-r2" points="160,74 206,112 186,166 132,158 112,98" fill="none" stroke="#F4C430" stroke-width="4"/>'
++'<g fill="#F4C430"><circle cx="112" cy="222" r="4" opacity=".4"/><circle cx="138" cy="222" r="4" opacity=".4"/><circle cx="164" cy="222" r="4" opacity=".4"/><circle cx="190" cy="222" r="4" opacity=".4"/></g>'
++'<circle class="xn-lens" cx="112" cy="222" r="7" fill="#F4C430"/></svg>',
+
+moonpacket:'<svg class="m" viewBox="0 0 320 240"><circle cx="244" cy="58" r="40" fill="#FFBA00"/>'
++'<g class="mp-coin m-vb" style="transform-origin:106px 132px"><circle cx="106" cy="132" r="17" fill="#FFBA00"/></g>'
++'<rect x="56" y="112" width="100" height="112" rx="4" fill="#E32521"/>'
++'<g class="mp-flap m-vb" style="transform-origin:106px 112px"><path d="M56 112 L156 112 L106 158 Z" fill="#A81A17"/></g></svg>',
+
+idokuta:'<svg class="m" viewBox="0 0 320 240"><defs><filter id="idSh" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="#0F2E3A" flood-opacity=".04"/><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0F2E3A" flood-opacity=".04"/></filter></defs>'
++'<g class="id-card"><rect x="46" y="54" width="150" height="132" rx="24" fill="#fff" stroke="rgba(15,46,58,.08)" stroke-width="1" filter="url(#idSh)"/>'
++'<g class="id-src"><rect x="70" y="86" width="86" height="8" rx="4" fill="#5C7280" opacity=".5"/><rect x="70" y="106" width="62" height="8" rx="4" fill="#5C7280" opacity=".5"/></g>'
++'<g class="id-ja"><rect x="70" y="86" width="102" height="8" rx="4" fill="#04A29E"/><rect x="70" y="106" width="74" height="8" rx="4" fill="#04A29E" opacity=".62"/><rect x="70" y="132" width="52" height="6" rx="3" fill="#037A77" opacity=".4"/></g></g>'
++'<g class="id-hand" fill="none" stroke="#04A29E" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'
++'<path d="M232 128 v-34 a7 7 0 0 1 14 0 v30"/><path d="M246 118 v-40 a7 7 0 0 1 14 0 v40"/><path d="M260 122 v-30 a7 7 0 0 1 14 0 v34"/>'
++'<path d="M232 124 q-14 6 -10 22 l10 30 a18 18 0 0 0 16 10 h24 a18 18 0 0 0 18 -18 v-42"/></g></svg>',
+
+mairi:'<svg class="m" viewBox="0 0 320 240"><g fill="#C95A3F"><rect x="52" y="40" width="180" height="12" rx="2"/><rect x="68" y="70" width="148" height="9" rx="2"/><rect x="76" y="52" width="12" height="140" rx="2"/><rect x="196" y="52" width="12" height="140" rx="2"/></g>'
++'<path class="mr-line m-draw" style="--len:340" d="M14 128 H72 L90 92 L108 156 L126 120 H236" fill="none" stroke="#1A2B3C" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>'
++'<g class="mr-qr m-vb" style="transform-origin:142px 196px"><rect x="118" y="172" width="48" height="48" rx="4" fill="#1A2B3C"/><rect x="128" y="182" width="12" height="12" fill="#FAF8F5"/><rect x="146" y="200" width="10" height="10" fill="#FAF8F5"/>'
++'<circle class="mr-timer m-vb" style="--len:176" cx="142" cy="196" r="28" fill="none" stroke="#C95A3F" stroke-width="3" stroke-dasharray="176" transform="rotate(-90 142 196)"/></g></svg>',
+
+meguru:'<svg class="m" viewBox="0 0 320 240">'
++'<circle class="mg-loop" cx="160" cy="120" r="86" fill="none" stroke="#0E0E10" stroke-width="3" stroke-dasharray="10 14" stroke-linecap="round" opacity=".45"/>'
++'<path class="mg-flap" d="M112 158 V96 a22 22 0 0 1 22 -22 h4 v84 Z" fill="#B51452"/>'
++'<g fill="none" stroke="#0E0E10" stroke-width="9" stroke-linejoin="round" stroke-linecap="round">'
++'<path d="M112 158 V96 a22 22 0 0 1 22 -22 a22 22 0 0 1 22 22 v62"/>'
++'<path d="M156 158 V96 a22 22 0 0 1 22 -22 a22 22 0 0 1 22 22 v50 l-14 12"/></g>'
++'<g fill="#B51452"><circle class="mg-node" cx="160" cy="34" r="5"/><circle class="mg-node" style="animation-delay:1.4s" cx="246" cy="120" r="5"/><circle class="mg-node" style="animation-delay:2.8s" cx="160" cy="206" r="5"/></g></svg>'};
+
+/* ── 12 產品 × 三語（各自撰寫，非直譯；原樣自 canvas 切出） ── */
+var P=[
+{s:"puritylens",n:"PurityLens",jp:"成分をひと目で",tint:"#EEF4F8",st:"live",plat:["iOS"],
+ en:{p:"Scan the jar, know where you stand.",b:"Three tiers, and it avoids the model wherever it can: a barcode hits a lookup table in under a second, known ingredients resolve against a static library at zero cost, and only unfamiliar labels go to AI OCR. Every verdict shows which sources it came from — <b>TFDA, CosIng, CIR, PubChem, AI</b> — in what proportion."},
+ ja:{p:"かざせば、その一本の立ち位置がわかる。",b:"三段構えで、AIはできるだけ呼びません。バーコードは1秒未満で照合表に、既知の成分はコストゼロの静的ライブラリに。未知のラベルだけがAI-OCRに回ります。判定にはどの情報源が何割かを必ず表示します —— <b>TFDA・CosIng・CIR・PubChem・AI</b>。"},
+ zh:{p:"掃一下，就知道這罐對你如何。",b:"三階查找，能不叫 AI 就不叫：條碼不到一秒直查對照表，已知成分走零成本的靜態資料庫，只有陌生標籤才送進 AI OCR。每一個判定都揭露它的來源佔比 —— <b>TFDA、CosIng、CIR、PubChem、AI</b>。"}},
+
+{s:"fudeto",n:"Fudeto",jp:"一筆書き",tint:"#FAFAFA",flat:1,st:"live",plat:["iOS"],
+ en:{p:"Euler's 1736 bridges, as a morning habit.",b:"The mechanism is 290 years old and we say so — what we compete on is the packaging, not the maths. One puzzle a day worldwide, generated live from a date hash with no art assets, five rarity tiers, and a share card built to leave the app. No gradients, no drop shadows: the drawing is the product."},
+ ja:{p:"290年前のオイラーを、朝の習慣に。",b:"仕組みは新しくありません。競っているのは仕組みではなく、その包み方です。世界共通の一日一問を日付ハッシュから即時生成し、画像素材は一枚も持ちません。5段階のレアリティ、共有カードはアプリの外へ出るために。グラデーションも影も使いません。線そのものが商品です。"},
+ zh:{p:"290 年前的歐拉七橋，變成每天早上的習慣。",b:"機制不是新的，我們也直說：競爭的是包裝，不是機制。全球同一題，由日期雜湊即時生成，零美術資源；五階稀有度，分享卡是為了讓它離開 App 而做。不用漸層、不用陰影 —— 那條線本身就是產品。"}},
+
+{s:"kichitto",n:"Kichitto",jp:"きちっと",tint:"#FBEFE8",st:"live",plat:["iOS JP"],
+ en:{p:"A receipt goes in; a row in your own Sheet comes out.",b:"The emphasis is on <b>your own</b>: output lands in your Drive and Sheets, never inside a closed database, with 8% and 10% consumption tax split automatically. Near-duplicate receipts are never merged — they append with a flag, because registration numbers aren't guaranteed unique and a silent merge eats real data."},
+ ja:{p:"レシートを一枚。あなたのシートに一行。",b:"大事なのは「あなたの」という点です。出力先はあなたのDriveとSheets。閉じたデータベースには入りません。8%と10%の消費税は自動で分けます。似たレシートを自動で統合することは決してしません。登録番号は一意とは限らず、黙って統合すれば本物のデータが消えるからです。"},
+ zh:{p:"進去一張收據，出來一列你自己的表格。",b:"重點是「你自己的」：輸出直接落進你的 Drive 與 Sheets，不進任何封閉資料庫，8% 與 10% 消費稅自動拆開。近似的重複收據永遠不自動合併，一律附加並標記 —— 登錄番號不保證唯一，靜默合併會吃掉真的資料。"}},
+
+{s:"qiflux",n:"QiFlux",jp:"静かな記録",tint:"#F6EDF0",st:"live",plat:["iOS"],
+ en:{p:"A cycle app that doesn't raise its voice.",b:"No streaks, no FOMO, no astrology. At least 60% of every screen is empty, and if something feels crowded we delete it rather than rearrange it. We never hide the cancel button."},
+ ja:{p:"大きな声を出さない、周期アプリ。",b:"連続記録もFOMOも占いもありません。画面の6割以上は余白のまま。詰まって見えたら、並べ替えるのではなく削ります。解約ボタンを隠すことは、決してしません。"},
+ zh:{p:"一個不對你喊叫的週期 App。",b:"沒有連續紀錄挑戰，沒有 FOMO，沒有占星。每一屏至少留六成空白；哪裡感覺太滿，我們是刪掉，不是重排。我們永遠不把取消訂閱的按鈕藏起來。"}},
+
+{s:"meishitto",n:"Meishitto",jp:"名刺っと",tint:"#EDEDFB",st:"live",plat:["iOS","Android"],
+ en:{p:"The card is scanned on your phone, and stays there.",b:"A three-stage funnel: on-device ML Kit first and free, a 0.75 confidence threshold, and only what fails it is sent to a cloud model. Animations are capped at 400ms and drop to zero under reduce-motion — large motion can trigger vertigo in people with vestibular disorders, and that reason is written in the code."},
+ ja:{p:"読み取りは端末の中で。データもそこに。",b:"三段の絞り込みです。まず無料の端末内ML Kit、信頼度のしきい値は0.75、それを下回ったものだけがクラウドのモデルへ。アニメーションは上限400ms、reduce motion時はゼロ。大きな動きは前庭障害のある方にめまいを起こしうる —— その理由をコードのコメントに残しています。"},
+ zh:{p:"辨識在你的手機裡完成，資料也留在那裡。",b:"三層漏斗：先跑裝置端免費的 ML Kit，信心門檻 0.75，只有沒過的才送雲端模型。動畫上限 400ms，開啟減少動態時歸零 —— 大位移可能誘發前庭功能障礙者暈眩，這個理由就寫在程式碼註解裡。"}},
+
+{s:"rythix2048",n:"Rythix 2048",jp:"音で解く 2048",tint:"#F6EEF4",st:"live",plat:["iOS","Android"],
+ en:{p:"Every move triggers a note.",b:"The soundtrack is generated on your device as you play, so no two games sound alike — nothing pre-recorded, nothing streamed. Mute it and you still have a perfectly good numbers puzzle: the music is addition, never a requirement."},
+ ja:{p:"一手ごとに、音が鳴る。",b:"曲は遊びながら端末上で生成されます。録音済みの音源も配信もないので、同じ一局は二度とありません。消音にすれば、ただの良い数字パズルとして成立します。音楽は足し算であって、条件ではありません。"},
+ zh:{p:"每走一步，就發一個音。",b:"配樂在你的裝置上即時生成，沒有預錄、沒有串流，所以每一局聽起來都不一樣。靜音之後，它依然是個好玩的數字謎題 —— 音樂是加法，不是門檻。"}},
+
+{s:"tendo",n:"Tendo",jp:"一日一道",tint:"#F5F1E8",flat:1,st:"live",plat:["Android"],
+ en:{p:"Every point, exactly once.",b:"Fudeto walks edges, which is P — parity of degrees tells you the answer. Tendo walks vertices, which is NP-complete: there is no formula, only intuition and backtracking, and realising that is the aha. Fully playable with Switch Control, with VoiceOver announcing each vertex. Solve it and the Magic Moment runs: 2.4 seconds, every vertex lighting gold in the order you visited it."},
+ ja:{p:"すべての点を、ちょうど一度ずつ。",b:"Fudetoは辺をたどるP問題。次数の偶奇で解けます。Tendoは点をたどるNP完全 —— 公式はなく、直感とバックトラックだけ。「公式がない」と気づく瞬間そのものが、この作品の山場です。スイッチコントロールだけで最後まで遊べ、VoiceOverが頂点を読み上げます。解けた瞬間、2.4秒のMagic Moment：訪れた順に、頂点がひとつずつ金に灯ります。"},
+ zh:{p:"每個點，剛好走一次。",b:"Fudeto 走邊，是 P 問題，看度數的奇偶就能判。Tendo 走點，是 NP-complete：沒有通解公式，只能靠直覺與回溯 —— 而「發現沒有公式」本身就是那個啊哈。單開關（Switch Control）可完整遊玩，VoiceOver 會逐頂點朗讀。解開的瞬間跑 2.4 秒的 Magic Moment：每個頂點按你走過的順序依序亮金。"}},
+
+{s:"xunni",n:"XunNi",jp:"尋你",tint:"#141210",st:"live",plat:["Android","Web"],
+ en:{p:"Same two charts, a different lens, a different reading.",b:"Star Bonds reads a pair of charts through one of four relationships — love, family, work, or the people around you — and the interpretation logic changes with the lens, not just the wording. The Voice of Mercury explains a public figure's best-known line by their Mercury placement, so a page reads as a reading rather than a database lookup."},
+ ja:{p:"同じ二枚の盤も、レンズを替えれば別の読みになる。",b:"Star Bondsは二枚の命盤を、恋愛・家族・仕事・人づきあいという四つの関係のいずれかを通して読みます。変わるのは言い回しではなく、解釈のロジックそのものです。The Voice of Mercuryは、著名人の名言をその水星の配置から説き明かします。データベースの検索結果ではなく、読み物であるために。"},
+ zh:{p:"同樣兩張盤，換一副鏡片就換一套讀法。",b:"Star Bonds 把兩張命盤放在愛情、家人、工作、身邊的人四種關係之一底下解讀 —— 換的是解釋邏輯，不只是措辭。The Voice of Mercury 用名人的水星配置去解釋他最著名的那句話，讓一頁讀起來像一次解讀，而不是一次資料庫查詢。"}},
+
+{s:"moonpacket",n:"moonpacket",jp:"月へ、紅包を",tint:"#0C1E3A",st:"live",plat:["Web","Telegram"],
+ en:{p:"The red packet, as Web3's everyday gesture.",b:"Web3 has airdrops that happen once and DeFi that happens rarely; what it lacks is something people do casually and often. A red packet is that hook — non-custodial, multi-chain, dropped straight into a Telegram group. The referral loop is capped on purpose: strict new-friend checks, 100 per person, ten million globally."},
+ ja:{p:"紅包を、Web3の日常の動作に。",b:"Web3にはエアドロップという一度きりと、DeFiという低頻度・高摩擦しかなく、気軽に何度もやることが欠けています。そのフックが紅包です。ノンカストディアル、マルチチェーン、Telegramのグループにそのまま投げ込めます。紹介の輪には意図的な上限を —— 厳格な新規判定、1人100件、全体で1,000万件まで。"},
+ zh:{p:"把紅包變成 Web3 的日常動作。",b:"Web3 有一次性的空投，有低頻高摩擦的 DeFi，缺的是「人們會隨手、常常做」的那件事。紅包就是那個鉤子：非託管、多鏈，直接丟進 Telegram 群組。推薦迴圈刻意封頂 —— 嚴格的新朋友判定、每人上限 100、全球上限一千萬。"}},
+
+{s:"idokuta",n:"iDokuta",jp:"言葉を越える診療",tint:"#F8FBFB",st:"dev",plat:[],
+ en:{p:"Bridge the language gap with Japanese healthcare.",b:"Type how you feel in your own language, get it back as clear medical Japanese with the key terms explained, then hand your phone to the person at the clinic. Five languages. <b>A language tool, not medical advice — always consult a doctor.</b>"},
+ ja:{p:"日本の医療との、言葉の隔たりを埋める。",b:"まず母語で、いまの症状をそのまま書く。すると、要点の医療用語に説明のついた、はっきりした日本語が返ってきます。あとはその画面を、受付の方に見せるだけ。5言語対応。<b>これは言葉の道具であり、医療上の助言ではありません。必ず医師にご相談ください。</b>"},
+ zh:{p:"把你和日本醫療之間的語言隔閡接起來。",b:"先用你自己的語言寫下哪裡不舒服，它會換成清楚的醫療日文，關鍵術語附上解釋；然後把手機遞給診所的人看就行。支援五種語言。<b>這是語言工具，不是醫療建議 —— 請務必諮詢醫師。</b>"}},
+
+{s:"mairi",n:"Mairi",jp:"毎日のカルテ",tint:"#FAF8F5",st:"dev",plat:[],
+ en:{p:"What you log daily, usable on the day you're seen.",b:"Japan has plenty of single-purpose PHRs, but none that manage integration, daily use, and sharing at the clinic all at once. Records are handed over as a two-layer QR that hard-expires in six hours and cannot be renewed — compatible with the pharmacy e-薬SCAN standard, where the usual medication notebook offers a permanent code."},
+ ja:{p:"毎日つけたものが、受診の日に効く。",b:"日本には単機能のPHRは数あれど、連携・毎日の記録・診察での共有をひと続きにしたものがありません。受け渡しは二層QRで、6時間で強制失効し、延長はできません。薬局のe薬SCAN規格に準拠しています —— 従来のお薬手帳が永続QRであるのに対して。"},
+ zh:{p:"每天記的那些，在就診那天派得上用場。",b:"日本不缺單點功能的 PHR，缺的是把「整合、每日使用、就診共享」串成一條的那一個。紀錄以雙層 QR 交出，六小時硬過期、不可續期，相容藥局 e薬SCAN 標準 —— 對照之下，一般的お薬手帳給的是永久 QR。"}},
+
+{s:"meguru",n:"Meguru",jp:"めぐる",tint:"#FAF7F2",nophone:1,border:1,st:"ops",plat:["Internal"],
+ en:{p:"Listing, order, support, payout — one loop.",b:"Around forty resale-commerce microservices, consolidated into a single platform. Human-in-the-loop is structural: reconciliation differences only ever produce a proposal that a person approves, and refunds, complaints, and angry messages are never answered automatically."},
+ ja:{p:"出品・受注・サポート・支払いが、ひと巡り。",b:"およそ40のリセール系マイクロサービスを、ひとつのプラットフォームに畳みました。human-in-the-loopは構造として組み込んであります。対帳の差異は提案を出すだけで、調整するのは必ず人。返金・クレーム・強い怒りには、自動では返しません。"},
+ zh:{p:"上架、接單、客服、撥款，收成一圈。",b:"把散在約四十個微服務裡的轉售電商流程，收斂成單一平台。human-in-the-loop 是結構性的：對帳差異只產生提案，動手調整的一定是人；退款、客訴與高怒氣訊息，絕不自動回覆。"}}
+];
+
+  /* ── registry 對帳：兩個真相源必須完全對得上，對不上就大聲失敗 ──
+     CRZ_I18N.work 決定產品數與 modal 索引；P 決定文案與 motif。
+     任一邊多／少一個產品，靜默渲染出殘缺清單比整區壞掉更難被發現。 */
+  function slugOf(w) {
+    var m = /([^/]+)\.webp$/.exec(w.img || '');
+    return m ? m[1] : null;
+  }
+  var byIndex = {};
+  REG.forEach(function (w, i) {
+    var s = slugOf(w);
+    if (s) byIndex[s] = i;
+  });
+  var missing = P.filter(function (p) { return !(p.s in byIndex); }).map(function (p) { return p.s; });
+  var extra = Object.keys(byIndex).filter(function (s) {
+    return !P.some(function (p) { return p.s === s; });
+  });
+  if (missing.length || extra.length) {
+    console.error('[work-v3] registry 對帳失敗 — P 缺:', missing, '/ registry 多:', extra);
+  }
+
+  function cardHTML(p) {
+    var t = p[L];
+    var idx = byIndex[p.s];
+    var reg = idx === undefined ? null : REG[idx];
+    var plat = p.plat.length
+      ? p.plat.map(function (b) { return '<b>' + b + '</b>'; }).join('')
+      : '<b class="none">' + UNRELEASED[L] + '</b>';
+    // 手機框是 9:19.5，要放的是**直立**截圖（assets/shots/*.webp，由
+    // scripts/build-shots.mjs 產出），不是 1600×1200 的橫向主視覺海報。
+    // 路徑前綴沿用 registry 的 img —— 它已經帶了正確的 locale 相對路徑。
+    var shot = reg ? reg.img.replace(/assets\/kv\/[^/]+$/, 'assets/shots/' + p.s + '.webp') : null;
+    var phone = (p.nophone || !shot)
+      ? ''
+      : '<div class="stage__phone"><i><img src="' + shot + '" alt="' + (reg.alt || p.n) +
+        '" loading="lazy" decoding="async" width="480" height="1040" /></i></div>';
+    return '<article class="card work-card" data-work-index="' + idx + '" tabindex="0" role="button" aria-label="Open ' + p.n + '">'
+      + '<div class="stage" style="--tint:' + p.tint + '"' + (p.flat ? ' data-flat="1"' : '') + (p.nophone ? ' data-nophone="1"' : '') + (p.border ? ' data-border="1"' : '') + '>' + M[p.s] + phone + '</div>'
+      + '<div class="card__meta"><h3 class="card__name"><em>' + p.n + '</em><i class="dot dot--' + p.st + '"></i></h3>'
+      + '<span class="card__jp">' + p.jp + '</span>'
+      + '<p class="card__pos">' + t.p + '</p><p class="card__body">' + t.b + '</p>'
+      + '<div class="plat">' + plat + '</div></div></article>';
+  }
+
+  var ledeEl = document.getElementById('work-lede');
+  var legendEl = document.getElementById('work-legend');
+  if (ledeEl) ledeEl.textContent = LEDE[L];
+  if (legendEl) {
+    legendEl.innerHTML = LEGEND[L].map(function (x) {
+      return '<span><i class="dot dot--' + x[0] + '"></i>' + x[1] + '</span>';
+    }).join('');
+  }
+  host.innerHTML = P.map(cardHTML).join('');
+
+  /* ── reveal：卡片進入視窗才播它自己的動畫 ──
+     沿用 canvas 的 scroll 驅動寫法。site.js 的 reveal 也是 scroll 驅動，
+     理由相同：IntersectionObserver 在部分瀏覽器被節流時會漏觸發。 */
+  var cards = [].slice.call(host.querySelectorAll('.card'));
+  var pending = cards.slice();
+  function check() {
+    var vh = window.innerHeight;
+    for (var i = pending.length - 1; i >= 0; i--) {
+      var el = pending[i], r = el.getBoundingClientRect();
+      if (r.top < vh * 0.9 && r.bottom > vh * 0.05) {
+        el.classList.add('is-in');
+        el.querySelector('.stage').classList.add('is-live');
+        pending.splice(i, 1);
+      }
+    }
+  }
+  window.addEventListener('scroll', check, { passive: true });
+  window.addEventListener('resize', check);
+  var timer = setInterval(function () { check(); if (!pending.length) clearInterval(timer); }, 300);
+  check();
+
+  cards.forEach(function (c) {
+    var stage = c.querySelector('.stage');
+    function replay() {
+      stage.classList.remove('is-live');
+      void stage.offsetWidth;
+      stage.classList.add('is-live');
+    }
+    c.addEventListener('mouseenter', replay);
+    c.addEventListener('focus', replay);
+  });
+})();

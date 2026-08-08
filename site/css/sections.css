@@ -664,3 +664,287 @@ section { position: relative; }
 .field .req,
 .field.is-error label,
 .join__formnote.is-sent { color: var(--accent-deep); }
+
+
+/* =====================  WORK v3 — per-product motif cards  =====================
+   來源：Claude Design 專案 dbbc5234-c185-49b2-97b2-09bf8b59aaf0 / `Work v3.html`
+   （2026-08-09 以 DesignSync get_file 取回，truncated:false）。
+
+   全部 scope 在 #work 之下：.card / .stage / .dot / .m 這些泛用 class 若放全域
+   會汙染其他 section。DOM 由 js/work-v3.js 生成。
+
+   canvas 原檔自帶一份 :root token，**刻意不移植** —— site/css/tokens.css 是唯一
+   真相源。兩邊逐值比對後的對映（值相同，只是名稱不同）：
+     --ec  → --ease-cond      cubic-bezier(.22,1,.36,1)
+     --ei  → --ease-in-cond   cubic-bezier(.6,.04,.98,.34)
+     --d1  → --dur-1  360ms   --d2 → --dur-2  620ms   --d3 → --dur-3  1100ms
+     --display/--serif/--mono/--jp → --font-display/--font-serif/--font-mono/--font-jp
+   =============================================================================== */
+
+#work .work__lede {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(19px, 1.6vw, 25px);
+  color: var(--ink-70);
+  max-width: 38ch;
+  line-height: 1.4;
+  margin: 0 0 clamp(24px, 3.4vh, 36px);
+}
+#work .work__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin: 0 0 clamp(28px, 4vh, 44px);
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-40);
+}
+#work .work__legend span { display: inline-flex; align-items: center; gap: 7px; }
+
+#work .dot { width: 7px; height: 7px; border-radius: var(--r-pill); flex: none; }
+#work .dot--live { background: var(--ink); }
+#work .dot--dev { background: transparent; box-shadow: inset 0 0 0 1.5px var(--accent); }
+#work .dot--ops { background: var(--accent); }
+
+#work-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(32px, 3.4vw, 52px) clamp(18px, 2vw, 32px);
+}
+#work .card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  cursor: pointer;
+  outline: none;
+}
+
+#work .stage {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--r-3);
+  overflow: hidden;
+  background: var(--tint);
+  border: 1px solid var(--line-soft);
+  transition: transform var(--dur-2) var(--ease-cond);
+}
+#work .card:hover .stage { transform: translateY(-3px); }
+#work .card:focus-visible .stage { outline: 2px solid var(--accent); outline-offset: 3px; }
+#work .m { position: absolute; left: 0; top: 0; bottom: 0; width: 70%; height: 100%; display: block; overflow: visible; }
+#work .stage[data-nophone="1"] .m { width: 100%; }
+#work .stage[data-border="1"] { border: 1px solid rgba(14, 14, 16, .14); box-shadow: none; }
+
+#work .stage__phone {
+  position: absolute;
+  right: 6.5%;
+  bottom: -14%;
+  width: 23%;
+  aspect-ratio: 9 / 19.5;
+  border-radius: var(--r-3);
+  background: var(--ink);
+  padding: 2px;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.45) inset,
+    -1px -1px 2px rgba(255,255,255,.30),
+    0 1px 1px rgba(18,17,16,.20),
+    0 6px 10px -4px rgba(18,17,16,.22),
+    0 20px 34px -12px rgba(18,17,16,.30);
+  transition: transform var(--dur-2) var(--ease-cond), box-shadow var(--dur-2) var(--ease-cond);
+}
+#work .card:hover .stage__phone { transform: translateY(-6px); }
+/* fudeto + tendo 的品牌規範：不用投影、不用漸層 */
+#work .stage[data-flat="1"] .stage__phone { box-shadow: 0 0 0 1px rgba(18,17,16,.16); }
+#work .stage__phone i {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+  overflow: hidden;
+  background:
+    repeating-linear-gradient(-45deg, var(--paper-2) 0 1px, transparent 1px 9px),
+    var(--paper);
+}
+#work .stage__phone img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+#work .card__meta { margin-top: 18px; }
+#work .card__name {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 19px;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+#work .card__name em { font-style: normal; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+#work .card__jp {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--font-jp);
+  font-weight: 400;
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
+  color: var(--ink-40);
+}
+#work .card__pos {
+  margin: 12px 0 0;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 16px;
+  color: var(--ink);
+  line-height: 1.35;
+}
+#work .card__body {
+  margin: 10px 0 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 13.5px;
+  line-height: 1.62;
+  color: var(--ink-55);
+  max-width: 44ch;
+}
+#work .card__body b { font-weight: 500; color: var(--ink-70); }
+
+/* 日文／中文：明體斜體在 CJK 不成立，改用 JP 字族 + 較鬆的行距 */
+:root[lang^="ja"] #work .card__body, :root[lang^="zh"] #work .card__body,
+:root[lang^="ja"] #work .card__pos,  :root[lang^="zh"] #work .card__pos,
+:root[lang^="ja"] #work .work__lede, :root[lang^="zh"] #work .work__lede {
+  font-family: var(--font-jp);
+  font-style: normal;
+  line-height: 1.75;
+}
+:root[lang^="ja"] #work .card__pos, :root[lang^="zh"] #work .card__pos { font-weight: 500; font-size: 15px; }
+:root[lang^="ja"] #work .work__lede, :root[lang^="zh"] #work .work__lede { font-weight: 400; line-height: 1.6; }
+
+#work .plat { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 14px; }
+#work .plat b {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 9.5px;
+  letter-spacing: 0.05em;
+  color: var(--ink-55);
+  border: 1px solid var(--line);
+  border-radius: var(--r-1);
+  padding: 3px 6px;
+}
+#work .plat b.none { color: var(--ink-25); border-style: dashed; }
+
+#work .card {
+  opacity: 0;
+  filter: blur(9px);
+  transform: translateY(18px);
+  transition:
+    opacity var(--dur-3) var(--ease-cond),
+    filter var(--dur-3) var(--ease-cond),
+    transform var(--dur-3) var(--ease-cond);
+}
+#work .card.is-in { opacity: 1; filter: none; transform: none; }
+
+/* ══════ motifs — 每個都是該產品自己的核心動作 ══════ */
+#work .m * { transform-box: fill-box; }
+#work .m-vb { transform-box: view-box; }
+#work .m-draw { stroke-dasharray: var(--len); stroke-dashoffset: var(--len); }
+
+/* puritylens — 成分列浮現，收斂成一個分數環 */
+#work .is-live .pl-row { animation: plRow var(--dur-2) var(--ease-cond) both; }
+@keyframes plRow { 0% { opacity: 0; transform: translateX(-10px); } 40%, 62% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateX(26px) scale(.9); } }
+#work .is-live .pl-dial { animation: draw var(--dur-3) var(--ease-cond) both; animation-delay: var(--dur-2); }
+#work .is-live .pl-ball { animation: plBall var(--dur-3) var(--ease-cond) both; }
+@keyframes plBall { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: scale(1); } }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+
+/* fudeto — 等角螺旋 800ms 自畫，收在那個金點上 */
+#work .is-live .fd-spiral { animation: draw 800ms var(--ease-cond) both; }
+#work .is-live .fd-gold { animation: fdGold var(--dur-1) var(--ease-cond) both; animation-delay: 760ms; }
+@keyframes fdGold { from { opacity: 0; transform: scale(.4); } to { opacity: 1; transform: scale(1); } }
+
+/* kichitto — 按快門、收據落下、成為帳上的一列 */
+#work .is-live .ki-fab { animation: kiFab var(--dur-1) var(--ease-cond) both; }
+@keyframes kiFab { 0%, 18% { transform: scale(1); } 34% { transform: scale(.86); } 100% { transform: scale(1); } }
+#work .is-live .ki-receipt { animation: kiFall var(--dur-3) var(--ease-cond) both; animation-delay: var(--dur-1); }
+@keyframes kiFall { 0% { opacity: 0; transform: translateY(-52px); } 44% { opacity: 1; transform: translateY(0); } 80%, 100% { opacity: 0; transform: translateY(64px) scaleY(.24); } }
+#work .is-live .ki-row { animation: kiRow var(--dur-2) var(--ease-cond) both; animation-delay: 1.16s; transform-origin: left center; }
+@keyframes kiRow { from { opacity: 0; transform: scaleX(.2); } to { opacity: 1; transform: scaleX(1); } }
+
+/* qiflux — 標記只是在呼吸 */
+#work .is-live .qf-breathe { animation: qfB 5.2s var(--ease-cond) infinite; }
+@keyframes qfB { 0%, 100% { transform: scale(1); opacity: .92; } 50% { transform: scale(1.045); opacity: 1; } }
+
+/* meishitto — 卡片滑進名片夾。400ms 上限，reduce-motion 時歸零 */
+#work .is-live .me-card { animation: meIn 400ms var(--ease-cond) both; }
+@keyframes meIn { from { transform: translate(-46px, -26px) rotate(-7deg); opacity: 0; } to { transform: none; opacity: 1; } }
+#work .is-live .me-row { animation: meRow var(--dur-1) var(--ease-cond) both; }
+@keyframes meRow { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: none; } }
+
+/* rythix 2048 — 滑動 → 合併 → 發聲，照這個因果順序 */
+#work .is-live .rx-a { animation: rxA 1.6s var(--ease-cond) infinite; }
+@keyframes rxA { 0% { transform: none; } 26%, 100% { transform: translateX(56px); } }
+#work .is-live .rx-b { animation: rxB 1.6s var(--ease-cond) infinite; }
+@keyframes rxB { 0%, 26% { opacity: 0; transform: scale(.6); } 34% { opacity: 1; transform: scale(1.08); } 44%, 100% { opacity: 1; transform: scale(1); } }
+#work .is-live .rx-bar { animation: rxBar 1.6s var(--ease-cond) infinite; }
+#work .rx-bar { transform-origin: left bottom; }
+@keyframes rxBar { 0%, 34% { transform: scaleY(.12); } 46% { transform: scaleY(1); } 70%, 100% { transform: scaleY(.18); } }
+
+/* tendo — Magic Moment：頂點按走訪順序在 2.4 秒內依序亮起 */
+#work .is-live .td-path { animation: draw 2.4s linear both; }
+#work .is-live .td-node { animation: tdNode var(--dur-1) var(--ease-cond) both; }
+@keyframes tdNode { from { fill-opacity: .16; } to { fill-opacity: 1; } }
+
+/* xunni — 外殼呼吸；鏡片切換，雷達跟著重讀一次 */
+#work .is-live .xn-shell { animation: xnShell 6s var(--ease-cond) infinite; }
+@keyframes xnShell { 0%, 100% { opacity: .45; transform: scale(1); } 50% { opacity: .9; transform: scale(1.03); } }
+#work .is-live .xn-r1 { animation: xnR1 4.8s var(--ease-cond) infinite; }
+@keyframes xnR1 { 0%, 38% { opacity: 1; } 50%, 88% { opacity: 0; } 100% { opacity: 1; } }
+#work .is-live .xn-r2 { animation: xnR2 4.8s var(--ease-cond) infinite; }
+@keyframes xnR2 { 0%, 38% { opacity: 0; } 50%, 88% { opacity: 1; } 100% { opacity: 0; } }
+#work .is-live .xn-lens { animation: xnLens 4.8s steps(1) infinite; }
+@keyframes xnLens { 0%, 44% { transform: none; } 50%, 94% { transform: translateX(26px); } 100% { transform: none; } }
+
+/* moonpacket — 封口掀開，獎勵飛出來 */
+#work .is-live .mp-flap { animation: mpFlap var(--dur-3) var(--ease-cond) both; }
+@keyframes mpFlap { 0% { transform: rotateX(0); } 55%, 100% { transform: rotateX(-158deg); } }
+#work .is-live .mp-coin { animation: mpCoin var(--dur-3) var(--ease-cond) both; animation-delay: var(--dur-1); }
+@keyframes mpCoin { from { opacity: 0; transform: translateY(16px) scale(.7); } to { opacity: 1; transform: translateY(-64px) scale(1); } }
+
+/* idokuta — 你的話溶成醫療日文，然後把手機遞過去 */
+#work .is-live .id-src { animation: idSrc var(--dur-2) var(--ease-cond) both; }
+@keyframes idSrc { 0% { opacity: 1; filter: blur(0); } 100% { opacity: 0; filter: blur(4px); } }
+#work .is-live .id-ja { animation: idJa var(--dur-2) var(--ease-cond) both; animation-delay: var(--dur-1); }
+@keyframes idJa { from { opacity: 0; filter: blur(4px); } to { opacity: 1; filter: blur(0); } }
+#work .is-live .id-card { animation: idPass var(--dur-3) var(--ease-cond) both; animation-delay: var(--dur-2); }
+@keyframes idPass { from { transform: none; } to { transform: translateX(34px); } }
+#work .is-live .id-hand { animation: idHand var(--dur-3) var(--ease-cond) both; animation-delay: var(--dur-2); }
+@keyframes idHand { from { transform: translateX(22px); opacity: .35; } to { transform: none; opacity: 1; } }
+
+/* mairi — 紀錄通過閘門，然後閘門在六小時後關上 */
+#work .is-live .mr-line { animation: draw var(--dur-3) var(--ease-cond) both; }
+#work .is-live .mr-qr { animation: mrQR 5.6s var(--ease-cond) infinite; }
+@keyframes mrQR { 0%, 8% { opacity: 0; transform: scale(.8); } 18%, 62% { opacity: 1; transform: none; } 82%, 100% { opacity: 0; transform: scale(.92); } }
+#work .is-live .mr-timer { animation: mrTimer 5.6s linear infinite; }
+@keyframes mrTimer { 0%, 18% { stroke-dashoffset: 0; } 72%, 100% { stroke-dashoffset: var(--len); } }
+
+/* meguru — 一個閉環，持續流動；洋紅只在節點出現 */
+#work .is-live .mg-loop { animation: mgFlow 4.4s linear infinite; }
+@keyframes mgFlow { to { stroke-dashoffset: -88; } }
+#work .is-live .mg-node { animation: mgNode 4.4s var(--ease-cond) infinite; }
+@keyframes mgNode { 0%, 72%, 100% { opacity: .34; } 80% { opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  #work .card { opacity: 1; filter: none; transform: none; }
+  #work .m *, #work .is-live .m * { animation: none !important; }
+  #work .m-draw { stroke-dashoffset: 0; }
+  #work .mp-flap { transform: rotateX(-158deg); }
+}
+
+@media (max-width: 1100px) { #work-cards { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) {
+  #work-cards { grid-template-columns: 1fr; gap: 44px; }
+  #work .card__pos { font-size: 15px; }
+  #work .stage__phone { width: 26%; }
+}

@@ -42,6 +42,22 @@ site/js/i18n/en.js（CRZ_I18N.work）                                          �
 Claude Design canvas: https://claude.ai/design/p/dbbc5234-c185-49b2-97b2-09bf8b59aaf0
 （2026-06-10 建立 — 「Materialize」概念重設計：desktop 1440 + mobile 390、tokens、atoms、hero scroll prototype）
 
+### 取件：用 `DesignSync` MCP，不要再繞路（2026-08-09 實證）
+
+```
+DesignSync method="list_files" projectId="dbbc5234-c185-49b2-97b2-09bf8b59aaf0"
+DesignSync method="get_file"   projectId="…" path="Work v3.html"   → truncated:false，256 KiB 內完整
+```
+
+`DesignSync` 是**唯一可靠**的取件路徑，一次呼叫拿到完整原始碼。
+以下四條**全部試過、全部失敗**，不要重踩：① Share→Export 下載落在 macOS TCC 擋住的
+Chrome profile（`mdfind` 在此環境完全失效）② canvas 簽章 URL curl → 403
+③ 瀏覽器 POST/導航到 localhost → CSP `connect-src` + Private Network Access 雙重擋下
+④ 從 chat DOM 分段讀取 → 單次截斷 ~1200 字元、且安全過濾器會擋掉 `content="a=b, c=d"` 這類字串。
+
+**subagent 沒有這個工具** —— 它是 orchestrator 專屬的 deferred tool。要 agent 接軌設計檔，
+先由 orchestrator 取回落檔，再把本機路徑交給它。
+
 ## 設計系統契約（送 brief 前必做）
 
 真相源：`docs/design-system/tokens/crealize.tokens.json`（DTCG，自 `tokens.css` 機械萃取）。
