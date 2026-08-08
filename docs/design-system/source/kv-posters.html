@@ -65,7 +65,7 @@
   .stage{position:relative;transform:rotate(-7deg) translateY(10px)}
   /* 裝置：真實截圖 + 邊緣高光 + 深落影（帶品牌色調） */
   .phone{
-    width:466px;height:980px;border-radius:54px;overflow:hidden;
+    width:466px;border-radius:54px;overflow:hidden;
     background:#0A0A0B;padding:11px;box-sizing:border-box;position:relative;
     box-shadow:
       inset 0 0 0 1px rgba(255,255,255,.22),
@@ -73,16 +73,16 @@
       0 70px 110px rgba(0,0,0,.45),
       0 0 120px -20px var(--glow);
   }
-  .phone img{width:100%;height:100%;object-fit:cover;object-position:top center;
-             display:block;border-radius:44px}
+    /* 外框比例已逐張對齊截圖，故用 fill 不裁切（原為 cover + top center，會切掉底部） */
+  .phone img{width:100%;height:100%;object-fit:fill;display:block;border-radius:44px}
   /* 反射：裝置下方的鏡射淡出 */
   .reflect{
-    position:absolute;left:0;top:100%;width:466px;height:280px;
+    position:absolute;left:0;top:100%;width:466px;
     border-radius:54px;overflow:hidden;transform:scaleY(-1);opacity:.20;
     -webkit-mask-image:linear-gradient(to top, transparent 0%, #000 96%);
     mask-image:linear-gradient(to top, transparent 0%, #000 96%);
   }
-  .reflect img{width:466px;height:980px;object-fit:cover;object-position:top center;display:block}
+  .reflect img{width:466px;object-fit:fill;display:block}
 </style></head><body>
 
 <div class="kv" id="kv-puritylens" style="--bg1:#EEF3F8;--bg2:#C6D4E2;--ink:#1B2A38;--glow:#9AB0C6;--beam:#5B7C9E">
@@ -95,8 +95,10 @@
   </div>
   <div class="right">
     <div class="stage">
-      <div class="phone"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/puritylens.png" alt=""></div>
-      <div class="reflect"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/puritylens.png" alt=""></div>
+      <div class="phone" style="height:987px"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/puritylens.png" alt=""></div>
+      <div class="reflect" style="height:276px">
+        <img src="file:///Users/yves/Projects/crealize/site-assets/shots/puritylens.png" style="height:987px" alt="">
+      </div>
     </div>
   </div>
 </div>
@@ -111,8 +113,10 @@
   </div>
   <div class="right">
     <div class="stage">
-      <div class="phone"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/fudeto.png" alt=""></div>
-      <div class="reflect"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/fudeto.png" alt=""></div>
+      <div class="phone" style="height:987px"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/fudeto.png" alt=""></div>
+      <div class="reflect" style="height:276px">
+        <img src="file:///Users/yves/Projects/crealize/site-assets/shots/fudeto.png" style="height:987px" alt="">
+      </div>
     </div>
   </div>
 </div>
@@ -127,13 +131,15 @@
   </div>
   <div class="right">
     <div class="stage">
-      <div class="phone"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/kichitto.png" alt=""></div>
-      <div class="reflect"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/kichitto.png" alt=""></div>
+      <div class="phone" style="height:987px"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/kichitto.png" alt=""></div>
+      <div class="reflect" style="height:276px">
+        <img src="file:///Users/yves/Projects/crealize/site-assets/shots/kichitto.png" style="height:987px" alt="">
+      </div>
     </div>
   </div>
 </div>
 
-<div class="kv" id="kv-qiflux" style="--bg1:#F7DDE4;--bg2:#5B2A63;--ink:#FFFFFF;--glow:#F2BBBB;--beam:#8E4A86">
+<div class="kv" id="kv-qiflux" style="--bg1:#F7DDE4;--bg2:#4A1B52;--ink:#2A0E31;--glow:#F2BBBB;--beam:#8E4A86">
   <div class="beams"></div>
   <div class="glow"></div>
   <div class="left">
@@ -143,8 +149,10 @@
   </div>
   <div class="right">
     <div class="stage">
-      <div class="phone"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/qiflux.png" alt=""></div>
-      <div class="reflect"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/qiflux.png" alt=""></div>
+      <div class="phone" style="height:987px"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/qiflux.png" alt=""></div>
+      <div class="reflect" style="height:276px">
+        <img src="file:///Users/yves/Projects/crealize/site-assets/shots/qiflux.png" style="height:987px" alt="">
+      </div>
     </div>
   </div>
 </div>
@@ -159,13 +167,15 @@
   </div>
   <div class="right">
     <div class="stage">
-      <div class="phone"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/meishitto.png" alt=""></div>
-      <div class="reflect"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/meishitto.png" alt=""></div>
+      <div class="phone" style="height:987px"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/meishitto.png" alt=""></div>
+      <div class="reflect" style="height:276px">
+        <img src="file:///Users/yves/Projects/crealize/site-assets/shots/meishitto.png" style="height:987px" alt="">
+      </div>
     </div>
   </div>
 </div>
 
-<div class="kv" id="kv-rythix2048" style="--bg1:#F7DCE9;--bg2:#CFCFFA;--ink:#2A1B33;--glow:#F2C6DC;--beam:#9B6FB5">
+<div class="kv" id="kv-rythix2048" style="--bg1:#EFD3E4;--bg2:#B9B9F2;--ink:#241528;--glow:#9B6FB5;--beam:#7A4E96">
   <div class="beams"></div>
   <div class="glow"></div>
   <div class="left">
@@ -175,8 +185,10 @@
   </div>
   <div class="right">
     <div class="stage">
-      <div class="phone"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/rythix2048.png" alt=""></div>
-      <div class="reflect"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/rythix2048.png" alt=""></div>
+      <div class="phone" style="height:987px"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/rythix2048.png" alt=""></div>
+      <div class="reflect" style="height:276px">
+        <img src="file:///Users/yves/Projects/crealize/site-assets/shots/rythix2048.png" style="height:987px" alt="">
+      </div>
     </div>
   </div>
 </div>
@@ -191,8 +203,10 @@
   </div>
   <div class="right">
     <div class="stage">
-      <div class="phone"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/tendo.png" alt=""></div>
-      <div class="reflect"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/tendo.png" alt=""></div>
+      <div class="phone" style="height:982px"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/tendo.png" alt=""></div>
+      <div class="reflect" style="height:275px">
+        <img src="file:///Users/yves/Projects/crealize/site-assets/shots/tendo.png" style="height:982px" alt="">
+      </div>
     </div>
   </div>
 </div>
@@ -207,8 +221,10 @@
   </div>
   <div class="right">
     <div class="stage">
-      <div class="phone"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/xunni.png" alt=""></div>
-      <div class="reflect"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/xunni.png" alt=""></div>
+      <div class="phone" style="height:984px"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/xunni.png" alt=""></div>
+      <div class="reflect" style="height:276px">
+        <img src="file:///Users/yves/Projects/crealize/site-assets/shots/xunni.png" style="height:984px" alt="">
+      </div>
     </div>
   </div>
 </div>
@@ -223,8 +239,10 @@
   </div>
   <div class="right">
     <div class="stage">
-      <div class="phone"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/dicex3d.png" alt=""></div>
-      <div class="reflect"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/dicex3d.png" alt=""></div>
+      <div class="phone" style="height:1009px"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/dicex3d.png" alt=""></div>
+      <div class="reflect" style="height:283px">
+        <img src="file:///Users/yves/Projects/crealize/site-assets/shots/dicex3d.png" style="height:1009px" alt="">
+      </div>
     </div>
   </div>
 </div>
@@ -249,8 +267,10 @@
   </div>
   <div class="right">
     <div class="stage">
-      <div class="phone"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/idokuta.png" alt=""></div>
-      <div class="reflect"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/idokuta.png" alt=""></div>
+      <div class="phone" style="height:987px"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/idokuta.png" alt=""></div>
+      <div class="reflect" style="height:276px">
+        <img src="file:///Users/yves/Projects/crealize/site-assets/shots/idokuta.png" style="height:987px" alt="">
+      </div>
     </div>
   </div>
 </div>
@@ -265,8 +285,10 @@
   </div>
   <div class="right">
     <div class="stage">
-      <div class="phone"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/mairi.png" alt=""></div>
-      <div class="reflect"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/mairi.png" alt=""></div>
+      <div class="phone" style="height:910px"><img src="file:///Users/yves/Projects/crealize/site-assets/shots/mairi.png" alt=""></div>
+      <div class="reflect" style="height:255px">
+        <img src="file:///Users/yves/Projects/crealize/site-assets/shots/mairi.png" style="height:910px" alt="">
+      </div>
     </div>
   </div>
 </div>

@@ -17,6 +17,7 @@
    輸出：docs/design-system/source/kv-posters.html（供 render-kv.mjs 渲染）
    ============================================================ */
 import { writeFileSync, readFileSync, existsSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -34,11 +35,11 @@ const PRODUCTS = [
   { slug: 'kichitto', name: 'Kichitto', slogan: 'Receipts, filed by AI.',
     bg: ['#FDF3ED', '#F3CDB8'], ink: '#3A1D0E', glow: '#E97B47', beam: '#C25A28' },
   { slug: 'qiflux', name: 'QiFlux', slogan: 'Your cycle, kept quiet.',
-    bg: ['#F7DDE4', '#5B2A63'], ink: '#FFFFFF', glow: '#F2BBBB', beam: '#8E4A86' },
+    bg: ['#F7DDE4', '#4A1B52'], ink: '#2A0E31', glow: '#F2BBBB', beam: '#8E4A86' },
   { slug: 'meishitto', name: 'Meishitto', slogan: 'Cards become contacts.',
     bg: ['#EFEFFB', '#C3C4F0'], ink: '#1B1B4A', glow: '#5254E0', beam: '#3B3CB8' },
   { slug: 'rythix2048', name: 'Rythix 2048', slogan: 'Merge on the beat.',
-    bg: ['#F7DCE9', '#CFCFFA'], ink: '#2A1B33', glow: '#F2C6DC', beam: '#9B6FB5' },
+    bg: ['#EFD3E4', '#B9B9F2'], ink: '#241528', glow: '#9B6FB5', beam: '#7A4E96' },
   { slug: 'tendo', name: 'Tendo', slogan: 'One path. Every dot.',
     bg: ['#2A241C', '#14100B'], ink: '#F5F1E8', glow: '#C9A961', beam: '#C9A961' },
   { slug: 'xunni', name: 'XunNi', slogan: 'Where charts align.',
@@ -54,6 +55,17 @@ const PRODUCTS = [
   { slug: 'meguru', name: 'Meguru', slogan: 'Commerce in circulation.',
     bg: ['#FBF5EF', '#E9CBD6'], ink: '#3A0A1E', glow: '#B51452', beam: '#8E0F3F' },
 ];
+
+/* 逐張讀出截圖實際比例，讓裝置外框高度跟著它走 —— 零裁切。
+   獨立 critic 2026-08-08 指出 mairi 底部導覽被邊框切成一半、xunni/idokuta/meishitto
+   右側內容被切。根因是外框比例固定 0.4635 而截圖比例不一（mairi 0.50，偏差 +7.9%），
+   object-fit:cover 就把差額吃掉了。改為外框遷就截圖，而不是截圖遷就外框。 */
+function shotRatio(file) {
+  const out = execFileSync('sips', ['-g', 'pixelWidth', '-g', 'pixelHeight', file], { encoding: 'utf8' });
+  const w = +/pixelWidth: (\d+)/.exec(out)[1];
+  const h = +/pixelHeight: (\d+)/.exec(out)[1];
+  return w / h;
+}
 
 const shots = join(ROOT, 'site-assets/shots');
 const icons = join(ROOT, 'site-assets/icons');
@@ -84,6 +96,10 @@ function poster(p) {
     : `<div class="mark mark--type">${p.name.slice(0, 1)}</div>`;
   const hasShot = existsSync(join(shots, `${p.slug}.png`));
   const shot = `file://${shots}/${p.slug}.png`;
+  const PAD = 11, INNER_W = 444;
+  const phoneH = hasShot
+    ? Math.round(INNER_W / shotRatio(join(shots, `${p.slug}.png`))) + PAD * 2
+    : 980;
   if (!hasShot) {
     return `
 <div class="kv kv--mark" id="kv-${p.slug}" style="--bg1:${p.bg[0]};--bg2:${p.bg[1]};--ink:${p.ink};--glow:${p.glow};--beam:${p.beam}">
@@ -107,8 +123,10 @@ function poster(p) {
   </div>
   <div class="right">
     <div class="stage">
-      <div class="phone"><img src="${shot}" alt=""></div>
-      <div class="reflect"><img src="${shot}" alt=""></div>
+      <div class="phone" style="height:${phoneH}px"><img src="${shot}" alt=""></div>
+      <div class="reflect" style="height:${Math.round(phoneH * 0.28)}px">
+        <img src="${shot}" style="height:${phoneH}px" alt="">
+      </div>
     </div>
   </div>
 </div>`;
@@ -181,7 +199,7 @@ const html = `<!DOCTYPE html>
   .stage{position:relative;transform:rotate(-7deg) translateY(10px)}
   /* 裝置：真實截圖 + 邊緣高光 + 深落影（帶品牌色調） */
   .phone{
-    width:466px;height:980px;border-radius:54px;overflow:hidden;
+    width:466px;border-radius:54px;overflow:hidden;
     background:#0A0A0B;padding:11px;box-sizing:border-box;position:relative;
     box-shadow:
       inset 0 0 0 1px rgba(255,255,255,.22),
@@ -189,16 +207,16 @@ const html = `<!DOCTYPE html>
       0 70px 110px rgba(0,0,0,.45),
       0 0 120px -20px var(--glow);
   }
-  .phone img{width:100%;height:100%;object-fit:cover;object-position:top center;
-             display:block;border-radius:44px}
+    /* 外框比例已逐張對齊截圖，故用 fill 不裁切（原為 cover + top center，會切掉底部） */
+  .phone img{width:100%;height:100%;object-fit:fill;display:block;border-radius:44px}
   /* 反射：裝置下方的鏡射淡出 */
   .reflect{
-    position:absolute;left:0;top:100%;width:466px;height:280px;
+    position:absolute;left:0;top:100%;width:466px;
     border-radius:54px;overflow:hidden;transform:scaleY(-1);opacity:.20;
     -webkit-mask-image:linear-gradient(to top, transparent 0%, #000 96%);
     mask-image:linear-gradient(to top, transparent 0%, #000 96%);
   }
-  .reflect img{width:466px;height:980px;object-fit:cover;object-position:top center;display:block}
+  .reflect img{width:466px;object-fit:fill;display:block}
 </style></head><body>
 ${PRODUCTS.map(poster).join('\n')}
 </body></html>
