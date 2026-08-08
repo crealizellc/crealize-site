@@ -15,7 +15,7 @@
   // ---------- WORK : case-study cards ----------
   function shotHTML(w) {
     if (w.img) {
-      return `<img class="work-card__img" src="${w.img}" alt="${w.alt || w.name}" loading="lazy" decoding="async" width="720" height="1560" style="object-position:${w.pos || 'top center'}" />`;
+      return `<img class="work-card__img" src="${w.img}" alt="${w.alt || w.name}" loading="lazy" decoding="async" width="1600" height="1200" />`;
     }
     return `
       <div class="work-card__ph">
@@ -38,7 +38,6 @@
           <span class="work-card__jp jp-accent">${w.jp}</span>
           <span class="work-card__tag">${w.tag}</span>
         </div>
-        <p class="work-card__line">${w.line}</p>
         <ul class="work-card__stack" aria-label="Tech stack">
           ${w.stack.map((s) => `<li>${s}</li>`).join('')}
         </ul>
