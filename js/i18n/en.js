@@ -21,7 +21,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'Kichitto', jp: 'きちっと', tag: 'Fintech · Solo founders',
+      name: 'Kichitto', featured: true, jp: 'きちっと', tag: 'Fintech · Solo founders',
       line: 'Receipts dissolve into ledgers — <em>photo → AI OCR → filed to Drive + Sheets.</em> Bookkeeping, garbage-collected.',
       ph: 'Kichitto — receipt capture UI',
       img: 'assets/kv/kichitto.webp',
@@ -39,7 +39,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'moonpacket', jp: '月へ、紅包を', tag: 'Web3 · Telegram',
+      name: 'moonpacket', featured: true, jp: '月へ、紅包を', tag: 'Web3 · Telegram',
       line: 'Crypto red packets for Telegram — <em>send in seconds, claim instantly.</em> Non-custodial, across USDT · TON · SOL · ETH.',
       ph: 'moonpacket — red packet UI',
       img: 'assets/kv/moonpacket.webp',
@@ -48,7 +48,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'iDokuta', jp: '言葉を越える診療', tag: 'Telehealth · i18n',
+      name: 'iDokuta', featured: true, jp: '言葉を越える診療', tag: 'Telehealth · i18n',
       line: 'Telehealth across language borders — <em>consultations mediated by live translation,</em> six locales deep.',
       ph: 'iDokuta — consultation UI',
       img: 'assets/kv/idokuta.webp',
@@ -57,7 +57,7 @@ window.CRZ_I18N = {
       status: 'wip',
     },
     {
-      name: 'Mairi', jp: '毎日のカルテ', tag: 'Health · Hospital-integrated',
+      name: 'Mairi', featured: true, jp: '毎日のカルテ', tag: 'Health · Hospital-integrated',
       line: 'A daily health record that <em>speaks hospital</em> — personal logs, clinically integrated.',
       ph: 'Mairi — daily record UI',
       img: 'assets/kv/mairi.webp',
@@ -66,7 +66,7 @@ window.CRZ_I18N = {
       status: 'wip',
     },
     {
-      name: 'Tendo', jp: '一日一道', tag: 'Puzzle · Daily ritual',
+      name: 'Tendo', featured: true, jp: '一日一道', tag: 'Puzzle · Daily ritual',
       line: 'Fudeto’s sister title — <em>one Hamiltonian path a day</em> keeps entropy away.',
       ph: 'Tendo — daily path UI',
       img: 'assets/kv/tendo.webp',
@@ -84,7 +84,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'Meishitto', jp: '名刺っと', tag: 'B2B · Productivity',
+      name: 'Meishitto', featured: true, jp: '名刺っと', tag: 'B2B · Productivity',
       line: 'Business cards, dissolved into data — <em>your contacts stay yours.</em>',
       ph: 'Meishitto — key visual',
       img: 'assets/kv/meishitto.webp',
@@ -93,7 +93,7 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'XunNi', jp: '尋你', tag: 'AI · Astrology',
+      name: 'XunNi', featured: true, jp: '尋你', tag: 'AI · Astrology',
       line: 'Two charts, one reading — <em>where your constellations overlap.</em>',
       ph: 'XunNi — key visual',
       img: 'assets/kv/xunni.webp',
@@ -102,12 +102,21 @@ window.CRZ_I18N = {
       status: 'shipped',
     },
     {
-      name: 'Meguru', jp: 'めぐる', tag: 'Platform · Cross-border commerce',
+      name: 'Meguru', featured: true, jp: 'めぐる', tag: 'Platform · Cross-border commerce',
       line: 'The loop behind the storefront — <em>listings, orders, settlement, all circulating.</em>',
       ph: 'Meguru — key visual',
       img: 'assets/kv/meguru.webp',
       alt: 'Meguru — a circulating loop through parcel nodes',
       stack: ['Cloudflare Workers', 'D1', 'Multi-tenant'],
+      status: 'shipped',
+    },
+    {
+      name: 'DiceX3D', featured: true, jp: 'さいころ', tag: 'Game · Casual',
+      line: 'Liar’s dice and more — <em>shake, call, bluff.</em>',
+      ph: 'DiceX3D — key visual',
+      img: 'assets/kv/dicex3d.webp',
+      alt: 'DiceX3D — 3D dice on a green felt table',
+      stack: ['Android', '3D dice engine'],
       status: 'shipped',
     },
   ],

@@ -93,10 +93,13 @@ section { position: relative; }
 }
 .work__sub-n { color: var(--ink-25); font-variant-numeric: tabular-nums; }
 .work__sub-n.is-filtered { color: var(--accent); }
+/* 2026-08-08：由兩欄大卡改為三欄小卡。Yves：「沒必要每個圖那麼大…你弄小一點」。
+   桌機 1440 下圖框由 571px 縮到約 373px，一屏內能看到更多產品；
+   卡片交錯位移（nth-child(even) 的 translateY）同步取消，三欄下錯位會讓視線亂掉。 */
 .work__grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(28px, 4vw, 64px) var(--col-gap);
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(24px, 3vw, 44px) var(--col-gap);
 }
 
 /* ---------- THE INDEX : product registry ---------- */
@@ -248,7 +251,7 @@ section { position: relative; }
 .index__empty::before { content: "∅ "; color: var(--accent); }
 .work-card { display: block; cursor: pointer; outline: none; }
 .work-card:focus-visible .work-card__shot { border-color: var(--accent); }
-.work-card:nth-child(even) { transform: translateY(clamp(24px, 5vh, 72px)); }
+/* 三欄版取消交錯位移（見上方 .work__grid 註解） */
 
 .work-card__shot {
   position: relative;
@@ -552,8 +555,7 @@ section { position: relative; }
 .join__formnote.is-sent { color: var(--accent); }
 
 @media (max-width: 1080px) {
-  .work__grid { grid-template-columns: 1fr; }
-  .work-card:nth-child(even) { transform: none; }
+  .work__grid { grid-template-columns: 1fr 1fr; }
   .index__head,
   .index-row { grid-template-columns: 44px minmax(120px, 1.2fr) minmax(150px, 1.4fr) 104px; }
   .index__head span:nth-child(3), .index-row .index-row__jp,
