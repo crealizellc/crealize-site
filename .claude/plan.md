@@ -126,7 +126,10 @@ prompt 統一要求「把 icon 的 mark 當主角放大成實體物件、真實�
 ### E. 上線
 - [x] E1 三道 gate 全綠（母版規格 / 三語對帳 / 品質不變式）；已 commit 並 push 到
       `crealizellc/crealize-site` public-main（0152094）
-- [ ] E2 部署 + curl 驗證（三語 200、12 張 200、線上 sha256 = 本地 build）
+- [x] E2 已部署並驗證：三語皆顯示 13 products、13/13 主視覺 HTTP 200、
+      DiceX3D 已在線、三欄 CSS 生效（實測 402/381/396px，圖框 401×300，
+      面積為改版前 571×428 的 51%）、線上 sha256 = 本地 build 產物。
+      `loading="lazy"` 使首屏未載入圖屬正常，強制載入回 1600×1200 / HTTP 200。
 
 ## 已知取件障礙（v1 踩過，v2 直接沿用解法，不重踩）
 
