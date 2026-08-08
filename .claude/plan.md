@@ -34,7 +34,11 @@
       ③ App Store 有 6 個官方 1024px icon 可直接取用，是最一致的 icon 來源
 - [x] B2 萃取設計契約 `docs/design-system/tokens/crealize.tokens.json`（DTCG）
       → 並在 CLAUDE.md 補上注入點與強制點（契約三處同在才不漂移）
-- [ ] B2.5 從 6 個商店官方 icon 取樣主色，補齊 PurityLens / QiFlux 缺失的 hex
+- [x] B2.5 從 6 個 App Store 官方 icon 取樣主色（iTunes API 取得，sellerName 全為 Crealize LLC）
+      → `docs/design-system/product-palette.json`（刻意放在 tokens/ 之外，避免稀釋站點契約）。
+      7 個有原始碼的產品 hex 我已逐一 sed/grep 第一手複驗。
+      **關鍵修正**：Rythix 2048 真實 icon 是粉彩調（#F2C6DC / #BBBBFD），
+      素材盤點推的「深空霓虹」來自姊妹作 RythixVerse，套上去會錯。
 - [ ] B3 用 `claude-design-handoff` 驅動 Claude Design canvas，注入契約 + 12 產品素材，產出 12 張 KV 設計
 - [ ] B4 export 下載 → 產圖 → 落到 `site/assets/kv/<locale>/`
 
@@ -48,9 +52,28 @@
 - [ ] C5 釐清 `claude-design-export` 與 `-v2` 何者為準（兩者主 HTML 位元相同，
       builder 只用 v1；v2 從未被使用）→ 以說明檔標註，不刪除資料
 
+### E. 計畫外發現（沿途抓到的真缺陷）
+- [x] E1 `check-todo.js` 假指標：`fs.existsSync("../../.git")` 判斷「公開 repo 是否建立」，
+      每跑一次就把正確狀態翻錯並寫回 TODO.md → 已移出自動檢測
+- [x] E2 全域 `token-drift-lint.sh` 字體檢查 fail-open：加引號的違規字體 100% 逃檢
+      → 已修 + 負面測試矩陣 + 兩專案真實路徑回歸（dotfiles `891eaa3`）
+- [x] E3 CLAUDE.md 架構論斷經獨立 verifier 反駁：1 條錯（`atmosphere.js` 其實與 export 相同）、
+      3 條講太滿 → 已全數修正（`adff208`）
+- [!] **E4 線上 dotfile 外洩** —— `https://crealize.llc/.cursorrules` HTTP 200 / 8229 bytes，
+      公司內部開發規範全文公開可讀；`.gitignore` 同樣 200。（`.env` / `.env.local` 為 404，
+      無金鑰外洩。）修補程式已進 `adff208`（白名單 guard + `--remove '**'` + 部署後 curl 驗證），
+      **但實際清除必須跑一次部署**。crealize 未登記 Full-Auto，
+      HARD BLOCKER = 需 Yves 單獨授權 production 部署。
+
 ### D. 收尾
-- [ ] D1 三支 checker 全 GREEN
-- [ ] D2 本機 build + 三語 output 檢查
-- [ ] D3 部署 gh-pages + curl 驗證線上實際生效
-- [ ] D4 commit + push 到 `crealizellc/crealize-site` public-main
-- [ ] D5 更新 Chronicle memory（修正「Next.js 14」的 stale 記載 — 實際是 build-site.mjs 靜態產生器）
+- [x] D1 gate 全部接好並經負面測試（KV 兩支仍為預期 RED，待 B4 產出素材後轉綠）
+- [x] D2 本機 build + 三語 output 檢查（產品數 / JSON-LD / 位元對比皆已驗）
+- [!] D3 部署 gh-pages + curl 驗證 —— 同 E4，需授權
+- [x] D4 commit（5 個原子 commit）；push 到 public-main 已於本 session 稍早完成
+- [x] D5 Chronicle memory 已更新並推上遠端（已用 `git show origin/main:` 複驗）：
+      ① `project_crealize.md` 頂部 description/TL;DR 的「Next.js 14」stale 記載改為第一手事實
+         （同檔 line 90 早已記載架構轉換，但被注入 session 的是頂部 —— append-only 頂部 stale）
+      ② 新增 `shared/feedback_vacuous_gate_verification.md` + MEMORY.md 索引
+      過程中修復兩個意外：陳舊的 `.git/rebase-merge` 導致 `--abort` 把分支倒回古早狀態
+      （以 `merge --ff-only` 非破壞性復原，未用禁用的 `reset --hard`）；
+      Chronicle local 33 / remote 243 的既有分歧已收斂至 0/0。
