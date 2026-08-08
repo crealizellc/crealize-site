@@ -38,6 +38,7 @@ const SPEC = {
      故對 bgVal < 0.25 的深底另設門檻；**不是**全面調低標準去遷就結果。 */
   minSubjectAreaDark: 0.13,
   darkBgThreshold: 0.25,
+  minPanelEdge: 6,            // detail 面板左緣最小亮度階差（0-255）
   minCornerColors: 2,     // AC-4 四角至少兩種不同顏色（非純色背景）
   cornerDeltaMin: 8,      // 判定「不同」的最小色差
   centerStdMax: 0.10,     // AC-6 主體中心點（正規化）標準差上限
@@ -75,11 +76,19 @@ for path in sys.argv[1:]:
         scale = ((bx1-bx0)/w + (by1-by0)/h) / 2
     else:
         cx = cy = scale = 0.0
+    # detail 版型的面板左緣位於畫面寬度約 51.75%（1600-72-700=828）。
+    # 沿面板垂直中央取一條水平線，量該邊界前後的亮度階差 ——
+    # 深色面板放在深色背景上時，「面積」量不到它，但「邊界對比」量得到。
+    def lum(c): return 0.2126*c[0] + 0.7152*c[1] + 0.0722*c[2]
+    ex = int(w*0.5175); ey = h//2
+    left_l  = sum(lum(px[x,ey]) for x in range(max(0,ex-14), ex-2)) / 12
+    right_l = sum(lum(px[x,ey]) for x in range(ex+3, min(w,ex+15))) / 12
+    edge = abs(right_l - left_l)
     r,g,b = [v/255 for v in bg]
     hh, ss, vv = colorsys.rgb_to_hsv(r,g,b)
     out[path] = {'w':W,'h':H,'cornerColors':len(uniq),'subjectArea':round(area,4),
                  'cx':round(cx,4),'cy':round(cy,4),'scale':round(scale,4),
-                 'bgHue':round(hh*360,1),'bgSat':round(ss,3),'bgVal':round(vv,3)}
+                 'bgHue':round(hh*360,1),'bgSat':round(ss,3),'bgVal':round(vv,3),'panelEdge':round(edge,1)}
 print(json.dumps(out))
 `;
   const tmp = join(tmpdir(), `kvq-${process.pid}.py`);
@@ -160,6 +169,18 @@ webps.forEach((f, i) => {
   const areaMin = isDark ? SPEC.minSubjectAreaDark : SPEC.minSubjectArea;
   if (!carriesUI) {
     notes.push(`AC-2 [${slug}] 版型 ${variant}（刻意不放 UI），不適用主體佔比（實測 ${(d.subjectArea * 100).toFixed(1)}%）`);
+  } else if (variant === 'detail') {
+    /* detail 版型的面板尺寸由模板寫死（700×700，佔畫面 25.5%），面積由構造保證，
+       量它沒有資訊量。真正的風險是深色面板疊在深色背景上「看不見」——
+       改驗面板左緣的亮度階差。 */
+    if (d.panelEdge < SPEC.minPanelEdge) {
+      errors.push(
+        `AC-2 面板可見度 [${slug}]：左緣亮度階差 ${d.panelEdge} < ${SPEC.minPanelEdge}` +
+          `（面板與背景幾乎同色，等於看不見）`
+      );
+    } else {
+      notes.push(`AC-2 [${slug}] detail 面板邊界階差 ${d.panelEdge}（門檻 ${SPEC.minPanelEdge}）`);
+    }
   } else if (d.subjectArea < areaMin) {
     errors.push(
       `AC-2 主體佔比 [${slug}]：${(d.subjectArea * 100).toFixed(1)}% < ${(areaMin * 100).toFixed(0)}%` +
