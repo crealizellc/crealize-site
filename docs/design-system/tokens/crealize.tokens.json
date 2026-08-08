@@ -5,7 +5,6 @@
     "extractedAt": "2026-08-08",
     "concept": "Japanese-Swiss editorial · monochrome + International Orange"
   },
-
   "color": {
     "paper": {
       "$type": "color",
@@ -43,7 +42,6 @@
       "$description": "小字用的 AA 合規強調色（紙底 5:1）"
     }
   },
-
   "font": {
     "display": {
       "$type": "fontFamily",
@@ -70,63 +68,188 @@
       "$value": "Bricolage Grotesque, Space Grotesk, Helvetica Neue"
     }
   },
-
   "fontSize": {
-    "mega": { "$type": "dimension", "$value": "clamp(52px, 10.4vw, 150px)" },
-    "h1": { "$type": "dimension", "$value": "clamp(44px, 7vw, 104px)" },
-    "h2": { "$type": "dimension", "$value": "clamp(34px, 4.6vw, 68px)" },
-    "h3": { "$type": "dimension", "$value": "clamp(24px, 2.4vw, 36px)" },
-    "lead": { "$type": "dimension", "$value": "clamp(20px, 1.7vw, 27px)" },
-    "body": { "$type": "dimension", "$value": "17px" },
-    "sm": { "$type": "dimension", "$value": "14px" },
-    "xs": { "$type": "dimension", "$value": "12px" },
-    "eyebrow": { "$type": "dimension", "$value": "11.5px" }
+    "mega": {
+      "$type": "dimension",
+      "$value": "clamp(52px, 10.4vw, 150px)"
+    },
+    "h1": {
+      "$type": "dimension",
+      "$value": "clamp(44px, 7vw, 104px)"
+    },
+    "h2": {
+      "$type": "dimension",
+      "$value": "clamp(34px, 4.6vw, 68px)"
+    },
+    "h3": {
+      "$type": "dimension",
+      "$value": "clamp(24px, 2.4vw, 36px)"
+    },
+    "lead": {
+      "$type": "dimension",
+      "$value": "clamp(20px, 1.7vw, 27px)"
+    },
+    "body": {
+      "$type": "dimension",
+      "$value": "17px"
+    },
+    "sm": {
+      "$type": "dimension",
+      "$value": "14px"
+    },
+    "xs": {
+      "$type": "dimension",
+      "$value": "12px"
+    },
+    "eyebrow": {
+      "$type": "dimension",
+      "$value": "11.5px"
+    }
   },
-
   "space": {
-    "1": { "$type": "dimension", "$value": "4px" },
-    "2": { "$type": "dimension", "$value": "8px" },
-    "3": { "$type": "dimension", "$value": "12px" },
-    "4": { "$type": "dimension", "$value": "16px" },
-    "5": { "$type": "dimension", "$value": "24px" },
-    "6": { "$type": "dimension", "$value": "32px" },
-    "7": { "$type": "dimension", "$value": "48px" },
-    "8": { "$type": "dimension", "$value": "64px" },
-    "9": { "$type": "dimension", "$value": "96px" },
-    "10": { "$type": "dimension", "$value": "128px" },
-    "11": { "$type": "dimension", "$value": "192px" }
+    "1": {
+      "$type": "dimension",
+      "$value": "4px"
+    },
+    "2": {
+      "$type": "dimension",
+      "$value": "8px"
+    },
+    "3": {
+      "$type": "dimension",
+      "$value": "12px"
+    },
+    "4": {
+      "$type": "dimension",
+      "$value": "16px"
+    },
+    "5": {
+      "$type": "dimension",
+      "$value": "24px"
+    },
+    "6": {
+      "$type": "dimension",
+      "$value": "32px"
+    },
+    "7": {
+      "$type": "dimension",
+      "$value": "48px"
+    },
+    "8": {
+      "$type": "dimension",
+      "$value": "64px"
+    },
+    "9": {
+      "$type": "dimension",
+      "$value": "96px"
+    },
+    "10": {
+      "$type": "dimension",
+      "$value": "128px"
+    },
+    "11": {
+      "$type": "dimension",
+      "$value": "192px"
+    }
   },
-
   "radius": {
     "$description": "Swiss = near-sharp。禁止在此之外發明圓角。",
-    "0": { "$type": "dimension", "$value": "0px" },
-    "1": { "$type": "dimension", "$value": "2px" },
-    "2": { "$type": "dimension", "$value": "4px" },
-    "3": { "$type": "dimension", "$value": "8px" },
-    "pill": { "$type": "dimension", "$value": "999px" }
+    "0": {
+      "$type": "dimension",
+      "$value": "0px"
+    },
+    "1": {
+      "$type": "dimension",
+      "$value": "2px"
+    },
+    "2": {
+      "$type": "dimension",
+      "$value": "4px"
+    },
+    "3": {
+      "$type": "dimension",
+      "$value": "8px"
+    },
+    "pill": {
+      "$type": "dimension",
+      "$value": "999px"
+    }
   },
-
   "layout": {
-    "maxWidth": { "$type": "dimension", "$value": "1440px" },
-    "gutter": { "$type": "dimension", "$value": "clamp(20px, 4.4vw, 88px)" },
-    "colGap": { "$type": "dimension", "$value": "clamp(16px, 1.6vw, 28px)" },
-    "navHeight": { "$type": "dimension", "$value": "72px" }
+    "maxWidth": {
+      "$type": "dimension",
+      "$value": "1440px"
+    },
+    "gutter": {
+      "$type": "dimension",
+      "$value": "clamp(20px, 4.4vw, 88px)"
+    },
+    "colGap": {
+      "$type": "dimension",
+      "$value": "clamp(16px, 1.6vw, 28px)"
+    },
+    "navHeight": {
+      "$type": "dimension",
+      "$value": "72px"
+    }
   },
-
   "motion": {
-    "easeCondensation": { "$type": "cubicBezier", "$value": [0.22, 1, 0.36, 1] },
-    "easeInCondensation": { "$type": "cubicBezier", "$value": [0.6, 0.04, 0.98, 0.34] },
-    "dur1": { "$type": "duration", "$value": "360ms" },
-    "dur2": { "$type": "duration", "$value": "620ms" },
-    "dur3": { "$type": "duration", "$value": "1100ms" }
+    "easeCondensation": {
+      "$type": "cubicBezier",
+      "$value": [
+        0.22,
+        1,
+        0.36,
+        1
+      ]
+    },
+    "easeInCondensation": {
+      "$type": "cubicBezier",
+      "$value": [
+        0.6,
+        0.04,
+        0.98,
+        0.34
+      ]
+    },
+    "dur1": {
+      "$type": "duration",
+      "$value": "360ms"
+    },
+    "dur2": {
+      "$type": "duration",
+      "$value": "620ms"
+    },
+    "dur3": {
+      "$type": "duration",
+      "$value": "1100ms"
+    }
   },
-
   "keyVisual": {
-    "$description": "Selected Work 卡片主視覺母版規格。與 scripts/audit-kv.mjs 的 SPEC 及 .claude/plan.md 決策紀錄一致，三處必須同步。",
-    "width": { "$type": "dimension", "$value": "1600px" },
-    "height": { "$type": "dimension", "$value": "1200px" },
-    "aspectRatio": { "$type": "number", "$value": 1.3333 },
-    "format": { "$type": "string", "$value": "webp" },
-    "maxBytes": { "$type": "number", "$value": 204800 }
+    "$description": "Selected Work 卡片主視覺母版。與 scripts/audit-kv.mjs 的 SPEC 及 .claude/plan.md 決策紀錄一致，三處必須同步。**主視覺一律不含文字**、語言中性、三語共用同一個檔 —— 文字留在已在地化的 HTML（CRZ_I18N.work）。",
+    "width": {
+      "$type": "dimension",
+      "$value": "1600px"
+    },
+    "height": {
+      "$type": "dimension",
+      "$value": "1200px"
+    },
+    "aspectRatio": {
+      "$type": "number",
+      "$value": 1.3333
+    },
+    "format": {
+      "$type": "string",
+      "$value": "webp"
+    },
+    "maxBytes": {
+      "$type": "number",
+      "$value": 204800
+    },
+    "path": {
+      "$type": "string",
+      "$value": "site/assets/kv/<product>.webp"
+    }
   }
 }

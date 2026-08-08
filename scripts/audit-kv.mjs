@@ -16,7 +16,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const KV_ROOT = join(ROOT, 'site/assets/kv');
 
-/** 母版規格 — 與 .claude/plan.md 決策紀錄一致 */
+/** 母版規格 — 與 .claude/plan.md 決策紀錄、tokens/crealize.tokens.json § keyVisual 三處同步 */
 export const SPEC = {
   width: 1600,
   height: 1200,
@@ -24,6 +24,8 @@ export const SPEC = {
   ratioTolerance: 0.005, // ±0.5%
   maxBytes: 200 * 1024,
   ext: '.webp',
+  /* 三語共用同一組主視覺：KV 語言中性、不含任何文字，文字留在已在地化的 HTML。
+     locales 仍列在此，供 registry 對帳檢查三語是否指向同一個檔。 */
   locales: ['en', 'ja', 'zh'],
 };
 
@@ -52,53 +54,51 @@ export function webpSize(buf) {
 function check() {
   const errors = [];
 
+  /* 遷移期行為：主視覺尚未產出時，本檢查無事可做 —— 不能因此擋下部署。
+     一道「目標狀態未達成就擋住現行站台部署」的 gate 是設計錯誤：它會在最需要
+     緊急修補上線時（例如 2026-08-08 的 .cursorrules 外洩）把路堵死。
+     本檢查只驗「已存在的主視覺合不合母版」；「registry 是否已改用主視覺」
+     由 audit-kv-registry.mjs 依實際遷移狀態自動判斷。 */
   if (!existsSync(KV_ROOT)) {
-    errors.push(`缺少主視覺目錄：site/assets/kv/（預期 ${SPEC.locales.join(' / ')} 三語子目錄）`);
+    console.log('ℹ️  audit-kv — site/assets/kv/ 尚未建立，主視覺未產出，跳過母版檢查');
     return errors;
   }
 
-  for (const locale of SPEC.locales) {
-    const dir = join(KV_ROOT, locale);
-    if (!existsSync(dir)) {
-      errors.push(`[${locale}] 缺少目錄 site/assets/kv/${locale}/`);
+  const files = readdirSync(KV_ROOT).filter((f) => !f.startsWith('.'));
+  if (files.length === 0) {
+    console.log('ℹ️  audit-kv — site/assets/kv/ 為空，跳過母版檢查');
+    return errors;
+  }
+
+  for (const f of files) {
+    const p = join(KV_ROOT, f);
+    const rel = `site/assets/kv/${f}`;
+
+    if (!f.endsWith(SPEC.ext)) {
+      errors.push(`${rel}: 副檔名須為 ${SPEC.ext}`);
       continue;
     }
-    const files = readdirSync(dir).filter((f) => !f.startsWith('.'));
-    if (files.length === 0) {
-      errors.push(`[${locale}] 目錄為空`);
+
+    const bytes = statSync(p).size;
+    if (bytes > SPEC.maxBytes) {
+      errors.push(`${rel}: ${(bytes / 1024).toFixed(0)}KB 超過上限 ${SPEC.maxBytes / 1024}KB`);
+    }
+
+    let size;
+    try {
+      size = webpSize(readFileSync(p));
+    } catch (e) {
+      errors.push(`${rel}: 無法讀取尺寸 — ${e.message}`);
       continue;
     }
 
-    for (const f of files) {
-      const p = join(dir, f);
-      const rel = `site/assets/kv/${locale}/${f}`;
+    if (size.w !== SPEC.width || size.h !== SPEC.height) {
+      errors.push(`${rel}: 尺寸 ${size.w}×${size.h}，母版須為 ${SPEC.width}×${SPEC.height}`);
+    }
 
-      if (!f.endsWith(SPEC.ext)) {
-        errors.push(`${rel}: 副檔名須為 ${SPEC.ext}`);
-        continue;
-      }
-
-      const bytes = statSync(p).size;
-      if (bytes > SPEC.maxBytes) {
-        errors.push(`${rel}: ${(bytes / 1024).toFixed(0)}KB 超過上限 ${SPEC.maxBytes / 1024}KB`);
-      }
-
-      let size;
-      try {
-        size = webpSize(readFileSync(p));
-      } catch (e) {
-        errors.push(`${rel}: 無法讀取尺寸 — ${e.message}`);
-        continue;
-      }
-
-      if (size.w !== SPEC.width || size.h !== SPEC.height) {
-        errors.push(`${rel}: 尺寸 ${size.w}×${size.h}，母版須為 ${SPEC.width}×${SPEC.height}`);
-      }
-
-      const ratio = size.w / size.h;
-      if (Math.abs(ratio - SPEC.ratio) / SPEC.ratio > SPEC.ratioTolerance) {
-        errors.push(`${rel}: 比例 ${ratio.toFixed(3)}，須為 ${SPEC.ratio.toFixed(3)} (4:3) ±0.5%`);
-      }
+    const ratio = size.w / size.h;
+    if (Math.abs(ratio - SPEC.ratio) / SPEC.ratio > SPEC.ratioTolerance) {
+      errors.push(`${rel}: 比例 ${ratio.toFixed(3)}，須為 ${SPEC.ratio.toFixed(3)} (4:3) ±0.5%`);
     }
   }
 

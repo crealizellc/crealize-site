@@ -8,7 +8,14 @@
   但 Yves 指示改用**量身設計的合成主視覺**後，內容由我們決定 → 沿用 4:3 不動 grid CSS，
   並可徹底移除逐產品 `object-position` 手調。
 - **母版尺寸 1600×1200**（4:3，@2x 以上餘裕），輸出 webp。
-- **每產品每語言各一張**：`site/assets/kv/<locale>/<product>.webp`，locale ∈ {en, ja, zh}。
+- **主視覺一律不含文字，每產品一張共用**：`site/assets/kv/<product>.webp`。
+  **修訂理由（2026-08-08，取代原本的「每產品每語言各一張」）**：原始缺陷是截圖裡
+  烘焙了 UI 文字，導致 en/ja/zh 三版共用同一組語言錯亂的圖。既然改為量身設計的
+  合成主視覺，就讓它**語言中性**——文字全部留在已在地化的 HTML（`CRZ_I18N.work`），
+  圖只負責視覺。如此語言錯亂問題從根消除，素材量從 36 張降為 12 張，
+  且三語版本視覺完全一致（作品集本來就該如此）。
+  代價：KV 內不能出現任何可讀文字，包含產品 UI 截圖片段中的文字 —— 這是刻意約束，
+  由 `audit-kv-registry.mjs` 強制三語 registry 指向同一個檔來間接保證不會分歧。
 - **12 個產品**：PurityLens、Fudeto、Kichitto、QiFlux、moonpacket、iDokuta、Mairi、Tendo、
   Rythix 2048、Meishitto、XunNi、Meguru（Yves 2026-08-08 核准後三者 + Meguru）。
 

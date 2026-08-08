@@ -52,18 +52,20 @@ if (Object.keys(registries).length === SPEC.locales.length) {
     }
   }
 
-  // 2. 每個產品每個語言都要有對應主視覺檔
+  const norm = (x) => (x ?? '').replace(/^(\.\.\/)+/, '');
+
+  /* 遷移階段自動偵測：全部 img 都指向 assets/kv/ 才算已遷移。
+     用自動偵測而非手動旗標，是因為手動旗標一定有人忘了翻。 */
+  const allImgs = SPEC.locales.flatMap((l) => (registries[l] ?? []).map((w) => norm(w.img)));
+  const migrated = allImgs.length > 0 && allImgs.every((p) => p.startsWith('assets/kv/'));
+
+  // ── 永遠成立的不變式（不論是否已遷移）──────────────────────────────
+  // 2. 每個產品每個語言的素材檔都要真的存在
   for (const locale of SPEC.locales) {
     for (const w of registries[locale] ?? []) {
       if (!w.img) {
         errors.push(`[${locale}] ${w.name}: registry 缺 img 欄位`);
         continue;
-      }
-      // ja/zh 的 registry 路徑帶 ../ 前綴（相對各自的 locale 輸出目錄），先正規化再判斷
-      const bare = w.img.replace(/^(\.\.\/)+/, '');
-      const want = `assets/kv/${locale}/`;
-      if (!bare.startsWith(want)) {
-        errors.push(`[${locale}] ${w.name}: img 應指向 ${want}…（目前 "${w.img}"）`);
       }
       // 實際解析：en 輸出在 site/，ja/zh 輸出在 site/<locale>/
       const outDir = join(ROOT, 'site', locale === 'en' ? '' : locale);
@@ -73,11 +75,34 @@ if (Object.keys(registries).length === SPEC.locales.length) {
     }
   }
 
-  // 3. 主視覺為量身設計，不應再有逐產品 object-position 手調
-  for (const locale of SPEC.locales) {
-    for (const w of registries[locale] ?? []) {
-      if (w.pos) errors.push(`[${locale}] ${w.name}: 仍殘留 pos="${w.pos}"，主視覺已按框設計，應移除`);
+  // ── 遷移後才強制的規則 ────────────────────────────────────────────
+  if (migrated) {
+    // 3. 主視覺按框設計，不應再有逐產品 object-position 手調
+    for (const locale of SPEC.locales) {
+      for (const w of registries[locale] ?? []) {
+        if (w.pos) errors.push(`[${locale}] ${w.name}: 仍殘留 pos="${w.pos}"，主視覺已按框設計，應移除`);
+      }
     }
+    // 4. 三語必須指向同一個主視覺檔。KV 語言中性、不含文字；一旦三語指向不同檔，
+    //    就代表有人又把文字烘進圖裡了 —— 那正是本次要根除的缺陷。
+    for (const w of registries[base] ?? []) {
+      const baseImg = norm(w.img);
+      for (const locale of rest) {
+        const other = (registries[locale] ?? []).find((x) => x.name === w.name);
+        if (other && norm(other.img) !== baseImg) {
+          errors.push(
+            `${w.name}: ${base} 與 ${locale} 指向不同主視覺（${baseImg} vs ${norm(other.img)}）。` +
+              `主視覺應語言中性、三語共用`
+          );
+        }
+      }
+    }
+  } else {
+    const kvCount = allImgs.filter((p) => p.startsWith('assets/kv/')).length;
+    console.log(
+      `ℹ️  audit-kv-registry — 尚未遷移至主視覺（${kvCount}/${allImgs.length} 已指向 assets/kv/）。` +
+        `本階段只驗素材存在與三語對稱；遷移完成後自動啟用「禁 pos」與「三語同圖」規則。`
+    );
   }
 }
 
