@@ -110,15 +110,6 @@ window.CRZ_I18N = {
       stack: ['Cloudflare Workers', 'D1', 'Multi-tenant'],
       status: 'shipped',
     },
-    {
-      name: 'DiceX3D', featured: true, jp: 'さいころ', tag: 'Game · Casual',
-      line: 'Liar’s dice and more — <em>shake, call, bluff.</em>',
-      ph: 'DiceX3D — key visual',
-      img: 'assets/kv/dicex3d.webp',
-      alt: 'DiceX3D — 3D dice on a green felt table',
-      stack: ['Android', '3D dice engine'],
-      status: 'shipped',
-    },
   ],
   method: [
     { n: 'Validate', jp: '検証', d: 'Every idea is a hypothesis. We write the test first — and run it on humans, not dashboards.' },

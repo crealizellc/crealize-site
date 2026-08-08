@@ -110,15 +110,6 @@ window.CRZ_I18N = {
       stack: ['Cloudflare Workers', 'D1', 'マルチテナント'],
       status: 'shipped',
     },
-    {
-      name: 'DiceX3D', featured: true, jp: 'さいころ', tag: 'ゲーム・カジュアル',
-      line: 'ライアーズダイスほか — <em>振って、宣言して、はったりを。</em>',
-      ph: 'DiceX3D — キービジュアル',
-      img: '../assets/kv/dicex3d.webp',
-      alt: 'DiceX3D — 緑のフェルト卓に転がる 3D のサイコロ',
-      stack: ['Android', '3D ダイスエンジン'],
-      status: 'shipped',
-    },
   ],
   method: [
     { n: '検証', jp: '', d: 'アイデアはすべて仮説として扱います。まず検証から — 答えはダッシュボードではなく、実際のユーザーから得ます。' },
