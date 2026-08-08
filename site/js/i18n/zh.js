@@ -110,6 +110,15 @@ window.CRZ_I18N = {
       stack: ['Cloudflare Workers', 'D1', '多租戶'],
       status: 'shipped',
     },
+    {
+      name: 'DiceX3D', jp: 'さいころ', tag: '遊戲 · 休閒',
+      line: '吹牛骰及更多玩法 — <em>搖、喊、唬。</em>',
+      ph: 'DiceX3D — 主視覺',
+      img: '../assets/kv/dicex3d.webp',
+      alt: 'DiceX3D — 綠絨桌面上的 3D 骰子',
+      stack: ['Android', '3D 骰子引擎'],
+      status: 'shipped',
+    },
   ],
   method: [
     { n: '驗證', jp: '', d: '每個點子都先當假說看待。先驗證再動手 — 答案來自真實用戶，不是儀表板。' },

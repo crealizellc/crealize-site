@@ -30,6 +30,7 @@ grep -q "application/ld+json" site/index.html || { echo "❌ JSON-LD missing" >&
 echo "▶ Key-visual audit (母版規格 + 三語 registry 對帳)..."
 node scripts/audit-kv.mjs
 node scripts/audit-kv-registry.mjs
+node scripts/audit-kv-quality.mjs --template docs/design-system/source/kv-posters.html
 
 # 我們用 -t/--dotfiles 是因為 GitHub Pages 需要 .nojekyll。代價是 site/ 裡任何
 # dotfile 都會被公開發佈。2026-08-08 發現 gh-pages 上殘留 .cursorrules（8229 bytes，

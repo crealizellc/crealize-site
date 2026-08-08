@@ -174,6 +174,7 @@ const PRODUCTS = [
   { name: 'Rythix 2048', cat: 'GameApplication', os: 'iOS, Android', desc: { en: 'Music-driven 2048: numbers merge on the beat.', ja: 'ビートに乗って数字が重なる音楽パズル 2048。', zh: '跟著節拍合併數字的音樂解謎 2048。' } },
   { name: 'Meishitto', cat: 'BusinessApplication', os: 'iOS, Android', desc: { en: 'Business-card scanner with on-device OCR — your contacts stay yours.', ja: '端末内 OCR の名刺スキャン — 連絡先の持ち主はあなたのまま。', zh: '裝置端 OCR 名片掃描 — 人脈始終是你的。' } },
   { name: 'XunNi', cat: 'LifestyleApplication', os: 'Android, Web', desc: { en: 'AI astrology and relationship readings across two charts.', ja: 'ふたつの命盤を読み解く AI 占星・相性鑑定。', zh: '解讀兩張命盤的 AI 占星與關係分析。' } },
+  { name: 'DiceX3D', cat: 'GameApplication', os: 'Android', desc: { en: 'Liar\u2019s dice and more \u2014 shake, call, bluff.', ja: '\u30e9\u30a4\u30a2\u30fc\u30ba\u30c0\u30a4\u30b9\u307b\u304b \u2014 \u632f\u3063\u3066\u3001\u5ba3\u8a00\u3057\u3066\u3001\u306f\u3063\u305f\u308a\u3092\u3002', zh: '\u5439\u725b\u9ab0\u53ca\u66f4\u591a\u73a9\u6cd5 \u2014 \u6416\u3001\u55ca\u3001\u5501\u3002' } },
   { name: 'Meguru', cat: 'BusinessApplication', os: 'Web', desc: { en: 'Cross-border commerce platform: listings, orders and settlement in one loop.', ja: '越境ECプラットフォーム — 出品・受注・精算をひと巡り。', zh: '跨境電商平台 — 上架、接單、對帳一路循環。' } },
 ];
 
