@@ -58,22 +58,44 @@ const PRODUCTS = [
 const shots = join(ROOT, 'site-assets/shots');
 const icons = join(ROOT, 'site-assets/icons');
 
-const missing = [];
+/* 沒有產品畫面不是錯誤 —— 平台型產品（Meguru）本來就沒有消費者 UI，
+   而 moonpacket 唯一的截圖是桌面網頁壓成手機寬、文字重疊不堪用。
+   這類改走 mark 版型。但**每個產品至少要有 icon**，否則兩者皆缺就無從呈現。 */
+const unusable = [];
 for (const p of PRODUCTS) {
-  if (!existsSync(join(shots, `${p.slug}.png`))) missing.push(`${p.slug}: 缺 screen`);
+  const hasShot = existsSync(join(shots, `${p.slug}.png`));
+  const hasIcon = existsSync(join(icons, `${p.slug}.png`));
+  if (!hasShot && !hasIcon) unusable.push(`${p.slug}: 既無 screen 也無 icon`);
 }
-if (missing.length) {
-  console.error('❌ 素材不齊：\n  ' + missing.join('\n  '));
+if (unusable.length) {
+  console.error('❌ 素材不齊：\n  ' + unusable.join('\n  '));
   process.exit(2);
 }
+const markOnly = PRODUCTS.filter((p) => !existsSync(join(shots, `${p.slug}.png`))).map((p) => p.slug);
+if (markOnly.length) console.log(`ℹ️  走 mark 版型（無產品畫面）：${markOnly.join(', ')}`);
 
-/** 一張海報：左側 logo + slogan，右側裝置內嵌真實畫面 */
+/** 一張海報：左側 logo + slogan，右側裝置內嵌真實畫面。
+    沒有可用產品畫面者（平台型、或截圖不堪用）改走 mark 版型：
+    放大自家 mark，不放任何裝置或替代畫面 —— 寧可簡單，也不擺不屬於它的東西。 */
 function poster(p) {
   const hasIcon = existsSync(join(icons, `${p.slug}.png`));
   const mark = hasIcon
     ? `<img class="mark" src="file://${icons}/${p.slug}.png" alt="">`
     : `<div class="mark mark--type">${p.name.slice(0, 1)}</div>`;
+  const hasShot = existsSync(join(shots, `${p.slug}.png`));
   const shot = `file://${shots}/${p.slug}.png`;
+  if (!hasShot) {
+    return `
+<div class="kv kv--mark" id="kv-${p.slug}" style="--bg1:${p.bg[0]};--bg2:${p.bg[1]};--ink:${p.ink};--glow:${p.glow};--beam:${p.beam}">
+  <div class="beams"></div>
+  <div class="glow"></div>
+  <div class="markonly">
+    <div class="markwrap markwrap--xl">${mark}</div>
+    <div class="slogan slogan--center">${p.slogan}</div>
+    <div class="rule rule--center"></div>
+  </div>
+</div>`;
+  }
   return `
 <div class="kv" id="kv-${p.slug}" style="--bg1:${p.bg[0]};--bg2:${p.bg[1]};--ink:${p.ink};--glow:${p.glow};--beam:${p.beam}">
   <div class="beams"></div>
@@ -111,12 +133,12 @@ const html = `<!DOCTYPE html>
      v3 第一版缺的就是它（平淡漸層讀起來像簡報底圖）。 */
   .beams{
     position:absolute;inset:-30%;
-    background:repeating-conic-gradient(from 0deg at 62% 44%,
-      var(--beam) 0deg 1.1deg, transparent 1.1deg 8deg);
-    opacity:.30;
-    -webkit-mask-image:radial-gradient(circle at 62% 44%, #000 0%, transparent 62%);
-    mask-image:radial-gradient(circle at 62% 44%, #000 0%, transparent 62%);
-    filter:blur(2px);
+    /* 2026-08-08 修：原本用 repeating-conic 做爆裂狀光芒，13 張排在一起時
+       同一個放射圖樣變成通病，縮小後整版像套版，效果本身也偏俗。
+       改為單一柔和斜向光帶，只負責讓背景有方向性。 */
+    background:linear-gradient(112deg, transparent 34%, var(--beam) 50%, transparent 66%);
+    opacity:.14;
+    filter:blur(60px);
   }
   /* 環境光：裝置背後的大面積品牌色光暈 */
   .glow{
@@ -146,6 +168,14 @@ const html = `<!DOCTYPE html>
   }
   .rule{margin-top:46px;width:104px;height:6px;border-radius:2px;
         background:var(--glow);box-shadow:0 0 24px -2px var(--glow)}
+
+  /* mark 版型：無裝置，logo 放大置中 */
+  .kv--mark{grid-template-columns:1fr}
+  .markonly{position:relative;z-index:3;display:grid;justify-items:center;text-align:center}
+  .markwrap--xl{width:250px;height:250px;border-radius:20px}
+  .markwrap--xl .mark{border-radius:20px}
+  .slogan--center{max-width:820px;margin-top:66px;text-align:center}
+  .rule--center{margin-left:auto;margin-right:auto}
 
   .right{position:relative;display:grid;place-items:center;z-index:3}
   .stage{position:relative;transform:rotate(-7deg) translateY(10px)}
