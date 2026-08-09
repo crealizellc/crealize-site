@@ -14,6 +14,7 @@ Products: 16
 - Kichitto — Receipt capture for solo founders: photo → AI OCR → auto-filed to Drive + Sheets. (iOS)
 - QiFlux — The quiet, privacy-first cycle tracker. (iOS)
 - moonpacket — Crypto red packets for Telegram communities — non-custodial, USDT / TON / SOL / ETH. (Web, Telegram)
+- Mairi — Trilingual personal health record (JA / 繁中 / EN): vitals, medication history and an AI symptom check that reads your own record. (Android)
 - Tendo — Daily Hamiltonian-path puzzle: connect every dot in one unbroken path. (Android)
 - Rythix 2048 — Music-driven 2048: numbers merge on the beat. (iOS, Android)
 - Meishitto — Business-card scanner with on-device OCR — your contacts stay yours. (iOS, Android)
@@ -24,8 +25,7 @@ Products: 16
 
 ## In development
 
-- iDokuta — Multilingual telehealth for foreigners in Japan (in development). (iOS, Android)
-- Mairi — Trilingual personal health record (JA / 繁中 / EN): vitals, medication history and an AI symptom check that reads your own record. (iOS, Android)
+- iDokuta — Medical language tool for foreign residents in Japan: write symptoms in your own language, show clear Japanese at the clinic. Five languages (in development). (iOS, Android)
 - Kizuki — Social engagement OS: AI notices conversations across cultures, drafts the reply, a human sends it. (Web, Telegram)
 - Todoke — Narrated short-video pipeline: script to captioned, multilingual video and publishing. (Internal)
 
