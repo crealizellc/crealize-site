@@ -366,15 +366,15 @@ var P=[
   "plat": [],
   "en": {
    "p": "A health record that speaks the language the family actually speaks at home.",
-   "b": "Japan has plenty of health apps. Almost all of them are Japanese-only — which fails the exact people who need a record most: foreign residents, exchange students, families where the parent and the child read different languages. Mairi ships Japanese, Traditional Chinese and English on day one, not as a later localisation pass. Vitals, medication history and a symptom check sit in one timeline, and the symptom check reads your own record as context instead of answering as if you were a stranger. The accessibility work is written into the spec, not left to goodwill: 17px body, 56pt tap targets, 7:1 contrast — built so someone in their seventies can use it without being handed to a younger relative."
+   "b": "Japan has plenty of health apps, and almost all of them are Japanese-only — which fails the people who need a record most: foreign residents, exchange students, families where the parent and the child read different languages. Mairi ships Japanese, Traditional Chinese and English on day one, not as a later localisation pass. The symptom check reads your own record as context instead of answering as if you were a stranger. Accessibility is in the spec, not left to goodwill: 17px body, 56pt tap targets, 7:1 contrast."
   },
   "ja": {
    "p": "家で実際に話している言葉で、健康を記録できる。",
-   "b": "健康アプリは日本にいくらでもあります。ただ、そのほとんどが日本語だけ。いちばん記録を必要としている人 —— 在住外国人、留学生、親と子で読める言語が違うご家族 —— がそこから漏れます。Mairi は日本語・繁體中文・English を最初から積んでいます。後付けのローカライズではありません。バイタル・薬歴・症状チェックが一つのタイムラインに並び、症状チェックはあなた自身の記録を文脈として読みます。初対面の相手に答えるようには答えません。高齢者への配慮も心がけではなく仕様です。本文 17px、タップ領域 56pt、コントラスト 7:1 以上 —— 70 代の方が、若い家族に代わってもらわずに自分で使えること。"
+   "b": "健康アプリは日本にいくらでもあります。ただ、そのほとんどが日本語だけ。いちばん記録を必要としている人 —— 在住外国人、留学生、親と子で読める言語が違うご家族 —— がそこから漏れます。Mairi は日本語・繁體中文・English を最初から積んでいます。後付けのローカライズではありません。症状チェックはあなた自身の記録を文脈として読み、初対面の相手に答えるようには答えません。高齢者への配慮も心がけではなく仕様です。本文 17px、タップ領域 56pt、コントラスト 7:1 以上。"
   },
   "zh": {
    "p": "用家裡真正在講的那個語言，記錄健康。",
-   "b": "日本的健康 App 不缺，缺的是不只講日文的那一種。最需要留下紀錄的人反而被漏掉了——在日外國人、留學生、父母與孩子讀不同語言的家庭。Mairi 從第一天就同時是日文、繁體中文與英文，不是事後補的在地化。生命徵象、用藥史、症狀速查放在同一條時間軸上；症狀速查會拿你自己的紀錄當上下文，而不是把你當成一個陌生人來回答。無障礙這件事寫在規格裡而不是靠自覺：內文 17px、點擊區 56pt、對比 7:1 以上——目標是七十幾歲的人自己就能用，不必再叫年輕的家人代勞。"
+   "b": "日本的健康 App 不缺，缺的是不只講日文的那一種。最需要留下紀錄的人反而被漏掉了——在日外國人、留學生、父母與孩子讀不同語言的家庭。Mairi 從第一天就同時是日文、繁體中文與英文，不是事後補的在地化。症狀速查會拿你自己的紀錄當上下文，而不是把你當成陌生人回答。無障礙寫在規格裡而不是靠自覺：內文 17px、點擊區 56pt、對比 7:1 以上。"
   },
   "hasIcon": 1
  },
