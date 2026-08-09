@@ -28,9 +28,12 @@ site/js/i18n/en.js（CRZ_I18N.work）                                          �
    **7 個已與 export 分岔，但 `site/js/atmosphere.js` 與兩份 export 逐 byte 相同**
    （`c88a7318…`）。**不要整包覆蓋 `site/js/`**：那會毀掉手工的 hero/site/work-modal/i18n；
    也不要以為 `atmosphere.js` 可以隨便改，它還跟 export 同步。
-4. **`claude-design-export` 與 `-v2` 的主 HTML 位元完全相同**（`28af457f…`），
-   builder 指名 v1 在版面層面沒有區別力；兩份只差 `css/sections.css`、`js/site.js`、
-   `js/work-modal.js` 三檔。
+4. **`claude-design-export` 與 `-v2` 的主 HTML 已分岔**（2026-08-09 起）。原本兩份位元相同
+   （`28af457f…`），但 `codex/fix-mobile-nav-and-copy` 直接手改了 v1 的 hero / vision /
+   method / join 文案（v1 現為 `8c0f6fcc…`，v2 仍停在 `28af457f…`）。
+   **後果：從 Claude Design 重新 export 蓋掉 v1，那批文案會無聲消失**，而且沒有任何 gate
+   會發現 —— builder 只讀 v1，v2 完全沒人驗。要嘛把文案改回設計檔的真相源，要嘛在
+   re-export 後手動比對。兩份仍只差 `css/sections.css`、`js/site.js`、`js/work-modal.js`。
 5. **`site/` 有 commit ≠ 已上線。** 要確認線上狀態，比對
    `git show origin/gh-pages:index.html | shasum -a256` 與線上 curl 的雜湊。
 
