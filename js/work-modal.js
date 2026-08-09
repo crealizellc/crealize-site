@@ -45,6 +45,7 @@
           <span class="work-modal__jp jp-accent"></span>
           <span class="work-modal__tag"></span>
           <p class="work-modal__line"></p>
+          <p class="work-modal__prose"></p>
           <ul class="work-modal__stack"></ul>
           <span class="work-modal__ok"></span>
         </div>
@@ -66,6 +67,7 @@
     jp: modal.querySelector('.work-modal__jp'),
     tag: modal.querySelector('.work-modal__tag'),
     line: modal.querySelector('.work-modal__line'),
+    prose: modal.querySelector('.work-modal__prose'),
     stack: modal.querySelector('.work-modal__stack'),
     ok: modal.querySelector('.work-modal__ok'),
   };
@@ -227,6 +229,11 @@
     els.jp.textContent = w.jp;
     els.tag.textContent = w.tag;
     els.line.innerHTML = w.line;
+    /* 完整正文（work-v3.js 依當前語言送過來）。沒有它，modal 就只剩一句 registry line
+       ——「點開比卡片上看到的還少」，等於這個 modal 沒有存在理由。 */
+    const copy = (window.CRZ_WORK_COPY || [])[i];
+    els.prose.innerHTML = (copy && copy.body) || '';
+    els.prose.hidden = !(copy && copy.body);
     els.stack.innerHTML = w.stack.map((s) => `<li>${s}</li>`).join('');
     els.ok.textContent = '';
   }

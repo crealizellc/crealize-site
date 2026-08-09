@@ -213,9 +213,13 @@ main, .nav, .foot { position: relative; z-index: 1; }
 }
 .nav__cta { height: 40px; padding: 0 18px; }
 
-/* 精簡導覽（≤1080px）。按鈕與面板由 site.js 生成，桌面寬度完全不出現。 */
+/* 精簡導覽。按鈕與面板由 site.js 生成，桌面寬度完全不出現。
+   斷點 860px 是量出來的，不是猜的：三語 nav 在不隱藏 links 時實際需要
+   en 765 / ja 791 / zh 680 px（brand + links + right + padding）。
+   先前設 1080 等於在 800–1080 這整段筆電寬度上，把明明放得下的四個連結
+   收進選單，還讓面板佔掉半個畫面 —— 2026-08-09 Yves 在自己螢幕上撞到。 */
 .nav__menu { display: none; }
-@media (max-width: 1080px) {
+@media (max-width: 860px) {
   .nav__links { display: none; }
   .nav__menu {
     display: grid; align-content: center; gap: 5px;
@@ -238,11 +242,13 @@ main, .nav, .foot { position: relative; z-index: 1; }
     display: grid; gap: 2px; padding: 10px 20px 18px;
     background: var(--paper); border-bottom: 1px solid var(--line);
   }
+  /* 字級用 --fs-body 不用 --fs-lead：--fs-lead 是 hero 導言用的展示級距（最大 27px），
+     四行疊起來會吃掉半個畫面。保留 44px 觸控下限，但不讓每行超過它太多。 */
   .nav__panel a {
     display: flex; align-items: baseline; gap: 10px;
-    padding: 13px 2px; min-height: 44px; /* 觸控目標 */
+    padding: 11px 2px; min-height: 44px;
     color: var(--ink); text-decoration: none;
-    font-family: var(--font-display); font-size: var(--fs-lead);
+    font-family: var(--font-display); font-size: var(--fs-body);
     border-bottom: 1px solid var(--line-soft);
   }
   .nav__panel a:last-child { border-bottom: 0; }
