@@ -96,11 +96,6 @@ section { position: relative; }
 /* 2026-08-08：由兩欄大卡改為三欄小卡。Yves：「沒必要每個圖那麼大…你弄小一點」。
    桌機 1440 下圖框由 571px 縮到約 373px，一屏內能看到更多產品；
    卡片交錯位移（nth-child(even) 的 translateY）同步取消，三欄下錯位會讓視線亂掉。 */
-.work__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(24px, 3vw, 44px) var(--col-gap);
-}
 
 /* ---------- THE INDEX : product registry ---------- */
 .work__index { margin-top: clamp(64px, 10vh, 120px); }
@@ -249,26 +244,10 @@ section { position: relative; }
   border-bottom: 1px solid var(--line-soft);
 }
 .index__empty::before { content: "∅ "; color: var(--accent); }
-.work-card { display: block; cursor: pointer; outline: none; }
-.work-card:focus-visible .work-card__shot { border-color: var(--accent); }
-/* 三欄版取消交錯位移（見上方 .work__grid 註解） */
+/* .work-card 現在只是 work-modal.js 事件委派的標記 class（site/js/work-modal.js:295）；
+   版面由 #work .card 決定，這裡不再設 display。 */
+.work-card { cursor: pointer; outline: none; }
 
-.work-card__shot {
-  position: relative;
-  border: 1px solid var(--line);
-  border-radius: var(--r-2);
-  overflow: hidden;
-  aspect-ratio: 4 / 3;
-  background:
-    repeating-linear-gradient(
-      -45deg,
-      var(--paper-2) 0px, var(--paper-2) 1px,
-      transparent 1px, transparent 9px
-    ),
-    color-mix(in oklab, var(--paper) 60%, var(--paper-2));
-  transition: border-color .35s var(--ease-cond);
-}
-.work-card:hover .work-card__shot { border-color: var(--ink-40); }
 .work-card__ph {
   position: absolute;
   inset: 0;
@@ -282,83 +261,8 @@ section { position: relative; }
   color: var(--ink-40);
 }
 .work-card__ph b { font-weight: 700; color: var(--ink-55); }
-.work-card__idx {
-  position: absolute;
-  top: 12px; left: 14px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--ink-40);
-}
-.work-card__badge {
-  position: absolute;
-  top: 8px; right: 10px;
-  font-family: var(--font-mono);
-  font-size: 9.5px;
-  letter-spacing: 0.06em;
-  color: var(--accent);
-  border: 1px solid color-mix(in oklab, var(--accent) 45%, transparent);
-  background: color-mix(in oklab, var(--paper) 75%, transparent);
-  border-radius: var(--r-pill);
-  padding: 3px 9px;
-  z-index: 2;
-}
-.work-card__zoom {
-  position: absolute;
-  inset: 0;
-  transition: transform .8s var(--ease-cond), filter .8s var(--ease-cond);
-}
 @media (prefers-reduced-motion: no-preference) {
-  .work-card:hover .work-card__zoom { transform: scale(calc(1 + 0.02 * var(--motion))); }
 }
-
-.work-card__meta {
-  display: flex;
-  align-items: baseline;
-  gap: var(--s-3);
-  margin-top: var(--s-4);
-}
-.work-card__name {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: var(--fs-h3);
-  letter-spacing: -0.02em;
-}
-.work-card__jp { font-family: var(--font-jp); font-size: var(--fs-xs); color: var(--ink-40); white-space: nowrap; }
-.work-card__tag {
-  margin-left: auto;
-  font-family: var(--font-mono);
-  font-size: 10.5px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--accent);
-  white-space: nowrap;
-}
-.work-card__line {
-  margin-top: 6px;
-  color: var(--ink-55);
-  font-size: var(--fs-sm);
-  max-width: 44ch;
-}
-.work-card__line em { color: var(--ink-70); }
-.work-card__stack {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin: 12px 0 0;
-  padding: 0;
-}
-.work-card__stack li {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.02em;
-  color: var(--ink-55);
-  border: 1px solid var(--line);
-  border-radius: var(--r-1);
-  padding: 3px 7px;
-  transition: border-color .3s var(--ease-cond), color .3s var(--ease-cond);
-}
-.work-card:hover .work-card__stack li { border-color: var(--ink-25); color: var(--ink-70); }
 
 /* =====================  METHOD (inverse panel) ===================== */
 .method {
@@ -555,7 +459,6 @@ section { position: relative; }
 .join__formnote.is-sent { color: var(--accent); }
 
 @media (max-width: 1080px) {
-  .work__grid { grid-template-columns: 1fr 1fr; }
   .index__head,
   .index-row { grid-template-columns: 44px minmax(120px, 1.2fr) minmax(150px, 1.4fr) 104px; }
   .index__head span:nth-child(3), .index-row .index-row__jp,
@@ -638,33 +541,15 @@ section { position: relative; }
   .foot__brand { grid-column: 1 / -1; }
 }
 
-
 /* ── real product screenshots (replace striped placeholders) ── */
-.work-card__img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top center;
-  display: block;
-}
-
-/* mobile: let card meta wrap instead of forcing horizontal overflow */
-@media (max-width: 560px) {
-  .work-card__meta { flex-wrap: wrap; row-gap: 4px; }
-  .work-card__tag { margin-left: 0; flex-basis: 100%; }
-}
 
 /* a11y: small accent text uses the AA-compliant deep variant (≥4.5:1 on paper) */
 .sec-head__idx,
-.work-card__tag,
 .work-modal__tag,
 .index-row__cat,
 .field .req,
 .field.is-error label,
 .join__formnote.is-sent { color: var(--accent-deep); }
-
 
 /* =====================  WORK v3 — per-product motif cards  =====================
    來源：Claude Design 專案 dbbc5234-c185-49b2-97b2-09bf8b59aaf0 / `Work v3.html`

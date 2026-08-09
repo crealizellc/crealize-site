@@ -119,7 +119,6 @@ window.CRZ_I18N = {
   ],
   ui: {
     wipBadge: '開發中',
-    featuredLabel: '精選作品',
     indexLabel: '作品索引',
     productsSuffix: ' 個產品',
     statusShipped: '● 已上線',

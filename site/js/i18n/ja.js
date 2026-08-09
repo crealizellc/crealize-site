@@ -119,7 +119,6 @@ window.CRZ_I18N = {
   ],
   ui: {
     wipBadge: '開発中',
-    featuredLabel: '代表作',
     indexLabel: '全製品目録',
     productsSuffix: ' 製品',
     statusShipped: '● 公開中',

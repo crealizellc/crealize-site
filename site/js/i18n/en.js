@@ -119,7 +119,6 @@ window.CRZ_I18N = {
   ],
   ui: {
     wipBadge: 'in development',
-    featuredLabel: 'Featured',
     indexLabel: 'The Index',
     productsSuffix: ' products',
     statusShipped: '● shipped',

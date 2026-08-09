@@ -39,6 +39,18 @@ node scripts/audit-work-v3.mjs
 # dotfile 都會被公開發佈。2026-08-08 發現 gh-pages 上殘留 .cursorrules（8229 bytes，
 # 公司內部開發規範）與 .gitignore，兩者皆 HTTP 200 可公開讀取。
 # 白名單以外的 dotfile 一律中止部署。
+# 2026-08-09：dotfile 白名單擋不到**非** dotfile 的殘留物。獨立驗收實測，
+# audit-work-v3 的暫存頁 site/__audit-work-v3.html 就這樣被 auto-save cron
+# commit 進公開 repo。gh-pages 的預設 src 是 '**/*' 且不讀 .gitignore，
+# 所以只要檔案在 site/ 下就會被發佈。
+echo "▶ 非 dotfile 殘留物檢查（gh-pages 會把 site/ 下所有檔案發佈出去）..."
+STRAY_TMP=$(find site -name "__*" -o -name "*.tmp" -o -name "*.bak" | head -20)
+if [ -n "$STRAY_TMP" ]; then
+  echo "❌ site/ 內有暫存／備份檔，部署會把它們公開：" >&2
+  echo "$STRAY_TMP" >&2
+  exit 1
+fi
+
 echo "▶ Dotfile allowlist（-t 會公開發佈 site/ 內所有 dotfile）..."
 UNEXPECTED=$(find site -name ".*" -type f ! -name ".nojekyll" | head -20)
 if [ -n "$UNEXPECTED" ]; then

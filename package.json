@@ -18,7 +18,9 @@
     "export": "sh -c 'mv middleware.ts middleware.ts.bak 2>/dev/null || true; STATIC_EXPORT=true next build; mv middleware.ts.bak middleware.ts 2>/dev/null || true'",
     "deploy:gh": "bash scripts/deploy-gh.sh",
     "dev": "next dev",
-    "start": "next start"
+    "start": "next start",
+    "build:shots": "node scripts/build-shots.mjs",
+    "build:work": "node scripts/gen-work-v3.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.27.0",

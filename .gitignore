@@ -54,3 +54,9 @@ Thumbs.db
 *.snowbak.tsx
 *.snowbak
 *.bak
+
+# 驗收暫存物（scripts/audit-work-v3.mjs 必須放在與正式頁同一層才能解析相對路徑，
+# 但它們絕不可進 repo，更不可被 gh-pages -d site 一起發佈出去。
+# 2026-08-09 踩過：auto-save cron 把 site/__audit-work-v3.html commit 進公開 repo。）
+site/__audit-*.html
+site/*/__audit-*.html

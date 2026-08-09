@@ -58,8 +58,20 @@ window.addEventListener('load', function () {
       indices: cards.map(function (c) { return c.getAttribute('data-work-index'); }),
       bodies: cards.map(function (c) { var e = c.querySelector('.card__body'); return e ? e.textContent : null; }),
       names: cards.map(function (c) { var e = c.querySelector('.card__name em'); return e ? e.textContent : null; }),
+      poss: cards.map(function (c) { var e = c.querySelector('.card__pos'); return e ? e.textContent : null; }),
       imgs: cards.map(function (c) { var e = c.querySelector('.stage__phone img'); return e ? e.getAttribute('src') : null; }),
       lede: (document.getElementById('work-lede') || {}).textContent || '',
+      classes: (function () {
+        var set = {};
+        [].slice.call(document.querySelectorAll('#work-cards *')).forEach(function (el) {
+          var c = el.getAttribute('class');
+          // 注意：這段字串是 .mjs 的 template literal，\\s 必須寫成雙反斜線，
+          // 否則會被當成未知跳脫而變成字母 s —— 那會把 class 依「s」切開
+          // （"stage" → "tage"），量測結果整個是假的。2026-08-09 踩過。
+          if (c) c.trim().split(/\\s+/).forEach(function (x) { if (x) set[x] = 1; });
+        });
+        return Object.keys(set);
+      })(),
       legend: (document.getElementById('work-legend') || {}).textContent || '',
       docW: document.documentElement.scrollWidth,
       winW: window.innerWidth,
@@ -75,6 +87,7 @@ window.addEventListener('load', function () {
 </script>`;
   // console.error 攔截要在其他 script 之前掛上
   const hook = `<script>window.__acErrors=[];(function(o){console.error=function(){window.__acErrors.push([].slice.call(arguments).join(' '));o.apply(console,arguments)}})(console.error);</script>`;
+  CLEANUP.files.add(tmp);
   writeFileSync(tmp, html.replace('</head>', hook + '</head>').replace('</body>', probeJs + '</body>'));
   try {
     const dom = execFileSync(CHROME, [
@@ -90,6 +103,7 @@ window.addEventListener('load', function () {
     return JSON.parse(decode(m[1]));
   } finally {
     rmSync(tmp, { force: true });
+    CLEANUP.files.delete(tmp);
   }
 }
 
@@ -119,6 +133,8 @@ window.addEventListener('load', function () {
   }, 400);
 });
 </script>`;
+  CLEANUP.files.add(tmp);
+  CLEANUP.files.add(parent);
   writeFileSync(tmp, html.replace('</head>', hook + '</head>').replace('</body>', probeJs + '</body>'));
   writeFileSync(parent, `<!doctype html><meta charset="utf-8">
 <style>html,body{margin:0;padding:0}iframe{width:${width}px;height:${height}px;border:0;display:block}</style>
@@ -150,8 +166,26 @@ setTimeout(function(){
   } finally {
     rmSync(tmp, { force: true });
     rmSync(parent, { force: true });
+    CLEANUP.files.delete(tmp);
+    CLEANUP.files.delete(parent);
   }
 }
+
+/* finally 在 SIGINT/SIGTERM 下不會執行 —— 2026-08-09 實測：在 AC-5 改寫 en.js 的
+   瞬間送 SIGINT，en.js 就少了一個產品且沒有任何警告，暫存頁也留在 site/ 下
+   （後來被 auto-save cron commit 進公開 repo）。改為集中登記 + 訊號時一併還原。 */
+const CLEANUP = { files: new Set(), restore: new Map() };
+function cleanupAll() {
+  for (const f of CLEANUP.files) { try { rmSync(f, { force: true }); } catch {} }
+  for (const [p, content] of CLEANUP.restore) { try { writeFileSync(p, content); } catch {} }
+  CLEANUP.files.clear();
+  CLEANUP.restore.clear();
+}
+process.on('exit', cleanupAll);
+for (const sig of ['SIGINT', 'SIGTERM', 'SIGHUP']) {
+  process.on(sig, () => { cleanupAll(); process.exit(130); });
+}
+process.on('uncaughtException', (e) => { cleanupAll(); console.error(e); process.exit(2); });
 
 const fails = [];
 const notes = [];
@@ -175,7 +209,15 @@ const HAN = /[一-鿿]/;
 for (let i = 0; i < 12; i++) {
   const [e, j, z] = [R.en.bodies[i], R.ja.bodies[i], R.zh.bodies[i]];
   const name = R.en.names[i];
-  const distinct = e !== j && j !== z && e !== z;
+  // 只驗「三者不同」的話，一個假名加一個漢字就能過關（獨立驗收實測）。
+  // 補上長度下限：這是產品說明，不是佔位字元。
+  const LEN_MIN = { en: 80, ja: 40, zh: 30 };   // CJK 字元密度高，門檻自然較低
+  const tooShort = [];
+  if ((e || '').length < LEN_MIN.en) tooShort.push(`en=${(e || '').length}`);
+  if ((j || '').length < LEN_MIN.ja) tooShort.push(`ja=${(j || '').length}`);
+  if ((z || '').length < LEN_MIN.zh) tooShort.push(`zh=${(z || '').length}`);
+  const posDistinct = R.en.poss[i] !== R.ja.poss[i] && R.ja.poss[i] !== R.zh.poss[i] && R.en.poss[i] !== R.zh.poss[i];
+  const distinct = e !== j && j !== z && e !== z && !tooShort.length && posDistinct;
   const jaOK = KANA.test(j || '');
   // 中文版容許少量假名 —— 引用日文專有名詞（お薬手帳、e薬SCAN）在中文行文裡是正確的，
   // 不是「忘了翻譯」。抓的是「整段其實還是日文」，門檻設在 3%。
@@ -183,7 +225,8 @@ for (let i = 0; i < 12; i++) {
   const ratio = z ? kana / z.length : 1;
   const zhOK = HAN.test(z || '') && ratio < 0.03;
   if (distinct && jaOK && zhOK) ok('AC-2', `${name}${kana ? `（zh 引用 ${kana} 個假名字元，${(ratio * 100).toFixed(1)}%，在容差內）` : ''}`);
-  else bad('AC-2', `${name}: distinct=${distinct} ja有假名=${jaOK} zh假名比=${(ratio * 100).toFixed(1)}%`);
+  else bad('AC-2', `${name}: distinct=${distinct} ja有假名=${jaOK} zh假名比=${(ratio * 100).toFixed(1)}%` +
+    (tooShort.length ? ` 說明過短(${tooShort.join(',')})` : '') + (posDistinct ? '' : ' 定位句三語未區分'));
 }
 if (R.en.lede === R.ja.lede || R.ja.lede === R.zh.lede) bad('AC-2', 'lede 三語未區分');
 else ok('AC-2', 'lede 三語各異');
@@ -202,23 +245,83 @@ for (const loc of LOCALES) {
   if (nophone === 1) ok('AC-3', 'meguru 為 nophone 版型（1 張無截圖），符合設計');
   else notes.push(`AC-3 提示：無截圖卡有 ${nophone} 張（設計上預期 1 張 = meguru）`);
 }
+{
+  // 「檔存在且副檔名對」擋不住「內容根本是別的形狀」——2026-08-09 獨立驗收實測：
+  // 把 1600×1200 的橫向海報複製成 shots/fudeto.webp，原本這條 AC 照樣全綠。
+  // 手機框是 aspect-ratio:9/19.5 + object-fit:cover，長寬比不符就會裁掉可見的內容。
+  const FRAME = 9 / 19.5;
+  const TOL = 0.03;   // 0.03 ≈ 裁掉單邊 3%；再寬就會吃到 UI
+  for (const src of R.en.imgs.filter(Boolean)) {
+    const f = resolve(LOCALES[0].dir, src);
+    const dims = execFileSync('sips', ['-g', 'pixelWidth', '-g', 'pixelHeight', f], { encoding: 'utf8' });
+    const w = Number(/pixelWidth:\s*(\d+)/.exec(dims)?.[1]);
+    const h = Number(/pixelHeight:\s*(\d+)/.exec(dims)?.[1]);
+    const ratio = w / h;
+    const name = src.split('/').pop();
+    if (Math.abs(ratio - FRAME) <= TOL) ok('AC-3', `${name} ${w}×${h} ratio=${ratio.toFixed(3)}`);
+    else bad('AC-3', `${name} ${w}×${h} ratio=${ratio.toFixed(3)}，框是 ${FRAME.toFixed(3)}（容差 ${TOL}）—— cover 會裁掉可見內容`);
+  }
+}
 
 console.log('▶ AC-4 動畫存在且尊重 reduce-motion');
 {
   const css = readFileSync(join(SITE, 'css/sections.css'), 'utf8');
   const v3 = css.slice(css.indexOf('WORK v3 — per-product motif cards'));
-  const rm = /@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{[\s\S]*?animation:\s*none/.test(v3);
-  const kf = new Set([...v3.matchAll(/@keyframes\s+([A-Za-z0-9_-]+)/g)].map((m) => m[1]));
-  if (rm) ok('AC-4', 'reduce-motion 區塊存在且含 animation:none');
-  else bad('AC-4', '找不到 reduce-motion 的 animation:none');
-  if (kf.size >= 10) ok('AC-4', `${kf.size} 組 @keyframes`);
-  else bad('AC-4', `只有 ${kf.size} 組 @keyframes（期望 ≥10）`);
+
+  // 原本用非貪婪正則從 @media 一路找 animation:none —— 它會跨過關掉的大括號，
+  // 所以「把整個 reduce-motion 區塊清空、後面別處留一句 animation:none」照樣綠。
+  // 改成大括號配對，只看區塊自己的內容。
+  const at = v3.indexOf('@media (prefers-reduced-motion: reduce)');
+  let rmBody = '';
+  if (at >= 0) {
+    let i = v3.indexOf('{', at), depth = 0, start = i;
+    for (; i < v3.length; i++) {
+      if (v3[i] === '{') depth++;
+      else if (v3[i] === '}' && --depth === 0) { rmBody = v3.slice(start + 1, i); break; }
+    }
+  }
+  if (/animation:\s*none/.test(rmBody)) ok('AC-4', `reduce-motion 區塊內含 animation:none（區塊 ${rmBody.trim().length} 字元）`);
+  else bad('AC-4', `reduce-motion 區塊沒有 animation:none（抽出 ${rmBody.trim().length} 字元）`);
+
+  // 動畫「有沒有綁到真實存在的元素」才是重點 —— 只數 @keyframes 的話，
+  // 把所有 .is-live 選擇器改成一個不存在的 class，整組動畫全死也還是綠。
+  const declared = new Set([...v3.matchAll(/@keyframes\s+([A-Za-z0-9_-]+)/g)].map((m) => m[1]));
+  const used = [...v3.matchAll(/#work\s+\.is-live\s+\.([A-Za-z0-9_-]+)\s*\{[^}]*animation:\s*([A-Za-z0-9_-]+)/g)]
+    .map((m) => ({ cls: m[1], kf: m[2] }));
+  const present = new Set(R.en.classes || []);
+  const orphanCls = [...new Set(used.filter((u) => !present.has(u.cls)).map((u) => u.cls))];
+  const orphanKf = [...new Set(used.filter((u) => !declared.has(u.kf)).map((u) => u.kf))];
+  if (used.length >= 20) ok('AC-4', `${used.length} 條 .is-live 動畫規則`);
+  else bad('AC-4', `只有 ${used.length} 條 .is-live 動畫規則（期望 ≥20）`);
+  if (!orphanCls.length) ok('AC-4', `全部動畫都綁到 DOM 內實際存在的 class`);
+  else bad('AC-4', `這些動畫綁在不存在的 class 上（等於沒動畫）：${orphanCls.join(', ')}`);
+  if (!orphanKf.length) ok('AC-4', `全部 animation 都指向已宣告的 @keyframes`);
+  else bad('AC-4', `這些 animation 指向未宣告的 @keyframes：${orphanKf.join(', ')}`);
+
+  // 每個產品至少要有一條屬於自己的動畫規則（用 motif class 前綴判定）
+  const PREFIX = { puritylens: 'pl', fudeto: 'fd', kichitto: 'ki', qiflux: 'qf', meishitto: 'me',
+                   rythix2048: 'rx', tendo: 'td', xunni: 'xn', moonpacket: 'mp', idokuta: 'id',
+                   mairi: 'mr', meguru: 'mg' };
+  const noAnim = Object.entries(PREFIX)
+    .filter(([, pre]) => !used.some((u) => u.cls.startsWith(pre + '-')))
+    .map(([slug]) => slug);
+  if (!noAnim.length) ok('AC-4', '12 個產品各有自己的動畫');
+  else bad('AC-4', `這些產品沒有自己的動畫：${noAnim.join(', ')}`);
 }
 
-console.log('▶ AC-5 registry 對帳失敗要大聲');
+console.log('▶ AC-5 registry 對帳：出貨狀態必須乾淨，且缺項時要大聲');
+for (const loc of LOCALES) {
+  // 這條才是真正的守門員。原本只驗「腳本自己弄壞時會叫」——那證明警報器會響，
+  // 沒證明它現在沒在響。2026-08-09 獨立驗收：多塞一個產品進 registry，
+  // 頁面 console 已在抗議、索引表 13 列對上 12 張卡，七條 AC 卻全綠。
+  const errs = R[loc.key].consoleErrors || [];
+  if (!errs.length) ok('AC-5', `${loc.key}: 出貨狀態 console 無錯誤`);
+  else bad('AC-5', `${loc.key}: 出貨狀態就有 console 錯誤 → ${JSON.stringify(errs)}`);
+}
 {
   const p = join(SITE, 'js/i18n/en.js');
   const orig = readFileSync(p, 'utf8');
+  CLEANUP.restore.set(p, orig);
   // 移除最後一個產品（Meguru）—— 註冊表少一個，work-v3 必須在 console 大聲抗議
   const cut = orig.replace(/,\s*\{\s*\n\s*name: 'Meguru'[\s\S]*?\n\s*\},/, ',');
   try {
@@ -232,6 +335,7 @@ console.log('▶ AC-5 registry 對帳失敗要大聲');
     }
   } finally {
     writeFileSync(p, orig);
+    CLEANUP.restore.delete(p);
   }
 }
 
@@ -246,6 +350,34 @@ for (const w of [1440, 1100, 640, 390]) {
 }
 
 console.log('▶ AC-7 設計契約未漂移');
+{
+  // token-drift-lint 只解析 hsl()、#hex 與 font-family；WORK v3 這 284 行新 CSS
+  // 用的全是 rgba() 與 var() 字體，所以那支 lint 對它「一個值都沒檢查到」。
+  // 這裡補上區塊自己的白名單：色彩要嘛是 var(--…)，要嘛是契約墨色/紙色的 rgba。
+  const ALLOWED_RGBA = new Set([
+    '18,17,16',      // --ink
+    '255,255,255',   // 白（高光）
+    '14,14,16',      // Meguru 品牌墨色 —— canvas 的 data-border 規則帶進來的產品品牌值
+  ]);
+  const css = readFileSync(join(SITE, 'css/sections.css'), 'utf8');
+  const v3 = css.slice(css.indexOf('WORK v3 — per-product motif cards'));
+  const offenders = [];
+  for (const m of v3.matchAll(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/g)) {
+    const t = `${m[1]},${m[2]},${m[3]}`;
+    if (!ALLOWED_RGBA.has(t)) offenders.push(`rgb(${t})`);
+  }
+  for (const fn of ['oklch(', 'color-mix(', 'lab(', 'lch(', 'hwb(']) {
+    if (v3.includes(fn)) offenders.push(`${fn}…（契約外的色彩函式）`);
+  }
+  for (const m of v3.matchAll(/(?:^|[\s:])(#[0-9a-fA-F]{3,8})\b/g)) offenders.push(m[1]);
+  // 具名色：抓 color/background/border-color 後面直接跟英文字的情形
+  for (const m of v3.matchAll(/(?:^|[;{\s])(?:color|background(?:-color)?|border-color|outline-color)\s*:\s*([a-z]{3,})\s*[;}]/g)) {
+    if (!['none', 'transparent', 'inherit', 'currentcolor', 'unset', 'initial'].includes(m[1].toLowerCase())) offenders.push(`具名色 ${m[1]}`);
+  }
+  const uniq = [...new Set(offenders)];
+  if (!uniq.length) ok('AC-7', 'WORK v3 區塊的色彩全部是 var() 或契約 rgba');
+  else bad('AC-7', `WORK v3 區塊有契約外的色值：${uniq.join(', ')}`);
+}
 try {
   execFileSync('bash', [
     join(process.env.HOME, '.claude/scripts/token-drift-lint.sh'),
@@ -256,6 +388,25 @@ try {
   ok('AC-7', 'token-drift-lint 無漂移');
 } catch (e) {
   bad('AC-7', `token-drift-lint 回報漂移：\n${(e.stdout || e.stderr || '').toString().trim()}`);
+}
+
+console.log('▶ AC-8 驗收自己不得留下殘留物');
+{
+  // 這些暫存頁必須放在與正式頁同一層（相對路徑才對得上），所以特別容易留下來。
+  // 2026-08-09 踩過：SIGINT 讓 finally 沒跑，殘檔被 auto-save cron commit 進公開 repo，
+  // 而 deploy-gh.sh 的白名單只看 dotfile，抓不到它。
+  const strays = [];
+  for (const loc of LOCALES) {
+    for (const n of ['__audit-work-v3.html', '__audit-work-v3-frame.html']) {
+      if (existsSync(join(loc.dir, n))) strays.push(join(loc.dir.replace(ROOT + '/', ''), n));
+    }
+  }
+  if (!strays.length) ok('AC-8', 'site/ 下無驗收暫存物');
+  else bad('AC-8', `殘留：${strays.join(', ')}`);
+
+  const en = readFileSync(join(SITE, 'js/i18n/en.js'), 'utf8');
+  if (en.includes("name: 'Meguru'")) ok('AC-8', 'site/js/i18n/en.js 已完整還原');
+  else bad('AC-8', 'site/js/i18n/en.js 少了 Meguru —— AC-5 的還原沒跑到');
 }
 
 console.log('');
