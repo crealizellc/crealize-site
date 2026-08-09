@@ -182,6 +182,8 @@ ${P}
        **不放手機或任何裝置外框**（Yves 講過兩次：那是十年前的設計）。
        slogan 不燒進圖裡，留在下面的 meta，否則 ja/zh 頁會變成英文圖 + 本地化字的重複。 */
     var bg = reg ? '<img class="stage__bg" src="' + reg.img + '" alt="" loading="lazy" decoding="async" width="1600" height="1200" />' : '';
+    /* 沒有官方 icon 的產品就不放標記 —— 不自己生一個。
+       缺哪些由 audit-work-v3 的 AC-3 列名回報，等真的 icon 進來再補。 */
     var icon = reg
       ? '<img class="stage__icon" src="' + reg.img.replace(/assets\\/kv\\/[^/]+$/, 'assets/icons/' + p.s + '.webp') +
         '" alt="' + p.n + ' icon" loading="lazy" decoding="async" width="256" height="256" />'

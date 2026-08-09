@@ -258,9 +258,11 @@ for (const loc of LOCALES) {
 }
 {
   // icon 是「個別 icon」這條需求的落地點；沒有官方 icon 的產品要被點名，不能靜默少一個
+  /* 缺 icon 就明白列出來，不自己補一個。
+     Yves 2026-08-09：「有哪些Icon你不知道你要跟我講，你不要捏造給我」。 */
   const noIcon = R.en.icons.map((x, i) => (x ? null : R.en.names[i])).filter(Boolean);
   if (!noIcon.length) ok('AC-3', `${R.en.icons.length} 張卡都有官方 icon`);
-  else notes.push(`AC-3 提示：這些產品沒有官方 icon（卡片只顯示名稱）：${noIcon.join(', ')}`);
+  else notes.push(`AC-3 ⚠️ 缺官方 icon（卡片留空，等真檔進來）：${noIcon.join(', ')}`);
 }
 {
   // 「檔存在且副檔名對」擋不住「內容根本是別的形狀」——2026-08-09 獨立驗收實測：
