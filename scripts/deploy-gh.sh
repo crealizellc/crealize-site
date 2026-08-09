@@ -22,7 +22,7 @@ cd "$REPO_ROOT"
 node scripts/build-site.mjs
 
 echo "▶ Sanity checks..."
-for f in site/index.html site/ja/index.html site/zh/index.html site/CNAME site/robots.txt site/sitemap.xml site/llms.txt site/assets/og.png; do
+for f in site/index.html site/ja/index.html site/zh/index.html site/404.html site/CNAME site/robots.txt site/sitemap.xml site/llms.txt site/assets/og.png; do
   [ -f "$f" ] || { echo "❌ missing $f" >&2; exit 1; }
 done
 grep -q "application/ld+json" site/index.html || { echo "❌ JSON-LD missing" >&2; exit 1; }
@@ -34,6 +34,9 @@ node scripts/audit-kv-quality.mjs
 
 echo "▶ Selected Work v3 驗收 (AC 見 .claude/ac.md)..."
 node scripts/audit-work-v3.mjs
+
+echo "▶ 窄視口導覽驗收（桌面導覽在 ≤1080px 被隱藏，必須有可用的替代入口）..."
+node scripts/audit-nav.mjs
 
 # 我們用 -t/--dotfiles 是因為 GitHub Pages 需要 .nojekyll。代價是 site/ 裡任何
 # dotfile 都會被公開發佈。2026-08-08 發現 gh-pages 上殘留 .cursorrules（8229 bytes，
