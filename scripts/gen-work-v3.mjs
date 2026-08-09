@@ -164,6 +164,12 @@ const out = `/* ============================================================
 
   var UNRELEASED = { en: 'unreleased', ja: '未リリース', zh: '尚未上架' };
 
+  /* 卡片上的「還有更多」提示。2026-08-09 之前卡片把整段 body 印在外面，
+     modal 只有一句 registry line + stack —— 點開比不點還少，Yves 直接問
+     「那還有必要打開嗎」。現在卡片＝鉤子，modal＝完整內容，所以卡片要說得出
+     「裡面還有東西」，否則沒人會點。 */
+  var MORE = { en: 'Read the full story', ja: '詳しく読む', zh: '看完整說明' };
+
 /* ── motifs：canvas 的原樣切出，加上 work-copy.json 帶進來的新產品 ── */
 ${M}
 ${extraMotifs.length ? `Object.assign(M, {${extraMotifs.join(',')}});` : ''}
@@ -216,8 +222,10 @@ ${P}
       + '<div class="stage" style="--tint:' + p.tint + '"' + (p.flat ? ' data-flat="1"' : '') + (p.border ? ' data-border="1"' : '') + '>' + bg + M[p.s] + icon + '</div>'
       + '<div class="card__meta"><h3 class="card__name"><em>' + p.n + '</em><i class="dot dot--' + p.st + '"></i></h3>'
       + '<span class="card__jp">' + p.jp + '</span>'
-      + '<p class="card__pos">' + t.p + '</p><p class="card__body">' + t.b + '</p>'
-      + '<div class="plat">' + plat + '</div></div></article>';
+      + '<p class="card__pos">' + t.p + '</p>'
+      + '<div class="plat">' + plat + '</div>'
+      + '<span class="card__more">' + MORE[L] + ' <i aria-hidden="true">→</i></span>'
+      + '</div></article>';
   }
 
   var ledeEl = document.getElementById('work-lede');
@@ -229,6 +237,16 @@ ${P}
     }).join('');
   }
   host.innerHTML = P.map(cardHTML).join('');
+
+  /* 把當前語言的完整文案交給 work-modal.js，索引與 CRZ_I18N.work 對齊
+     （對帳在上面已做過，對不上會先大聲失敗）。
+     modal 讀不到 body 就只能印 registry 的一句 line —— 那正是「點開反而更少」的成因。 */
+  window.CRZ_WORK_COPY = REG.map(function () { return null; });
+  P.forEach(function (p) {
+    var i = byIndex[p.s];
+    if (i === undefined) return;
+    window.CRZ_WORK_COPY[i] = { pos: p[L].p, body: p[L].b };
+  });
 
   /* ── reveal：卡片進入視窗才播它自己的動畫 ──
      沿用 canvas 的 scroll 驅動寫法。site.js 的 reveal 也是 scroll 驅動，

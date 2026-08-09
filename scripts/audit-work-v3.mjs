@@ -56,7 +56,18 @@ window.addEventListener('load', function () {
       lang: document.documentElement.getAttribute('lang'),
       count: cards.length,
       indices: cards.map(function (c) { return c.getAttribute('data-work-index'); }),
-      bodies: cards.map(function (c) { var e = c.querySelector('.card__body'); return e ? e.textContent : null; }),
+      /* 2026-08-09：完整正文從卡片搬進 modal（卡片＝鉤子）。這裡改讀 work-v3.js
+         交給 modal 的同一份文案，量的內容不變，只是換了它現在住的地方。 */
+      bodies: (window.CRZ_WORK_COPY || []).map(function (x) { return x ? x.body : null; }),
+      hooks: cards.map(function (c) { var e = c.querySelector('.card__pos'); return e ? e.textContent : null; }),
+      /* modal 必須比卡片講得多 —— 否則點開沒有意義。量的是「卡片外顯字數」
+         對上「modal 會顯示的字數」，兩邊都取當前語言的實際字串。 */
+      cardChars: cards.map(function (c) { return c.innerText.replace(/\\s+/g, ' ').trim().length; }),
+      modalChars: (window.CRZ_WORK_COPY || []).map(function (x, i) {
+        var w = (window.CRZ_WORK || [])[i] || {};
+        var strip = function (s) { var d = document.createElement('div'); d.innerHTML = s || ''; return d.textContent; };
+        return (strip(w.line) + ' ' + strip(x && x.body) + ' ' + (w.stack || []).join(' ')).replace(/\\s+/g, ' ').trim().length;
+      }),
       names: cards.map(function (c) { var e = c.querySelector('.card__name em'); return e ? e.textContent : null; }),
       poss: cards.map(function (c) { var e = c.querySelector('.card__pos'); return e ? e.textContent : null; }),
       imgs: cards.map(function (c) { var e = c.querySelector('.stage__bg'); return e ? e.getAttribute('src') : null; }),
@@ -272,6 +283,28 @@ for (const loc of LOCALES) {
     bad('AC-2', `${loc.key}: lede 沒有提到產品數 ${n}（應由 registry 長度填入）`);
   } else {
     ok('AC-2', `${loc.key}: lede 產品數 ${n} 與卡片數一致`);
+  }
+}
+
+/* AC-2b：點開必須比不點多。
+   2026-08-09 Yves 實際點下去才發現 —— modal 只印 registry 的一句 line + stack，
+   而卡片把整段正文攤在外面，於是「打開之後說明更少」。既有 AC 一項都沒抓到，
+   因為它們只量卡片、從不量 modal。這條是那個缺陷的直接反例測試。 */
+console.log('▶ AC-2b 點開要比卡片講得多');
+for (const loc of LOCALES) {
+  const r = R[loc.key];
+  const thin = [];
+  for (let i = 0; i < r.count; i++) {
+    const c = r.cardChars[i] || 0;
+    const m = r.modalChars[i] || 0;
+    if (m < c * 1.5) thin.push(`${r.names[i]}(卡${c}/開${m})`);
+  }
+  if (!thin.length) {
+    const ratios = r.cardChars.map((c, i) => (r.modalChars[i] || 0) / (c || 1));
+    const lo = Math.min(...ratios).toFixed(1);
+    ok('AC-2b', `${loc.key}: 16 張卡點開後內容量皆 ≥1.5×（最低 ${lo}×）`);
+  } else {
+    bad('AC-2b', `${loc.key}: 這幾張點開沒有更多內容 → ${thin.join(', ')}`);
   }
 }
 

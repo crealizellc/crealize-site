@@ -679,19 +679,17 @@ section { position: relative; }
   color: var(--ink);
   line-height: 1.35;
 }
-#work .card__body {
-  margin: 10px 0 0;
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: 13.5px;
-  line-height: 1.62;
-  color: var(--ink-55);
-  max-width: 44ch;
+/* 卡片的「還有更多」提示。卡片＝鉤子，完整正文在 modal 裡。 */
+#work .card__more {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 12px;
+  font-family: var(--font-mono); font-size: var(--fs-sm);
+  color: var(--accent-deep);
 }
-#work .card__body b { font-weight: 500; color: var(--ink-70); }
+#work .card__more i { font-style: normal; transition: transform var(--dur-1, .24s) var(--ease-cond, ease); }
+#work .card:hover .card__more i { transform: translateX(4px); }
 
 /* 日文／中文：明體斜體在 CJK 不成立，改用 JP 字族 + 較鬆的行距 */
-:root[lang^="ja"] #work .card__body, :root[lang^="zh"] #work .card__body,
 :root[lang^="ja"] #work .card__pos,  :root[lang^="zh"] #work .card__pos,
 :root[lang^="ja"] #work .work__lede, :root[lang^="zh"] #work .work__lede {
   font-family: var(--font-jp);
