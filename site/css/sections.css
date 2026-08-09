@@ -635,7 +635,12 @@ section { position: relative; }
 #work .stage__icon {
   position: absolute; left: 22px; bottom: 22px; width: 46px; height: 46px;
   border-radius: 11px; display: block; z-index: 2;
-  box-shadow: 0 1px 0 rgba(255,255,255,.19) inset, 0 10px 24px -8px rgba(18,17,16,.69);
+  /* 三道，缺一不可：內緣高光給玻璃感、髮絲外框給邊界、落影給浮起。
+     只有落影時，淺色 icon（PurityLens 的玻璃光圈就是）落在淺色底圖上會整個融掉 ——
+     落影在下方，救不了上緣與左右緣。髮絲框走 --ink 家族，與 --line 同一個值。 */
+  box-shadow: 0 1px 0 rgba(255,255,255,.19) inset,
+              0 0 0 1px rgba(18,17,16,.14),
+              0 10px 24px -8px rgba(18,17,16,.69);
   transform: translateY(6px); opacity: 0;
   transition: transform var(--dur-2) var(--ease-cond), opacity var(--dur-2) var(--ease-cond);
   transition-delay: 180ms;
