@@ -2,11 +2,14 @@
 /**
  * 導覽可用性驗收 —— 三語 × 窄視口。
  *
- * 為什麼要有這支：site.css 的 `@media (max-width:1080px){ .nav__links{display:none} }`
- * 從一開始就在，卻沒有任何替代入口。平板與全部手機上四個區塊完全無法跳轉，只能捲完
- * 五萬多像素 —— 而既有五道 gate（kv 母版 / kv registry / kv 畫質 / work v3 AC / token drift）
- * 沒有一道會叫，因為它們量的是主視覺與 Selected Work，不是導覽。
- * 「全綠」在這個缺口上是假指標，所以補這道。
+ * 為什麼要有這支：site.css 原本 `@media (max-width:1080px){ .nav__links{display:none} }`
+ * 卻沒有任何替代入口。平板與全部手機上四個區塊完全無法跳轉，只能一路捲完整頁
+ * （1440×900 實測全頁約 10,000px）—— 而既有五道 gate（kv 母版 / kv registry /
+ * kv 畫質 / work v3 AC / token drift）沒有一道會叫，因為它們量的是主視覺與
+ * Selected Work，不是導覽。「全綠」在這個缺口上是假指標，所以補這道。
+ *
+ * 兩個方向都要守：太窄沒有替代入口 = 到不了；斷點訂太寬 = 明明放得下卻收進選單、
+ * 面板還佔掉半個畫面（第一版設 1080 就是這樣，Yves 在自己螢幕上撞到）。
  *
  * Chrome headless 在 macOS 把視窗寬度硬夾在 500px（audit-work-v3.mjs 同一個坑），
  * 所以窄寬度一律走 iframe —— 媒體查詢對 iframe 自己的寬度生效，是真的視口測試。
@@ -32,7 +35,11 @@ const LOCALES = [
   { key: 'ja', dir: join(SITE, 'ja') },
   { key: 'zh', dir: join(SITE, 'zh') },
 ];
-const NARROW = 390;          // iPhone 14/15 直向
+const NARROW = 390;          // iPhone 14/15 直向 → 應出現精簡選單
+/* 900px 這格是回歸防線：斷點一旦訂得太寬，明明放得下的四個連結會被收進選單，
+   面板還會佔掉半個畫面（2026-08-09 斷點設 1080 時 Yves 在自己螢幕上撞到）。
+   三語 nav 實測只需要 en 765 / ja 791 / zh 680 px，所以 900px 必須維持 inline。 */
+const WIDE = 900;
 const TAP_MIN = 44;          // WCAG 2.5.8 觸控目標下限
 
 /* finally 在 SIGINT 下不會跑；集中登記，訊號時一併清掉暫存頁。
@@ -42,7 +49,7 @@ const cleanup = () => { for (const f of TMP) { try { rmSync(f, { force: true });
 process.on('exit', cleanup);
 for (const sig of ['SIGINT', 'SIGTERM', 'SIGHUP']) process.on(sig, () => { cleanup(); process.exit(130); });
 
-function probe(loc) {
+function probe(loc, width) {
   const inner = join(loc.dir, '__audit-nav.html');
   const outer = join(loc.dir, '__audit-nav-parent.html');
   TMP.add(inner); TMP.add(outer);
@@ -79,9 +86,16 @@ function probe(loc) {
 }, 900); });
 </script>`;
 
-  writeFileSync(inner, readFileSync(join(loc.dir, 'index.html'), 'utf8').replace('</body>', probeJs + '</body>'));
+  /* 拿掉 Google Fonts 的 render-blocking <link>。
+     它是外部網路請求，headless 會一路等下去，document.readyState 卡在 'loading'，
+     注入的量測腳本根本輪不到執行 —— 表現出來就是隨機的「iframe 內沒有量測結果」。
+     本檔的斷言（display / 連結數 / 44px 觸控框 / 溢出）由媒體查詢與固定尺寸決定，
+     不依賴字體度量，所以拿掉是安全的。需要字體度量的 audit-work-v3 不套用這招。 */
+  const html = readFileSync(join(loc.dir, 'index.html'), 'utf8')
+    .replace(/<link[^>]+fonts\.(googleapis|gstatic)\.com[^>]*>/g, '');
+  writeFileSync(inner, html.replace('</body>', probeJs + '</body>'));
   writeFileSync(outer, `<!doctype html><meta charset="utf-8">
-<style>html,body{margin:0;padding:0}iframe{width:${NARROW}px;height:800px;border:0;display:block}</style>
+<style>html,body{margin:0;padding:0}iframe{width:${width}px;height:800px;border:0;display:block}</style>
 <iframe src="__audit-nav.html"></iframe><pre id="__r"></pre>
 <script>
 var t0=Date.now();(function p(){
@@ -96,8 +110,9 @@ var t0=Date.now();(function p(){
   try {
     const dom = execFileSync(CHROME, [
       '--headless', '--disable-gpu', '--no-sandbox', '--hide-scrollbars', '--allow-file-access-from-files',
-      // 不等圖片後 6s 已綽綽有餘（內頁 DOMContentLoaded+900ms，父頁輪詢 100ms）。
-      '--window-size=560,900', '--virtual-time-budget=6000', '--dump-dom', `file://${outer}`,
+      // 視窗要塞得下 iframe（WIDE=900 那格用 560 會被夾住）；
+      // 虛擬時間必須 > 父頁 9000ms 輪詢上限，否則 Chrome 先收工、父頁只會拿到 readyState=loading。
+      `--window-size=${Math.max(width + 80, 600)},900`, '--virtual-time-budget=12000', '--dump-dom', `file://${outer}`,
     ], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, stdio: ['ignore', 'pipe', 'ignore'] });
     const m = /<pre id="__r">([\s\S]*?)<\/pre>/.exec(dom);
     if (!m) throw new Error('父頁沒有產出結果');
@@ -117,7 +132,7 @@ const bad = (m) => { console.log(`   ✗ ${m}`); fails.push(m); };
 
 console.log(`▶ 窄視口（${NARROW}px）導覽必須可用`);
 for (const loc of LOCALES) {
-  const r = probe(loc);
+  const r = probe(loc, NARROW);
 
   if (r.winW !== NARROW) { bad(`${loc.key}: 視口實際是 ${r.winW}px，這格沒測到，不算通過`); continue; }
   if (!r.deskHidden) { ok(`${loc.key}: 桌面導覽在 ${NARROW}px 仍可見（無需精簡選單）`); continue; }
@@ -149,9 +164,22 @@ for (const loc of LOCALES) {
   else bad(`${loc.key}: 水平溢出 ${r.docW - r.winW}px`);
 }
 
+console.log(`▶ 寬視口（${WIDE}px）不得把放得下的導覽收進選單`);
+for (const loc of LOCALES) {
+  const r = probe(loc, WIDE);
+  if (r.winW !== WIDE) { bad(`${loc.key}: 視口實際是 ${r.winW}px，這格沒測到，不算通過`); continue; }
+  if (r.deskHidden) {
+    bad(`${loc.key}: ${WIDE}px 下桌面導覽被隱藏 —— 斷點訂得比實需（≤791px）寬，使用者會拿到蓋住半個畫面的面板`);
+  } else {
+    ok(`${loc.key}: ${WIDE}px 維持 inline 導覽（${r.deskHrefs.length} 個連結）`);
+  }
+  if (r.docW === r.winW) ok(`${loc.key}: ${WIDE}px 無水平溢出`);
+  else bad(`${loc.key}: ${WIDE}px 水平溢出 ${r.docW - r.winW}px`);
+}
+
 console.log();
 if (fails.length) {
   console.error(`❌ audit-nav — ${fails.length} 項未通過`);
   process.exit(2);
 }
-console.log('✅ audit-nav — 三語窄視口導覽皆可用');
+console.log("✅ audit-nav — 三語 × 窄/寬視口導覽皆正確");

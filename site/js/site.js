@@ -228,8 +228,20 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && nav.classList.contains('is-menu-open')) { setNavOpen(false); btn.focus(); }
     });
+    /* 捲動即關閉。nav 是 position:fixed，面板不自己收就會一路蓋在內容上
+       ——「上面那四個一直住在上面，整個畫面都看不到」就是這個。
+       用 scrollY 差值而不是任何捲動都關：點面板連結會觸發平滑捲動，
+       那是使用者剛下的指令，不該被自己的關閉邏輯搶在前面誤判。 */
+    let openedAt = 0;
+    const closeOnScroll = () => {
+      if (!nav.classList.contains('is-menu-open')) return;
+      if (Math.abs(window.scrollY - openedAt) > 40) setNavOpen(false);
+    };
+    window.addEventListener('scroll', closeOnScroll, { passive: true });
+    btn.addEventListener('click', () => { openedAt = window.scrollY; });
+
     /* 視窗放大回桌面寬度時，面板的 hidden 狀態要跟著重置，否則縮放過的頁面會留著 open class。 */
-    const mq = window.matchMedia('(min-width: 1081px)');
+    const mq = window.matchMedia('(min-width: 861px)');
     const syncMq = () => { if (mq.matches) setNavOpen(false); };
     mq.addEventListener ? mq.addEventListener('change', syncMq) : mq.addListener(syncMq);
   }
