@@ -247,6 +247,22 @@ for (let i = 0; i < N; i++) {
 if (R.en.lede === R.ja.lede || R.ja.lede === R.zh.lede) bad('AC-2', 'lede 三語未區分');
 else ok('AC-2', 'lede 三語各異');
 
+/* lede 曾經把產品數寫死成「Twelve / 12 / 十二」，產品加到 16 之後三語都還在說十二，
+   右上角的計數卻是 16 —— 同一頁自相矛盾。產品數只能從 registry 來。 */
+for (const loc of LOCALES) {
+  const r = R[loc.key];
+  const n = r.count;
+  const nums = (r.lede.match(/\d+/g) || []).map(Number);
+  const words = /twelve|十二|１２/i.test(r.lede);
+  if (words || (nums.length && !nums.includes(n))) {
+    bad('AC-2', `${loc.key}: lede 的產品數與實際 ${n} 張卡不符 → 「${r.lede.slice(0, 40)}…」`);
+  } else if (!nums.includes(n)) {
+    bad('AC-2', `${loc.key}: lede 沒有提到產品數 ${n}（應由 registry 長度填入）`);
+  } else {
+    ok('AC-2', `${loc.key}: lede 產品數 ${n} 與卡片數一致`);
+  }
+}
+
 console.log('▶ AC-3 圖片實際存在');
 for (const loc of LOCALES) {
   const r = R[loc.key];

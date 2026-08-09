@@ -15,14 +15,16 @@
 
 const HOST = 'http://localhost:9222';
 
-async function http(path, method = 'GET') {
-  const res = await fetch(HOST + path, { method });
+async function http(path, method = 'GET', host = HOST) {
+  const res = await fetch(host + path, { method });
   const text = await res.text();
   try { return JSON.parse(text); } catch { return text; }
 }
 
-export async function listPages() {
-  const all = await http('/json/list');
+/** port 可覆寫：截圖用的 headless Chrome 另開一個 port，
+    不去打擾 9222 那台正在跑 ChatGPT 的 automation Chrome。 */
+export async function listPages(port) {
+  const all = await http('/json/list', 'GET', port ? `http://localhost:${port}` : HOST);
   return all.filter((t) => t.type === 'page');
 }
 

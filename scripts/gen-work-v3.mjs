@@ -147,10 +147,13 @@ const out = `/* ============================================================
   var lang = (document.documentElement.getAttribute('lang') || 'en').toLowerCase();
   var L = lang.indexOf('ja') === 0 ? 'ja' : lang.indexOf('zh') === 0 ? 'zh' : 'en';
 
+  /* {n} 由 registry 長度填入 —— 曾經寫死「Twelve / 12 / 十二」，
+     產品加到 16 之後三語都還在說十二個，右上角的計數卻是 16。
+     產品數只能有一個真相源，就是 registry 本身。 */
   var LEDE = {
-    en: "Twelve products. Each one is a mechanism we thought should exist — so we built the smallest honest version of it and shipped.",
-    ja: "12のプロダクト。どれも「この仕組みはあるべきだ」という一点から始め、いちばん小さくて誠実な形にして世に出しました。",
-    zh: "十二個產品。每一個都始於「這個機制應該存在」，然後做成最小、也最誠實的那個版本，送出去。"
+    en: "{n} products. Each one is a mechanism we thought should exist — so we built the smallest honest version of it and shipped.",
+    ja: "{n}のプロダクト。どれも「この仕組みはあるべきだ」という一点から始め、いちばん小さくて誠実な形にして世に出しました。",
+    zh: "{n} 個產品。每一個都始於「這個機制應該存在」，然後做成最小、也最誠實的那個版本，送出去。"
   };
 
   var LEGEND = {
@@ -219,7 +222,7 @@ ${P}
 
   var ledeEl = document.getElementById('work-lede');
   var legendEl = document.getElementById('work-legend');
-  if (ledeEl) ledeEl.textContent = LEDE[L];
+  if (ledeEl) ledeEl.textContent = LEDE[L].replace('{n}', String(REG.length));
   if (legendEl) {
     legendEl.innerHTML = LEGEND[L].map(function (x) {
       return '<span><i class="dot dot--' + x[0] + '"></i>' + x[1] + '</span>';
