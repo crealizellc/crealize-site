@@ -17,9 +17,20 @@ fi
 
 REPO_URL="https://${GH_TOKEN}@github.com/crealizellc/crealize-site.git"
 
-echo "▶ Building trilingual static site (site/)..."
+echo "▶ Generating Selected Work v3 (site/js/work-v3.js)..."
 cd "$REPO_ROOT"
+node scripts/gen-work-v3.mjs
+
+echo "▶ Building trilingual static site (site/)..."
 node scripts/build-site.mjs
+
+# 順序不可換：build-site 每次都整份重寫 index.html（回到 #work-cards 的
+# 佔位註解），所以 prerender 必須在它「之後」跑，才不會被下一次 build 蓋掉。
+# 2026-08-09 起：#work-cards 原本只有一行註解，16 個產品與全部文案要等
+# work-v3.js 在瀏覽器裡跑完才生出來——GPTBot / ClaudeBot 這類不執行 JS 的
+# AI 爬蟲讀到的只有 JSON-LD 摘要，看不到真正內容。
+echo "▶ Prerendering Selected Work cards into static HTML (for AI crawlers)..."
+node scripts/prerender-work.mjs
 
 echo "▶ Sanity checks..."
 for f in site/index.html site/ja/index.html site/zh/index.html site/404.html site/CNAME site/robots.txt site/sitemap.xml site/llms.txt site/assets/og.png; do
@@ -37,6 +48,9 @@ node scripts/audit-work-v3.mjs
 
 echo "▶ 窄視口導覽驗收（桌面導覽在 ≤1080px 被隱藏，必須有可用的替代入口）..."
 node scripts/audit-nav.mjs
+
+echo "▶ 爬蟲可見性驗收（不執行 JS 的原始 HTML 必須含完整內容）..."
+node scripts/audit-prerender.mjs
 
 # 我們用 -t/--dotfiles 是因為 GitHub Pages 需要 .nojekyll。代價是 site/ 裡任何
 # dotfile 都會被公開發佈。2026-08-08 發現 gh-pages 上殘留 .cursorrules（8229 bytes，

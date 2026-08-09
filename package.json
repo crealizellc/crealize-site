@@ -8,7 +8,7 @@
     "check:kv": "node scripts/audit-kv.mjs && node scripts/audit-kv-registry.mjs && node scripts/audit-kv-quality.mjs",
     "check:work": "node scripts/audit-work-v3.mjs",
     "check:design": "bash ~/.claude/scripts/token-drift-lint.sh docs/design-system/tokens site/css/tokens.css site/css/site.css site/css/sections.css site/css/work-modal.css",
-    "check:all": "npm run check:todo && npm run check:rules && npm run check:kv && npm run check:work && npm run check:nav && npm run check:design",
+    "check:all": "npm run check:todo && npm run check:rules && npm run check:kv && npm run check:work && npm run check:nav && npm run check:prerender && npm run check:design",
     "dev:guide": "node scripts/dev-guide.js",
     "auto:dev": "node scripts/auto-dev.js --dev",
     "auto:opt": "node scripts/auto-dev.js --opt",
@@ -21,7 +21,8 @@
     "start": "next start",
     "build:shots": "node scripts/build-shots.mjs",
     "build:work": "node scripts/gen-work-v3.mjs",
-    "check:nav": "node scripts/audit-nav.mjs"
+    "check:nav": "node scripts/audit-nav.mjs",
+    "check:prerender": "node scripts/audit-prerender.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.27.0",
