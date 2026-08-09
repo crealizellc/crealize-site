@@ -109,6 +109,23 @@ fi
 # 3) 資產層：主視覺的線上位元必須等於本地。
 #    2026-08-08 踩到 —— 原本只比對 index.html 雜湊，圖換了但 CDN 還吐舊版時仍報綠燈。
 #    「部署成功 ≠ 上線成功」對資產同樣成立。
+# 2026-08-09（第二次同類缺口）：css/ 與 js/ 也不在任何比對裡。
+# 版面與互動的改動幾乎都只動這兩類檔，index.html 由 builder 產生、內容不變，
+# 於是「線上內容 = 本次 build 產物」照樣綠燈 —— 對這類改動等於完全沒驗。
+echo "▶ 樣式與腳本比對（版面／互動改動只會動到這兩類檔）..."
+for attempt in 1 2 3; do
+  stale=""
+  for f in site/css/*.css site/js/*.js site/js/i18n/*.js; do
+    rel="${f#site/}"
+    lh=$(curl -s -H "Cache-Control: no-cache" "https://crealize.llc/$rel" | shasum -a256 | cut -d' ' -f1)
+    bh=$(shasum -a256 "$f" | cut -d' ' -f1)
+    [ "$lh" = "$bh" ] || stale="$stale $rel"
+  done
+  [ -z "$stale" ] && { echo "   ✓ $(ls site/css/*.css site/js/*.js site/js/i18n/*.js | wc -l | tr -d ' ') 個樣式／腳本線上位元一致"; break; }
+  [ "$attempt" = "3" ] && { echo "❌ CDN 未更新：$stale" >&2; fail=1; break; }
+  sleep 20
+done
+
 # 2026-08-09：icons/ 原本不在這個迴圈裡。XunNi 換 icon 那次，部署腳本從頭到尾
 # 報綠燈，卻**一張 icon 都沒驗** —— 只能靠人手動 curl 才知道有沒有真的上線。
 # 覆蓋面不足的驗證，比沒有驗證更危險，因為它會產生「已驗過」的錯覺。
