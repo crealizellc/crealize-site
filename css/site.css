@@ -213,8 +213,40 @@ main, .nav, .foot { position: relative; z-index: 1; }
 }
 .nav__cta { height: 40px; padding: 0 18px; }
 
+/* 精簡導覽（≤1080px）。按鈕與面板由 site.js 生成，桌面寬度完全不出現。 */
+.nav__menu { display: none; }
 @media (max-width: 1080px) {
   .nav__links { display: none; }
+  .nav__menu {
+    display: grid; align-content: center; gap: 5px;
+    /* flex: none + border-box 缺一不可 —— 少了會被 .nav__right 的 flex 壓縮，
+       日文版標籤較長時實測只剩 38px，低於 44px 觸控目標下限。 */
+    box-sizing: border-box; flex: 0 0 44px;
+    width: 44px; height: 44px; padding: 0 10px;
+    background: none; border: 0; cursor: pointer; color: var(--ink);
+  }
+  .nav__menu span {
+    display: block; height: 1.5px; background: currentColor; border-radius: 1px;
+    transition: transform var(--dur-1, .24s) var(--ease-cond, ease), opacity var(--dur-1, .24s) ease;
+  }
+  .nav__menu span:last-child { width: 70%; justify-self: start; }
+  .nav.is-menu-open .nav__menu span:first-child { transform: translateY(3.25px) rotate(45deg); }
+  .nav.is-menu-open .nav__menu span:last-child { width: 100%; transform: translateY(-3.25px) rotate(-45deg); }
+
+  .nav__panel {
+    position: absolute; left: 0; right: 0; top: 100%;
+    display: grid; gap: 2px; padding: 10px 20px 18px;
+    background: var(--paper); border-bottom: 1px solid var(--line);
+  }
+  .nav__panel a {
+    display: flex; align-items: baseline; gap: 10px;
+    padding: 13px 2px; min-height: 44px; /* 觸控目標 */
+    color: var(--ink); text-decoration: none;
+    font-family: var(--font-display); font-size: var(--fs-lead);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .nav__panel a:last-child { border-bottom: 0; }
+  .nav__panel .nav__idx { font-family: var(--font-mono); font-size: var(--fs-sm); color: var(--accent); }
 }
 @media (max-width: 720px) {
   .nav__cta { height: 34px; padding: 0 14px; font-size: 12px; }

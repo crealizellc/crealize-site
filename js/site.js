@@ -12,37 +12,11 @@
   const METHOD = I18N.method;
   const UI = I18N.ui;
 
-  // ---------- WORK : case-study cards ----------
-  function shotHTML(w) {
-    if (w.img) {
-      return `<img class="work-card__img" src="${w.img}" alt="${w.alt || w.name}" loading="lazy" decoding="async" width="1600" height="1200" />`;
-    }
-    return `
-      <div class="work-card__ph">
-        <b>[ ${w.ph} ]</b>
-        <span>product screenshot · drop here</span>
-      </div>`;
-  }
-
-  function cardHTML(w, globalIdx, wip) {
-    return `
-      <article class="work-card reveal" data-work-index="${globalIdx}" tabindex="0" role="button"
-               aria-label="Open ${w.name}">
-        <div class="work-card__shot">
-          <div class="work-card__zoom">${shotHTML(w)}</div>
-          <span class="work-card__idx">${String(globalIdx + 1).padStart(2, '0')}</span>
-          ${wip ? `<span class="work-card__badge">${UI.wipBadge}</span>` : ''}
-        </div>
-        <div class="work-card__meta">
-          <span class="work-card__name">${w.name}</span>
-          <span class="work-card__jp jp-accent">${w.jp}</span>
-          <span class="work-card__tag">${w.tag}</span>
-        </div>
-        <ul class="work-card__stack" aria-label="Tech stack">
-          ${w.stack.map((s) => `<li>${s}</li>`).join('')}
-        </ul>
-      </article>`;
-  }
+  // ---------- WORK : 產品卡 ----------
+  // 2026-08-09：產品卡改由 js/work-v3.js 渲染進 #work-cards（Claude Design 的 Work v3
+  // ——per-product motif + 各自的動畫 + 三語各自撰寫的說明）。原本這裡的
+  // shotHTML() / cardHTML() 只出 8 張 featured 截圖卡，已整組移除；
+  // 兩套同時寫同一個容器只會互相覆蓋。本檔仍負責下方的 THE INDEX 註冊表。
 
   // short registry tokens for the index stack column
   const token = (s) => s.toLowerCase()
@@ -72,11 +46,7 @@
 
   const grid = document.getElementById('work-grid');
   if (grid) {
-    const featured = WORK.filter((w) => w.featured);
     grid.innerHTML = `
-      <div class="work__sub"><span class="work__sub-label">${UI.featuredLabel}</span><span class="work__sub-n">0${featured.length}</span></div>
-      <div class="work__grid">${featured.map((w) => cardHTML(w, WORK.indexOf(w), w.status === 'wip')).join('')}</div>
-
       <div class="work__index" id="work-index">
         <div class="work__sub work__sub--index"><span class="work__sub-label">${UI.indexLabel}</span><span class="work__sub-n" id="index-count">${String(WORK.length).padStart(2, '0')} / ${String(WORK.length).padStart(2, '0')}</span></div>
         <label class="index__prompt">
@@ -213,6 +183,55 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') setOpen(false);
     });
+  }
+
+  // ---------- Compact nav (≤1080px) ----------
+  /* site.css 在 max-width:1080px 把 .nav__links 整組 display:none，卻沒有任何替代 ——
+     平板與全部手機上，四個區塊沒有任何跳轉方式，只能捲完五萬多像素。
+     nav 的 markup 來自 design export（builder 的 DOM 輸入），不動它；
+     這裡用 JS 生成按鈕與面板，連結直接複製自 .nav__links，所以三語自動跟著走。 */
+  const navLinksEl = document.querySelector('.nav__links');
+  const navRight = document.querySelector('.nav__right');
+  if (nav && navLinksEl && navRight && links.length) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'nav__menu';
+    btn.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('aria-controls', 'nav-panel');
+    btn.setAttribute('aria-label', navLinksEl.getAttribute('aria-label') || 'Menu');
+    btn.innerHTML = '<span aria-hidden="true"></span><span aria-hidden="true"></span>';
+    navRight.insertBefore(btn, navRight.firstChild);
+
+    const panel = document.createElement('div');
+    panel.className = 'nav__panel';
+    panel.id = 'nav-panel';
+    panel.hidden = true;
+    links.forEach((a) => {
+      const c = a.cloneNode(true);
+      c.classList.remove('is-active');
+      panel.appendChild(c);
+    });
+    nav.appendChild(panel);
+
+    const setNavOpen = (open) => {
+      nav.classList.toggle('is-menu-open', open);
+      btn.setAttribute('aria-expanded', String(open));
+      panel.hidden = !open;
+    };
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      setNavOpen(!nav.classList.contains('is-menu-open'));
+    });
+    /* 點連結後要自己收起來 —— 同頁錨點不會觸發任何導航事件，不收就會蓋住捲到的區塊。 */
+    panel.addEventListener('click', (e) => { if (e.target.closest('a')) setNavOpen(false); });
+    document.addEventListener('click', (e) => { if (!nav.contains(e.target)) setNavOpen(false); });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && nav.classList.contains('is-menu-open')) { setNavOpen(false); btn.focus(); }
+    });
+    /* 視窗放大回桌面寬度時，面板的 hidden 狀態要跟著重置，否則縮放過的頁面會留著 open class。 */
+    const mq = window.matchMedia('(min-width: 1081px)');
+    const syncMq = () => { if (mq.matches) setNavOpen(false); };
+    mq.addEventListener ? mq.addEventListener('change', syncMq) : mq.addListener(syncMq);
   }
 
   // ---------- Footer build line ----------

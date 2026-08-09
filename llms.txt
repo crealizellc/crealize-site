@@ -6,20 +6,29 @@
 
 Contact: support@crealize.llc
 Languages: English (/), 日本語 (/ja/), 繁體中文 (/zh/)
+Products: 16
 
 ## Shipped products
 
-- PurityLens — AI skincare-ingredient safety scanner: photo → OCR → AI safety verdict (Flutter, AI OCR, serverless API)
-- Fudeto — daily one-stroke puzzle game (Flutter, puzzle generator, serverless API)
-- Kichitto — receipt capture for solo founders: photo → AI OCR → auto-filed to Google Drive + Sheets (Flutter, Gemini AI, Google Workspace API)
-- QiFlux — quiet, privacy-first cycle tracker; data stays on device (Flutter, Riverpod, local-first)
-- moonpacket — crypto red packets for Telegram communities; non-custodial, USDT / TON / SOL / ETH (Telegram Mini App, multi-chain) — https://moonpacket.com/
+- PurityLens — AI skincare-ingredient safety scanner: photo → OCR → analysis. (iOS)
+- Fudeto — Daily one-stroke puzzle: one stroke, one graph, every morning. (iOS, Android)
+- Kichitto — Receipt capture for solo founders: photo → AI OCR → auto-filed to Drive + Sheets. (iOS)
+- QiFlux — The quiet, privacy-first cycle tracker. (iOS)
+- moonpacket — Crypto red packets for Telegram communities — non-custodial, USDT / TON / SOL / ETH. (Web, Telegram)
+- Tendo — Daily Hamiltonian-path puzzle: connect every dot in one unbroken path. (Android)
+- Rythix 2048 — Music-driven 2048: numbers merge on the beat. (iOS, Android)
+- Meishitto — Business-card scanner with on-device OCR — your contacts stay yours. (iOS, Android)
+- XunNi — AI astrology and relationship readings across two charts. (Android, Web)
+- Meguru — Cross-border commerce platform: listings, orders and settlement in one loop. (Web)
+- YMY — Whole-enterprise design for a Japanese trading company: CI standard, logo vector masters, mascot system, environmental graphics and a four-language corporate site. (Brand, Web)
+- dramaflow — AI short-drama production line with a ratified world constitution and shot-chain continuity. (Internal)
 
 ## In development
 
-- iDokuta — multilingual telehealth for foreigners in Japan; realtime-translation consultations in 6 languages (Flutter)
-- Mairi — daily personal health record × hospital integration (Flutter, Next.js, LINE integration)
-- Tendo — daily Hamiltonian-path puzzle, Fudeto's sister title (vanilla JS web)
+- iDokuta — Multilingual telehealth for foreigners in Japan (in development). (iOS, Android)
+- Mairi — Trilingual personal health record (JA / 繁中 / EN): vitals, medication history and an AI symptom check that reads your own record. (iOS, Android)
+- Kizuki — Social engagement OS: AI notices conversations across cultures, drafts the reply, a human sends it. (Web, Telegram)
+- Todoke — Narrated short-video pipeline: script to captioned, multilingual video and publishing. (Internal)
 
 ## Method
 
@@ -30,3 +39,4 @@ module boundaries, type-safe by default, zero-dependency bias, code as craft.
 ## Hiring
 
 Remote-first, Tokyo HQ. Roles: Design, Engineering, Growth.
+Contact support@crealize.llc — tell us what you shipped, not what you studied.
