@@ -111,8 +111,11 @@
    靠著「後載入贏」蓋掉 sections.css 裡 `@media (prefers-reduced-motion: reduce)`
    給 .m * 設的 animation:none!important —— 等於幫暈動症使用者把動畫重新打開，
    modal 停留時間通常比卡片久，是更糟的迴歸。 */
+/* 不再限定在 .work-modal__shot 底下：卡片本身在觸控裝置上也要循環（見 work-v3.js
+   的 COARSE 分支）。桌機有 hover 可以重播，手機沒有 —— 動畫播完一次就永遠停格，
+   而且那一次通常發生在卡片剛冒出畫面下緣、使用者還沒看到的時候。 */
 @media (prefers-reduced-motion: no-preference) {
-  .work-modal__shot .stage.is-looping * {
+  .stage.is-looping * {
     animation-iteration-count: infinite !important;
   }
 }
@@ -223,15 +226,49 @@
 .work-modal__close:hover { color: var(--ink); border-color: var(--ink-40); }
 .work-modal__close:active { transform: scale(.95); }
 
+/* 窄視口改為「全屏 sheet」。
+   原本是 `.work-modal { place-items: center }` + 讓卡片自由長高：內容一旦比視窗高，
+   溢出會上下均分，把右上角的關閉鈕推到畫面之外。390×844 線上實測 close.y=-40、
+   `document.elementFromPoint(關閉鈕中心)` 回傳 null —— 手機沒有 Esc 鍵，左右又只剩
+   16px 背景可點，使用者等於進得去出不來。
+   解法是把卡片釘成剛好一個視窗高、正文在 __content 內部捲動，關閉鈕留在卡片上不動。 */
 @media (max-width: 700px) {
+  .work-modal { padding: 0; place-items: stretch; }
+  .work-modal__card {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+  }
   .work-modal__content {
     grid-template-columns: 1fr;
     min-height: 0;
+    height: 100%;
+    align-content: start;
     padding: 18px;
+    /* 上緣讓出關閉鈕 + 瀏海安全區，標題才不會被壓在按鈕底下 */
+    padding-top: calc(64px + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
   }
   .work-modal__shot { min-height: 200px; aspect-ratio: 16 / 10; }
-  .work-modal__card { width: 100%; }
   .work-modal__line { max-width: none; }
+  /* 關閉鈕在 work-modal.js 裡是 __card 的直屬子元素，不在 __content 內，
+     所以正文捲動時它不會跟著跑掉。同時放大到 WCAG 2.5.8 的 44×44，
+     底色改為不透明，避免捲到一半時與底下的正文疊字。 */
+  .work-modal__close {
+    top: calc(12px + env(safe-area-inset-top, 0px));
+    right: 12px;
+    min-width: 44px;
+    min-height: 44px;
+    justify-content: center;
+    padding: 7px 14px;
+    background: var(--paper);
+    box-shadow: 0 2px 12px -4px rgba(18,17,16,.4);
+  }
 }
 
 /* ── real product screenshot in modal ── */

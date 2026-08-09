@@ -49,10 +49,12 @@
           <ul class="work-modal__stack"></ul>
           <span class="work-modal__ok"></span>
         </div>
-        <button class="work-modal__close" type="button" aria-label="Close" data-close>
-          <span>esc</span> ✕
-        </button>
       </div>
+      <!-- 關閉鈕必須是 __card 的直屬子元素，不能放進 __content：窄視口下 __content
+           會變成內部捲動容器，放在裡面的按鈕會跟著內容一起被捲出畫面。 -->
+      <button class="work-modal__close" type="button" aria-label="Close" data-close>
+        <span>esc</span> ✕
+      </button>
     </div>`;
   document.body.appendChild(modal);
 
