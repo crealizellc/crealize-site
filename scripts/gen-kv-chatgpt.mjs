@@ -206,11 +206,27 @@ async function generate(prod) {
     await s.send('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13 });
 
     // 生成圖的來源網域是 oaiusercontent（簽章 URL，之後可直接 curl）
+    /* ChatGPT 偶爾回「發生錯誤。請再試一次」並附一個重試鈕。
+       不處理的話就是白等 480 秒，整批一起陣亡（2026-08-09 實測 5/5 失敗）。 */
+    let retried = 0;
+    const maybeRetry = async () => {
+      if (retried >= 2) return false;
+      const clicked = await s.evaluate(() => {
+        const btns = [...document.querySelectorAll('button')];
+        const b = btns.find((x) => /重試|重试|Retry|Try again/i.test(x.textContent || ''));
+        if (b) { b.click(); return true; }
+        return false;
+      }).catch(() => false);
+      if (clicked) { retried++; console.log(`\n     ↻ ${prod.s} 偵測到錯誤，已按重試（第 ${retried} 次）`); }
+      return clicked;
+    };
+
     const sentAt = Date.now();
     const MIN_BYTES = 200_000;   // 上傳的 icon 縮圖是 13KB；生成圖是 MB 級
     let picked = null;
-    for (let waited = 0; waited < 480_000; waited += 4000) {
+    for (let waited = 0; waited < 600_000; waited += 4000) {
       await sleep(4000);
+      if (waited % 40_000 === 0 && waited > 0) await maybeRetry();
       const fileId = (u) => (/id=(file_[A-Za-z0-9]+)/.exec(u || '') || [])[1];
       const cands = [...imgs.entries()]
         .filter(([, e]) => e.done && e.t > sentAt && e.bytes >= MIN_BYTES)
