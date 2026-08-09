@@ -57,6 +57,13 @@ const PRODUCTS = [
   { s: 'meguru', k: 'Meguru', mech: 'Listing, order, support and payout closed into a single loop — forty microservices folded into one platform, with a human approving every reconciliation.' },
 ];
 
+/** 從 PNG 的 IHDR 直接讀寬高（前 24 bytes 就夠，不需要解碼影像）。 */
+function pngSize(buf) {
+  if (buf.length < 24 || buf.readUInt32BE(0) !== 0x89504e47) return null;
+  if (buf.toString('ascii', 12, 16) !== 'IHDR') return null;
+  return { w: buf.readUInt32BE(16), h: buf.readUInt32BE(20) };
+}
+
 function paletteLine(k) {
   const p = PALETTE[k];
   if (!p) return '';
@@ -274,6 +281,16 @@ async function generate(prod) {
     const { body, base64Encoded } = await s.send('Network.getResponseBody', { requestId: picked.requestId });
     const buf = Buffer.from(body, base64Encoded ? 'base64' : 'utf8');
     if (buf.length < MIN_BYTES) throw new Error(`取回的圖只有 ${buf.length} bytes，不像成品`);
+    /* 尺寸是最後一道防線：prompt 要的是 4:3 橫向，而我們上傳的參考圖是
+       直立截圖或正方 icon。若取回的是直立或正方，那就是抓到自己上傳的東西 ——
+       file-id 黑名單擋不住送出後才被重新編碼的那份。
+       2026-08-09 實際踩到：ymy.png 落檔成 945×2048，內容是 YMY 官網截圖
+       （圖上有真實日文與按鈕），四條品質 AC 全部照樣綠燈。 */
+    const png = pngSize(buf);
+    if (!png) throw new Error('取回的不是可解析的 PNG');
+    if (png.w <= png.h) {
+      throw new Error(`取回的是 ${png.w}×${png.h}（非橫向）—— 這是上傳的參考圖，不是生成圖`);
+    }
     return { buf, hasIcon, url: picked.url, refs: refs.length };
   } finally {
     /* 分頁留著重複使用，不關 —— 關掉再開會讓 session 更容易被判定異常。 */

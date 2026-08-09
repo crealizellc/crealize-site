@@ -83,6 +83,34 @@ function paletteHues(slug) {
 const files = readdirSync(KV).filter((f) => f.endsWith('.webp')).sort();
 if (!files.length) { console.error('❌ site/assets/kv/ 沒有 webp'); process.exit(2); }
 
+/* AC-0：來源必須是「生成的橫向底圖」，不是我上傳的參考圖。
+   build-kv-assets 一律把輸出裁成 1600×1200，所以 site/assets/kv/ 這一層
+   永遠是 4:3，量它等於沒量 —— 要看的是 kv-ai/ 與 kv-gen/ 的原始檔。
+   2026-08-09：ymy.png 是 945×2048 的 YMY 官網截圖（圖上有真實日文與按鈕），
+   AC-1..AC-4 四條全綠 —— 因為它們只看亮度與色相，看不出「這是一張截圖」。 */
+const SRC_DIRS = ['site-assets/kv-ai', 'site-assets/kv-gen'];
+const srcFails = [];
+for (const dir of SRC_DIRS) {
+  const abs = join(ROOT, dir);
+  let entries = [];
+  try { entries = readdirSync(abs).filter((f) => f.endsWith('.png')); } catch { continue; }
+  for (const f of entries) {
+    const buf = readFileSync(join(abs, f));
+    if (buf.readUInt32BE(0) !== 0x89504e47 || buf.toString('ascii', 12, 16) !== 'IHDR') {
+      srcFails.push(`AC-0 ${dir}/${f}：不是可解析的 PNG`);
+      continue;
+    }
+    const w = buf.readUInt32BE(16), h = buf.readUInt32BE(20);
+    if (w <= h) srcFails.push(`AC-0 ${dir}/${f}：${w}×${h} 非橫向 —— 這是參考圖或截圖，不是生成的底圖`);
+  }
+}
+if (srcFails.length) {
+  for (const f of srcFails) console.error(`   ✗ ${f}`);
+  console.error(`\n❌ audit-kv-quality — 來源底圖有 ${srcFails.length} 張不是橫向生成圖`);
+  process.exit(2);
+}
+console.log(`   ✓ AC-0 來源底圖全為橫向生成圖`);
+
 /* 取樣改用 sips → PNG → zlib 解碼，不經瀏覽器。
    原本想用 Chrome 的 canvas，實測在 file:// + --virtual-time-budget 下
    img.decode() 不保證在 --dump-dom 之前完成，量測腳本永遠回 "init"。
