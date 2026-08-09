@@ -110,6 +110,15 @@ window.CRZ_I18N = {
       stack: ['Cloudflare Workers', 'D1', '多租戶'],
       status: 'shipped',
     },
+    {
+      name: 'YMY', featured: true, jp: '株式会社YMY商事', tag: '品牌 · 全企業設計',
+      line: '一整間公司，從頭到尾 — <em>識別、官網、事業與經銷。</em>',
+      ph: 'YMY — 品牌識別系統',
+      img: '../assets/kv/ymy.webp',
+      alt: 'YMY 企業識別',
+      stack: ['CI 規範', '向量母版', 'Astro · 四語', '吉祥物體系'],
+      status: 'shipped',
+    },
   ],
   method: [
     { n: '驗證', jp: '', d: '每個點子都先當假說看待。先驗證再動手 — 答案來自真實用戶，不是儀表板。' },

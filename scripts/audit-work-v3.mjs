@@ -59,7 +59,8 @@ window.addEventListener('load', function () {
       bodies: cards.map(function (c) { var e = c.querySelector('.card__body'); return e ? e.textContent : null; }),
       names: cards.map(function (c) { var e = c.querySelector('.card__name em'); return e ? e.textContent : null; }),
       poss: cards.map(function (c) { var e = c.querySelector('.card__pos'); return e ? e.textContent : null; }),
-      imgs: cards.map(function (c) { var e = c.querySelector('.stage__phone img'); return e ? e.getAttribute('src') : null; }),
+      imgs: cards.map(function (c) { var e = c.querySelector('.stage__bg'); return e ? e.getAttribute('src') : null; }),
+      icons: cards.map(function (c) { var e = c.querySelector('.stage__icon'); return e ? e.getAttribute('src') : null; }),
       lede: (document.getElementById('work-lede') || {}).textContent || '',
       classes: (function () {
         var set = {};
@@ -193,20 +194,27 @@ const ok = (label, msg) => console.log(`   ✓ ${label} ${msg}`);
 const bad = (label, msg) => { fails.push(`${label} ${msg}`); console.log(`   ✗ ${label} ${msg}`); };
 
 console.log('▶ AC-1 產品齊全 + data-work-index 唯一');
+/* 產品數以 registry 為準，不寫死 —— 寫死的話每加一個產品就要回頭改這裡，
+   而且改漏了會變成「加了產品卻說通過」。registry 是 build 的真相源。 */
+const N = (() => {
+  const win = {};
+  new Function('window', readFileSync(join(SITE, 'js/i18n/en.js'), 'utf8'))(win);
+  return win.CRZ_I18N.work.length;
+})();
 const R = {};
 for (const loc of LOCALES) {
   R[loc.key] = probe(loc, 1440, 1200);
   const r = R[loc.key];
   const uniq = new Set(r.indices);
-  const inRange = r.indices.every((i) => Number(i) >= 0 && Number(i) <= 11);
-  if (r.count === 12 && uniq.size === 12 && inRange) ok('AC-1', `${loc.key}: 12 張，index 0..11 皆唯一`);
-  else bad('AC-1', `${loc.key}: count=${r.count} uniq=${uniq.size} inRange=${inRange} indices=${r.indices.join(',')}`);
+  const inRange = r.indices.every((i) => Number(i) >= 0 && Number(i) < N);
+  if (r.count === N && uniq.size === N && inRange) ok('AC-1', `${loc.key}: ${N} 張，index 0..${N - 1} 皆唯一`);
+  else bad('AC-1', `${loc.key}: count=${r.count}/${N} uniq=${uniq.size} inRange=${inRange} indices=${r.indices.join(',')}`);
 }
 
 console.log('▶ AC-2 三語真的不同');
 const KANA = /[぀-ゟ゠-ヿ]/;
 const HAN = /[一-鿿]/;
-for (let i = 0; i < 12; i++) {
+for (let i = 0; i < N; i++) {
   const [e, j, z] = [R.en.bodies[i], R.ja.bodies[i], R.zh.bodies[i]];
   const name = R.en.names[i];
   // 只驗「三者不同」的話，一個假名加一個漢字就能過關（獨立驗收實測）。
@@ -241,16 +249,19 @@ for (const loc of LOCALES) {
   else bad('AC-3', `${loc.key}: 缺檔=${missing.join(',')} 非webp=${notWebp.join(',')}`);
 }
 {
-  const nophone = R.en.imgs.filter((x) => x === null).length;
-  if (nophone === 1) ok('AC-3', 'meguru 為 nophone 版型（1 張無截圖），符合設計');
-  else notes.push(`AC-3 提示：無截圖卡有 ${nophone} 張（設計上預期 1 張 = meguru）`);
+  // icon 是「個別 icon」這條需求的落地點；沒有官方 icon 的產品要被點名，不能靜默少一個
+  const noIcon = R.en.icons.map((x, i) => (x ? null : R.en.names[i])).filter(Boolean);
+  if (!noIcon.length) ok('AC-3', `${R.en.icons.length} 張卡都有官方 icon`);
+  else notes.push(`AC-3 提示：這些產品沒有官方 icon（卡片只顯示名稱）：${noIcon.join(', ')}`);
 }
 {
   // 「檔存在且副檔名對」擋不住「內容根本是別的形狀」——2026-08-09 獨立驗收實測：
   // 把 1600×1200 的橫向海報複製成 shots/fudeto.webp，原本這條 AC 照樣全綠。
   // 手機框是 aspect-ratio:9/19.5 + object-fit:cover，長寬比不符就會裁掉可見的內容。
-  const FRAME = 9 / 19.5;
-  const TOL = 0.03;   // 0.03 ≈ 裁掉單邊 3%；再寬就會吃到 UI
+  // 底圖是 4:3 母版（見 tokens/crealize.tokens.json § keyVisual）。
+  // 舊值是 9:19.5 —— 那是手機框的比例，手機框已經整組移除。
+  const FRAME = 4 / 3;
+  const TOL = 0.02;
   for (const src of R.en.imgs.filter(Boolean)) {
     const f = resolve(LOCALES[0].dir, src);
     const dims = execFileSync('sips', ['-g', 'pixelWidth', '-g', 'pixelHeight', f], { encoding: 'utf8' });
@@ -259,7 +270,7 @@ for (const loc of LOCALES) {
     const ratio = w / h;
     const name = src.split('/').pop();
     if (Math.abs(ratio - FRAME) <= TOL) ok('AC-3', `${name} ${w}×${h} ratio=${ratio.toFixed(3)}`);
-    else bad('AC-3', `${name} ${w}×${h} ratio=${ratio.toFixed(3)}，框是 ${FRAME.toFixed(3)}（容差 ${TOL}）—— cover 會裁掉可見內容`);
+    else bad('AC-3', `${name} ${w}×${h} ratio=${ratio.toFixed(3)}，母版是 ${FRAME.toFixed(3)}（容差 ${TOL}）`);
   }
 }
 
@@ -301,7 +312,7 @@ console.log('▶ AC-4 動畫存在且尊重 reduce-motion');
   // 每個產品至少要有一條屬於自己的動畫規則（用 motif class 前綴判定）
   const PREFIX = { puritylens: 'pl', fudeto: 'fd', kichitto: 'ki', qiflux: 'qf', meishitto: 'me',
                    rythix2048: 'rx', tendo: 'td', xunni: 'xn', moonpacket: 'mp', idokuta: 'id',
-                   mairi: 'mr', meguru: 'mg' };
+                   mairi: 'mr', meguru: 'mg', ymy: 'ymy' };
   const noAnim = Object.entries(PREFIX)
     .filter(([, pre]) => !used.some((u) => u.cls.startsWith(pre + '-')))
     .map(([slug]) => slug);

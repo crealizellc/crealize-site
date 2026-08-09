@@ -115,6 +115,14 @@ const P = {
             <path class="stroke" d="M180 640 H430 L500 480 L580 800 L660 600 H1240" fill="none"/>
             <rect class="qr" x="700" y="760" width="200" height="200" rx="20"/>`,
   },
+  ymy: {
+    ink: '#1A1418', a: '#D52A5B', b: '#FFF9F7', c: '#8A1338',
+    slogan: 'Yes. Make Yours.',
+    motif: `<g fill="none" stroke="#FFF9F7" stroke-width="30" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M96 74 L136 130 L176 74 M136 130 V196"/>
+              <path d="M300 196 V88 L346 144 L392 88 V196"/></g>
+            <path class="stroke" d="M330 60 L246 214" stroke="#D52A5B" stroke-width="46" stroke-linecap="square" fill="none"/>`,
+  },
   meguru: {
     ink: '#0E0E10', a: '#B51452', b: '#F6C6D8', c: '#7A0E37',
     slogan: 'Listing, order, support,\npayout — one loop.',

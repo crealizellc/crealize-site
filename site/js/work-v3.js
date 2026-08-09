@@ -51,7 +51,7 @@
 
   var UNRELEASED = { en: 'unreleased', ja: '未リリース', zh: '尚未上架' };
 
-/* ── motifs: authored from each product's real mechanism（原樣自 canvas 切出） ── */
+/* ── motifs：canvas 的原樣切出，加上 work-copy.json 帶進來的新產品 ── */
 var M={
 puritylens:'<svg class="m" viewBox="0 0 320 240"><defs><radialGradient id="plB" cx="34%" cy="30%" r="74%"><stop offset="0" stop-color="#fff"/><stop offset=".38" stop-color="#DCEAF2"/><stop offset="1" stop-color="#7BB8D4"/></radialGradient></defs>'
 +'<g class="pl-ball m-vb" style="transform-origin:112px 120px"><circle cx="112" cy="120" r="66" fill="url(#plB)"/><circle cx="90" cy="98" r="15" fill="#fff" opacity=".72"/></g>'
@@ -114,6 +114,7 @@ meguru:'<svg class="m" viewBox="0 0 320 240">'
 +'<path d="M112 158 V96 a22 22 0 0 1 22 -22 a22 22 0 0 1 22 22 v62"/>'
 +'<path d="M156 158 V96 a22 22 0 0 1 22 -22 a22 22 0 0 1 22 22 v50 l-14 12"/></g>'
 +'<g fill="#B51452"><circle class="mg-node" cx="160" cy="34" r="5"/><circle class="mg-node" style="animation-delay:1.4s" cx="246" cy="120" r="5"/><circle class="mg-node" style="animation-delay:2.8s" cx="160" cy="206" r="5"/></g></svg>'};
+Object.assign(M, {ymy:"<svg class=\"m\" viewBox=\"0 0 320 240\"><g class=\"ymy-marks\" fill=\"none\" stroke=\"#FFF9F7\" stroke-width=\"13\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M56 84 L80 118 L104 84 M80 118 V162\"/><path d=\"M132 162 V96 L160 130 L188 96 V162\"/><path d=\"M216 84 L240 118 L264 84 M240 118 V162\"/></g><path class=\"ymy-tape m-draw\" style=\"--len:210\" d=\"M196 72 L146 178\" fill=\"none\" stroke=\"#D52A5B\" stroke-width=\"22\" stroke-linecap=\"square\"/></svg>"});
 
 /* ── 12 產品 × 三語（各自撰寫，非直譯；原樣自 canvas 切出） ── */
 var P=[
@@ -383,6 +384,30 @@ var P=[
   "zh": {
    "p": "上架、接單、客服、撥款，收成一圈。",
    "b": "轉售生意長得越快，最後就跑在大約四十個沒有人能同時掌握的微服務上。Meguru 把它們收斂成單一平台。真正特別的不是整合，而是我們把自動化的線畫在哪：對帳差異只會產生一份提案，動手核准的一定是人；退款、客訴與高怒氣訊息，絕不自動回覆。human-in-the-loop 在這裡是結構性的，寫進系統裡，不是簡報上的一句承諾。"
+  }
+ },
+ {
+  "s": "ymy",
+  "n": "YMY",
+  "jp": "株式会社YMY商事",
+  "tint": "#1A1418",
+  "st": "ops",
+  "plat": [
+   "Brand",
+   "Web"
+  ],
+  "border": 1,
+  "en": {
+   "p": "One company, designed end to end.",
+   "b": "YMY sources and fulfils for individual sellers on Japan's marketplaces — and it arrived with no identity at all. We designed the whole enterprise: the CI standard down to logo vector masters and safe-space rules, the mascot and its generation standard, the signage, uniforms, vehicles and merchandise, the four-language corporate site, and the way the business and its distribution actually work. The discipline is in the restraint. The magenta diagonal — taken from packing tape and the path goods travel — is the only accent in the entire identity, and the standard forbids adding a second one."
+  },
+  "ja": {
+   "p": "一社まるごと、端から端まで設計する。",
+   "b": "YMYは日本のECモール上の個人商店に仕入れと物流を提供する会社で、依頼を受けた時点でアイデンティティは何もありませんでした。企業全体を設計しています。ロゴのベクター母版とアイソレーションまで定めたCI規定、マスコットとその生成基準、看板・制服・車輌・グッズ、4言語のコーポレートサイト、そして事業と流通の仕組みそのもの。要はどこまで我慢するかです。封函テープと物が流れる経路から取った洋紅の斜線は、この識別全体で唯一の強調で、規定は二つ目を足すことを禁じています。"
+  },
+  "zh": {
+   "p": "一整間公司，從頭到尾一次設計。",
+   "b": "YMY 為日本電商平台上的個人商家做採購與代發，接手時它沒有任何識別。我們設計的是整間企業：從 logo 向量母版與安全空間規則的 CI 規範、吉祥物與它的生成標準、招牌制服車輛周邊、四語官網，一直到事業與經銷制度本身怎麼運作。真正的功夫在克制——那道取自封箱膠帶與貨物流動路徑的洋紅斜線，是整套識別裡唯一的強調，而規範明文禁止再加第二個。"
   }
  }
 ];

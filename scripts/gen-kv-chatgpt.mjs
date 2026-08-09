@@ -48,6 +48,7 @@ const PRODUCTS = [
   { s: 'moonpacket', k: 'moonpacket', mech: 'The lunar-new-year red packet reimagined as Web3’s everyday gesture — non-custodial, dropped straight into a group chat.' },
   { s: 'idokuta', k: 'iDokuta', mech: 'You write how you feel in your own language and it comes back as clear medical Japanese, so you can simply hand the phone to the clinic staff.' },
   { s: 'mairi', k: 'Mairi', mech: 'What you record every day becomes usable on the day you are seen — handed over as a pass that expires in six hours and cannot be renewed.' },
+  { s: 'ymy', k: 'YMY', mech: 'A whole-enterprise identity for a Japanese trading company that sources and fulfils for individual marketplace sellers — CI standard, logo vector masters, mascot, signage, uniforms, vehicles, a four-language corporate site, and the business and distribution design behind it.' },
   { s: 'meguru', k: 'Meguru', mech: 'Listing, order, support and payout closed into a single loop — forty microservices folded into one platform, with a human approving every reconciliation.' },
 ];
 
@@ -183,6 +184,19 @@ async function generate(prod) {
       await sleep(2500);
     }
 
+    /* 送出前先把畫面上已有的圖（＝我剛上傳的參考圖）記下來當黑名單。
+       2026-08-09 踩到：加了第二張參考圖之後，上傳的截圖本身也超過 200KB，
+       而且它的網路回應在送出之後才完成，於是贏了「送出後最大的圖」這個判準 ——
+       kichitto 抓回 942×2048 的截圖、idokuta 抓回 1024×1024 的 icon 本身。 */
+    const uploaded = new Set(await s.evaluate(() => {
+      const ids = [];
+      document.querySelectorAll('img').forEach((i) => {
+        const m = /id=(file_[A-Za-z0-9]+)/.exec(i.currentSrc || i.src || '');
+        if (m) ids.push(m[1]);
+      });
+      return ids;
+    }));
+
     const prompt = buildPrompt(prod, refs.length);
     await s.evaluate(() => { document.querySelector('#prompt-textarea').focus(); });
     await s.send('Input.insertText', { text: prompt });
@@ -197,8 +211,10 @@ async function generate(prod) {
     let picked = null;
     for (let waited = 0; waited < 480_000; waited += 4000) {
       await sleep(4000);
+      const fileId = (u) => (/id=(file_[A-Za-z0-9]+)/.exec(u || '') || [])[1];
       const cands = [...imgs.entries()]
         .filter(([, e]) => e.done && e.t > sentAt && e.bytes >= MIN_BYTES)
+        .filter(([, e]) => !uploaded.has(fileId(e.url)))
         .sort((a, b) => b[1].bytes - a[1].bytes);
       if (cands.length) { picked = { requestId: cands[0][0], ...cands[0][1] }; break; }
     }

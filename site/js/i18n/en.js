@@ -110,6 +110,15 @@ window.CRZ_I18N = {
       stack: ['Cloudflare Workers', 'D1', 'Multi-tenant'],
       status: 'shipped',
     },
+    {
+      name: 'YMY', featured: true, jp: '株式会社YMY商事', tag: 'Brand · Whole-enterprise design',
+      line: 'One company, designed end to end — <em>identity, site, business and distribution.</em>',
+      ph: 'YMY — brand identity system',
+      img: 'assets/kv/ymy.webp',
+      alt: 'YMY corporate identity',
+      stack: ['CI standard', 'Vector masters', 'Astro · 4 locales', 'Mascot system'],
+      status: 'shipped',
+    },
   ],
   method: [
     { n: 'Validate', jp: '検証', d: 'Every idea is a hypothesis. We write the test first — and run it on humans, not dashboards.' },

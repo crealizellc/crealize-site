@@ -57,16 +57,32 @@ for (const m of meta) {
     m[l] = { p: c.pos, b: c.body };
   }
 }
+/* canvas 之外新增的產品（例如客戶案 YMY）：在 work-copy.json 自己的區塊裡
+   多帶 meta 與 motif 兩個欄位，這裡自動接上。以後加新產品只要改那一個檔。 */
+const canvasSlugs = new Set(meta.map((m) => m.s));
+const extraMotifs = [];
+for (const [slug, entry] of Object.entries(COPY)) {
+  if (slug.startsWith('$') || canvasSlugs.has(slug)) continue;
+  if (!entry.meta || !entry.motif) {
+    console.error(`❌ ${slug} 是 canvas 之外的新產品，必須同時提供 meta 與 motif`);
+    process.exit(2);
+  }
+  const m = { ...entry.meta };
+  for (const l of ['en', 'ja', 'zh']) m[l] = { p: entry[l].pos, b: entry[l].body };
+  meta.push(m);
+  extraMotifs.push(`${slug}:${JSON.stringify(entry.motif)}`);
+}
 const P = `var P=${JSON.stringify(meta, null, 1)};`;
 
 // 交叉驗證：兩個宣告都必須恰好涵蓋 12 個產品，否則寧可失敗也不產出殘缺檔。
 const slugs = meta.map((m) => m.s);
 const motifKeys = [...M.matchAll(/^([a-z0-9]+):'<svg/gm)].map((m) => m[1]);
-if (slugs.length !== 12 || motifKeys.length !== 12) {
-  console.error(`❌ 產品數不符：P=${slugs.length} motif=${motifKeys.length}（期望各 12）`);
+const allMotifKeys = motifKeys.concat(extraMotifs.map((e) => e.split(':')[0]));
+if (slugs.length !== allMotifKeys.length) {
+  console.error(`❌ 產品數不符：P=${slugs.length} motif=${allMotifKeys.length}`);
   process.exit(2);
 }
-const noMotif = slugs.filter((s) => !motifKeys.includes(s));
+const noMotif = slugs.filter((s) => !allMotifKeys.includes(s));
 if (noMotif.length) {
   console.error(`❌ 這些產品沒有對應 motif：${noMotif.join(', ')}`);
   process.exit(2);
@@ -125,8 +141,9 @@ const out = `/* ============================================================
 
   var UNRELEASED = { en: 'unreleased', ja: '未リリース', zh: '尚未上架' };
 
-/* ── motifs: authored from each product's real mechanism（原樣自 canvas 切出） ── */
+/* ── motifs：canvas 的原樣切出，加上 work-copy.json 帶進來的新產品 ── */
 ${M}
+${extraMotifs.length ? `Object.assign(M, {${extraMotifs.join(',')}});` : ''}
 
 /* ── 12 產品 × 三語（各自撰寫，非直譯；原樣自 canvas 切出） ── */
 ${P}
@@ -222,5 +239,5 @@ ${P}
 `;
 
 writeFileSync(OUT, out);
-console.log(`✅ site/js/work-v3.js 已生成（${slugs.length} 產品 / ${motifKeys.length} motif，${out.length} bytes）`);
+console.log(`✅ site/js/work-v3.js 已生成（${slugs.length} 產品 / ${allMotifKeys.length} motif，${out.length} bytes）`);
 console.log(`   產品：${slugs.join(', ')}`);

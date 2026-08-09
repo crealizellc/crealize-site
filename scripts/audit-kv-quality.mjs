@@ -12,7 +12,9 @@
    現在的底圖來自 gen-kv-chatgpt.mjs（AI）或 build-kv-code.mjs（程式），
    兩者都只負責「氛圍」，主體與文字由頁面上的動態層提供。所以值得機械檢查的是：
 
-     AC-1 有層次      四角取樣的亮度落差 —— 純色底圖等於沒設計
+     AC-1 有層次      全圖亮度標準差 —— 純色底圖等於沒設計。
+                      **不用四角落差**：深色構圖的四角本來就都是暗的，
+                      XunNi 那張漂亮的金色星盤就是這樣被誤判為「幾乎純色」。
      AC-2 曝光可用    平均亮度落在區間內，卡片上的文字才讀得到
      AC-3 品牌色      主色調落在該產品 product-palette.json 的色系家族內
      AC-4 左下安靜    icon 疊在左下，那一區的細節量不得高於全圖
@@ -42,12 +44,13 @@ const KEY = {
   puritylens: 'PurityLens', fudeto: 'Fudeto', kichitto: 'Kichitto', qiflux: 'QiFlux',
   meishitto: 'Meishitto', rythix2048: 'Rythix2048', tendo: 'Tendo', xunni: 'XunNi',
   moonpacket: 'moonpacket', idokuta: 'iDokuta', mairi: 'Mairi', meguru: 'Meguru',
+  ymy: 'YMY',
 };
 
 const HUE_TOL = 34;        // 色系家族容差（度）。底圖是氛圍層，比 UI 色寬鬆是刻意的
 const LOW_SAT = 12;        // 飽和度低於此的品牌色不拿來比 hue —— 近灰色談色相沒意義
 const LUM_MIN = 8, LUM_MAX = 240;
-const CORNER_DELTA = 10;   // 四角亮度至少要有這個落差才算有層次
+const LUM_STD_MIN = 10;    // 全圖亮度標準差下限（純色底趨近 0）
 const QUIET_RATIO = 1.15;  // 左下細節量相對全圖的上限
 
 function hexToHsl(hex) {
@@ -136,11 +139,12 @@ function sample(file) {
     const { w, h, bpp, data } = img;
     const px = (i, j) => { const k = (j * w + i) * bpp; return [data[k], data[k + 1], data[k + 2]]; };
 
-    let sumL = 0, n = 0;
+    let sumL = 0, sumL2 = 0, n = 0;
     const hist = new Map();
     for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) {
       const [r, g, b] = px(i, j);
-      sumL += (r + g + b) / 3; n++;
+      const L = (r + g + b) / 3;
+      sumL += L; sumL2 += L * L; n++;
       const c = rgbToHsl(r, g, b);
       if (c.s >= 15 && c.l > 8 && c.l < 94) {
         const bin = Math.round(c.h / 8) * 8;
@@ -163,6 +167,7 @@ function sample(file) {
     for (const [bin, cnt] of hist) { total += cnt; if (cnt > best) { best = cnt; dom = bin; } }
     return {
       lum: +(sumL / n).toFixed(1),
+      lumStd: +Math.sqrt(Math.max(0, sumL2 / n - (sumL / n) ** 2)).toFixed(1),
       cornerSpread: +(Math.max(...cs) - Math.min(...cs)).toFixed(1),
       domHue: dom,
       chromaticPx: total,
@@ -190,8 +195,8 @@ for (const f of files) {
   const r = raw[f];
   if (!r) { fails.push(`${slug}：取樣失敗（圖片可能損毀）`); continue; }
 
-  if (r.cornerSpread >= CORNER_DELTA) console.log(`   ✓ AC-1 ${slug.padEnd(12)} 四角亮度落差 ${r.cornerSpread}`);
-  else fails.push(`AC-1 有層次 [${slug}]：四角亮度落差僅 ${r.cornerSpread}（門檻 ${CORNER_DELTA}）—— 幾乎是純色底`);
+  if (r.lumStd >= LUM_STD_MIN) console.log(`   ✓ AC-1 ${slug.padEnd(12)} 亮度標準差 ${r.lumStd}（四角落差 ${r.cornerSpread}）`);
+  else fails.push(`AC-1 有層次 [${slug}]：全圖亮度標準差僅 ${r.lumStd}（門檻 ${LUM_STD_MIN}）—— 幾乎是純色底`);
 
   if (r.lum >= LUM_MIN && r.lum <= LUM_MAX) console.log(`   ✓ AC-2 ${slug.padEnd(12)} 平均亮度 ${r.lum}`);
   else fails.push(`AC-2 曝光 [${slug}]：平均亮度 ${r.lum} 不在 ${LUM_MIN}–${LUM_MAX}`);

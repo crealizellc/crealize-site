@@ -110,6 +110,15 @@ window.CRZ_I18N = {
       stack: ['Cloudflare Workers', 'D1', 'マルチテナント'],
       status: 'shipped',
     },
+    {
+      name: 'YMY', featured: true, jp: '株式会社YMY商事', tag: 'ブランド · 企業まるごと設計',
+      line: '一社まるごと、端から端まで — <em>識別・サイト・事業・流通。</em>',
+      ph: 'YMY — ブランド識別システム',
+      img: '../assets/kv/ymy.webp',
+      alt: 'YMY コーポレートアイデンティティ',
+      stack: ['CI規定', 'ベクター母版', 'Astro · 4言語', 'マスコット体系'],
+      status: 'shipped',
+    },
   ],
   method: [
     { n: '検証', jp: '', d: 'アイデアはすべて仮説として扱います。まず検証から — 答えはダッシュボードではなく、実際のユーザーから得ます。' },

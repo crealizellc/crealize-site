@@ -821,3 +821,8 @@ section { position: relative; }
   #work-cards { grid-template-columns: 1fr; gap: 44px; }
   #work .card__pos { font-size: 15px; }
   
+/* ymy — 三個字標浮現，然後那道洋紅斜線像封箱膠帶一樣拉過去。
+   CI 規範明訂它是整套識別裡唯一的強調動作，所以這裡也只有它在動。 */
+#work .is-live .ymy-marks { animation: ymyIn var(--dur-2) var(--ease-cond) both; }
+@keyframes ymyIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+#work .is-live .ymy-tape { animation: draw var(--dur-2) var(--ease-cond) both; animation-delay: 300ms; }

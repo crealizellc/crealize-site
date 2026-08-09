@@ -174,6 +174,9 @@ const PRODUCTS = [
   { name: 'Rythix 2048', cat: 'GameApplication', os: 'iOS, Android', desc: { en: 'Music-driven 2048: numbers merge on the beat.', ja: 'ビートに乗って数字が重なる音楽パズル 2048。', zh: '跟著節拍合併數字的音樂解謎 2048。' } },
   { name: 'Meishitto', cat: 'BusinessApplication', os: 'iOS, Android', desc: { en: 'Business-card scanner with on-device OCR — your contacts stay yours.', ja: '端末内 OCR の名刺スキャン — 連絡先の持ち主はあなたのまま。', zh: '裝置端 OCR 名片掃描 — 人脈始終是你的。' } },
   { name: 'XunNi', cat: 'LifestyleApplication', os: 'Android, Web', desc: { en: 'AI astrology and relationship readings across two charts.', ja: 'ふたつの命盤を読み解く AI 占星・相性鑑定。', zh: '解讀兩張命盤的 AI 占星與關係分析。' } },
+  // 客戶案：株式会社YMY商事。schema.org 沒有「品牌識別專案」這個型別，
+  // 用 CreativeWork 而不是硬套 SoftwareApplication —— 它不是一支 App。
+  { name: 'YMY', cat: 'CreativeWork', os: 'Brand, Web', desc: { en: 'Whole-enterprise design for a Japanese trading company: CI standard, logo vector masters, mascot system, environmental graphics and a four-language corporate site.', ja: '株式会社YMY商事の企業まるごと設計 — CI規定、ロゴのベクター母版、マスコット体系、環境グラフィック、4言語コーポレートサイト。', zh: '株式会社YMY商事的全企業設計 — CI 規範、logo 向量母版、吉祥物體系、環境圖像與四語官網。' } },
   { name: 'Meguru', cat: 'BusinessApplication', os: 'Web', desc: { en: 'Cross-border commerce platform: listings, orders and settlement in one loop.', ja: '越境ECプラットフォーム — 出品・受注・精算をひと巡り。', zh: '跨境電商平台 — 上架、接單、對帳一路循環。' } },
 ];
 

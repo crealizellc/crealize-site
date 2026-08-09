@@ -33,7 +33,7 @@ const ICON_OUT = join(ROOT, 'site/assets/icons');
 
 const SLUGS = [
   'puritylens', 'fudeto', 'kichitto', 'qiflux', 'meishitto', 'rythix2048',
-  'tendo', 'xunni', 'moonpacket', 'idokuta', 'mairi', 'meguru',
+  'tendo', 'xunni', 'moonpacket', 'idokuta', 'mairi', 'meguru', 'ymy',
 ];
 
 const KV_W = 1600, KV_H = 1200;      // 4:3 母版
