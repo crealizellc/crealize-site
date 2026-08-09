@@ -24,7 +24,7 @@
      node scripts/gen-kv-chatgpt.mjs --print           # 只印 prompt 不動 Chrome
    退出：0 全部成功 / 1 有產品失敗 / 2 環境問題
    ============================================================ */
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync, rmSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { newTab, listPages, attach } from './lib/cdp.mjs';
@@ -108,6 +108,30 @@ if (args.includes('--print')) {
 }
 
 if (!existsSync(OUT)) mkdirSync(OUT, { recursive: true });
+
+/* 單一實例鎖 —— 全腳本共用 automation Chrome 的同一個 ChatGPT 分頁，
+   兩個以上同時跑就會互相搶輸入框、互相看到對方的回覆，症狀是
+   「發生錯誤。請再試一次」與抓到別人的圖。2026-08-09 實際堆積了 20 個
+   前次 session 遺留的程序，todoke / dramaflow 連續失敗全來自這裡，
+   而不是 prompt 或額度問題。 */
+const LOCK = join(ROOT, '.kv-chatgpt.lock');
+if (existsSync(LOCK)) {
+  const pid = Number(readFileSync(LOCK, 'utf8').trim());
+  let alive = false;
+  try { process.kill(pid, 0); alive = true; } catch { alive = false; }
+  if (alive) {
+    console.error(`❌ 另一個 gen-kv-chatgpt 正在跑（pid ${pid}）—— 同時跑會搶同一個 ChatGPT 分頁。`);
+    console.error(`   要強制接手：kill ${pid} && rm ${LOCK}`);
+    process.exit(2);
+  }
+  console.error(`⚠️  清掉上次沒收乾淨的鎖（pid ${pid} 已不存在）`);
+}
+writeFileSync(LOCK, String(process.pid));
+const dropLock = () => { try { rmSync(LOCK, { force: true }); } catch {} };
+process.on('exit', dropLock);
+for (const sig of ['SIGINT', 'SIGTERM', 'SIGHUP']) {
+  process.on(sig, () => { dropLock(); process.exit(130); });
+}
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
