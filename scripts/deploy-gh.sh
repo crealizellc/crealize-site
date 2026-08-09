@@ -109,16 +109,19 @@ fi
 # 3) 資產層：主視覺的線上位元必須等於本地。
 #    2026-08-08 踩到 —— 原本只比對 index.html 雜湊，圖換了但 CDN 還吐舊版時仍報綠燈。
 #    「部署成功 ≠ 上線成功」對資產同樣成立。
-echo "▶ 圖片資產比對（主視覺 + 手機縮圖；CDN 可能落後，最多重試 6 次）..."
+# 2026-08-09：icons/ 原本不在這個迴圈裡。XunNi 換 icon 那次，部署腳本從頭到尾
+# 報綠燈，卻**一張 icon 都沒驗** —— 只能靠人手動 curl 才知道有沒有真的上線。
+# 覆蓋面不足的驗證，比沒有驗證更危險，因為它會產生「已驗過」的錯覺。
+echo "▶ 圖片資產比對（主視覺 + 產品 icon + 手機縮圖；CDN 可能落後，最多重試 6 次）..."
 for attempt in 1 2 3 4 5 6; do
   stale=""
-  for f in site/assets/kv/*.webp site/assets/shots/*.webp; do
+  for f in site/assets/kv/*.webp site/assets/icons/*.webp site/assets/shots/*.webp; do
     rel="${f#site/}"
     lh=$(curl -s -H "Cache-Control: no-cache" "https://crealize.llc/$rel" | shasum -a256 | cut -d' ' -f1)
     bh=$(shasum -a256 "$f" | cut -d' ' -f1)
     [ "$lh" = "$bh" ] || stale="$stale $rel"
   done
-  [ -z "$stale" ] && { echo "   ✓ $(ls site/assets/kv/*.webp site/assets/shots/*.webp | wc -l | tr -d ' ') 張圖片線上位元一致"; break; }
+  [ -z "$stale" ] && { echo "   ✓ $(ls site/assets/kv/*.webp site/assets/icons/*.webp site/assets/shots/*.webp | wc -l | tr -d ' ') 張圖片線上位元一致"; break; }
   [ "$attempt" = "6" ] && { echo "❌ CDN 未更新：$stale" >&2; fail=1; break; }
   sleep 20
 done
