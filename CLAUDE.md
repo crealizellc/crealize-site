@@ -10,7 +10,10 @@
 docs/design-system/source/claude-design-export/Crealize Corporate Site.html  ← 輸入 1：DOM 結構
 site/js/i18n/en.js（CRZ_I18N.work）                                          ← 輸入 2：產品清單
   → scripts/build-site.mjs（注入三語 head / SEO / JSON-LD / i18n script）
-  → site/{index.html, ja/index.html, zh/index.html}   ← builder 只寫這 3 個檔
+  → site/{index.html, ja/index.html, zh/index.html}   ← 三語頁
+  → site/{sitemap.xml, llms.txt}                      ← 2026-08-09 起也由 builder 生成
+                                                         （手工版已爛：lastmod 停在 6/10、
+                                                          llms.txt 只列 8/16 個產品）
   → scripts/deploy-gh.sh → gh-pages branch → crealize.llc
 ```
 
