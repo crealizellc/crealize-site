@@ -4,7 +4,7 @@ window.CRZ_I18N = {
   work: [
     {
       name: 'PurityLens', featured: true, jp: '成分をひと目で', tag: 'AI · Consumer Health',
-      line: 'Read the fine print on your skin — <em>photo → OCR → verdict</em>, before anything touches it.',
+      line: 'Photograph a cosmetic label to check its ingredients and the evidence behind each assessment.',
       ph: 'PurityLens — scan result UI',
       img: 'assets/kv/puritylens.webp',
       alt: 'PurityLens app — ingredient scan result screen',
@@ -13,7 +13,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Fudeto', featured: true, jp: '一筆書き', tag: 'Puzzle · Daily ritual',
-      line: 'One stroke, one graph, every morning — <em>a small infinity before coffee.</em>',
+      line: 'A new one-stroke bridge puzzle each day, shared by every player.',
       ph: 'Fudeto — daily puzzle UI',
       img: 'assets/kv/fudeto.webp',
       alt: 'Fudeto app — daily one-stroke puzzle board',
@@ -22,7 +22,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Kichitto', featured: true, jp: 'きちっと', tag: 'Fintech · Solo founders',
-      line: 'Receipts dissolve into ledgers — <em>photo → AI OCR → filed to Drive + Sheets.</em> Bookkeeping, garbage-collected.',
+      line: 'Photograph a receipt and save the extracted details to your own Drive and Sheets.',
       ph: 'Kichitto — receipt capture UI',
       img: 'assets/kv/kichitto.webp',
       alt: 'Kichitto app — receipt capture screen',
@@ -31,7 +31,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'QiFlux', featured: true, jp: '静かな記録', tag: 'Health · Privacy-first',
-      line: 'The quiet, privacy-first cycle tracker — <em>a diary your body writes,</em> kept on your device.',
+      line: 'A privacy-first cycle tracker that keeps records on your device.',
       ph: 'QiFlux — tracking UI',
       img: 'assets/kv/qiflux.webp',
       alt: 'QiFlux app — cycle calendar screen',
@@ -40,7 +40,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'moonpacket', featured: true, jp: '月へ、紅包を', tag: 'Web3 · Telegram',
-      line: 'Crypto red packets for Telegram — <em>send in seconds, claim instantly.</em> Non-custodial, across USDT · TON · SOL · ETH.',
+      line: 'Send non-custodial crypto red packets in Telegram using USDT, TON, SOL, or ETH.',
       ph: 'moonpacket — red packet UI',
       img: 'assets/kv/moonpacket.webp',
       alt: 'moonpacket — brand mark on a deep navy gradient',
@@ -49,7 +49,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'iDokuta', featured: true, jp: '言葉を越える診療', tag: 'Telehealth · i18n',
-      line: 'Telehealth across language borders — <em>consultations mediated by live translation,</em> six locales deep.',
+      line: 'A telehealth service with live translation across six languages.',
       ph: 'iDokuta — consultation UI',
       img: 'assets/kv/idokuta.webp',
       alt: 'iDokuta app — live translation consultation screen',
@@ -58,7 +58,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Mairi', featured: true, jp: '毎日のカルテ', tag: 'Health · Hospital-integrated',
-      line: 'A daily health record that <em>speaks hospital</em> — personal logs, clinically integrated.',
+      line: 'A multilingual daily health record designed to support hospital visits.',
       ph: 'Mairi — daily record UI',
       img: 'assets/kv/mairi.webp',
       alt: 'Mairi app — welcome screen',
@@ -67,7 +67,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Tendo', featured: true, jp: '一日一道', tag: 'Puzzle · Daily ritual',
-      line: 'Fudeto’s sister title — <em>one Hamiltonian path a day</em> keeps entropy away.',
+      line: 'A daily path puzzle where every point must be visited exactly once.',
       ph: 'Tendo — daily path UI',
       img: 'assets/kv/tendo.webp',
       alt: 'Tendo web app — daily Hamiltonian path puzzle',
@@ -76,7 +76,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Rythix 2048', featured: true, jp: '音で解く 2048', tag: 'Game · Music puzzle',
-      line: 'Numbers merge on the beat — <em>2048 with a metronome in its chest.</em>',
+      line: 'A 2048-style number puzzle that generates music as you play.',
       ph: 'Rythix 2048 — key visual',
       img: 'assets/kv/rythix2048.webp',
       alt: 'Rythix 2048 — pastel tiles merging on a rhythmic grid',
@@ -85,7 +85,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Meishitto', featured: true, jp: '名刺っと', tag: 'B2B · Productivity',
-      line: 'Business cards, dissolved into data — <em>your contacts stay yours.</em>',
+      line: 'Scan business cards on your device and keep the contact data under your control.',
       ph: 'Meishitto — key visual',
       img: 'assets/kv/meishitto.webp',
       alt: 'Meishitto — a card unfolding into structured data rows',
@@ -94,7 +94,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'XunNi', featured: true, jp: '尋你', tag: 'AI · Astrology',
-      line: 'Two charts, one reading — <em>where your constellations overlap.</em>',
+      line: 'AI-assisted relationship readings based on two astrological charts.',
       ph: 'XunNi — key visual',
       img: 'assets/kv/xunni.webp',
       alt: 'XunNi — two star clusters linked by a single line',
@@ -103,7 +103,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Meguru', featured: true, jp: 'めぐる', tag: 'Platform · Cross-border commerce',
-      line: 'The loop behind the storefront — <em>listings, orders, settlement, all circulating.</em>',
+      line: 'One operating layer for listings, orders, customer support, and payouts.',
       ph: 'Meguru — key visual',
       img: 'assets/kv/meguru.webp',
       alt: 'Meguru — brand mark on a magenta gradient',
@@ -112,7 +112,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'YMY', featured: true, jp: '株式会社YMY商事', tag: 'Brand · Whole-enterprise design',
-      line: 'One company, designed end to end — <em>identity, site, business and distribution.</em>',
+      line: 'Corporate identity, multilingual website, and operating model for YMY.',
       ph: 'YMY — brand identity system',
       img: 'assets/kv/ymy.webp',
       alt: 'YMY corporate identity',
@@ -121,7 +121,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Kizuki', featured: true, jp: '気付き', tag: 'AI · Social engagement OS',
-      line: 'It notices the conversation before you do — <em>drafts the reply, you tap send.</em>',
+      line: 'Find relevant product conversations and prepare culturally appropriate reply drafts for human approval.',
       ph: 'Kizuki — engagement inbox',
       img: 'assets/kv/kizuki.webp',
       alt: 'Kizuki social engagement OS',
@@ -130,7 +130,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'dramaflow', featured: true, jp: '短編ドラマ生産ライン', tag: 'AI · Short-drama pipeline',
-      line: 'Constitution first — <em>nothing generates until the world is ratified.</em>',
+      line: 'A short-drama production pipeline with enforced rules for setting, wardrobe, and shot continuity.',
       ph: 'dramaflow — production console',
       img: 'assets/kv/dramaflow.webp',
       alt: 'dramaflow short-drama pipeline',
@@ -139,7 +139,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Todoke', featured: true, jp: '届け', tag: 'AI · Narrated video pipeline',
-      line: 'One script in — <em>three languages of narrated video out.</em>',
+      line: 'Turn one script into narrated videos with subtitles in three languages.',
       ph: 'Todoke — pipeline run',
       img: 'assets/kv/todoke.webp',
       alt: 'Todoke narrated video pipeline',
@@ -148,10 +148,10 @@ window.CRZ_I18N = {
     },
   ],
   method: [
-    { n: 'Validate', jp: '検証', d: 'Every idea is a hypothesis. We write the test first — and run it on humans, not dashboards.' },
-    { n: 'Build', jp: '構築', d: 'A small senior team writes the real thing. No throwaway code, no theater.' },
-    { n: 'Ship', jp: '出荷', d: 'Software is literature that runs. Publish early — readers are the only honest critics.' },
-    { n: 'Polish', jp: '研磨', d: 'The last 4% is the soul — latency, copy, motion. Craft is retention.' },
+    { n: 'Validate', jp: '検証', d: 'We talk to potential users, check assumptions, and define what success looks like before we build.' },
+    { n: 'Build', jp: '構築', d: 'A small senior team designs and builds the working product, using production-ready foundations from the start.' },
+    { n: 'Ship', jp: '出荷', d: 'We release a focused first version, observe how it performs, and fix what gets in the way.' },
+    { n: 'Polish', jp: '研磨', d: 'We improve speed, accessibility, copy, and interaction based on real use.' },
   ],
   ui: {
     wipBadge: 'in development',

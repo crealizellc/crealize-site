@@ -4,7 +4,7 @@ window.CRZ_I18N = {
   work: [
     {
       name: 'PurityLens', featured: true, jp: '成分一目了然', tag: 'AI · 消費者健康',
-      line: '擦上臉之前，先看懂成分表 — <em>拍張照，AI 幫你判定安全性。</em>',
+      line: '拍下化妝品標籤，查看成分與每項判定的依據。',
       ph: 'PurityLens — 掃描結果 UI',
       img: '../assets/kv/puritylens.webp',
       alt: 'PurityLens App — 成分掃描結果畫面',
@@ -13,7 +13,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Fudeto', featured: true, jp: '一筆畫', tag: '解謎 · 每日習慣',
-      line: '每天早上一道一筆畫謎題 — <em>喝咖啡前的小小腦力體操。</em>',
+      line: '每天提供一道全球玩家共用的一筆畫謎題。',
       ph: 'Fudeto — 每日謎題 UI',
       img: '../assets/kv/fudeto.webp',
       alt: 'Fudeto App — 一筆畫謎題畫面',
@@ -22,7 +22,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Kichitto', featured: true, jp: '收據好好記', tag: '金融 · 一人公司',
-      line: '收據拍一下就好 — <em>AI 自動辨識，歸檔進 Drive 和 Sheets。</em>記帳雜務，歸零。',
+      line: '拍下收據，將辨識結果存進你自己的 Drive 與 Sheets。',
       ph: 'Kichitto — 收據擷取 UI',
       img: '../assets/kv/kichitto.webp',
       alt: 'Kichitto App — 收據拍攝畫面',
@@ -31,7 +31,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'QiFlux', featured: true, jp: '安靜的記錄', tag: '健康 · 隱私優先',
-      line: '安靜、隱私優先的週期記錄 — <em>所有資料只留在你的裝置上，</em>不上傳雲端。',
+      line: '重視隱私的週期紀錄工具，所有資料都保留在你的裝置上。',
       ph: 'QiFlux — 記錄 UI',
       img: '../assets/kv/qiflux.webp',
       alt: 'QiFlux App — 週期日曆畫面',
@@ -40,7 +40,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'moonpacket', featured: true, jp: '加密紅包', tag: 'Web3 · Telegram',
-      line: 'Telegram 上的加密貨幣紅包 — <em>幾秒發出、即領即到。</em>非託管，支援 USDT・TON・SOL・ETH。',
+      line: '在 Telegram 發送非託管的加密貨幣紅包，支援 USDT、TON、SOL 與 ETH。',
       ph: 'moonpacket — 紅包 UI',
       img: '../assets/kv/moonpacket.webp',
       alt: 'moonpacket — 深藍漸層上的品牌標誌',
@@ -49,7 +49,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'iDokuta', featured: true, jp: '跨語言看診', tag: '遠距醫療 · 多語言',
-      line: '跨越語言隔閡的線上診療 — <em>即時翻譯陪你看診，</em>支援六種語言。',
+      line: '提供即時翻譯、支援六種語言的線上診療服務。',
       ph: 'iDokuta — 問診 UI',
       img: '../assets/kv/idokuta.webp',
       alt: 'iDokuta App — 即時翻譯問診畫面',
@@ -58,7 +58,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Mairi', featured: true, jp: '每日健康紀錄', tag: '健康 · 醫院整合',
-      line: '每天的健康紀錄，直接接上醫院 — <em>把個人記錄帶進診間。</em>',
+      line: '可在就醫時使用的多語言日常健康紀錄服務。',
       ph: 'Mairi — 每日紀錄 UI',
       img: '../assets/kv/mairi.webp',
       alt: 'Mairi App — 歡迎畫面',
@@ -67,7 +67,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Tendo', featured: true, jp: '一日一道', tag: '解謎 · 每日習慣',
-      line: 'Fudeto 的姊妹作 — <em>每天一題，把所有的點用一條路串起來。</em>',
+      line: '每天一道路徑謎題，每個點都必須剛好走過一次。',
       ph: 'Tendo — 每日路徑 UI',
       img: '../assets/kv/tendo.webp',
       alt: 'Tendo Web App — 漢米爾頓路徑謎題畫面',
@@ -76,7 +76,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Rythix 2048', featured: true, jp: '音で解く 2048', tag: '遊戲 · 音樂解謎',
-      line: '數字踩著節拍合併 — <em>胸口裝了節拍器的 2048。</em>',
+      line: '遊玩時即時生成音樂的 2048 類數字謎題。',
       ph: 'Rythix 2048 — 主視覺',
       img: '../assets/kv/rythix2048.webp',
       alt: 'Rythix 2048 — 方塊在節奏格線上兩兩合併',
@@ -85,7 +85,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Meishitto', featured: true, jp: '名刺っと', tag: 'B2B · 生產力',
-      line: '名片直接化成資料 — <em>而人脈始終是你的。</em>',
+      line: '在裝置上辨識名片，聯絡人資料仍由你自己掌握。',
       ph: 'Meishitto — 主視覺',
       img: '../assets/kv/meishitto.webp',
       alt: 'Meishitto — 一張名片展開成結構化的資料列',
@@ -94,7 +94,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'XunNi', featured: true, jp: '尋你', tag: 'AI · 命理',
-      line: '兩張命盤，一次解讀 — <em>看你們的星座在哪裡交會。</em>',
+      line: '依照兩張命盤分析關係的 AI 輔助解讀服務。',
       ph: 'XunNi — 主視覺',
       img: '../assets/kv/xunni.webp',
       alt: 'XunNi — 兩個星團之間由一條線連起',
@@ -103,7 +103,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Meguru', featured: true, jp: 'めぐる', tag: '平台 · 跨境電商',
-      line: '店面背後那一圈循環 — <em>上架、接單、對帳，一路轉回來。</em>',
+      line: '把商品上架、接單、客服與撥款整合在同一個營運平台。',
       ph: 'Meguru — 主視覺',
       img: '../assets/kv/meguru.webp',
       alt: 'Meguru — 洋紅漸層上的品牌標誌',
@@ -112,7 +112,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'YMY', featured: true, jp: '株式会社YMY商事', tag: '品牌 · 全企業設計',
-      line: '一整間公司，從頭到尾 — <em>識別、官網、事業與經銷。</em>',
+      line: '為 YMY 設計企業識別、多語言官網與事業流通制度。',
       ph: 'YMY — 品牌識別系統',
       img: '../assets/kv/ymy.webp',
       alt: 'YMY 企業識別',
@@ -121,7 +121,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Kizuki', featured: true, jp: '気付き', tag: 'AI · 社群經營 OS',
-      line: '比你先察覺那段對話 — <em>草擬回覆，送出的是人。</em>',
+      line: '找出與商品有關的討論，準備符合當地語境的回覆草稿，再由人確認送出。',
       ph: 'Kizuki — 互動收件匣',
       img: '../assets/kv/kizuki.webp',
       alt: 'Kizuki 社群經營 OS',
@@ -130,7 +130,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'dramaflow', featured: true, jp: '短編ドラマ生産ライン', tag: 'AI · 短劇生產線',
-      line: '憲法先行 — <em>世界觀批准之前，什麼都不生成。</em>',
+      line: '用流程規則管理年代、服裝與鏡頭連戲的短劇製作平台。',
       ph: 'dramaflow — 製作主控台',
       img: '../assets/kv/dramaflow.webp',
       alt: 'dramaflow 短劇生產線',
@@ -139,7 +139,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Todoke', featured: true, jp: '届け', tag: 'AI · 旁白影片管線',
-      line: '丟進一份腳本 — <em>出來三種語言的旁白影片。</em>',
+      line: '把一份腳本製作成三種語言的旁白與字幕影片。',
       ph: 'Todoke — 管線執行',
       img: '../assets/kv/todoke.webp',
       alt: 'Todoke 旁白影片管線',
@@ -148,10 +148,10 @@ window.CRZ_I18N = {
     },
   ],
   method: [
-    { n: '驗證', jp: '', d: '每個點子都先當假說看待。先驗證再動手 — 答案來自真實用戶，不是儀表板。' },
-    { n: '打造', jp: '', d: '小而資深的團隊，從第一行就寫正式品質的程式碼，不做丟棄式原型。' },
-    { n: '上線', jp: '', d: '儘早上線 — 最誠實的回饋，永遠來自真正使用它的人。' },
-    { n: '打磨', jp: '', d: '最後幾 % 的細節是靈魂 — 速度、文案、動效。把細節磨亮，用戶才會留下來。' },
+    { n: '驗證', jp: '', d: '動手前先訪談可能的使用者，確認關鍵假設，並定義成功標準。' },
+    { n: '打造', jp: '', d: '由小型資深團隊完成設計與開發，從一開始就採用可正式運行的基礎。' },
+    { n: '上線', jp: '', d: '先上線一個重點清楚的版本，觀察實際使用，再排除阻礙。' },
+    { n: '改善', jp: '', d: '依照真實使用情況，持續改善速度、無障礙、文案與操作細節。' },
   ],
   ui: {
     wipBadge: '開發中',
