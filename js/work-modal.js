@@ -217,7 +217,19 @@
 
   function fill(w, i) {
     const shot = modal.querySelector('.work-modal__shot');
-    if (w.img) {
+    /* Yves 2026-08-09：「打開的每一張圖，也要有 loop 動態演示」。
+       卡片上已經有一套：底圖 + 會動的向量 motif + 官方 icon，是三層混合的既有系統
+       （gen-work-v3.mjs 的三層混合）。不重新做一套，直接把對應卡片的 .stage 整組
+       複製進 modal —— 同一份 DOM、同一組 @keyframes，不可能跟卡片畫得不一樣。
+       是否找得到卡片：卡片可能還在螢幕外沒進場過（is-in 尚未加上），所以下面
+       用 data-work-index 找，不依賴使用者是否捲到過那張卡。 */
+    const srcCard = document.querySelector('.card[data-work-index="' + i + '"] .stage');
+    if (srcCard) {
+      shot.innerHTML = '';
+      const clone = srcCard.cloneNode(true);
+      clone.classList.add('is-live', 'is-looping');
+      shot.appendChild(clone);
+    } else if (w.img) {
       shot.innerHTML = `<img class="work-modal__img" src="${w.img}" alt="${w.alt || w.name}" decoding="async" style="object-position:${w.pos || 'top center'}" />`;
     } else {
       shot.innerHTML = `<div class="work-card__ph"><b>[ ${w.ph} ]</b><span>product screenshot · drop here</span></div>`;

@@ -608,7 +608,14 @@ section { position: relative; }
   outline: none;
 }
 
-#work .stage {
+/* 結構層（背景 / motif / icon 的定位與混合模式）不再要求 #work 祖先——理由跟
+   上面的 .is-live 動畫規則一樣：modal 打開時會把卡片的 .stage 整組複製到
+   <body> 底下的 modal 裡（不在 #work 容器內），若這些規則鎖死 #work 祖先，
+   clone 過去的圖層會整組塌成一塊沒有定位、沒有混合模式的實心色塊
+   （2026-08-09 實測：XunNi 的 modal 打開後是純黑一片，就是這個成因）。
+   只有「互動狀態」（:hover / :focus-visible）留在 #work 底下 ——
+   那些本來就只該對卡片生效，modal 沒有 hover 這回事。 */
+.stage {
   position: relative;
   aspect-ratio: 4 / 3;
   border-radius: var(--r-3);
@@ -620,19 +627,19 @@ section { position: relative; }
 #work .card:hover .stage { transform: translateY(-3px); }
 #work .card:focus-visible .stage { outline: 2px solid var(--accent); outline-offset: 3px; }
 /* 三層：AI 底圖 → 程式動態 motif → 官方 icon。手機外框已整組移除。 */
-#work .stage__bg {
+.stage__bg {
   position: absolute; inset: 0; width: 100%; height: 100%;
   object-fit: cover; display: block;
   transform: scale(1.04);
   transition: transform 1.6s var(--ease-cond), filter var(--dur-3) var(--ease-cond);
 }
 #work .card:hover .stage__bg { transform: scale(1.09); }
-#work .m {
+.m {
   position: absolute; inset: 0; width: 100%; height: 100%; display: block; overflow: visible;
   mix-blend-mode: screen; opacity: .92;
 }
-#work .stage[data-flat="1"] .m { mix-blend-mode: normal; opacity: .96; }
-#work .stage__icon {
+.stage[data-flat="1"] .m { mix-blend-mode: normal; opacity: .96; }
+.stage__icon {
   position: absolute; left: 22px; bottom: 22px; width: 46px; height: 46px;
   border-radius: 11px; display: block; z-index: 2;
   /* 三道，缺一不可：內緣高光給玻璃感、髮絲外框給邊界、落影給浮起。
@@ -645,8 +652,12 @@ section { position: relative; }
   transition: transform var(--dur-2) var(--ease-cond), opacity var(--dur-2) var(--ease-cond);
   transition-delay: 180ms;
 }
-#work .card.is-in .stage__icon { transform: none; opacity: 1; }
-#work .stage[data-border="1"] { border: 1px solid rgba(14, 14, 16, .14); box-shadow: none; }
+/* 卡片端用 .card.is-in 觸發（IntersectionObserver），modal 端沒有 .card 祖先——
+   但兩邊都會同時拿到 .is-live（reveal 邏輯對 .card 加 is-in 的同時對 .stage 加
+   is-live，見 gen-work-v3.mjs 的 reveal 區塊；modal 端由 work-modal.js 的 fill()
+   直接加），改用 .stage.is-live 當單一判準，兩邊都吃得到。 */
+.stage.is-live .stage__icon, #work .card.is-in .stage__icon { transform: none; opacity: 1; }
+.stage[data-border="1"] { border: 1px solid rgba(14, 14, 16, .14); box-shadow: none; }
 
 
 #work .card__meta { margin-top: 18px; }
@@ -729,96 +740,101 @@ section { position: relative; }
 #work .m-draw { stroke-dasharray: var(--len); stroke-dashoffset: var(--len); }
 
 /* puritylens — 成分列浮現，收斂成一個分數環 */
-#work .is-live .pl-row { animation: plRow var(--dur-2) var(--ease-cond) both; }
+.is-live .pl-row { animation: plRow var(--dur-2) var(--ease-cond) both; }
 @keyframes plRow { 0% { opacity: 0; transform: translateX(-10px); } 40%, 62% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateX(26px) scale(.9); } }
-#work .is-live .pl-dial { animation: draw var(--dur-3) var(--ease-cond) both; animation-delay: var(--dur-2); }
-#work .is-live .pl-ball { animation: plBall var(--dur-3) var(--ease-cond) both; }
+.is-live .pl-dial { animation: draw var(--dur-3) var(--ease-cond) both; animation-delay: var(--dur-2); }
+.is-live .pl-ball { animation: plBall var(--dur-3) var(--ease-cond) both; }
 @keyframes plBall { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: scale(1); } }
 @keyframes draw { to { stroke-dashoffset: 0; } }
 
 /* fudeto — 等角螺旋 800ms 自畫，收在那個金點上 */
-#work .is-live .fd-spiral { animation: draw 800ms var(--ease-cond) both; }
-#work .is-live .fd-gold { animation: fdGold var(--dur-1) var(--ease-cond) both; animation-delay: 760ms; }
+.is-live .fd-spiral { animation: draw 800ms var(--ease-cond) both; }
+.is-live .fd-gold { animation: fdGold var(--dur-1) var(--ease-cond) both; animation-delay: 760ms; }
 @keyframes fdGold { from { opacity: 0; transform: scale(.4); } to { opacity: 1; transform: scale(1); } }
 
 /* kichitto — 按快門、收據落下、成為帳上的一列 */
-#work .is-live .ki-fab { animation: kiFab var(--dur-1) var(--ease-cond) both; }
+.is-live .ki-fab { animation: kiFab var(--dur-1) var(--ease-cond) both; }
 @keyframes kiFab { 0%, 18% { transform: scale(1); } 34% { transform: scale(.86); } 100% { transform: scale(1); } }
-#work .is-live .ki-receipt { animation: kiFall var(--dur-3) var(--ease-cond) both; animation-delay: var(--dur-1); }
+.is-live .ki-receipt { animation: kiFall var(--dur-3) var(--ease-cond) both; animation-delay: var(--dur-1); }
 @keyframes kiFall { 0% { opacity: 0; transform: translateY(-52px); } 44% { opacity: 1; transform: translateY(0); } 80%, 100% { opacity: 0; transform: translateY(64px) scaleY(.24); } }
-#work .is-live .ki-row { animation: kiRow var(--dur-2) var(--ease-cond) both; animation-delay: 1.16s; transform-origin: left center; }
+.is-live .ki-row { animation: kiRow var(--dur-2) var(--ease-cond) both; animation-delay: 1.16s; transform-origin: left center; }
 @keyframes kiRow { from { opacity: 0; transform: scaleX(.2); } to { opacity: 1; transform: scaleX(1); } }
 
 /* qiflux — 標記只是在呼吸 */
-#work .is-live .qf-breathe { animation: qfB 5.2s var(--ease-cond) infinite; }
+.is-live .qf-breathe { animation: qfB 5.2s var(--ease-cond) infinite; }
 @keyframes qfB { 0%, 100% { transform: scale(1); opacity: .92; } 50% { transform: scale(1.045); opacity: 1; } }
 
 /* meishitto — 卡片滑進名片夾。400ms 上限，reduce-motion 時歸零 */
-#work .is-live .me-card { animation: meIn 400ms var(--ease-cond) both; }
+.is-live .me-card { animation: meIn 400ms var(--ease-cond) both; }
 @keyframes meIn { from { transform: translate(-46px, -26px) rotate(-7deg); opacity: 0; } to { transform: none; opacity: 1; } }
-#work .is-live .me-row { animation: meRow var(--dur-1) var(--ease-cond) both; }
+.is-live .me-row { animation: meRow var(--dur-1) var(--ease-cond) both; }
 @keyframes meRow { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: none; } }
 
 /* rythix 2048 — 滑動 → 合併 → 發聲，照這個因果順序 */
-#work .is-live .rx-a { animation: rxA 1.6s var(--ease-cond) infinite; }
+.is-live .rx-a { animation: rxA 1.6s var(--ease-cond) infinite; }
 @keyframes rxA { 0% { transform: none; } 26%, 100% { transform: translateX(56px); } }
-#work .is-live .rx-b { animation: rxB 1.6s var(--ease-cond) infinite; }
+.is-live .rx-b { animation: rxB 1.6s var(--ease-cond) infinite; }
 @keyframes rxB { 0%, 26% { opacity: 0; transform: scale(.6); } 34% { opacity: 1; transform: scale(1.08); } 44%, 100% { opacity: 1; transform: scale(1); } }
-#work .is-live .rx-bar { animation: rxBar 1.6s var(--ease-cond) infinite; }
+.is-live .rx-bar { animation: rxBar 1.6s var(--ease-cond) infinite; }
 #work .rx-bar { transform-origin: left bottom; }
 @keyframes rxBar { 0%, 34% { transform: scaleY(.12); } 46% { transform: scaleY(1); } 70%, 100% { transform: scaleY(.18); } }
 
 /* tendo — Magic Moment：頂點按走訪順序在 2.4 秒內依序亮起 */
-#work .is-live .td-path { animation: draw 2.4s linear both; }
-#work .is-live .td-node { animation: tdNode var(--dur-1) var(--ease-cond) both; }
+.is-live .td-path { animation: draw 2.4s linear both; }
+.is-live .td-node { animation: tdNode var(--dur-1) var(--ease-cond) both; }
 @keyframes tdNode { from { fill-opacity: .16; } to { fill-opacity: 1; } }
 
 /* xunni — 外殼呼吸；鏡片切換，雷達跟著重讀一次 */
-#work .is-live .xn-shell { animation: xnShell 6s var(--ease-cond) infinite; }
+.is-live .xn-shell { animation: xnShell 6s var(--ease-cond) infinite; }
 @keyframes xnShell { 0%, 100% { opacity: .45; transform: scale(1); } 50% { opacity: .9; transform: scale(1.03); } }
-#work .is-live .xn-r1 { animation: xnR1 4.8s var(--ease-cond) infinite; }
+.is-live .xn-r1 { animation: xnR1 4.8s var(--ease-cond) infinite; }
 @keyframes xnR1 { 0%, 38% { opacity: 1; } 50%, 88% { opacity: 0; } 100% { opacity: 1; } }
-#work .is-live .xn-r2 { animation: xnR2 4.8s var(--ease-cond) infinite; }
+.is-live .xn-r2 { animation: xnR2 4.8s var(--ease-cond) infinite; }
 @keyframes xnR2 { 0%, 38% { opacity: 0; } 50%, 88% { opacity: 1; } 100% { opacity: 0; } }
-#work .is-live .xn-lens { animation: xnLens 4.8s steps(1) infinite; }
+.is-live .xn-lens { animation: xnLens 4.8s steps(1) infinite; }
 @keyframes xnLens { 0%, 44% { transform: none; } 50%, 94% { transform: translateX(26px); } 100% { transform: none; } }
 
 /* moonpacket — 封口掀開，獎勵飛出來 */
-#work .is-live .mp-flap { animation: mpFlap var(--dur-3) var(--ease-cond) both; }
+.is-live .mp-flap { animation: mpFlap var(--dur-3) var(--ease-cond) both; }
 @keyframes mpFlap { 0% { transform: rotateX(0); } 55%, 100% { transform: rotateX(-158deg); } }
-#work .is-live .mp-coin { animation: mpCoin var(--dur-3) var(--ease-cond) both; animation-delay: var(--dur-1); }
+.is-live .mp-coin { animation: mpCoin var(--dur-3) var(--ease-cond) both; animation-delay: var(--dur-1); }
 @keyframes mpCoin { from { opacity: 0; transform: translateY(16px) scale(.7); } to { opacity: 1; transform: translateY(-64px) scale(1); } }
 
 /* idokuta — 你的話溶成醫療日文，然後把手機遞過去 */
-#work .is-live .id-src { animation: idSrc var(--dur-2) var(--ease-cond) both; }
+.is-live .id-src { animation: idSrc var(--dur-2) var(--ease-cond) both; }
 @keyframes idSrc { 0% { opacity: 1; filter: blur(0); } 100% { opacity: 0; filter: blur(4px); } }
-#work .is-live .id-ja { animation: idJa var(--dur-2) var(--ease-cond) both; animation-delay: var(--dur-1); }
+.is-live .id-ja { animation: idJa var(--dur-2) var(--ease-cond) both; animation-delay: var(--dur-1); }
 @keyframes idJa { from { opacity: 0; filter: blur(4px); } to { opacity: 1; filter: blur(0); } }
-#work .is-live .id-card { animation: idPass var(--dur-3) var(--ease-cond) both; animation-delay: var(--dur-2); }
+.is-live .id-card { animation: idPass var(--dur-3) var(--ease-cond) both; animation-delay: var(--dur-2); }
 @keyframes idPass { from { transform: none; } to { transform: translateX(34px); } }
-#work .is-live .id-hand { animation: idHand var(--dur-3) var(--ease-cond) both; animation-delay: var(--dur-2); }
+.is-live .id-hand { animation: idHand var(--dur-3) var(--ease-cond) both; animation-delay: var(--dur-2); }
 @keyframes idHand { from { transform: translateX(22px); opacity: .35; } to { transform: none; opacity: 1; } }
 
 /* mairi — 三語各自的紀錄匯流成同一條時間軸，接上今天的生命徵象 */
-#work .is-live .mr-strand .m-draw { animation: draw var(--dur-3) var(--ease-cond) both; }
-#work .is-live .mr-strand .m-draw:nth-child(2) { animation-delay: 90ms; }
-#work .is-live .mr-strand .m-draw:nth-child(3) { animation-delay: 180ms; }
-#work .is-live .mr-join { animation: mrJoin 4.8s var(--ease-cond) infinite; transform-origin: 200px 120px; }
+.is-live .mr-strand .m-draw { animation: draw var(--dur-3) var(--ease-cond) both; }
+.is-live .mr-strand .m-draw:nth-child(2) { animation-delay: 90ms; }
+.is-live .mr-strand .m-draw:nth-child(3) { animation-delay: 180ms; }
+.is-live .mr-join { animation: mrJoin 4.8s var(--ease-cond) infinite; transform-origin: 200px 120px; }
 @keyframes mrJoin { 0%, 62%, 100% { opacity: .45; transform: scale(.82); } 72% { opacity: 1; transform: none; } }
-#work .is-live .mr-beat { stroke-dasharray: 220; animation: mrBeat 4.8s linear infinite; }
+.is-live .mr-beat { stroke-dasharray: 220; animation: mrBeat 4.8s linear infinite; }
 @keyframes mrBeat { 0%, 24% { stroke-dashoffset: 220; } 70%, 100% { stroke-dashoffset: 0; } }
 
 /* meguru — 一個閉環，持續流動；洋紅只在節點出現 */
-#work .is-live .mg-loop { animation: mgFlow 4.4s linear infinite; }
+.is-live .mg-loop { animation: mgFlow 4.4s linear infinite; }
 @keyframes mgFlow { to { stroke-dashoffset: -88; } }
-#work .is-live .mg-node { animation: mgNode 4.4s var(--ease-cond) infinite; }
+.is-live .mg-node { animation: mgNode 4.4s var(--ease-cond) infinite; }
 @keyframes mgNode { 0%, 72%, 100% { opacity: .34; } 80% { opacity: 1; } }
 
 @media (prefers-reduced-motion: reduce) {
   #work .card { opacity: 1; filter: none; transform: none; }
-  #work .m *, #work .is-live .m * { animation: none !important; }
-  #work .m-draw { stroke-dashoffset: 0; }
-  #work .mp-flap { transform: rotateX(-158deg); }
+  /* .m / .m-draw / .mp-flap 這幾行拿掉 #work 前綴的理由跟上面結構層一致：
+     modal 打開時會 clone 卡片的 .stage 到 <body> 底下（不在 #work 內）。
+     若這條關閉規則鎖死 #work，暈動症使用者在系統設定要求「減少動態」時，
+     modal 打開後 motif 照樣會用 animation-iteration-count:infinite 一直轉——
+     那是比卡片本身更糟的動態量（modal 停留時間通常更長）。 */
+  .m *, .is-live .m * { animation: none !important; }
+  .m-draw { stroke-dashoffset: 0; }
+  .mp-flap { transform: rotateX(-158deg); }
 }
 
 @media (max-width: 1100px) { #work-cards { grid-template-columns: repeat(2, 1fr); } }
@@ -828,33 +844,33 @@ section { position: relative; }
   
 /* ymy — 三個字標浮現，然後那道洋紅斜線像封箱膠帶一樣拉過去。
    CI 規範明訂它是整套識別裡唯一的強調動作，所以這裡也只有它在動。 */
-#work .is-live .ymy-marks { animation: ymyIn var(--dur-2) var(--ease-cond) both; }
+.is-live .ymy-marks { animation: ymyIn var(--dur-2) var(--ease-cond) both; }
 @keyframes ymyIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
-#work .is-live .ymy-tape { animation: draw var(--dur-2) var(--ease-cond) both; animation-delay: 300ms; }
+.is-live .ymy-tape { animation: draw var(--dur-2) var(--ease-cond) both; animation-delay: 300ms; }
 
 /* kizuki — 燈泡自己畫出來，朱紅的芯亮起，然後往外擴出三圈「聽見了」的漣漪 */
-#work .is-live .kz-bulb { animation: draw var(--dur-3) var(--ease-cond) both; }
-#work .is-live .kz-spark { animation: kzSpark var(--dur-2) var(--ease-cond) both; animation-delay: 620ms; }
+.is-live .kz-bulb { animation: draw var(--dur-3) var(--ease-cond) both; }
+.is-live .kz-spark { animation: kzSpark var(--dur-2) var(--ease-cond) both; animation-delay: 620ms; }
 @keyframes kzSpark { from { opacity: 0; transform: scale(.4); } to { opacity: 1; transform: scale(1); } }
-#work .is-live .kz-ripple { animation: kzRipple 4.6s var(--ease-cond) infinite; }
+.is-live .kz-ripple { animation: kzRipple 4.6s var(--ease-cond) infinite; }
 @keyframes kzRipple { 0%, 100% { opacity: .18; transform: scale(.94); } 45% { opacity: .5; transform: scale(1.02); } }
 
 /* dramaflow — 憲法先亮（上方那點），三格畫面才依序出現，最後首末幀的連戲鏈接起來 */
-#work .is-live .df-gate { animation: dfGate var(--dur-2) var(--ease-cond) both; }
+.is-live .df-gate { animation: dfGate var(--dur-2) var(--ease-cond) both; }
 @keyframes dfGate { from { opacity: 0; transform: scale(.3); } to { opacity: 1; transform: scale(1); } }
-#work .is-live .df-frames { animation: dfIn var(--dur-3) var(--ease-cond) both; animation-delay: 280ms; }
+.is-live .df-frames { animation: dfIn var(--dur-3) var(--ease-cond) both; animation-delay: 280ms; }
 @keyframes dfIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
-#work .is-live .df-chain { animation: draw var(--dur-2) var(--ease-cond) both; animation-delay: 900ms; }
+.is-live .df-chain { animation: draw var(--dur-2) var(--ease-cond) both; animation-delay: 900ms; }
 
 /* todoke — 旁白波形在跑，字幕跟著出現；左側三個點是三個語系 */
-#work .is-live .td-wave rect { animation: tdWave 1.5s var(--ease-cond) infinite; transform-origin: center; }
-#work .is-live .td-wave rect:nth-child(2) { animation-delay: .12s }
-#work .is-live .td-wave rect:nth-child(3) { animation-delay: .24s }
-#work .is-live .td-wave rect:nth-child(4) { animation-delay: .36s }
-#work .is-live .td-wave rect:nth-child(5) { animation-delay: .48s }
+.is-live .td-wave rect { animation: tdWave 1.5s var(--ease-cond) infinite; transform-origin: center; }
+.is-live .td-wave rect:nth-child(2) { animation-delay: .12s }
+.is-live .td-wave rect:nth-child(3) { animation-delay: .24s }
+.is-live .td-wave rect:nth-child(4) { animation-delay: .36s }
+.is-live .td-wave rect:nth-child(5) { animation-delay: .48s }
 @keyframes tdWave { 0%, 100% { transform: scaleY(.55); } 50% { transform: scaleY(1); } }
-#work .is-live .td-cap { animation: tdCap var(--dur-2) var(--ease-cond) both; animation-delay: 420ms; }
+.is-live .td-cap { animation: tdCap var(--dur-2) var(--ease-cond) both; animation-delay: 420ms; }
 @keyframes tdCap { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-#work .is-live .td-locales { animation: tdLoc var(--dur-3) var(--ease-cond) both; animation-delay: 200ms; }
+.is-live .td-locales { animation: tdLoc var(--dur-3) var(--ease-cond) both; animation-delay: 200ms; }
 @keyframes tdLoc { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: none; } }
 
