@@ -263,6 +263,12 @@ for (const loc of LOCALES) {
   const noIcon = R.en.icons.map((x, i) => (x ? null : R.en.names[i])).filter(Boolean);
   if (!noIcon.length) ok('AC-3', `${R.en.icons.length} 張卡都有官方 icon`);
   else notes.push(`AC-3 ⚠️ 缺官方 icon（卡片留空，等真檔進來）：${noIcon.join(', ')}`);
+  // 有 src 就必須解析得到檔案 —— 破圖會顯示 alt 文字，看起來像一個寫著產品名的白方塊
+  const brokenIcon = R.en.icons
+    .map((src, i) => (src && !existsSync(resolve(LOCALES[0].dir, src)) ? `${R.en.names[i]} → ${src}` : null))
+    .filter(Boolean);
+  if (!brokenIcon.length) ok('AC-3', 'icon 路徑全部解析得到檔案');
+  else bad('AC-3', `icon 破圖（會顯示 alt 文字）：${brokenIcon.join(', ')}`);
 }
 {
   // 「檔存在且副檔名對」擋不住「內容根本是別的形狀」——2026-08-09 獨立驗收實測：

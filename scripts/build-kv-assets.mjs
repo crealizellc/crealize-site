@@ -103,6 +103,6 @@ for (const slug of SLUGS) {
   const r = toWebp(src, join(ICON_OUT, `${slug}.webp`), ICON_PX, ICON_PX, 90);
   console.log(`   ✓ ${slug.padEnd(12)} ${r.srcW}×${r.srcH} → ${ICON_PX}², ${r.kb.toFixed(1)} KB`);
 }
-if (noIcon.length) console.log(`   ℹ️  無官方 icon（卡片改只顯示名稱）：${noIcon.join(', ')}`);
+if (noIcon.length) console.log(`   ⚠️  缺官方 icon，卡片留空（不自己生一個）：${noIcon.join(', ')}`);
 
 console.log(`✅ kv ${readdirSync(KV_OUT).filter((f) => f.endsWith('.webp')).length} 張 · icon ${readdirSync(ICON_OUT).filter((f) => f.endsWith('.webp')).length} 張`);

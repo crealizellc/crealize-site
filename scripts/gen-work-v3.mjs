@@ -10,7 +10,7 @@
    用法：node scripts/gen-work-v3.mjs
    退出：0 成功 / 2 來源結構不符（不靜默產出殘缺檔）
    ============================================================ */
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -71,6 +71,12 @@ for (const [slug, entry] of Object.entries(COPY)) {
   for (const l of ['en', 'ja', 'zh']) m[l] = { p: entry[l].pos, b: entry[l].body };
   meta.push(m);
   extraMotifs.push(`${slug}:${JSON.stringify(entry.motif)}`);
+}
+/* icon 檔不存在就不要渲染 <img> —— 否則瀏覽器顯示破圖與 alt 文字，
+   看起來像一個寫著產品名的白方塊（2026-08-09 實拍抓到 Mairi/Kizuki/Todoke 都這樣）。
+   缺哪些由 audit-work-v3 的 AC-3 列名回報，不自己補一個 icon。 */
+for (const m of meta) {
+  m.hasIcon = existsSync(join(ROOT, 'site/assets/icons', `${m.s}.webp`)) ? 1 : 0;
 }
 const P = `var P=${JSON.stringify(meta, null, 1)};`;
 
@@ -184,7 +190,7 @@ ${P}
     var bg = reg ? '<img class="stage__bg" src="' + reg.img + '" alt="" loading="lazy" decoding="async" width="1600" height="1200" />' : '';
     /* 沒有官方 icon 的產品就不放標記 —— 不自己生一個。
        缺哪些由 audit-work-v3 的 AC-3 列名回報，等真的 icon 進來再補。 */
-    var icon = reg
+    var icon = (reg && p.hasIcon)
       ? '<img class="stage__icon" src="' + reg.img.replace(/assets\\/kv\\/[^/]+$/, 'assets/icons/' + p.s + '.webp') +
         '" alt="' + p.n + ' icon" loading="lazy" decoding="async" width="256" height="256" />'
       : '';
