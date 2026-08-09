@@ -64,3 +64,4 @@ site/*/__audit-*.html
 # gen-kv-chatgpt 單一實例鎖（執行期產物）
 .kv-chatgpt.lock
 .chrome-shoot-profile/
+.chrome-mobile-profile*/

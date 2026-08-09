@@ -597,6 +597,16 @@ var P=[
      理由相同：IntersectionObserver 在部分瀏覽器被節流時會漏觸發。 */
   var cards = [].slice.call(host.querySelectorAll('.card'));
   var pending = cards.slice();
+
+  /* 觸控裝置沒有 hover，下面那組 mouseenter 重播永遠不會觸發。卡片的 motif 多半是
+     `animation: ... both`（只播一次），而那一次是在卡片剛越過 vh*0.9、還在畫面
+     下緣時播完的 —— 手機使用者實際上永遠看不到動態，只看得到停在最後一格的靜止圖。
+     所以在 coarse pointer 上改成「卡片進入畫面中央帶就持續循環」：沿用既有的
+     .is-looping（work-modal.css，本身包在 prefers-reduced-motion: no-preference
+     內，暈動症使用者不受影響），不另外寫一套動畫。
+     只讓中央帶內的卡片循環 —— 390px 螢幕同時至多 1–2 張在跑，不會 16 張一起燒電。 */
+  var COARSE = window.matchMedia && window.matchMedia('(hover: none)').matches;
+
   function check() {
     var vh = window.innerHeight;
     for (var i = pending.length - 1; i >= 0; i--) {
@@ -607,9 +617,17 @@ var P=[
         pending.splice(i, 1);
       }
     }
+    if (!COARSE) return;
+    for (var j = 0; j < cards.length; j++) {
+      var c = cards[j], b = c.getBoundingClientRect(), st = c.querySelector('.stage');
+      if (!st) continue;
+      st.classList.toggle('is-looping', b.top < vh * 0.85 && b.bottom > vh * 0.15);
+    }
   }
   window.addEventListener('scroll', check, { passive: true });
   window.addEventListener('resize', check);
+  /* 循環開關只在捲動位置改變時需要重算，交給上面的 scroll/resize 監聽即可 ——
+     不留常駐 interval，手機才不會在使用者停著不動時持續空轉耗電。 */
   var timer = setInterval(function () { check(); if (!pending.length) clearInterval(timer); }, 300);
   check();
 

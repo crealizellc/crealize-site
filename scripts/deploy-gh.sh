@@ -52,6 +52,13 @@ node scripts/audit-nav.mjs
 echo "▶ 爬蟲可見性驗收（不執行 JS 的原始 HTML 必須含完整內容）..."
 node scripts/audit-prerender.mjs
 
+# 前面每一道都在 1440px 或「390px 寬的 iframe」裡量 —— 那量不到真手機：
+# iframe 的高度是我們自己給的（測不出 modal 溢出把關閉鈕推出畫面），
+# 而且 iframe 永遠是 hover:hover（測不出觸控裝置看不到卡片動畫）。
+# 2026-08-09 兩個上線缺陷都是從這個盲區溜出去的。
+echo "▶ 真手機模擬驗收（390×844 mobile=true：modal 關得掉、動態看得到）..."
+node scripts/audit-mobile-modal.mjs
+
 # 我們用 -t/--dotfiles 是因為 GitHub Pages 需要 .nojekyll。代價是 site/ 裡任何
 # dotfile 都會被公開發佈。2026-08-08 發現 gh-pages 上殘留 .cursorrules（8229 bytes，
 # 公司內部開發規範）與 .gitignore，兩者皆 HTTP 200 可公開讀取。
