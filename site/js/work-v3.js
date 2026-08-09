@@ -115,6 +115,8 @@ meguru:'<svg class="m" viewBox="0 0 320 240">'
 +'<path d="M156 158 V96 a22 22 0 0 1 22 -22 a22 22 0 0 1 22 22 v50 l-14 12"/></g>'
 +'<g fill="#B51452"><circle class="mg-node" cx="160" cy="34" r="5"/><circle class="mg-node" style="animation-delay:1.4s" cx="246" cy="120" r="5"/><circle class="mg-node" style="animation-delay:2.8s" cx="160" cy="206" r="5"/></g></svg>'};
 Object.assign(M, {ymy:"<svg class=\"m\" viewBox=\"0 0 320 240\"><g class=\"ymy-marks\" fill=\"none\" stroke=\"#FFF9F7\" stroke-width=\"13\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M56 84 L80 118 L104 84 M80 118 V162\"/><path d=\"M132 162 V96 L160 130 L188 96 V162\"/><path d=\"M216 84 L240 118 L264 84 M240 118 V162\"/></g><path class=\"ymy-tape m-draw\" style=\"--len:210\" d=\"M196 72 L146 178\" fill=\"none\" stroke=\"#D52A5B\" stroke-width=\"22\" stroke-linecap=\"square\"/></svg>",kizuki:"<svg class=\"m\" viewBox=\"0 0 320 240\"><g class=\"kz-ripple\" fill=\"none\" stroke=\"#FAFAF7\" stroke-width=\"2\" opacity=\".4\"><circle cx=\"160\" cy=\"116\" r=\"84\"/><circle cx=\"160\" cy=\"116\" r=\"112\"/><circle cx=\"160\" cy=\"116\" r=\"140\"/></g><path class=\"kz-bulb m-draw\" style=\"--len:300\" d=\"M160 44 a52 52 0 0 1 32 93 v20 h-64 v-20 a52 52 0 0 1 32 -93z\" fill=\"none\" stroke=\"#FAFAF7\" stroke-width=\"7\" stroke-linejoin=\"round\"/><path class=\"kz-spark\" d=\"M148 108 L160 78 L172 108 L160 130 Z\" fill=\"#DC322F\"/><g fill=\"#FAFAF7\" opacity=\".55\"><rect x=\"132\" y=\"182\" width=\"56\" height=\"7\" rx=\"3\"/><rect x=\"142\" y=\"198\" width=\"36\" height=\"7\" rx=\"3\"/></g></svg>",dramaflow:"<svg class=\"m\" viewBox=\"0 0 320 240\"><g class=\"df-frames\"><rect x=\"28\" y=\"84\" width=\"76\" height=\"58\" rx=\"6\" fill=\"none\" stroke=\"#5b8cff\" stroke-width=\"5\"/><rect x=\"122\" y=\"84\" width=\"76\" height=\"58\" rx=\"6\" fill=\"none\" stroke=\"#5b8cff\" stroke-width=\"5\"/><rect x=\"216\" y=\"84\" width=\"76\" height=\"58\" rx=\"6\" fill=\"none\" stroke=\"#5b8cff\" stroke-width=\"5\"/></g><path class=\"df-chain m-draw\" style=\"--len:200\" d=\"M104 113 H122 M198 113 H216\" fill=\"none\" stroke=\"#3ddc97\" stroke-width=\"7\" stroke-linecap=\"round\"/><g class=\"df-gate\" fill=\"#3ddc97\"><circle cx=\"160\" cy=\"48\" r=\"9\"/></g><path d=\"M160 57 V84\" stroke=\"#3ddc97\" stroke-width=\"4\" opacity=\".5\"/><g fill=\"#5b8cff\" opacity=\".35\"><rect x=\"28\" y=\"170\" width=\"264\" height=\"5\" rx=\"2\"/></g></svg>",todoke:"<svg class=\"m\" viewBox=\"0 0 320 240\"><rect x=\"112\" y=\"36\" width=\"96\" height=\"168\" rx=\"10\" fill=\"none\" stroke=\"#4059A6\" stroke-width=\"6\"/><g class=\"td-wave\" fill=\"#F2EDE4\"><rect x=\"128\" y=\"104\" width=\"7\" height=\"32\" rx=\"3\"/><rect x=\"142\" y=\"88\" width=\"7\" height=\"64\" rx=\"3\"/><rect x=\"156\" y=\"72\" width=\"7\" height=\"96\" rx=\"3\"/><rect x=\"170\" y=\"92\" width=\"7\" height=\"56\" rx=\"3\"/><rect x=\"184\" y=\"110\" width=\"7\" height=\"20\" rx=\"3\"/></g><g class=\"td-cap\" fill=\"#A79E90\"><rect x=\"124\" y=\"176\" width=\"72\" height=\"7\" rx=\"3\"/><rect x=\"134\" y=\"189\" width=\"52\" height=\"7\" rx=\"3\"/></g><g class=\"td-locales\" fill=\"#4059A6\"><circle cx=\"52\" cy=\"120\" r=\"11\"/><circle cx=\"52\" cy=\"84\" r=\"8\" opacity=\".6\"/><circle cx=\"52\" cy=\"156\" r=\"8\" opacity=\".6\"/></g></svg>"});
+/* 覆寫 canvas motif（理由見 work-copy.json 的 $motifOverride） */
+Object.assign(M, {mairi:"<svg class=\"m\" viewBox=\"0 0 320 240\"><g class=\"mr-strand\" fill=\"none\" stroke=\"#8EE6EB\" stroke-width=\"6\" stroke-linecap=\"round\" opacity=\".6\"><path class=\"m-draw\" style=\"--len:210\" d=\"M34 62 C118 62 128 120 200 120\"/><path class=\"m-draw\" style=\"--len:170\" d=\"M34 120 H200\"/><path class=\"m-draw\" style=\"--len:210\" d=\"M34 178 C118 178 128 120 200 120\"/></g><path class=\"mr-spine\" fill=\"none\" stroke=\"#2BD982\" stroke-width=\"7\" stroke-linecap=\"round\" d=\"M200 120 H292\"/><path class=\"mr-beat\" fill=\"none\" stroke=\"#2BD982\" stroke-width=\"7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M206 120 l14 -34 l16 66 l14 -44 l12 12 H292\"/><circle class=\"mr-join\" cx=\"200\" cy=\"120\" r=\"9\" fill=\"#2BD982\"/></svg>"});
 
 /* ── 12 產品 × 三語（各自撰寫，非直譯；原樣自 canvas 切出） ── */
 var P=[
@@ -360,18 +362,18 @@ var P=[
   "st": "dev",
   "plat": [],
   "en": {
-   "p": "What you write down every day, made useful on the day you're seen.",
-   "b": "Japan has no shortage of single-purpose health records — one app for blood pressure, another for medication, a paper notebook for the pharmacy. None of them carry a daily habit through to the ten minutes you actually get with a doctor. Mairi does, and hands the record over as a two-layer QR code. Here's the part nobody else ships: that code hard-expires in six hours and cannot be renewed. The usual medication notebook gives out a permanent code — we decided expiry was a feature, not a limitation."
+   "p": "A health record that speaks the language the family actually speaks at home.",
+   "b": "Japan has plenty of health apps. Almost all of them are Japanese-only — which fails the exact people who need a record most: foreign residents, exchange students, families where the parent and the child read different languages. Mairi ships Japanese, Traditional Chinese and English on day one, not as a later localisation pass. Vitals, medication history and a symptom check sit in one timeline, and the symptom check reads your own record as context instead of answering as if you were a stranger. The accessibility work is written into the spec, not left to goodwill: 17px body, 56pt tap targets, 7:1 contrast — built so someone in their seventies can use it without being handed to a younger relative."
   },
   "ja": {
-   "p": "毎日つけているものが、受診の日に効く。",
-   "b": "日本に単機能の健康記録は数えきれないほどあります。血圧はこのアプリ、薬はあのアプリ、薬局には紙の手帳。けれど毎日の習慣を、医師と向き合うあの十分間まで運んでくれるものはありません。Mairiはそれをやり、記録を二層QRで渡します。他がやっていないのはここです。そのコードは6時間で強制的に失効し、延長できません。従来のお薬手帳は永続QRを配ります。私たちは、失効することを制約ではなく機能だと考えました。"
+   "p": "家で実際に話している言葉で、健康を記録できる。",
+   "b": "健康アプリは日本にいくらでもあります。ただ、そのほとんどが日本語だけ。いちばん記録を必要としている人 —— 在住外国人、留学生、親と子で読める言語が違うご家族 —— がそこから漏れます。Mairi は日本語・繁體中文・English を最初から積んでいます。後付けのローカライズではありません。バイタル・薬歴・症状チェックが一つのタイムラインに並び、症状チェックはあなた自身の記録を文脈として読みます。初対面の相手に答えるようには答えません。高齢者への配慮も心がけではなく仕様です。本文 17px、タップ領域 56pt、コントラスト 7:1 以上 —— 70 代の方が、若い家族に代わってもらわずに自分で使えること。"
   },
   "zh": {
-   "p": "每天記下的那些，在就診那天真的派得上用場。",
-   "b": "日本不缺單點功能的健康紀錄：血壓一個 App、用藥一個 App、藥局再給你一本紙手帳。但沒有一個能把每天的習慣，帶到你真正見到醫師的那十分鐘。Mairi 做到了，並且用雙層 QR 把紀錄交出去。少有人敢做的是這一步：那組碼六小時硬過期，而且不可續期。一般的お薬手帳給的是永久 QR——我們認為「會過期」是功能，不是限制。"
+   "p": "用家裡真正在講的那個語言，記錄健康。",
+   "b": "日本的健康 App 不缺，缺的是不只講日文的那一種。最需要留下紀錄的人反而被漏掉了——在日外國人、留學生、父母與孩子讀不同語言的家庭。Mairi 從第一天就同時是日文、繁體中文與英文，不是事後補的在地化。生命徵象、用藥史、症狀速查放在同一條時間軸上；症狀速查會拿你自己的紀錄當上下文，而不是把你當成一個陌生人來回答。無障礙這件事寫在規格裡而不是靠自覺：內文 17px、點擊區 56pt、對比 7:1 以上——目標是七十幾歲的人自己就能用，不必再叫年輕的家人代勞。"
   },
-  "hasIcon": 0
+  "hasIcon": 1
  },
  {
   "s": "meguru",

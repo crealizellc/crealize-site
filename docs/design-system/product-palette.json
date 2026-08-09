@@ -110,21 +110,22 @@
       "status": "未上架，無官方商店 icon"
     },
     "Mairi": {
-      "provenance": "source-verified",
+      "provenance": "live-site-harvested",
       "palette": {
-        "vermilion": "#C95A3F",
-        "ink": "#1A2B3C",
-        "pearl": "#FAF8F5",
-        "vitalGreen": "#4A9068"
+        "brandGreen": "#2BD982",
+        "mintTop": "#3ED3B6",
+        "deepGreen": "#06BD69",
+        "aqua": "#8EE6EB",
+        "ink": "#0E1411"
       },
-      "$evidence": "/Users/yves/Projects/omnihealth-phr/docs/brand.md:95 → `| **Mairi Vermilion** | `#C95A3F` | ブランドカラー、CTA |`",
-      "fonts": "Noto Serif JP（品牌標題）+ Plus Jakarta Sans（拉丁/數字）",
+      "$evidence": "https://mairi.smartrich.ai/ja `<meta name=\"theme-color\" content=\"#2BD982\">`；logo `/brand/mairi-logo.jpg` 1280² 取樣：頂 #3ED3B6 / 左下 #06BD69。落檔 docs/design-system/source/harvested/mairi/",
+      "fonts": "日文襯線（標題「毎日が、つながる。」）+ 拉丁無襯線",
       "assets": {
-        "icon": null,
-        "extra": null
+        "icon": "site-assets/icons/mairi.png（1024，取自 /brand/mairi-logo.jpg）",
+        "shot": "site-assets/shots/mairi.png（線上 ja 首屏）"
       },
-      "tone": "參拜般的暖朱紅 + 珍珠白留白，日文襯線、數據幾何無襯線，排斥冷調臨床語彙",
-      "risk": "零視覺資產。logo 仍是三個未定案概念，brand.md 自註色票『是方向不是鎖定』。這張卡等於從零設計"
+      "tone": "薄荷綠→珊瑚粉的柔和漸層、圓角雲朵與心形、日常健康記錄的溫和感；非臨床冷調",
+      "supersedes": "舊記載採 omnihealth-phr/docs/brand.md 的朱紅 #C95A3F —— 2026-08-09 實查線上站台推翻：實際品牌是綠色系。brand.md 已過期，勿再引用其色票"
     },
     "Tendo": {
       "provenance": "secondhand",
@@ -233,21 +234,22 @@
       "note": "客戶案（株式会社YMY商事 / YMY Trading Co., Ltd.，品牌語 Yes. Make Yours.）。與 Meguru 是不同的東西：Meguru 是內部平台，YMY 是對外的品牌與事業。"
     },
     "Kizuki": {
-      "provenance": "source-verified",
+      "provenance": "live-site-harvested",
       "palette": {
         "vermillion": "#DC322F",
         "warmWhite": "#FAFAF7",
         "ink": "#0E0E10",
         "vermillionStrong": "#B82420"
       },
-      "$evidence": "/Users/yves/Projects/kizuki/docs/SITE_SPEC.md:142 → `--accent: #DC322F;       /* primary accent — \"the noticing spark\" */`；同檔 :40 註明「朱色，日本『批注／點睛』傳統色」",
+      "$evidence": "/Users/yves/Projects/kizuki/docs/SITE_SPEC.md:142 → `--accent: #DC322F;       /* primary accent — \"the noticing spark\" */`；同檔 :40 註明「朱色，日本『批注／點睛』傳統色」；2026-08-09 線上複驗 https://kizuki-staging.smartrich.ai/assets/icon-192.svg `fill=\"#DC322F\"`",
       "fonts": null,
       "assets": {
-        "icon": null,
-        "note": "README 記載 logo 已選定為「Lightbulb 電球 + 朱紅芯」，但本機查無圖檔"
+        "icon": "site-assets/icons/kizuki.png（取自線上 /assets/icon-192.svg：#DC322F 底 + 白色電球）",
+        "shot": "site-assets/shots/kizuki.png（線上 ja 首屏）",
+        "note": "線上 header 內嵌 mark 與 kizuki/assets/from-claude-design-logo-v1/10.html 的 sil-bulb 幾何逐字相同 —— 概念稿與線上一致"
       },
       "tone": "暖白紙面上一點朱色 —— 那一點是「察覺」本身。刻意不用純白背景",
-      "status": "README 自述 prod worker live 但 /readyz degraded，Stripe/Telegram/Apify secrets 未設，送出回覆路徑尚未實作 → 卡片標開發中"
+      "status": "線上 staging 可訪問（HTTP 200，2026-08-09）。定位：AI 気付く → 人が判断 → 人が送信；Bot シグナルはゼロ"
     },
     "dramaflow": {
       "provenance": "source-verified",

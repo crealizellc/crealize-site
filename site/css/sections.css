@@ -796,12 +796,14 @@ section { position: relative; }
 #work .is-live .id-hand { animation: idHand var(--dur-3) var(--ease-cond) both; animation-delay: var(--dur-2); }
 @keyframes idHand { from { transform: translateX(22px); opacity: .35; } to { transform: none; opacity: 1; } }
 
-/* mairi — 紀錄通過閘門，然後閘門在六小時後關上 */
-#work .is-live .mr-line { animation: draw var(--dur-3) var(--ease-cond) both; }
-#work .is-live .mr-qr { animation: mrQR 5.6s var(--ease-cond) infinite; }
-@keyframes mrQR { 0%, 8% { opacity: 0; transform: scale(.8); } 18%, 62% { opacity: 1; transform: none; } 82%, 100% { opacity: 0; transform: scale(.92); } }
-#work .is-live .mr-timer { animation: mrTimer 5.6s linear infinite; }
-@keyframes mrTimer { 0%, 18% { stroke-dashoffset: 0; } 72%, 100% { stroke-dashoffset: var(--len); } }
+/* mairi — 三語各自的紀錄匯流成同一條時間軸，接上今天的生命徵象 */
+#work .is-live .mr-strand .m-draw { animation: draw var(--dur-3) var(--ease-cond) both; }
+#work .is-live .mr-strand .m-draw:nth-child(2) { animation-delay: 90ms; }
+#work .is-live .mr-strand .m-draw:nth-child(3) { animation-delay: 180ms; }
+#work .is-live .mr-join { animation: mrJoin 4.8s var(--ease-cond) infinite; transform-origin: 200px 120px; }
+@keyframes mrJoin { 0%, 62%, 100% { opacity: .45; transform: scale(.82); } 72% { opacity: 1; transform: none; } }
+#work .is-live .mr-beat { stroke-dasharray: 220; animation: mrBeat 4.8s linear infinite; }
+@keyframes mrBeat { 0%, 24% { stroke-dashoffset: 220; } 70%, 100% { stroke-dashoffset: 0; } }
 
 /* meguru — 一個閉環，持續流動；洋紅只在節點出現 */
 #work .is-live .mg-loop { animation: mgFlow 4.4s linear infinite; }

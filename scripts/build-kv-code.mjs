@@ -109,11 +109,15 @@ const P = {
             <circle class="ring" cx="800" cy="600" r="360" stroke-dasharray="2 22"/>`,
   },
   mairi: {
-    ink: '#0F1A24', a: '#C95A3F', b: '#F2B8A5', c: '#4A9068',
-    slogan: 'What you log daily,\nusable on the day you’re seen.',
-    motif: `<path class="gate" d="M420 320 h760 M470 400 h660 M520 320 v560 M1080 320 v560" fill="none"/>
-            <path class="stroke" d="M180 640 H430 L500 480 L580 800 L660 600 H1240" fill="none"/>
-            <rect class="qr" x="700" y="760" width="200" height="200" rx="20"/>`,
+    ink: '#0E1411', a: '#2BD982', b: '#8EE6EB', c: '#06BD69',
+    slogan: 'The record speaks\nthe language home speaks.',
+    motif: `<g class="strands" fill="none">
+              <path d="M180 380 C520 380 560 600 900 600"/>
+              <path d="M180 600 H900"/>
+              <path d="M180 820 C520 820 560 600 900 600"/>
+            </g>
+            <path class="stroke" d="M900 600 H1420" fill="none"/>
+            <g class="beats" fill="none"><path d="M960 600 l40 -110 l46 220 l40 -140 l36 30 H1420"/></g>`,
   },
   kizuki: {
     ink: '#14100F', a: '#DC322F', b: '#FAFAF7', c: '#B82420',
@@ -191,6 +195,8 @@ function plate(slug) {
   .motif{filter:url(#glow)}
   .stroke,.holder,.chart,.chart2,.gate{stroke:${d.a};stroke-width:16;stroke-linecap:round;stroke-linejoin:round}
   .chart2{stroke:${d.b};stroke-width:9;opacity:.75}
+  .strands path{stroke:${d.b};stroke-width:9;stroke-linecap:round;opacity:.62}
+  .beats path{stroke:${d.b};stroke-width:11;stroke-linecap:round;stroke-linejoin:round;opacity:.85}
   .ring{fill:none;stroke:${d.b};stroke-width:5;opacity:.5}
   .orb{fill:url(#orbg)}
   .rows rect,.rows2 rect,.tiles rect,.card-a rect,.qr,.row-out{fill:${d.a}}

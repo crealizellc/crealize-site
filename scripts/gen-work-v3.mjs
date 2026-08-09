@@ -61,8 +61,22 @@ for (const m of meta) {
    多帶 meta 與 motif 兩個欄位，這裡自動接上。以後加新產品只要改那一個檔。 */
 const canvasSlugs = new Set(meta.map((m) => m.s));
 const extraMotifs = [];
+const overrides = [];
 for (const [slug, entry] of Object.entries(COPY)) {
-  if (slug.startsWith('$') || canvasSlugs.has(slug)) continue;
+  if (slug.startsWith('$')) continue;
+  /* canvas 產品也可以覆寫 motif —— 但必須寫明理由，否則就是在無聲偏離設計稿。
+     目前唯一案例：mairi 的 canvas motif 畫的是「鳥居 + 六小時失效 QR」，
+     而線上站台把受診 QR 列為「今後対応予定」，那個 motif 在講還沒有的功能。 */
+  if (canvasSlugs.has(slug)) {
+    if (!entry.motif) continue;
+    if (!entry.$motifOverride) {
+      console.error(`❌ ${slug} 覆寫了 canvas motif，必須在 work-copy.json 同時寫 $motifOverride 說明理由`);
+      process.exit(2);
+    }
+    overrides.push(`${slug}:${JSON.stringify(entry.motif)}`);
+    console.log(`↻ ${slug} motif 覆寫 canvas：${entry.$motifOverride}`);
+    continue;
+  }
   if (!entry.meta || !entry.motif) {
     console.error(`❌ ${slug} 是 canvas 之外的新產品，必須同時提供 meta 與 motif`);
     process.exit(2);
@@ -150,6 +164,7 @@ const out = `/* ============================================================
 /* ── motifs：canvas 的原樣切出，加上 work-copy.json 帶進來的新產品 ── */
 ${M}
 ${extraMotifs.length ? `Object.assign(M, {${extraMotifs.join(',')}});` : ''}
+${overrides.length ? `/* 覆寫 canvas motif（理由見 work-copy.json 的 $motifOverride） */\nObject.assign(M, {${overrides.join(',')}});` : ''}
 
 /* ── 12 產品 × 三語（各自撰寫，非直譯；原樣自 canvas 切出） ── */
 ${P}

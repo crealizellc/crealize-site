@@ -147,17 +147,19 @@
   },
   "mairi": {
     "en": {
-      "pos": "What you write down every day, made useful on the day you're seen.",
-      "body": "Japan has no shortage of single-purpose health records — one app for blood pressure, another for medication, a paper notebook for the pharmacy. None of them carry a daily habit through to the ten minutes you actually get with a doctor. Mairi does, and hands the record over as a two-layer QR code. Here's the part nobody else ships: that code hard-expires in six hours and cannot be renewed. The usual medication notebook gives out a permanent code — we decided expiry was a feature, not a limitation."
+      "pos": "A health record that speaks the language the family actually speaks at home.",
+      "body": "Japan has plenty of health apps. Almost all of them are Japanese-only — which fails the exact people who need a record most: foreign residents, exchange students, families where the parent and the child read different languages. Mairi ships Japanese, Traditional Chinese and English on day one, not as a later localisation pass. Vitals, medication history and a symptom check sit in one timeline, and the symptom check reads your own record as context instead of answering as if you were a stranger. The accessibility work is written into the spec, not left to goodwill: 17px body, 56pt tap targets, 7:1 contrast — built so someone in their seventies can use it without being handed to a younger relative."
     },
     "ja": {
-      "pos": "毎日つけているものが、受診の日に効く。",
-      "body": "日本に単機能の健康記録は数えきれないほどあります。血圧はこのアプリ、薬はあのアプリ、薬局には紙の手帳。けれど毎日の習慣を、医師と向き合うあの十分間まで運んでくれるものはありません。Mairiはそれをやり、記録を二層QRで渡します。他がやっていないのはここです。そのコードは6時間で強制的に失効し、延長できません。従来のお薬手帳は永続QRを配ります。私たちは、失効することを制約ではなく機能だと考えました。"
+      "pos": "家で実際に話している言葉で、健康を記録できる。",
+      "body": "健康アプリは日本にいくらでもあります。ただ、そのほとんどが日本語だけ。いちばん記録を必要としている人 —— 在住外国人、留学生、親と子で読める言語が違うご家族 —— がそこから漏れます。Mairi は日本語・繁體中文・English を最初から積んでいます。後付けのローカライズではありません。バイタル・薬歴・症状チェックが一つのタイムラインに並び、症状チェックはあなた自身の記録を文脈として読みます。初対面の相手に答えるようには答えません。高齢者への配慮も心がけではなく仕様です。本文 17px、タップ領域 56pt、コントラスト 7:1 以上 —— 70 代の方が、若い家族に代わってもらわずに自分で使えること。"
     },
     "zh": {
-      "pos": "每天記下的那些，在就診那天真的派得上用場。",
-      "body": "日本不缺單點功能的健康紀錄：血壓一個 App、用藥一個 App、藥局再給你一本紙手帳。但沒有一個能把每天的習慣，帶到你真正見到醫師的那十分鐘。Mairi 做到了，並且用雙層 QR 把紀錄交出去。少有人敢做的是這一步：那組碼六小時硬過期，而且不可續期。一般的お薬手帳給的是永久 QR——我們認為「會過期」是功能，不是限制。"
-    }
+      "pos": "用家裡真正在講的那個語言，記錄健康。",
+      "body": "日本的健康 App 不缺，缺的是不只講日文的那一種。最需要留下紀錄的人反而被漏掉了——在日外國人、留學生、父母與孩子讀不同語言的家庭。Mairi 從第一天就同時是日文、繁體中文與英文，不是事後補的在地化。生命徵象、用藥史、症狀速查放在同一條時間軸上；症狀速查會拿你自己的紀錄當上下文，而不是把你當成一個陌生人來回答。無障礙這件事寫在規格裡而不是靠自覺：內文 17px、點擊區 56pt、對比 7:1 以上——目標是七十幾歲的人自己就能用，不必再叫年輕的家人代勞。"
+    },
+    "$motifOverride": "canvas 版畫的是鳥居閘門 + 六小時失效 QR，但線上站台把「受診準備 QR」列為『今後対応予定』，那個 motif 在講尚未存在的功能；品牌色也從 brand.md 的朱紅 #C95A3F 被線上 theme-color #2BD982 推翻。改為真實核心：三語各自的紀錄匯流成同一條時間軸。",
+    "motif": "<svg class=\"m\" viewBox=\"0 0 320 240\"><g class=\"mr-strand\" fill=\"none\" stroke=\"#8EE6EB\" stroke-width=\"6\" stroke-linecap=\"round\" opacity=\".6\"><path class=\"m-draw\" style=\"--len:210\" d=\"M34 62 C118 62 128 120 200 120\"/><path class=\"m-draw\" style=\"--len:170\" d=\"M34 120 H200\"/><path class=\"m-draw\" style=\"--len:210\" d=\"M34 178 C118 178 128 120 200 120\"/></g><path class=\"mr-spine\" fill=\"none\" stroke=\"#2BD982\" stroke-width=\"7\" stroke-linecap=\"round\" d=\"M200 120 H292\"/><path class=\"mr-beat\" fill=\"none\" stroke=\"#2BD982\" stroke-width=\"7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M206 120 l14 -34 l16 66 l14 -44 l12 12 H292\"/><circle class=\"mr-join\" cx=\"200\" cy=\"120\" r=\"9\" fill=\"#2BD982\"/></svg>"
   },
   "meguru": {
     "en": {
