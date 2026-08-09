@@ -373,8 +373,14 @@ console.log('▶ AC-4 動畫存在且尊重 reduce-motion');
 
   // 動畫「有沒有綁到真實存在的元素」才是重點 —— 只數 @keyframes 的話，
   // 把所有 .is-live 選擇器改成一個不存在的 class，整組動畫全死也還是綠。
+  //
+  // 2026-08-09：選擇器不再要求 `#work` 祖先（原本是 `#work .is-live .xxx`）。
+  // 原因：modal 打開時要把卡片的 .stage 整組複製過去循環播放（Yves 要求），
+  // 而 modal 是掛在 <body> 底下、不在 #work 容器內，要求 #work 祖先的動畫
+  // 規則在 modal 裡完全不生效。改成單純 `.is-live .xxx`，同一套 @keyframes
+  // 卡片與 modal 都吃得到，不會有第二份規則要維護。
   const declared = new Set([...v3.matchAll(/@keyframes\s+([A-Za-z0-9_-]+)/g)].map((m) => m[1]));
-  const used = [...v3.matchAll(/#work\s+\.is-live\s+\.([A-Za-z0-9_-]+)\s*\{[^}]*animation:\s*([A-Za-z0-9_-]+)/g)]
+  const used = [...v3.matchAll(/(?:#work\s+)?\.is-live\s+\.([A-Za-z0-9_-]+)\s*\{[^}]*animation:\s*([A-Za-z0-9_-]+)/g)]
     .map((m) => ({ cls: m[1], kf: m[2] }));
   const present = new Set(R.en.classes || []);
   const orphanCls = [...new Set(used.filter((u) => !present.has(u.cls)).map((u) => u.cls))];
@@ -496,6 +502,82 @@ console.log('▶ AC-8 驗收自己不得留下殘留物');
   const en = readFileSync(join(SITE, 'js/i18n/en.js'), 'utf8');
   if (en.includes("name: 'Meguru'")) ok('AC-8', 'site/js/i18n/en.js 已完整還原');
   else bad('AC-8', 'site/js/i18n/en.js 少了 Meguru —— AC-5 的還原沒跑到');
+}
+
+console.log('▶ AC-9 modal 打開要有循環動態演示，且尊重 reduce-motion');
+{
+  /* Yves 2026-08-09：「打開的每一張圖，也要有 loop 動態演示」。
+     modal 打開時把卡片的 .stage clone 進去（work-modal.js fill()），這動作
+     依賴一長串跨檔案的結構層規則同步生效（sections.css 的 .stage/.stage__bg/.m/
+     .stage__icon 拿掉 #work 前綴、work-modal.css 的 is-looping 覆寫、
+     reduce-motion 關閉規則也拿掉 #work 前綴）——任一處漏改，modal 就會退回
+     實心黑塊或動畫關不掉，而且不會有任何既有 gate 發現，因為它們都只測卡片列表。
+     這裡直接開一張卡的 modal，用兩種 prefers-reduced-motion 各測一次。 */
+  const tmp = join(SITE, '__audit-ac9.html');
+  const html = readFileSync(join(SITE, 'index.html'), 'utf8');
+  const probeJs = `<script>
+(function ready(fn){ if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn); else fn(); })(function () { setTimeout(function () {
+  var card = document.querySelector('#work-cards .card'); // 不寫死 index，順序改變也不受影響
+  var out = { cardFound: !!card };
+  if (card) {
+    card.click();
+    out.stageFound = !!document.querySelector('.work-modal__shot .stage.is-looping');
+    var img = document.querySelector('.work-modal__shot .stage__bg');
+    out.bgOk = !!img && img.complete && img.naturalWidth > 0;
+    var box = document.querySelector('.work-modal__shot').getBoundingClientRect();
+    /* 不驗 4:3 —— .work-modal__shot 本來就靠 grid 列高撐開（跟卡片的
+       aspect-ratio:4/3 是兩回事），原本的靜態 <img> 版同樣如此，只有
+       max-height:62vh 上限。真正要防的是「塌成 0」或「大到蓋滿整頁」。 */
+    out.shotW = Math.round(box.width); out.shotH = Math.round(box.height);
+    var animated = [].slice.call(document.querySelectorAll('.work-modal__shot .m *'))
+      .filter(function (e) { return getComputedStyle(e).animationName !== 'none'; });
+    out.animatedCount = animated.length;
+    var withInfinite = animated.filter(function (e) { return getComputedStyle(e).animationIterationCount === 'infinite'; });
+    out.infiniteCount = withInfinite.length;
+  }
+  var pre = document.createElement('pre'); pre.id = '__r'; pre.textContent = JSON.stringify(out);
+  document.body.appendChild(pre);
+}, 900); });
+</script>`;
+  writeFileSync(tmp, html.replace('</body>', probeJs + '</body>'));
+  CLEANUP.files.add(tmp);
+
+  function runOnce(extraFlags) {
+    const dom = execFileSync(CHROME, [
+      '--headless', '--disable-gpu', '--no-sandbox', '--hide-scrollbars', '--allow-file-access-from-files',
+      '--window-size=1440,1000', '--virtual-time-budget=6000', ...extraFlags, '--dump-dom', `file://${tmp}`,
+    ], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, stdio: ['ignore', 'pipe', 'ignore'] });
+    const m = /<pre id="__r">([\s\S]*?)<\/pre>/.exec(dom);
+    if (!m) throw new Error('沒有量測結果');
+    const dec = (s) => s.replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+    return JSON.parse(dec(m[1]));
+  }
+
+  try {
+    const normal = runOnce([]);
+    if (!normal.cardFound) bad('AC-9', '找不到任何卡片');
+    else {
+      if (normal.stageFound) ok('AC-9', 'modal 打開後 .stage.is-looping 存在（不是空的 shot）');
+      else bad('AC-9', 'modal 打開後找不到 .stage.is-looping —— clone 沒發生');
+      if (normal.bgOk) ok('AC-9', '底圖真的載入了（不是塌成黑塊）');
+      else bad('AC-9', '底圖沒載入 —— stage__bg 結構層規則可能又被 #work 鎖住了');
+      if (normal.shotW >= 200 && normal.shotH >= 200) ok('AC-9', `shot ${normal.shotW}×${normal.shotH}px（沒有塌成 0）`);
+      else bad('AC-9', `shot ${normal.shotW}×${normal.shotH}px —— 太小，clone 可能沒撐開版面`);
+      if (normal.infiniteCount > 0) ok('AC-9', `${normal.infiniteCount} 個動畫元素在 no-preference 下 iteration=infinite（真的在循環）`);
+      else bad('AC-9', 'no-preference 下沒有任何元素是 infinite —— is-looping 覆寫沒生效');
+    }
+
+    const reduced = runOnce(['--force-prefers-reduced-motion']);
+    if (reduced.cardFound) {
+      if (reduced.animatedCount === 0) ok('AC-9', 'reduce-motion 下 modal 內 0 個元素在動（正確關閉）');
+      else bad('AC-9', `reduce-motion 下 modal 內仍有 ${reduced.animatedCount} 個元素在動 —— a11y 迴歸`);
+    }
+  } catch (e) {
+    bad('AC-9', `modal 動畫探測失敗：${e.message}`);
+  } finally {
+    rmSync(tmp, { force: true });
+    CLEANUP.files.delete(tmp);
+  }
 }
 
 console.log('');

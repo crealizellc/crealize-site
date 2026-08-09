@@ -553,6 +553,12 @@ var P=[
       + '<p class="card__pos">' + t.p + '</p>'
       + '<div class="plat">' + plat + '</div>'
       + '<span class="card__more">' + MORE[L] + ' <i aria-hidden="true">→</i></span>'
+      /* 完整正文放進卡片的 DOM（hidden），modal 開啟時直接讀它。
+         兩個理由：① 不執行 JS 的 AI 爬蟲讀得到真正的內容，不是只有一句摘要
+         ② modal 與爬蟲吃的是同一份字串，不可能分岔。
+         這是標準的 accordion／tab 揭露模式 —— 內容對使用者真的可及（點卡片就看得到），
+         不是藏字。 */
+      + '<div class="card__detail" hidden>' + t.b + '</div>'
       + '</div></article>';
   }
 
@@ -564,16 +570,26 @@ var P=[
       return '<span><i class="dot dot--' + x[0] + '"></i>' + x[1] + '</span>';
     }).join('');
   }
-  host.innerHTML = P.map(cardHTML).join('');
+  /* 卡片可能已經由 prerender-work.mjs 靜態寫進 HTML（給不執行 JS 的 AI 爬蟲看）。
+     已經有卡片就不要重畫 —— 內容一模一樣（同一份 cardHTML 產生），重畫只會多一次
+     reflow，還會把已經套上的 reveal 狀態洗掉。 */
+  if (!host.querySelector('.card')) host.innerHTML = P.map(cardHTML).join('');
 
   /* 把當前語言的完整文案交給 work-modal.js，索引與 CRZ_I18N.work 對齊
      （對帳在上面已做過，對不上會先大聲失敗）。
-     modal 讀不到 body 就只能印 registry 的一句 line —— 那正是「點開反而更少」的成因。 */
+     modal 讀不到 body 就只能印 registry 的一句 line —— 那正是「點開反而更少」的成因。
+
+     來源是 DOM 的 .card__detail，不是重新從 P 算一遍 —— 不管卡片是剛畫的還是
+     prerender-work.mjs 早就靜態寫進 HTML 的，讀到的都是同一份字串，不會有
+     「爬蟲看到的內容」與「modal 顯示的內容」兩份真相源分岔的可能。 */
   window.CRZ_WORK_COPY = REG.map(function () { return null; });
-  P.forEach(function (p) {
-    var i = byIndex[p.s];
-    if (i === undefined) return;
-    window.CRZ_WORK_COPY[i] = { pos: p[L].p, body: p[L].b };
+  [].forEach.call(host.querySelectorAll('.card'), function (card) {
+    var i = Number(card.getAttribute('data-work-index'));
+    var detail = card.querySelector('.card__detail');
+    var pos = card.querySelector('.card__pos');
+    if (!Number.isNaN(i) && detail) {
+      window.CRZ_WORK_COPY[i] = { pos: pos ? pos.textContent : '', body: detail.innerHTML };
+    }
   });
 
   /* ── reveal：卡片進入視窗才播它自己的動畫 ──

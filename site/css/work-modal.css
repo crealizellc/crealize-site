@@ -91,6 +91,30 @@
   display: grid;
   place-items: center;
   min-height: 320px;
+  overflow: hidden;
+}
+/* 卡片的 .stage 是複製進來的（work-modal.js fill()），它的基礎樣式
+   （aspect-ratio / border-radius / overflow）被 `#work .stage` 限定，
+   clone 到 modal 底下吃不到，這裡補一份等效的。
+   is-looping：卡片上很多 motif 是「進場播一次就停」（animation:...both），
+   modal 打開時要能一直看，所以把它們的 iteration-count 蓋成 infinite。
+   用 !important 是必要的 —— 逐一動畫本來就用完整 animation 簡寫宣告
+   （animation: name dur ease both），單獨的 animation-iteration-count
+   若沒有更高優先權會被那個簡寫蓋掉。 */
+.work-modal__shot .stage {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  aspect-ratio: auto; border-radius: 0; border: 0;
+}
+/* 一定要包在 no-preference 裡，不能是無條件規則：work-modal.css 在
+   sections.css「之後」載入，若這條不設條件，它的 !important 會在同一優先權下
+   靠著「後載入贏」蓋掉 sections.css 裡 `@media (prefers-reduced-motion: reduce)`
+   給 .m * 設的 animation:none!important —— 等於幫暈動症使用者把動畫重新打開，
+   modal 停留時間通常比卡片久，是更糟的迴歸。 */
+@media (prefers-reduced-motion: no-preference) {
+  .work-modal__shot .stage.is-looping * {
+    animation-iteration-count: infinite !important;
+  }
 }
 
 .work-modal__body {
