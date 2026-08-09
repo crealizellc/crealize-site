@@ -165,7 +165,9 @@ const PRODUCTS = [
   { name: 'Kichitto', cat: 'FinanceApplication', os: 'iOS', desc: { en: 'Receipt capture for solo founders: photo → AI OCR → auto-filed to Drive + Sheets.', ja: '領収書を撮影 → AI OCR → Drive + Sheets へ自動整理。', zh: '收據拍照 → AI OCR → 自動歸檔 Drive + Sheets。' } },
   { name: 'QiFlux', cat: 'HealthApplication', os: 'iOS', desc: { en: 'The quiet, privacy-first cycle tracker.', ja: '静かでプライバシー第一の周期トラッカー。', zh: '安靜、隱私優先的週期記錄。' } },
   { name: 'iDokuta', cat: 'MedicalApplication', os: 'iOS, Android', desc: { en: 'Multilingual telehealth for foreigners in Japan (in development).', ja: '在日外国人向け多言語オンライン診療（開発中）。', zh: '在日外國人多語線上診療（開發中）。' } },
-  { name: 'Mairi', cat: 'HealthApplication', os: 'iOS, Android', desc: { en: 'Daily personal health record × hospital integration (in development).', ja: '毎日の健康記録 × 病院連携（開発中）。', zh: '每日健康紀錄 × 醫院整合（開發中）。' } },
+  // 「病院連携」是舊記載；線上 mairi.smartrich.ai 的實際定位是日中英三語 PHR，
+  // 醫療機構相關的只有 Phase 1.5 的マイナポータル連携，且受診 QR 標為「今後対応予定」。
+  { name: 'Mairi', cat: 'HealthApplication', os: 'iOS, Android', desc: { en: 'Trilingual personal health record (JA / 繁中 / EN): vitals, medication history and an AI symptom check that reads your own record.', ja: '日中英3言語のPHR — バイタル・薬歴と、自分の記録を文脈にしたAI症状チェック。', zh: '日中英三語 PHR — 生命徵象、用藥史，以及讀你自己紀錄的 AI 症狀速查。' } },
   // os 原記 'Web' 且描述標「開發中」，但 2026-08-08 實測 Google Play com.kkdstudios.tendo
   // 已公開上架（developer=Crealize）；iOS id6781214609 lookup resultCount=0，確實未上架。
   // 未取得公開 Web 版網址的第一手證據，故 os 只寫已驗證的 Android。
@@ -349,4 +351,82 @@ for (const [key, loc] of Object.entries(LOCALES)) {
   mkdirSync(outDir, { recursive: true });
   writeFileSync(join(outDir, 'index.html'), html);
   console.log(`✅ ${key} → ${join(outDir, 'index.html')} (${(html.length / 1024).toFixed(1)} KB)`);
+}
+
+/* ── sitemap.xml + llms.txt：從同一份清單生成 ──────────────────────────
+   兩個檔原本手工維護，結果都爛掉了：sitemap 的 lastmod 停在 2026-06-10，
+   llms.txt 只列到 8 個產品（實際 16），還把已上架的 Tendo 寫在「開發中」。
+   對外檔案說謊比沒有更糟，所以改成生成 —— 清單一改，這兩個檔跟著對。 */
+{
+  const paths = ['/', '/ja/', '/zh/'];
+  const alt = paths
+    .map((p, i) => `    <xhtml:link rel="alternate" hreflang="${['en', 'ja', 'zh-Hant'][i]}" href="${ORIGIN}${p}"/>`)
+    .concat(`    <xhtml:link rel="alternate" hreflang="x-default" href="${ORIGIN}/"/>`)
+    .join('\n');
+  /* lastmod 用建置日 —— 這個檔只在 build 時重寫，日期就是它最後一次為真的時刻。 */
+  const today = new Date().toISOString().slice(0, 10);
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+${paths.map((p) => `  <url>
+    <loc>${ORIGIN}${p}</loc>
+    <lastmod>${today}</lastmod>
+${alt}
+  </url>`).join('\n')}
+</urlset>
+`;
+  writeFileSync(join(OUT, 'sitemap.xml'), sitemap);
+  console.log(`✅ sitemap.xml (${paths.length} URL, lastmod ${today})`);
+
+  /* llms.txt 的分組直接讀 registry 的 status，不另外判斷 —— 卡片顯示什麼狀態，
+     這裡就寫什麼狀態，不會再出現「網站說已上架、llms.txt 說開發中」。 */
+  const GROUPS = [
+    ['shipped', '## Shipped products'],
+    ['wip', '## In development'],
+  ];
+  /* registry 的 status 詞彙一旦多出一種，沒被歸類的產品會從 llms.txt 靜靜消失。
+     第一版就踩到：只認 shipped/dev/ops，結果 wip 的四個產品（iDokuta / Mairi /
+     Kizuki / Todoke）全數落榜，檔案看起來還是完整的。寧可中止建置。 */
+  const known = new Set(GROUPS.map(([s]) => s));
+  const stray = [...new Set(WORK.map((r) => r.status).filter((s) => !known.has(s)))];
+  if (stray.length) {
+    throw new Error(`llms.txt: registry 出現未分組的 status「${stray.join('、')}」—— 先在 GROUPS 加上對應標題，否則這些產品會被靜默略過`);
+  }
+  const byName = new Map(PRODUCTS.map((p) => [p.name, p]));
+  const lines = [];
+  for (const [status, heading] of GROUPS) {
+    const items = WORK.filter((r) => r.status === status);
+    if (!items.length) continue;
+    lines.push('', heading, '');
+    for (const r of items) {
+      const meta = byName.get(r.name);
+      const desc = meta ? meta.desc.en : '';
+      const os = meta && meta.os ? ` (${meta.os})` : '';
+      lines.push(`- ${r.name} — ${desc}${os}`);
+    }
+  }
+  const llms = `# Crealize
+
+> Crealize LLC is a Tokyo-based independent product studio. We carry products
+> from 0 to 1 — validate, build, ship, polish. Brand: "Creative × Realize —
+> transforming imagination into reality."
+
+Contact: support@crealize.llc
+Languages: English (/), 日本語 (/ja/), 繁體中文 (/zh/)
+Products: ${WORK.length}
+${lines.join('\n')}
+
+## Method
+
+Validate → Build → Ship → Polish.
+Engineering principles: atomicity (one change, one meaning), explicit dependencies,
+module boundaries, type-safe by default, zero-dependency bias, code as craft.
+
+## Hiring
+
+Remote-first, Tokyo HQ. Roles: Design, Engineering, Growth.
+Contact support@crealize.llc — tell us what you shipped, not what you studied.
+`;
+  writeFileSync(join(OUT, 'llms.txt'), llms);
+  console.log(`✅ llms.txt (${WORK.length} 產品，依 registry 狀態分組)`);
 }

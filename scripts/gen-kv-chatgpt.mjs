@@ -50,7 +50,9 @@ const PRODUCTS = [
   { s: 'mairi', k: 'Mairi', mech: 'A family health record that speaks Japanese, Traditional Chinese and English from day one — three separate streams of daily vitals and medication converging into one calm timeline, so the symptom check reads your own history instead of treating you as a stranger.' },
   { s: 'kizuki', k: 'Kizuki', mech: 'It watches for people talking about your product — on your own listings and out in the wild, in languages you do not read — drafts a reply that works in that culture, and hands it to you in Telegram. It never sends on its own.' },
   { s: 'dramaflow', k: 'dramaflow', mech: 'A short-drama production line where a ratified world constitution comes first: era, lexicon, wardrobe rules and taboos are enforced before anything is generated, and each shot chains to the previous one so the last frame becomes the next first frame.' },
-  { s: 'todoke', k: 'Todoke', mech: 'One script becomes narrated short video in three languages — screen capture or motion graphics, TTS narration, word-level subtitles, then publishing, thumbnails and the numbers that come back.' },
+  /* 「届」的字面聯想是宅配 —— 2026-08-09 第一次生成就整張變成粉紅色的包裹在軌道上飛，
+     既錯色系（品牌是 #4059A6 藍）也錯概念（這是影片生成流水線，不是物流公司）。 */
+  { s: 'todoke', k: 'Todoke', mech: 'A narration-first short-video pipeline: one written script fans out into three languages, each with synthesised voice-over, word-level subtitles and motion graphics rendered in sync, then published with thumbnails and the view numbers flowing back. This is video production software — NOT a courier, NOT parcels, NOT logistics, NOT shipping. Do not draw boxes, packages or delivery imagery.' },
   { s: 'ymy', k: 'YMY', mech: 'A whole-enterprise identity for a Japanese trading company that sources and fulfils for individual marketplace sellers — CI standard, logo vector masters, mascot, signage, uniforms, vehicles, a four-language corporate site, and the business and distribution design behind it.' },
   { s: 'meguru', k: 'Meguru', mech: 'Listing, order, support and payout closed into a single loop — forty microservices folded into one platform, with a human approving every reconciliation.' },
 ];
