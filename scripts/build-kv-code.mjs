@@ -73,7 +73,9 @@ const P = {
             <g class="rows">${[0,1,2].map(i=>`<rect x="1020" y="${470+i*74}" width="${340-i*90}" height="20" rx="10"/>`).join('')}</g>`,
   },
   rythix2048: {
-    ink: '#170F1B', a: '#F2C6DC', b: '#BBBBFD', c: '#E7D1DC',
+    // 粉紅 330° 與薰衣草 240° 混在一起，底圖主色會落在 288°（紫）—— 兩邊都不像。
+    // 品牌以粉彩粉紅為主、薰衣草為輔，所以 ink 與 c 都往粉紅側靠。
+    ink: '#1A0E15', a: '#F2C6DC', b: '#BBBBFD', c: '#C77FA4',
     slogan: 'Every move\ntriggers a note.',
     motif: `<g class="tiles"><rect x="300" y="300" width="200" height="200" rx="24"/><rect x="540" y="300" width="200" height="200" rx="24"/></g>
             <g class="bars">${[0,1,2,3,4,5,6,7].map(i=>{const h=[300,180,420,240,360,150,480,220][i];return `<rect x="${300+i*130}" y="${960-h}" width="64" height="${h}" rx="18"/>`}).join('')}</g>`,

@@ -30,7 +30,7 @@ grep -q "application/ld+json" site/index.html || { echo "❌ JSON-LD missing" >&
 echo "▶ Key-visual audit (母版規格 + 三語 registry 對帳)..."
 node scripts/audit-kv.mjs
 node scripts/audit-kv-registry.mjs
-node scripts/audit-kv-quality.mjs --template docs/design-system/source/kv-posters.html
+node scripts/audit-kv-quality.mjs
 
 echo "▶ Selected Work v3 驗收 (AC 見 .claude/ac.md)..."
 node scripts/audit-work-v3.mjs

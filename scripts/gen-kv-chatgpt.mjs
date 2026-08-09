@@ -27,7 +27,7 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { newTab, listPages, attach, closeTab } from './lib/cdp.mjs';
+import { newTab, listPages, attach } from './lib/cdp.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const ICONS = join(ROOT, 'site-assets/icons');
@@ -107,24 +107,49 @@ if (!existsSync(OUT)) mkdirSync(OUT, { recursive: true });
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+/* 重複使用同一個分頁，每個產品用導航回首頁的方式開新對話。
+   原本每個產品開一個分頁，跑到一半累積 12 個分頁，而且 ChatGPT 反覆回
+   「Your session has expired」把整批卡死。分頁少、行為像人，才穩。 */
+let SESSION = null;
 async function freshChat() {
-  // 一定要 attach 到 newTab 回傳的那個 id。先前用 listPages().pop() 猜，
-  // 結果三次生成全堆進同一串對話（風格互相污染，而且分不出哪張圖是哪次的）。
+  if (SESSION) {
+    try {
+      await SESSION.navigate('https://chatgpt.com/');
+      await sleep(3500);
+      await SESSION.waitFor(() => !!document.querySelector('#prompt-textarea'), { label: 'composer', timeout: 45000 });
+      return SESSION;
+    } catch {
+      try { SESSION.close(); } catch {}
+      SESSION = null;
+    }
+  }
   const created = await newTab('https://chatgpt.com/');
   if (!created || !created.id) throw new Error('開不了 chatgpt 分頁');
-  await sleep(3500);
+  await sleep(4000);
   const t = (await listPages()).find((p) => p.id === created.id);
   if (!t) throw new Error('新分頁消失了');
   const s = await attach(t);
   await s.waitFor(() => !!document.querySelector('#prompt-textarea'), { label: 'composer', timeout: 60000 });
   s.tabId = created.id;
+  SESSION = s;
   return s;
+}
+
+/** session 過期時，導航一次通常就會恢復（實測）。恢復不了才算真的斷。 */
+async function assertLive(s, slug) {
+  const email = await s.evaluate(async () => {
+    try { const j = await (await fetch('/api/auth/session', { credentials: 'include' })).json(); return j?.user?.email || null; }
+    catch { return null; }
+  });
+  if (!email) throw new Error(`${slug}：ChatGPT session 失效（需要重新登入，agent 不輸入密碼）`);
+  return email;
 }
 
 async function generate(prod) {
   const iconPath = join(ICONS, `${prod.s}.png`);
   const hasIcon = existsSync(iconPath);
   const s = await freshChat();
+  await assertLive(s, prod.s);
   try {
     // 生成圖的 URL 直接 fetch 會 403（簽章綁瀏覽器 session）。
     // 所以改為：開 Network domain 記下每個圖片回應的 requestId，
@@ -190,11 +215,7 @@ async function generate(prod) {
     if (buf.length < MIN_BYTES) throw new Error(`取回的圖只有 ${buf.length} bytes，不像成品`);
     return { buf, hasIcon, url: picked.url, refs: refs.length };
   } finally {
-    s.close();
-    // 每個產品開一個分頁，跑完要關 —— 不關的話 11 個分頁會一路累積，
-    // 而且 2026-08-09 遇過舊分頁的 session 過期（"Your session has expired"）
-    // 把整批卡死，新開的分頁反而是好的。
-    if (s.tabId) await closeTab(s.tabId).catch(() => {});
+    /* 分頁留著重複使用，不關 —— 關掉再開會讓 session 更容易被判定異常。 */
   }
 }
 
