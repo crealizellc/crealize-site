@@ -36,10 +36,31 @@ function slice(name, endMark) {
 }
 
 const M = slice('M', '</svg>\'};');
-const P = slice('P', '\n];');
+const P_RAW = slice('P', '\n];');
+
+/* 文案的真相源是 docs/design-system/work-copy.json，不是 canvas。
+   Yves 2026-08-09：「文字的说明要更人类一点，说明产品是什么？解决什么问题，
+   有什么地方特别，别人少见，我们做的很好的」。canvas 那版偏工程筆記，
+   而且以後新增產品時，改一個 JSON 比回頭改畫布容易得多。
+   canvas 仍然是 **motif 與版位 meta**（tint / status / 平台 / flat·nophone·border）的來源。 */
+const COPY = JSON.parse(readFileSync(join(ROOT, 'docs/design-system/work-copy.json'), 'utf8'));
+const meta = new Function(`${P_RAW}\nreturn P;`)();
+const missingCopy = meta.filter((m) => !COPY[m.s]).map((m) => m.s);
+if (missingCopy.length) {
+  console.error(`❌ work-copy.json 缺這些產品的文案：${missingCopy.join(', ')}`);
+  process.exit(2);
+}
+for (const m of meta) {
+  for (const l of ['en', 'ja', 'zh']) {
+    const c = COPY[m.s][l];
+    if (!c || !c.pos || !c.body) { console.error(`❌ ${m.s} 缺 ${l} 文案`); process.exit(2); }
+    m[l] = { p: c.pos, b: c.body };
+  }
+}
+const P = `var P=${JSON.stringify(meta, null, 1)};`;
 
 // 交叉驗證：兩個宣告都必須恰好涵蓋 12 個產品，否則寧可失敗也不產出殘缺檔。
-const slugs = [...P.matchAll(/\{s:"([a-z0-9]+)"/g)].map((m) => m[1]);
+const slugs = meta.map((m) => m.s);
 const motifKeys = [...M.matchAll(/^([a-z0-9]+):'<svg/gm)].map((m) => m[1]);
 if (slugs.length !== 12 || motifKeys.length !== 12) {
   console.error(`❌ 產品數不符：P=${slugs.length} motif=${motifKeys.length}（期望各 12）`);
@@ -64,14 +85,16 @@ const out = `/* ============================================================
       <html lang> 決定，只 render 一次。canvas 需要那個切換器，是為了在
       單一畫布預覽三語；正式站有它反而會與 URL 的語言狀態打架。
 
-   2. 圖片改吃 window.CRZ_I18N.work[].img，不用原檔的 'shots/<slug>.png'。
-      per-locale 的 i18n 檔已經帶了正確的相對路徑（en 是 'assets/…'，
-      ja/zh 是 '../assets/…'），所以不需要另做 base path 管線。
+   2. 卡片改為三層混合：AI 底圖（assets/kv）+ 程式動態 motif + 官方 icon（assets/icons）。
+      canvas 原檔在角落放一支手機裝產品截圖，那個整組移除 —— Yves 講過兩次
+      「故意放個手機是十年前的設計」。路徑吃 window.CRZ_I18N.work[].img，
+      per-locale 的 i18n 檔已帶正確相對路徑，不需要另做 base path 管線。
 
    3. 每張卡帶 class="work-card" 與 data-work-index，讓 work-modal.js 既有的
       事件委派（'.work-card[data-work-index], .index-row[data-work-index]'）繼續有效。
 
-   M（motif SVG）與 P（三語文案）由生成器從 canvas 原檔原樣切出，未改一個 byte。
+   M（motif SVG）與版位 meta 由生成器從 canvas 原檔原樣切出；
+   三語文案來自 docs/design-system/work-copy.json（那才是文案的真相源）。
    樣式在 site/css/sections.css 的「WORK v3」區塊，全部 scope 在 #work 之下；
    token 一律用 site/css/tokens.css 的既有名稱（--ease-cond / --dur-1..3 / --font-*），
    canvas 自帶的那份 :root 刻意不移植 —— tokens.css 是唯一真相源。
@@ -135,16 +158,19 @@ ${P}
     var plat = p.plat.length
       ? p.plat.map(function (b) { return '<b>' + b + '</b>'; }).join('')
       : '<b class="none">' + UNRELEASED[L] + '</b>';
-    // 手機框是 9:19.5，要放的是**直立**截圖（assets/shots/*.webp，由
-    // scripts/build-shots.mjs 產出），不是 1600×1200 的橫向主視覺海報。
-    // 路徑前綴沿用 registry 的 img —— 它已經帶了正確的 locale 相對路徑。
-    var shot = reg ? reg.img.replace(/assets\\/kv\\/[^/]+$/, 'assets/shots/' + p.s + '.webp') : null;
-    var phone = (p.nophone || !shot)
-      ? ''
-      : '<div class="stage__phone"><i><img src="' + shot + '" alt="' + (reg.alt || p.n) +
-        '" loading="lazy" decoding="async" width="480" height="1040" /></i></div>';
+    /* 三層混合（Yves 2026-08-09 拍板：「混合，兩邊各做各擅長的」）
+         底層 AI 生成的品牌氛圍底圖 —— 材質、光線、景深，程式做不出來
+         中層 程式即時渲染的 motif —— 會動、向量清晰，AI 做不到
+         角落 該產品官方 app icon —— 統一尺寸與位置
+       **不放手機或任何裝置外框**（Yves 講過兩次：那是十年前的設計）。
+       slogan 不燒進圖裡，留在下面的 meta，否則 ja/zh 頁會變成英文圖 + 本地化字的重複。 */
+    var bg = reg ? '<img class="stage__bg" src="' + reg.img + '" alt="" loading="lazy" decoding="async" width="1600" height="1200" />' : '';
+    var icon = reg
+      ? '<img class="stage__icon" src="' + reg.img.replace(/assets\\/kv\\/[^/]+$/, 'assets/icons/' + p.s + '.webp') +
+        '" alt="' + p.n + ' icon" loading="lazy" decoding="async" width="256" height="256" />'
+      : '';
     return '<article class="card work-card" data-work-index="' + idx + '" tabindex="0" role="button" aria-label="Open ' + p.n + '">'
-      + '<div class="stage" style="--tint:' + p.tint + '"' + (p.flat ? ' data-flat="1"' : '') + (p.nophone ? ' data-nophone="1"' : '') + (p.border ? ' data-border="1"' : '') + '>' + M[p.s] + phone + '</div>'
+      + '<div class="stage" style="--tint:' + p.tint + '"' + (p.flat ? ' data-flat="1"' : '') + (p.border ? ' data-border="1"' : '') + '>' + bg + M[p.s] + icon + '</div>'
       + '<div class="card__meta"><h3 class="card__name"><em>' + p.n + '</em><i class="dot dot--' + p.st + '"></i></h3>'
       + '<span class="card__jp">' + p.jp + '</span>'
       + '<p class="card__pos">' + t.p + '</p><p class="card__body">' + t.b + '</p>'

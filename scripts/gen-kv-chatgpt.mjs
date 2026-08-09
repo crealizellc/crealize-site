@@ -12,7 +12,7 @@
      2. 上傳該產品**官方 app icon** 當參考圖 —— 這是「按照各產品自己的品牌規劃」的關鍵。
         純文字 prompt 生出來的東西跟產品識別無關（2026-08-08 已被退件過一次）。
      3. 送出以 docs/design-system/product-palette.json 的品牌色與 tone 組出的 prompt
-     4. 等圖、取 URL、下載到 site-assets/kv-gen/<slug>.png
+     4. 等圖、取 URL、下載到 site-assets/kv-ai/<slug>.png
 
    硬性約束寫在 prompt 裡：無文字、無 logo、**無手機/裝置/UI**、非扁平幾何。
    前兩者是為了語言中性與真實性，第三個是 Yves 明講過兩次的「放手機是十年前的設計」。
@@ -27,11 +27,11 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { openOn, newTab, listPages, attach } from './lib/cdp.mjs';
+import { newTab, listPages, attach, closeTab } from './lib/cdp.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const ICONS = join(ROOT, 'site-assets/icons');
-const OUT = join(ROOT, 'site-assets/kv-gen');
+const OUT = join(ROOT, 'site-assets/kv-ai');   // 與程式生成版 kv-gen/ 分開，方便比對
 const PALETTE = JSON.parse(readFileSync(join(ROOT, 'docs/design-system/product-palette.json'), 'utf8')).products;
 
 /** slug → palette.json 的鍵，以及卡片要傳達的那一個機制。
@@ -191,6 +191,10 @@ async function generate(prod) {
     return { buf, hasIcon, url: picked.url, refs: refs.length };
   } finally {
     s.close();
+    // 每個產品開一個分頁，跑完要關 —— 不關的話 11 個分頁會一路累積，
+    // 而且 2026-08-09 遇過舊分頁的 session 過期（"Your session has expired"）
+    // 把整批卡死，新開的分頁反而是好的。
+    if (s.tabId) await closeTab(s.tabId).catch(() => {});
   }
 }
 

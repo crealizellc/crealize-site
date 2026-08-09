@@ -619,41 +619,30 @@ section { position: relative; }
 }
 #work .card:hover .stage { transform: translateY(-3px); }
 #work .card:focus-visible .stage { outline: 2px solid var(--accent); outline-offset: 3px; }
-#work .m { position: absolute; left: 0; top: 0; bottom: 0; width: 70%; height: 100%; display: block; overflow: visible; }
-#work .stage[data-nophone="1"] .m { width: 100%; }
+/* 三層：AI 底圖 → 程式動態 motif → 官方 icon。手機外框已整組移除。 */
+#work .stage__bg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  transform: scale(1.04);
+  transition: transform 1.6s var(--ease-cond), filter var(--dur-3) var(--ease-cond);
+}
+#work .card:hover .stage__bg { transform: scale(1.09); }
+#work .m {
+  position: absolute; inset: 0; width: 100%; height: 100%; display: block; overflow: visible;
+  mix-blend-mode: screen; opacity: .92;
+}
+#work .stage[data-flat="1"] .m { mix-blend-mode: normal; opacity: .96; }
+#work .stage__icon {
+  position: absolute; left: 22px; bottom: 22px; width: 46px; height: 46px;
+  border-radius: 11px; display: block; z-index: 2;
+  box-shadow: 0 1px 0 rgba(255,255,255,.19) inset, 0 10px 24px -8px rgba(18,17,16,.69);
+  transform: translateY(6px); opacity: 0;
+  transition: transform var(--dur-2) var(--ease-cond), opacity var(--dur-2) var(--ease-cond);
+  transition-delay: 180ms;
+}
+#work .card.is-in .stage__icon { transform: none; opacity: 1; }
 #work .stage[data-border="1"] { border: 1px solid rgba(14, 14, 16, .14); box-shadow: none; }
 
-#work .stage__phone {
-  position: absolute;
-  right: 6.5%;
-  bottom: -14%;
-  width: 23%;
-  aspect-ratio: 9 / 19.5;
-  border-radius: var(--r-3);
-  background: var(--ink);
-  padding: 2px;
-  box-shadow:
-    0 1px 0 rgba(255,255,255,.45) inset,
-    -1px -1px 2px rgba(255,255,255,.30),
-    0 1px 1px rgba(18,17,16,.20),
-    0 6px 10px -4px rgba(18,17,16,.22),
-    0 20px 34px -12px rgba(18,17,16,.30);
-  transition: transform var(--dur-2) var(--ease-cond), box-shadow var(--dur-2) var(--ease-cond);
-}
-#work .card:hover .stage__phone { transform: translateY(-6px); }
-/* fudeto + tendo 的品牌規範：不用投影、不用漸層 */
-#work .stage[data-flat="1"] .stage__phone { box-shadow: 0 0 0 1px rgba(18,17,16,.16); }
-#work .stage__phone i {
-  display: block;
-  width: 100%;
-  height: 100%;
-  border-radius: 6px;
-  overflow: hidden;
-  background:
-    repeating-linear-gradient(-45deg, var(--paper-2) 0 1px, transparent 1px 9px),
-    var(--paper);
-}
-#work .stage__phone img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
 #work .card__meta { margin-top: 18px; }
 #work .card__name {
@@ -831,5 +820,4 @@ section { position: relative; }
 @media (max-width: 640px) {
   #work-cards { grid-template-columns: 1fr; gap: 44px; }
   #work .card__pos { font-size: 15px; }
-  #work .stage__phone { width: 26%; }
-}
+  

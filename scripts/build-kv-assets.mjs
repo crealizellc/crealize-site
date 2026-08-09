@@ -23,7 +23,10 @@ import { fileURLToPath } from 'node:url';
 import { tmpdir } from 'node:os';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const KV_SRC = join(ROOT, 'site-assets/kv-gen');
+/* 底圖優先用 AI 版（材質與光線是 AI 的強項），沒有就退回程式版。
+   這是刻意的備援：ChatGPT 額度會用完、生成也會失敗，但站台不能因此開天窗。 */
+const KV_AI = join(ROOT, 'site-assets/kv-ai');
+const KV_CODE = join(ROOT, 'site-assets/kv-gen');
 const ICON_SRC = join(ROOT, 'site-assets/icons');
 const KV_OUT = join(ROOT, 'site/assets/kv');
 const ICON_OUT = join(ROOT, 'site/assets/icons');
@@ -69,10 +72,13 @@ function toWebp(src, dst, targetW, targetH, quality) {
   return { srcW: w, srcH: h, kb: statSync(dst).size / 1024 };
 }
 
-const missingKv = SLUGS.filter((s) => !existsSync(join(KV_SRC, `${s}.png`)));
+const kvSrc = (s) => existsSync(join(KV_AI, `${s}.png`)) ? join(KV_AI, `${s}.png`) : join(KV_CODE, `${s}.png`);
+const kvKind = (s) => existsSync(join(KV_AI, `${s}.png`)) ? 'AI' : '程式';
+const missingKv = SLUGS.filter((s) => !existsSync(join(KV_AI, `${s}.png`)) && !existsSync(join(KV_CODE, `${s}.png`)));
 if (missingKv.length) {
-  console.error(`❌ site-assets/kv-gen/ 缺這些產品的生成圖：${missingKv.join(', ')}`);
-  console.error(`   先跑：node scripts/gen-kv-chatgpt.mjs --only ${missingKv.join(',')}`);
+  console.error(`❌ kv-ai/ 與 kv-gen/ 都缺這些產品的底圖：${missingKv.join(', ')}`);
+  console.error(`   AI 版：node scripts/gen-kv-chatgpt.mjs --only ${missingKv.join(',')}`);
+  console.error(`   程式版：node scripts/build-kv-code.mjs --only ${missingKv.join(',')}`);
   process.exit(2);
 }
 
@@ -82,11 +88,11 @@ for (const slug of SLUGS) {
   // 從 q=82 起跳，超過上限就降到過為止（母版規格是硬的，畫質是可調的）
   let q = 82, r;
   do {
-    r = toWebp(join(KV_SRC, `${slug}.png`), dst, KV_W, KV_H, q);
+    r = toWebp(kvSrc(slug), dst, KV_W, KV_H, q);
     q -= 8;
   } while (r.kb > KV_MAX_KB && q >= 50);
   const flag = r.kb > KV_MAX_KB ? ' ⚠️ 仍超過上限' : '';
-  console.log(`   ✓ ${slug.padEnd(12)} ${r.srcW}×${r.srcH} → ${KV_W}×${KV_H} q${q + 8}, ${r.kb.toFixed(0)} KB${flag}`);
+  console.log(`   ✓ ${slug.padEnd(12)} [${kvKind(slug)}] ${r.srcW}×${r.srcH} → ${KV_W}×${KV_H} q${q + 8}, ${r.kb.toFixed(0)} KB${flag}`);
 }
 
 console.log('▶ 產品 icon → site/assets/icons/');

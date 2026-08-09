@@ -11,14 +11,16 @@
       <html lang> 決定，只 render 一次。canvas 需要那個切換器，是為了在
       單一畫布預覽三語；正式站有它反而會與 URL 的語言狀態打架。
 
-   2. 圖片改吃 window.CRZ_I18N.work[].img，不用原檔的 'shots/<slug>.png'。
-      per-locale 的 i18n 檔已經帶了正確的相對路徑（en 是 'assets/…'，
-      ja/zh 是 '../assets/…'），所以不需要另做 base path 管線。
+   2. 卡片改為三層混合：AI 底圖（assets/kv）+ 程式動態 motif + 官方 icon（assets/icons）。
+      canvas 原檔在角落放一支手機裝產品截圖，那個整組移除 —— Yves 講過兩次
+      「故意放個手機是十年前的設計」。路徑吃 window.CRZ_I18N.work[].img，
+      per-locale 的 i18n 檔已帶正確相對路徑，不需要另做 base path 管線。
 
    3. 每張卡帶 class="work-card" 與 data-work-index，讓 work-modal.js 既有的
       事件委派（'.work-card[data-work-index], .index-row[data-work-index]'）繼續有效。
 
-   M（motif SVG）與 P（三語文案）由生成器從 canvas 原檔原樣切出，未改一個 byte。
+   M（motif SVG）與版位 meta 由生成器從 canvas 原檔原樣切出；
+   三語文案來自 docs/design-system/work-copy.json（那才是文案的真相源）。
    樣式在 site/css/sections.css 的「WORK v3」區塊，全部 scope 在 #work 之下；
    token 一律用 site/css/tokens.css 的既有名稱（--ease-cond / --dur-1..3 / --font-*），
    canvas 自帶的那份 :root 刻意不移植 —— tokens.css 是唯一真相源。
@@ -115,65 +117,274 @@ meguru:'<svg class="m" viewBox="0 0 320 240">'
 
 /* ── 12 產品 × 三語（各自撰寫，非直譯；原樣自 canvas 切出） ── */
 var P=[
-{s:"puritylens",n:"PurityLens",jp:"成分をひと目で",tint:"#EEF4F8",st:"live",plat:["iOS"],
- en:{p:"Scan the jar, know where you stand.",b:"Three tiers, and it avoids the model wherever it can: a barcode hits a lookup table in under a second, known ingredients resolve against a static library at zero cost, and only unfamiliar labels go to AI OCR. Every verdict shows which sources it came from — <b>TFDA, CosIng, CIR, PubChem, AI</b> — in what proportion."},
- ja:{p:"かざせば、その一本の立ち位置がわかる。",b:"三段構えで、AIはできるだけ呼びません。バーコードは1秒未満で照合表に、既知の成分はコストゼロの静的ライブラリに。未知のラベルだけがAI-OCRに回ります。判定にはどの情報源が何割かを必ず表示します —— <b>TFDA・CosIng・CIR・PubChem・AI</b>。"},
- zh:{p:"掃一下，就知道這罐對你如何。",b:"三階查找，能不叫 AI 就不叫：條碼不到一秒直查對照表，已知成分走零成本的靜態資料庫，只有陌生標籤才送進 AI OCR。每一個判定都揭露它的來源佔比 —— <b>TFDA、CosIng、CIR、PubChem、AI</b>。"}},
-
-{s:"fudeto",n:"Fudeto",jp:"一筆書き",tint:"#FAFAFA",flat:1,st:"live",plat:["iOS"],
- en:{p:"Euler's 1736 bridges, as a morning habit.",b:"The mechanism is 290 years old and we say so — what we compete on is the packaging, not the maths. One puzzle a day worldwide, generated live from a date hash with no art assets, five rarity tiers, and a share card built to leave the app. No gradients, no drop shadows: the drawing is the product."},
- ja:{p:"290年前のオイラーを、朝の習慣に。",b:"仕組みは新しくありません。競っているのは仕組みではなく、その包み方です。世界共通の一日一問を日付ハッシュから即時生成し、画像素材は一枚も持ちません。5段階のレアリティ、共有カードはアプリの外へ出るために。グラデーションも影も使いません。線そのものが商品です。"},
- zh:{p:"290 年前的歐拉七橋，變成每天早上的習慣。",b:"機制不是新的，我們也直說：競爭的是包裝，不是機制。全球同一題，由日期雜湊即時生成，零美術資源；五階稀有度，分享卡是為了讓它離開 App 而做。不用漸層、不用陰影 —— 那條線本身就是產品。"}},
-
-{s:"kichitto",n:"Kichitto",jp:"きちっと",tint:"#FBEFE8",st:"live",plat:["iOS JP"],
- en:{p:"A receipt goes in; a row in your own Sheet comes out.",b:"The emphasis is on <b>your own</b>: output lands in your Drive and Sheets, never inside a closed database, with 8% and 10% consumption tax split automatically. Near-duplicate receipts are never merged — they append with a flag, because registration numbers aren't guaranteed unique and a silent merge eats real data."},
- ja:{p:"レシートを一枚。あなたのシートに一行。",b:"大事なのは「あなたの」という点です。出力先はあなたのDriveとSheets。閉じたデータベースには入りません。8%と10%の消費税は自動で分けます。似たレシートを自動で統合することは決してしません。登録番号は一意とは限らず、黙って統合すれば本物のデータが消えるからです。"},
- zh:{p:"進去一張收據，出來一列你自己的表格。",b:"重點是「你自己的」：輸出直接落進你的 Drive 與 Sheets，不進任何封閉資料庫，8% 與 10% 消費稅自動拆開。近似的重複收據永遠不自動合併，一律附加並標記 —— 登錄番號不保證唯一，靜默合併會吃掉真的資料。"}},
-
-{s:"qiflux",n:"QiFlux",jp:"静かな記録",tint:"#F6EDF0",st:"live",plat:["iOS"],
- en:{p:"A cycle app that doesn't raise its voice.",b:"No streaks, no FOMO, no astrology. At least 60% of every screen is empty, and if something feels crowded we delete it rather than rearrange it. We never hide the cancel button."},
- ja:{p:"大きな声を出さない、周期アプリ。",b:"連続記録もFOMOも占いもありません。画面の6割以上は余白のまま。詰まって見えたら、並べ替えるのではなく削ります。解約ボタンを隠すことは、決してしません。"},
- zh:{p:"一個不對你喊叫的週期 App。",b:"沒有連續紀錄挑戰，沒有 FOMO，沒有占星。每一屏至少留六成空白；哪裡感覺太滿，我們是刪掉，不是重排。我們永遠不把取消訂閱的按鈕藏起來。"}},
-
-{s:"meishitto",n:"Meishitto",jp:"名刺っと",tint:"#EDEDFB",st:"live",plat:["iOS","Android"],
- en:{p:"The card is scanned on your phone, and stays there.",b:"A three-stage funnel: on-device ML Kit first and free, a 0.75 confidence threshold, and only what fails it is sent to a cloud model. Animations are capped at 400ms and drop to zero under reduce-motion — large motion can trigger vertigo in people with vestibular disorders, and that reason is written in the code."},
- ja:{p:"読み取りは端末の中で。データもそこに。",b:"三段の絞り込みです。まず無料の端末内ML Kit、信頼度のしきい値は0.75、それを下回ったものだけがクラウドのモデルへ。アニメーションは上限400ms、reduce motion時はゼロ。大きな動きは前庭障害のある方にめまいを起こしうる —— その理由をコードのコメントに残しています。"},
- zh:{p:"辨識在你的手機裡完成，資料也留在那裡。",b:"三層漏斗：先跑裝置端免費的 ML Kit，信心門檻 0.75，只有沒過的才送雲端模型。動畫上限 400ms，開啟減少動態時歸零 —— 大位移可能誘發前庭功能障礙者暈眩，這個理由就寫在程式碼註解裡。"}},
-
-{s:"rythix2048",n:"Rythix 2048",jp:"音で解く 2048",tint:"#F6EEF4",st:"live",plat:["iOS","Android"],
- en:{p:"Every move triggers a note.",b:"The soundtrack is generated on your device as you play, so no two games sound alike — nothing pre-recorded, nothing streamed. Mute it and you still have a perfectly good numbers puzzle: the music is addition, never a requirement."},
- ja:{p:"一手ごとに、音が鳴る。",b:"曲は遊びながら端末上で生成されます。録音済みの音源も配信もないので、同じ一局は二度とありません。消音にすれば、ただの良い数字パズルとして成立します。音楽は足し算であって、条件ではありません。"},
- zh:{p:"每走一步，就發一個音。",b:"配樂在你的裝置上即時生成，沒有預錄、沒有串流，所以每一局聽起來都不一樣。靜音之後，它依然是個好玩的數字謎題 —— 音樂是加法，不是門檻。"}},
-
-{s:"tendo",n:"Tendo",jp:"一日一道",tint:"#F5F1E8",flat:1,st:"live",plat:["Android"],
- en:{p:"Every point, exactly once.",b:"Fudeto walks edges, which is P — parity of degrees tells you the answer. Tendo walks vertices, which is NP-complete: there is no formula, only intuition and backtracking, and realising that is the aha. Fully playable with Switch Control, with VoiceOver announcing each vertex. Solve it and the Magic Moment runs: 2.4 seconds, every vertex lighting gold in the order you visited it."},
- ja:{p:"すべての点を、ちょうど一度ずつ。",b:"Fudetoは辺をたどるP問題。次数の偶奇で解けます。Tendoは点をたどるNP完全 —— 公式はなく、直感とバックトラックだけ。「公式がない」と気づく瞬間そのものが、この作品の山場です。スイッチコントロールだけで最後まで遊べ、VoiceOverが頂点を読み上げます。解けた瞬間、2.4秒のMagic Moment：訪れた順に、頂点がひとつずつ金に灯ります。"},
- zh:{p:"每個點，剛好走一次。",b:"Fudeto 走邊，是 P 問題，看度數的奇偶就能判。Tendo 走點，是 NP-complete：沒有通解公式，只能靠直覺與回溯 —— 而「發現沒有公式」本身就是那個啊哈。單開關（Switch Control）可完整遊玩，VoiceOver 會逐頂點朗讀。解開的瞬間跑 2.4 秒的 Magic Moment：每個頂點按你走過的順序依序亮金。"}},
-
-{s:"xunni",n:"XunNi",jp:"尋你",tint:"#141210",st:"live",plat:["Android","Web"],
- en:{p:"Same two charts, a different lens, a different reading.",b:"Star Bonds reads a pair of charts through one of four relationships — love, family, work, or the people around you — and the interpretation logic changes with the lens, not just the wording. The Voice of Mercury explains a public figure's best-known line by their Mercury placement, so a page reads as a reading rather than a database lookup."},
- ja:{p:"同じ二枚の盤も、レンズを替えれば別の読みになる。",b:"Star Bondsは二枚の命盤を、恋愛・家族・仕事・人づきあいという四つの関係のいずれかを通して読みます。変わるのは言い回しではなく、解釈のロジックそのものです。The Voice of Mercuryは、著名人の名言をその水星の配置から説き明かします。データベースの検索結果ではなく、読み物であるために。"},
- zh:{p:"同樣兩張盤，換一副鏡片就換一套讀法。",b:"Star Bonds 把兩張命盤放在愛情、家人、工作、身邊的人四種關係之一底下解讀 —— 換的是解釋邏輯，不只是措辭。The Voice of Mercury 用名人的水星配置去解釋他最著名的那句話，讓一頁讀起來像一次解讀，而不是一次資料庫查詢。"}},
-
-{s:"moonpacket",n:"moonpacket",jp:"月へ、紅包を",tint:"#0C1E3A",st:"live",plat:["Web","Telegram"],
- en:{p:"The red packet, as Web3's everyday gesture.",b:"Web3 has airdrops that happen once and DeFi that happens rarely; what it lacks is something people do casually and often. A red packet is that hook — non-custodial, multi-chain, dropped straight into a Telegram group. The referral loop is capped on purpose: strict new-friend checks, 100 per person, ten million globally."},
- ja:{p:"紅包を、Web3の日常の動作に。",b:"Web3にはエアドロップという一度きりと、DeFiという低頻度・高摩擦しかなく、気軽に何度もやることが欠けています。そのフックが紅包です。ノンカストディアル、マルチチェーン、Telegramのグループにそのまま投げ込めます。紹介の輪には意図的な上限を —— 厳格な新規判定、1人100件、全体で1,000万件まで。"},
- zh:{p:"把紅包變成 Web3 的日常動作。",b:"Web3 有一次性的空投，有低頻高摩擦的 DeFi，缺的是「人們會隨手、常常做」的那件事。紅包就是那個鉤子：非託管、多鏈，直接丟進 Telegram 群組。推薦迴圈刻意封頂 —— 嚴格的新朋友判定、每人上限 100、全球上限一千萬。"}},
-
-{s:"idokuta",n:"iDokuta",jp:"言葉を越える診療",tint:"#F8FBFB",st:"dev",plat:[],
- en:{p:"Bridge the language gap with Japanese healthcare.",b:"Type how you feel in your own language, get it back as clear medical Japanese with the key terms explained, then hand your phone to the person at the clinic. Five languages. <b>A language tool, not medical advice — always consult a doctor.</b>"},
- ja:{p:"日本の医療との、言葉の隔たりを埋める。",b:"まず母語で、いまの症状をそのまま書く。すると、要点の医療用語に説明のついた、はっきりした日本語が返ってきます。あとはその画面を、受付の方に見せるだけ。5言語対応。<b>これは言葉の道具であり、医療上の助言ではありません。必ず医師にご相談ください。</b>"},
- zh:{p:"把你和日本醫療之間的語言隔閡接起來。",b:"先用你自己的語言寫下哪裡不舒服，它會換成清楚的醫療日文，關鍵術語附上解釋；然後把手機遞給診所的人看就行。支援五種語言。<b>這是語言工具，不是醫療建議 —— 請務必諮詢醫師。</b>"}},
-
-{s:"mairi",n:"Mairi",jp:"毎日のカルテ",tint:"#FAF8F5",st:"dev",plat:[],
- en:{p:"What you log daily, usable on the day you're seen.",b:"Japan has plenty of single-purpose PHRs, but none that manage integration, daily use, and sharing at the clinic all at once. Records are handed over as a two-layer QR that hard-expires in six hours and cannot be renewed — compatible with the pharmacy e-薬SCAN standard, where the usual medication notebook offers a permanent code."},
- ja:{p:"毎日つけたものが、受診の日に効く。",b:"日本には単機能のPHRは数あれど、連携・毎日の記録・診察での共有をひと続きにしたものがありません。受け渡しは二層QRで、6時間で強制失効し、延長はできません。薬局のe薬SCAN規格に準拠しています —— 従来のお薬手帳が永続QRであるのに対して。"},
- zh:{p:"每天記的那些，在就診那天派得上用場。",b:"日本不缺單點功能的 PHR，缺的是把「整合、每日使用、就診共享」串成一條的那一個。紀錄以雙層 QR 交出，六小時硬過期、不可續期，相容藥局 e薬SCAN 標準 —— 對照之下，一般的お薬手帳給的是永久 QR。"}},
-
-{s:"meguru",n:"Meguru",jp:"めぐる",tint:"#FAF7F2",nophone:1,border:1,st:"ops",plat:["Internal"],
- en:{p:"Listing, order, support, payout — one loop.",b:"Around forty resale-commerce microservices, consolidated into a single platform. Human-in-the-loop is structural: reconciliation differences only ever produce a proposal that a person approves, and refunds, complaints, and angry messages are never answered automatically."},
- ja:{p:"出品・受注・サポート・支払いが、ひと巡り。",b:"およそ40のリセール系マイクロサービスを、ひとつのプラットフォームに畳みました。human-in-the-loopは構造として組み込んであります。対帳の差異は提案を出すだけで、調整するのは必ず人。返金・クレーム・強い怒りには、自動では返しません。"},
- zh:{p:"上架、接單、客服、撥款，收成一圈。",b:"把散在約四十個微服務裡的轉售電商流程，收斂成單一平台。human-in-the-loop 是結構性的：對帳差異只產生提案，動手調整的一定是人；退款、客訴與高怒氣訊息，絕不自動回覆。"}}
+ {
+  "s": "puritylens",
+  "n": "PurityLens",
+  "jp": "成分をひと目で",
+  "tint": "#EEF4F8",
+  "st": "live",
+  "plat": [
+   "iOS"
+  ],
+  "en": {
+   "p": "Know what's actually in the jar before it touches your skin.",
+   "b": "An ingredient list is written for regulators, not for you, and the internet will happily give you five contradictory answers about the same chemical. PurityLens reads the label and tells you where that product stands for <b>your</b> skin. What almost nobody else does: every verdict shows its receipts — how much came from TFDA, CosIng, CIR, PubChem, and how much from AI. If we aren't sure, you can see that we aren't sure."
+  },
+  "ja": {
+   "p": "肌にのせる前に、その一本の中身がわかる。",
+   "b": "成分表は規制のために書かれていて、消費者のためには書かれていません。ネットで調べれば同じ成分に五通りの説明が出てきます。PurityLensはラベルを読み取り、それが<b>あなたの</b>肌にとってどうなのかを示します。他がやっていないのは根拠の開示です。判定のうちTFDA・CosIng・CIR・PubChemが何割で、AIが何割か。自信がないときは、自信がないことがそのまま見えます。"
+  },
+  "zh": {
+   "p": "在擦上去之前，先知道這罐裡面到底是什麼。",
+   "b": "成分表是寫給主管機關看的，不是寫給你看的；上網查同一個成分，你會得到五種互相矛盾的說法。PurityLens 讀完標籤，告訴你這罐對<b>你的</b>膚況而言站在什麼位置。少有人做的是把依據攤開：這個判定有幾成來自 TFDA、CosIng、CIR、PubChem，幾成來自 AI。我們沒把握的時候，你看得出來我們沒把握。"
+  }
+ },
+ {
+  "s": "fudeto",
+  "n": "Fudeto",
+  "jp": "一筆書き",
+  "tint": "#FAFAFA",
+  "flat": 1,
+  "st": "live",
+  "plat": [
+   "iOS"
+  ],
+  "en": {
+   "p": "A 290-year-old maths problem, turned into a morning habit.",
+   "b": "Most puzzle apps want your evening and your attention span. Fudeto wants ninety seconds: one unbroken stroke across every bridge, one puzzle a day, the same one for everyone on earth. The mechanism is Euler's, from 1736, and we say so — what we actually compete on is the packaging. Every board is generated live from a date hash, so the app ships with no artwork at all, and the share card exists to leave the app rather than trap you in it."
+  },
+  "ja": {
+   "p": "290年前の数学の問題を、朝の習慣に。",
+   "b": "パズルアプリの多くは、あなたの夜と集中力を丸ごと欲しがります。Fudetoが欲しいのは90秒だけ。すべての橋を一度ずつ渡る一筆書きを、世界共通の一日一問で。仕組みは1736年のオイラーのもので、そこは隠しません。競っているのは仕組みではなく、その包み方です。盤面は日付ハッシュから即時生成するので画像素材は一枚も持たず、共有カードはあなたを閉じ込めるためでなく、アプリの外へ出るために作りました。"
+  },
+  "zh": {
+   "p": "把 290 年前的數學題，變成每天早上的習慣。",
+   "b": "多數解謎 App 想要的是你整個晚上。Fudeto 只要九十秒：一筆走完所有的橋，一天一題，全世界同一題。機制是 1736 年歐拉的，我們直說——真正在競爭的是包裝，不是機制。每一局都由日期雜湊即時生成，所以整個 App 裡沒有一張美術圖；分享卡的存在是為了讓它離開 App，而不是把你留下來。"
+  }
+ },
+ {
+  "s": "kichitto",
+  "n": "Kichitto",
+  "jp": "きちっと",
+  "tint": "#FBEFE8",
+  "st": "live",
+  "plat": [
+   "iOS JP"
+  ],
+  "en": {
+   "p": "Photograph a receipt, get one clean row in your own spreadsheet.",
+   "b": "Japanese sole traders lose whole evenings to a shoebox of receipts, and most bookkeeping apps solve that by locking your data inside their database. Kichitto writes into <b>your</b> Drive and <b>your</b> Sheets, splits 8% and 10% consumption tax automatically, and never asks you to migrate anything. The unusual part is what it refuses to do: near-duplicate receipts are never silently merged. Registration numbers aren't guaranteed unique, and a merge that quietly eats a real transaction is worse than a duplicate you can see."
+  },
+  "ja": {
+   "p": "レシートを一枚撮れば、あなたのシートに一行。",
+   "b": "個人事業主の夜は、たまったレシートに消えていきます。多くの記帳アプリはそれを、自社のデータベースに囲い込むことで解決します。Kichittoが書き込むのは<b>あなたの</b>DriveとSheets。8%と10%の消費税は自動で分け、移行作業は一切求めません。特徴的なのは「やらないこと」です。似たレシートを黙って統合することは決してしません。登録番号は一意とは限らず、静かに本物の取引を消してしまうくらいなら、目に見える重複のほうがましだからです。"
+  },
+  "zh": {
+   "p": "拍一張收據，變成你自己表格裡的一列。",
+   "b": "日本的個人事業主，晚上都耗在一盒收據上；而多數記帳 App 的解法，是把你的資料鎖進它自己的資料庫。Kichitto 寫進的是<b>你的</b> Drive 與<b>你的</b> Sheets，8% 與 10% 消費稅自動拆開，不要求你搬家。比較少見的是它拒絕做的事：近似的重複收據永遠不會被靜默合併。登錄番號不保證唯一，與其安靜地吃掉一筆真交易，不如留一筆你看得見的重複。"
+  }
+ },
+ {
+  "s": "qiflux",
+  "n": "QiFlux",
+  "jp": "静かな記録",
+  "tint": "#F6EDF0",
+  "st": "live",
+  "plat": [
+   "iOS"
+  ],
+  "en": {
+   "p": "A cycle tracker that doesn't raise its voice.",
+   "b": "Health apps have learned all the growth tricks — streaks you mustn't break, notifications that imply something is wrong, horoscopes bolted onto your body data. QiFlux does none of it. At least 60% of every screen stays empty, and when a screen feels crowded we delete something rather than rearrange it. And the cancel button is never hidden: if you want to leave, we are not going to make that hard."
+  },
+  "ja": {
+   "p": "大きな声を出さない、周期トラッカー。",
+   "b": "健康アプリはグロースの手口を覚えてしまいました。途切れさせてはいけない連続記録、何か異常があるかのような通知、体のデータに接ぎ木された占い。QiFluxはそのどれもやりません。画面の6割以上は余白のまま残し、詰まって見えたら並べ替えるのではなく削ります。解約ボタンを隠すこともしません。やめたいときに、やめにくくはしません。"
+  },
+  "zh": {
+   "p": "一個不對你大聲說話的週期紀錄。",
+   "b": "健康 App 把成長手法都學會了：不能斷的連續紀錄、暗示你身體出事的推播、接在生理數據上的占星。QiFlux 一樣都不做。每一屏至少留六成空白，哪裡覺得太滿，我們是刪掉而不是重排。取消訂閱的按鈕也永遠不藏——你想走的時候，我們不會讓它變難。"
+  }
+ },
+ {
+  "s": "meishitto",
+  "n": "Meishitto",
+  "jp": "名刺っと",
+  "tint": "#EDEDFB",
+  "st": "live",
+  "plat": [
+   "iOS",
+   "Android"
+  ],
+  "en": {
+   "p": "Your business cards are read on your phone, and stay on your phone.",
+   "b": "Every card scanner asks you to upload your professional network to someone else's server. Meishitto starts on-device: free ML Kit recognition first, and only what falls below a 0.75 confidence threshold is ever sent to a cloud model. Something you rarely see spelled out — animations are capped at 400ms and drop to zero under reduce-motion, because large motion can trigger vertigo in people with vestibular disorders. That reason is written in the source, not just in a policy page."
+  },
+  "ja": {
+   "p": "名刺は端末の中で読み取り、そのまま端末に残ります。",
+   "b": "名刺アプリはたいてい、あなたの人脈をどこかのサーバーに預けろと言います。Meishittoはまず端末内で処理します。無料のML Kitで読み取り、信頼度0.75を下回ったものだけがクラウドのモデルへ渡ります。あまり明文化されないところも書いています。アニメーションは上限400ms、reduce motion時はゼロ。大きな動きは前庭障害のある方にめまいを起こしうるからで、その理由はポリシーページではなくソースコードに残してあります。"
+  },
+  "zh": {
+   "p": "名片在你手機裡辨識完，資料也留在你手機裡。",
+   "b": "名片 App 幾乎都要你把人脈上傳到別人的伺服器。Meishitto 先在裝置上做：免費的 ML Kit 跑第一輪，只有信心低於 0.75 的才送雲端模型。比較少見的是把理由寫清楚——動畫上限 400ms、開啟「減少動態」時歸零，因為大幅位移可能誘發前庭功能障礙者暈眩。這個理由寫在程式碼註解裡，不是只寫在政策頁上。"
+  }
+ },
+ {
+  "s": "rythix2048",
+  "n": "Rythix 2048",
+  "jp": "音で解く 2048",
+  "tint": "#F6EEF4",
+  "st": "live",
+  "plat": [
+   "iOS",
+   "Android"
+  ],
+  "en": {
+   "p": "A number puzzle where every move sounds a note.",
+   "b": "2048 is a solved genre — after a few hundred games it goes quiet. Rythix composes the soundtrack on your device while you play, so no two sessions sound alike; nothing is pre-recorded and nothing is streamed. The restraint is the point: mute it and you still have a perfectly good numbers puzzle. The music is addition, never a requirement, and never a reason to keep the volume up in a meeting."
+  },
+  "ja": {
+   "p": "一手ごとに音が鳴る、数字パズル。",
+   "b": "2048というジャンルはやり尽くされていて、何百局か遊ぶと静かになります。Rythixは遊んでいる最中に端末上で曲を生成するので、同じ一局は二度とありません。録音済みの音源も配信もありません。抑制がこの作品の要点です。消音にしても、ちゃんと面白い数字パズルとして成立します。音楽は足し算であって条件ではなく、会議中に音量を上げる理由にもなりません。"
+  },
+  "zh": {
+   "p": "每走一步就發出一個音的數字謎題。",
+   "b": "2048 這個類型早就被玩透了，幾百局之後就安靜了。Rythix 在你遊玩的當下於裝置上即時作曲，所以沒有兩局聽起來一樣，沒有預錄、也沒有串流。克制才是重點：靜音之後，它依然是個好玩的數字謎題。音樂是加法，不是門檻，也不會變成你在會議中非開喇叭不可的理由。"
+  }
+ },
+ {
+  "s": "tendo",
+  "n": "Tendo",
+  "jp": "一日一道",
+  "tint": "#F5F1E8",
+  "flat": 1,
+  "st": "live",
+  "plat": [
+   "Android"
+  ],
+  "en": {
+   "p": "Visit every point exactly once. There is no formula.",
+   "b": "Its sibling Fudeto walks edges, which is easy maths — count how many points have an odd number of lines and you know the answer before you start. Tendo walks vertices, which is NP-complete: no formula exists, only intuition and backtracking. Realising that is the whole game. The part we're proudest of is quieter: it's fully playable with a single switch, and VoiceOver announces each vertex, so the puzzle stays a puzzle for people who can't swipe."
+  },
+  "ja": {
+   "p": "すべての点を、ちょうど一度ずつ。公式はありません。",
+   "b": "姉妹作のFudetoは辺をたどるので、数学的には簡単です。奇数本の線が集まる点を数えれば、始める前に答えがわかります。Tendoは点をたどる、NP完全の問題。公式は存在せず、直感とバックトラックしかありません。「公式がない」と気づく瞬間そのものが、この作品の山場です。もっと静かな自慢もあります。スイッチひとつで最後まで遊べ、VoiceOverが頂点を読み上げる。スワイプできない人にとっても、これはちゃんとパズルのままです。"
+  },
+  "zh": {
+   "p": "每個點剛好走一次。沒有公式。",
+   "b": "姊妹作 Fudeto 走的是邊，數學上很簡單——數一數有幾個點連著奇數條線，開始前就知道答案。Tendo 走的是點，屬於 NP-complete：沒有通解公式，只剩直覺與回溯。而「發現沒有公式」本身就是整個遊戲。我們更在意的是另一件比較安靜的事：它可以只用單一開關完整遊玩，VoiceOver 會逐頂點朗讀，讓滑不動螢幕的人也還有一個真正的謎題。"
+  }
+ },
+ {
+  "s": "xunni",
+  "n": "XunNi",
+  "jp": "尋你",
+  "tint": "#141210",
+  "st": "live",
+  "plat": [
+   "Android",
+   "Web"
+  ],
+  "en": {
+   "p": "The same two charts, read through a different lens, become a different reading.",
+   "b": "Most divination apps are database lookups wearing a mystical skin: you get the same paragraph everyone else gets. Star Bonds reads a pair of charts through one of four relationships — love, family, work, or the people around you — and it's the interpretation logic that changes with the lens, not just the adjectives. The Voice of Mercury goes further and explains a public figure's most famous line by their Mercury placement, so the page reads like someone actually read for you."
+  },
+  "ja": {
+   "p": "同じ二枚の盤も、レンズを替えれば別の読みになる。",
+   "b": "占いアプリの多くは、神秘的な皮をかぶったデータベース検索です。誰が引いても同じ段落が返ってきます。Star Bondsは二枚の命盤を、恋愛・家族・仕事・人づきあいという四つの関係のいずれかを通して読みます。レンズで変わるのは形容詞ではなく、解釈のロジックそのものです。The Voice of Mercuryはさらに踏み込み、著名人の名言をその人の水星の配置から説き明かします。検索結果ではなく、誰かが本当に読んでくれた文章になるように。"
+  },
+  "zh": {
+   "p": "同樣兩張盤，換一副鏡片，就是另一套讀法。",
+   "b": "多數命理 App 是披著神秘外皮的資料庫查表：誰抽到都是同一段話。Star Bonds 把兩張命盤放進愛情、家人、工作、身邊的人四種關係之一底下解讀，而換鏡片改變的是解釋邏輯本身，不只是形容詞。The Voice of Mercury 更進一步，用名人的水星配置去解釋他最著名的那句話，讓一頁讀起來像真的有人替你讀過，而不是查了一次資料庫。"
+  }
+ },
+ {
+  "s": "moonpacket",
+  "n": "moonpacket",
+  "jp": "月へ、紅包を",
+  "tint": "#0C1E3A",
+  "st": "live",
+  "plat": [
+   "Web",
+   "Telegram"
+  ],
+  "en": {
+   "p": "The lunar new year red packet, as Web3's everyday gesture.",
+   "b": "Web3 has airdrops, which happen once, and DeFi, which is rare and full of friction. What it has never had is something people do casually and often. A red packet is that gesture — non-custodial, multi-chain, dropped straight into a Telegram group where the conversation already is. The unusual decision is the ceiling: the referral loop is capped on purpose at 100 per person and ten million globally, because a growth mechanic with no limit stops being a gift and becomes a farm."
+  },
+  "ja": {
+   "p": "紅包を、Web3の日常の動作に。",
+   "b": "Web3には一度きりのエアドロップと、低頻度で摩擦の大きいDeFiしかありません。欠けているのは、人が気軽に何度もやることです。紅包はその動作になれます。ノンカストディアル、マルチチェーンで、会話がすでにあるTelegramのグループにそのまま投げ込めます。変わっているのは上限を設けたことです。紹介の輪は1人100件、全体で1,000万件で意図的に止めます。上限のないグロース施策は、贈り物ではなく農場になってしまうからです。"
+  },
+  "zh": {
+   "p": "把紅包變成 Web3 的日常動作。",
+   "b": "Web3 有一次性的空投，有低頻又高摩擦的 DeFi，唯獨沒有「人們會隨手、常常做」的那件事。紅包就是那個動作：非託管、多鏈，直接丟進對話本來就在的 Telegram 群組。比較少見的決定是我們刻意設了上限——推薦迴圈每人封頂 100、全球封頂一千萬。沒有上限的成長機制，就不再是禮物，而是農場。"
+  }
+ },
+ {
+  "s": "idokuta",
+  "n": "iDokuta",
+  "jp": "言葉を越える診療",
+  "tint": "#F8FBFB",
+  "st": "dev",
+  "plat": [],
+  "en": {
+   "p": "For the moment you have to explain your symptoms in Japanese.",
+   "b": "Living in Japan is fine until you're unwell at a clinic reception, holding a form, unable to say the one word that matters. iDokuta lets you write how you feel in your own language and hands it back as clear medical Japanese, with the key terms explained so you know what you just said. It isn't built to be a translator — it's built for the second you turn the phone around and show it to someone. Five languages. <b>A language tool, not medical advice — always consult a doctor.</b>"
+  },
+  "ja": {
+   "p": "症状を日本語で説明しなければならない、その瞬間のために。",
+   "b": "日本での暮らしは、体調を崩して受付に立ち、問診票を前に肝心のひと言が出てこないその瞬間まではうまくいきます。iDokutaは母語で書いた症状を、はっきりした日本語にして返します。要点の医療用語には説明がつくので、自分が何と言ったのかもわかります。翻訳機として作ったのではありません。画面を相手に向けて見せる、あの一瞬のために作りました。5言語対応。<b>これは言葉の道具であり、医療上の助言ではありません。必ず医師にご相談ください。</b>"
+  },
+  "zh": {
+   "p": "為了你必須用日文說出哪裡不舒服的那一刻。",
+   "b": "在日本生活一切都好，直到你身體不適、站在診所櫃檯前、手上拿著問診單，卻說不出最關鍵的那個詞。iDokuta 讓你用自己的語言寫下感受，換回清楚的醫療日文，關鍵術語附上解釋，所以你也知道自己剛剛說了什麼。它不是當翻譯機做的——是為了「把手機轉過去給對方看」的那一秒做的。支援五種語言。<b>這是語言工具，不是醫療建議 —— 請務必諮詢醫師。</b>"
+  }
+ },
+ {
+  "s": "mairi",
+  "n": "Mairi",
+  "jp": "毎日のカルテ",
+  "tint": "#FAF8F5",
+  "st": "dev",
+  "plat": [],
+  "en": {
+   "p": "What you write down every day, made useful on the day you're seen.",
+   "b": "Japan has no shortage of single-purpose health records — one app for blood pressure, another for medication, a paper notebook for the pharmacy. None of them carry a daily habit through to the ten minutes you actually get with a doctor. Mairi does, and hands the record over as a two-layer QR code. Here's the part nobody else ships: that code hard-expires in six hours and cannot be renewed. The usual medication notebook gives out a permanent code — we decided expiry was a feature, not a limitation."
+  },
+  "ja": {
+   "p": "毎日つけているものが、受診の日に効く。",
+   "b": "日本に単機能の健康記録は数えきれないほどあります。血圧はこのアプリ、薬はあのアプリ、薬局には紙の手帳。けれど毎日の習慣を、医師と向き合うあの十分間まで運んでくれるものはありません。Mairiはそれをやり、記録を二層QRで渡します。他がやっていないのはここです。そのコードは6時間で強制的に失効し、延長できません。従来のお薬手帳は永続QRを配ります。私たちは、失効することを制約ではなく機能だと考えました。"
+  },
+  "zh": {
+   "p": "每天記下的那些，在就診那天真的派得上用場。",
+   "b": "日本不缺單點功能的健康紀錄：血壓一個 App、用藥一個 App、藥局再給你一本紙手帳。但沒有一個能把每天的習慣，帶到你真正見到醫師的那十分鐘。Mairi 做到了，並且用雙層 QR 把紀錄交出去。少有人敢做的是這一步：那組碼六小時硬過期，而且不可續期。一般的お薬手帳給的是永久 QR——我們認為「會過期」是功能，不是限制。"
+  }
+ },
+ {
+  "s": "meguru",
+  "n": "Meguru",
+  "jp": "めぐる",
+  "tint": "#FAF7F2",
+  "nophone": 1,
+  "border": 1,
+  "st": "ops",
+  "plat": [
+   "Internal"
+  ],
+  "en": {
+   "p": "Listing, order, support and payout, closed into one loop.",
+   "b": "A resale business that grows fast ends up running on about forty microservices that nobody can hold in their head at once. Meguru folds that into a single platform. What makes it unusual isn't the consolidation, it's where we drew the line for automation: a reconciliation difference only ever produces a proposal, and a person approves it. Refunds, complaints and angry messages are never answered automatically. Human-in-the-loop here is structural, written into the system, not a promise in a deck."
+  },
+  "ja": {
+   "p": "出品・受注・サポート・支払いを、ひと巡りに閉じる。",
+   "b": "リセール事業は伸びるほど、誰も全体を把握できない40ほどのマイクロサービスの上で回るようになります。Meguruはそれをひとつのプラットフォームに畳みました。特徴は統合そのものではなく、自動化の線をどこに引いたかです。対帳の差異は提案を出すだけで、承認するのは必ず人。返金・クレーム・強い怒りを含む連絡には、自動では返しません。human-in-the-loopは資料上の約束ではなく、システムの構造として組み込んであります。"
+  },
+  "zh": {
+   "p": "上架、接單、客服、撥款，收成一圈。",
+   "b": "轉售生意長得越快，最後就跑在大約四十個沒有人能同時掌握的微服務上。Meguru 把它們收斂成單一平台。真正特別的不是整合，而是我們把自動化的線畫在哪：對帳差異只會產生一份提案，動手核准的一定是人；退款、客訴與高怒氣訊息，絕不自動回覆。human-in-the-loop 在這裡是結構性的，寫進系統裡，不是簡報上的一句承諾。"
+  }
+ }
 ];
 
   /* ── registry 對帳：兩個真相源必須完全對得上，對不上就大聲失敗 ──
@@ -203,16 +414,19 @@ var P=[
     var plat = p.plat.length
       ? p.plat.map(function (b) { return '<b>' + b + '</b>'; }).join('')
       : '<b class="none">' + UNRELEASED[L] + '</b>';
-    // 手機框是 9:19.5，要放的是**直立**截圖（assets/shots/*.webp，由
-    // scripts/build-shots.mjs 產出），不是 1600×1200 的橫向主視覺海報。
-    // 路徑前綴沿用 registry 的 img —— 它已經帶了正確的 locale 相對路徑。
-    var shot = reg ? reg.img.replace(/assets\/kv\/[^/]+$/, 'assets/shots/' + p.s + '.webp') : null;
-    var phone = (p.nophone || !shot)
-      ? ''
-      : '<div class="stage__phone"><i><img src="' + shot + '" alt="' + (reg.alt || p.n) +
-        '" loading="lazy" decoding="async" width="480" height="1040" /></i></div>';
+    /* 三層混合（Yves 2026-08-09 拍板：「混合，兩邊各做各擅長的」）
+         底層 AI 生成的品牌氛圍底圖 —— 材質、光線、景深，程式做不出來
+         中層 程式即時渲染的 motif —— 會動、向量清晰，AI 做不到
+         角落 該產品官方 app icon —— 統一尺寸與位置
+       **不放手機或任何裝置外框**（Yves 講過兩次：那是十年前的設計）。
+       slogan 不燒進圖裡，留在下面的 meta，否則 ja/zh 頁會變成英文圖 + 本地化字的重複。 */
+    var bg = reg ? '<img class="stage__bg" src="' + reg.img + '" alt="" loading="lazy" decoding="async" width="1600" height="1200" />' : '';
+    var icon = reg
+      ? '<img class="stage__icon" src="' + reg.img.replace(/assets\/kv\/[^/]+$/, 'assets/icons/' + p.s + '.webp') +
+        '" alt="' + p.n + ' icon" loading="lazy" decoding="async" width="256" height="256" />'
+      : '';
     return '<article class="card work-card" data-work-index="' + idx + '" tabindex="0" role="button" aria-label="Open ' + p.n + '">'
-      + '<div class="stage" style="--tint:' + p.tint + '"' + (p.flat ? ' data-flat="1"' : '') + (p.nophone ? ' data-nophone="1"' : '') + (p.border ? ' data-border="1"' : '') + '>' + M[p.s] + phone + '</div>'
+      + '<div class="stage" style="--tint:' + p.tint + '"' + (p.flat ? ' data-flat="1"' : '') + (p.border ? ' data-border="1"' : '') + '>' + bg + M[p.s] + icon + '</div>'
       + '<div class="card__meta"><h3 class="card__name"><em>' + p.n + '</em><i class="dot dot--' + p.st + '"></i></h3>'
       + '<span class="card__jp">' + p.jp + '</span>'
       + '<p class="card__pos">' + t.p + '</p><p class="card__body">' + t.b + '</p>'

@@ -123,6 +123,15 @@ const P = {
   },
 };
 
+/* 預設只出「底圖」：icon 與 slogan 現在由頁面即時疊上（Yves 拍板的混合分工）。
+   燒進圖裡會有兩個問題：ja/zh 頁出現英文 slogan 與本地化文案的重複，
+   而且字被壓成點陣，Retina 上不夠銳利。--with-text 只用於單張比稿。 */
+const WITH_TEXT = process.argv.includes('--with-text');
+/* motif 預設也不畫進底圖 —— 它是頁面上的**動態層**，底圖再畫一次就會出現殘影
+   （2026-08-09 實拍：Kichitto 的收據疊出綠色鬼影、PurityLens 疊出雙圓）。
+   底圖只負責氛圍：品牌色場、輝光、顆粒、暈影。--with-motif 只用於單張比稿。 */
+const WITH_MOTIF = process.argv.includes('--with-motif');
+
 function plate(slug) {
   const d = P[slug];
   const iconPath = join(ICONS, `${slug}.png`);
@@ -208,17 +217,18 @@ function plate(slug) {
         <feColorMatrix type="saturate" values="0"/>
       </filter>
     </defs>
-    <rect width="${W}" height="${H}" filter="url(#flow)" opacity=".42"/>
-    <g class="motif">${d.motif}</g>
+    <rect width="${W}" height="${H}" filter="url(#flow)" opacity="${WITH_MOTIF ? '.42' : '.62'}"/>
+    ${WITH_MOTIF ? '' : `<g class="motif" opacity=".18"><circle cx="1120" cy="420" r="300" class="orb"/></g>`}
+    ${WITH_MOTIF ? `<g class="motif">${d.motif}</g>` : ''}
   </svg>
   <div class="bloom"></div>
   <svg class="grain"><rect width="100%" height="100%" filter="url(#noise)"/></svg>
   <div class="vig"></div>
   <div class="quiet"></div>
-  <div class="plate">
+  ${WITH_TEXT ? `<div class="plate">
     ${icon ? `<img class="icon" src="${icon}" alt="">` : ''}
     <div class="slogan">${d.slogan}</div>
-  </div>
+  </div>` : ''}
 </div>`;
 }
 
