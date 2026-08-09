@@ -301,3 +301,7 @@ if (bad.length) {
   for (const b of bad) console.error(`   ✗ ${b.slug}: ${b.err}`);
   process.exit(1);
 }
+/* 成功路徑也要顯式退出：CDP 的 WebSocket 仍掛在 event loop 上，
+   不 exit 的話程序寫完檔就永遠不結束，鎖也永遠不放 ——
+   2026-08-09 todoke 圖已落檔卻卡住 5 分鐘、擋住下一個產品，就是這裡。 */
+process.exit(0);
