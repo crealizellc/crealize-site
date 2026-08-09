@@ -172,6 +172,14 @@ Yves 原話：「一開始就叫你用 Claude Design 你一直不聽話，然後
       三語 1440 實拍目視確認。**AC-6 修掉一個假綠燈**：Chrome headless 在 macOS
       把視窗寬夾在 500px（390/360/500 的 innerWidth 都回 500），原本拿被夾過的寬度
       自我對照永遠相等 —— 改用 iframe 量真視口，並加上「量到的寬度 ≠ 要求的寬度就不算通過」
+- [x] V4b 獨立驗收（maker≠checker）判 **NO_GO**，全部修完（commit `d8f268a`）。
+      它實際製造反例證明七條 AC 裡有四條在該紅時仍會綠：AC-3 對圖片內容錯誤無感
+      （橫向海報冒充直立截圖照樣過）· AC-4 動畫全綁到不存在的 class 仍綠、
+      reduce-motion 正則跨過關掉的大括號 · AC-5 只驗「自己弄壞時會叫」，
+      沒驗出貨狀態在不在叫 · AC-7 對新增的 284 行 CSS 一個值都沒檢查到。
+      另抓到 `moonpacket.png` 來源本身就溢出（已重拍 moonpacket.com）、
+      `site/__audit-work-v3.html` 被 auto-save commit 進公開 repo、21 條死 CSS。
+      新增 AC-8 驗「驗收自己不留殘留物」；deploy gate 補上非 dotfile 殘留檢查。
 - [!] V5 上線 —— **只有 Yves 能決定**。他第四輪明確要求「我要先看一下你打開給我看」，
       版面美感屬創作品味；且 `deploy:gh` 一跑就是對外發佈到 crealize.llc。
       本機已備妥：三語截圖在 scratchpad，`deploy-gh.sh` 已把 `audit-work-v3` 與
