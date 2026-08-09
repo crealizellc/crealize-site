@@ -21,9 +21,11 @@ import { attach, listPages } from './lib/cdp.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const CHROME = [
+  process.env.CHROME_BIN,
   '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
   '/Applications/Chromium.app/Contents/MacOS/Chromium',
-].find((p) => existsSync(p));
+].filter(Boolean).find((p) => existsSync(p));
+const CHROME_PROCESS_FLAGS = process.env.CHROME_SINGLE_PROCESS === '1' ? ['--single-process', '--no-zygote'] : [];
 if (!CHROME) {
   console.error('❌ 找不到 Chrome —— 環境問題，不是內容問題');
   process.exit(1);
@@ -55,6 +57,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const chrome = spawn(CHROME, [
   `--remote-debugging-port=${PORT}`,
   '--headless=new', '--disable-gpu', '--no-sandbox', '--hide-scrollbars',
+  ...CHROME_PROCESS_FLAGS,
   '--force-device-scale-factor=1', `--window-size=${WIDTH},${HEIGHT}`,
   '--user-data-dir=' + join(ROOT, '.chrome-shoot-profile'),
   'about:blank',

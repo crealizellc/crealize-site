@@ -1,8 +1,7 @@
 # Crealize
 
-> Crealize LLC is a Tokyo-based independent product studio. We carry products
-> from 0 to 1 — validate, build, ship, polish. Brand: "Creative × Realize —
-> transforming imagination into reality."
+> Crealize LLC is an independent product studio in Tokyo. We research, design,
+> build, launch, and improve digital products.
 
 Contact: support@crealize.llc
 Languages: English (/), 日本語 (/ja/), 繁體中文 (/zh/)
@@ -32,11 +31,11 @@ Products: 16
 
 ## Method
 
-Validate → Build → Ship → Polish.
+Research → Design → Build → Launch → Improve.
 Engineering principles: atomicity (one change, one meaning), explicit dependencies,
 module boundaries, type-safe by default, zero-dependency bias, code as craft.
 
 ## Hiring
 
 Remote-first, Tokyo HQ. Roles: Design, Engineering, Growth.
-Contact support@crealize.llc — tell us what you shipped, not what you studied.
+Contact support@crealize.llc with a project you are proud of and the part you contributed.

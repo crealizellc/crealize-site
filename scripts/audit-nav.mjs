@@ -22,9 +22,11 @@ import { fileURLToPath } from 'node:url';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SITE = join(ROOT, 'site');
 const CHROME = [
+  process.env.CHROME_BIN,
   '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
   '/Applications/Chromium.app/Contents/MacOS/Chromium',
-].find((p) => existsSync(p));
+].filter(Boolean).find((p) => existsSync(p));
+const CHROME_PROCESS_FLAGS = process.env.CHROME_SINGLE_PROCESS === '1' ? ['--single-process', '--no-zygote'] : [];
 if (!CHROME) {
   console.error('❌ 找不到 Chrome —— 這是環境問題，不是 AC 失敗');
   process.exit(2);
@@ -60,14 +62,40 @@ function probe(loc, width) {
 (function ready(fn){ if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn); else fn(); })(function () { setTimeout(function () {
   var o = {};
   var btn = document.querySelector('.nav__menu');
+  var panel = document.getElementById('nav-panel');
+  o.panelInitiallyHidden = !!panel && panel.hidden;
+  o.panelInitialDisplay = panel ? getComputedStyle(panel).display : null;
+  var globe = document.querySelector('.nav__globe');
+  var langWrap = document.getElementById('lang-switch');
+  var langMenu = document.querySelector('.nav__langmenu');
+  o.globeExists = !!globe;
+  o.langInitiallyClosed = !!langWrap && !langWrap.classList.contains('is-open') &&
+    !!globe && globe.getAttribute('aria-expanded') === 'false' &&
+    !!langMenu && getComputedStyle(langMenu).pointerEvents === 'none';
+  if (globe && langWrap && langMenu) {
+    globe.click();
+    /* The menu fades in for 300ms. Finish only this component's animations so
+       the assertion measures the settled visible state rather than frame 0. */
+    if (langMenu.getAnimations) langMenu.getAnimations({ subtree: true }).forEach(function (a) { try { a.finish(); } catch (_) {} });
+    var langStyle = getComputedStyle(langMenu);
+    o.langOpened = langWrap.classList.contains('is-open') &&
+      globe.getAttribute('aria-expanded') === 'true' &&
+      langStyle.pointerEvents !== 'none' && Number(langStyle.opacity) > 0;
+    o.langHrefs = [].slice.call(langMenu.querySelectorAll('a')).map(function (a) { return a.getAttribute('href'); });
+    globe.click();
+    if (langMenu.getAnimations) langMenu.getAnimations({ subtree: true }).forEach(function (a) { try { a.finish(); } catch (_) {} });
+    o.langClosedAgain = !langWrap.classList.contains('is-open') &&
+      globe.getAttribute('aria-expanded') === 'false' &&
+      getComputedStyle(langMenu).pointerEvents === 'none';
+  }
   o.btnExists = !!btn;
   if (btn) {
     var cs = getComputedStyle(btn), r = btn.getBoundingClientRect();
     o.btnVisible = cs.display !== 'none' && cs.visibility !== 'hidden' && cs.opacity !== '0';
     o.btnW = Math.round(r.width); o.btnH = Math.round(r.height);
     btn.click();
-    var panel = document.getElementById('nav-panel');
     o.panelOpen = !!panel && !panel.hidden;
+    o.panelOpenDisplay = panel ? getComputedStyle(panel).display : null;
     o.ariaExpanded = btn.getAttribute('aria-expanded');
     var as = panel ? [].slice.call(panel.querySelectorAll('a')) : [];
     o.links = as.map(function (a) {
@@ -75,6 +103,7 @@ function probe(loc, width) {
     });
     var first = as[0]; if (first) first.click();
     o.closedAfterClick = !!panel && panel.hidden;
+    o.panelClosedDisplay = panel ? getComputedStyle(panel).display : null;
   }
   var deskLinks = [].slice.call(document.querySelectorAll('.nav__links a'));
   o.deskHrefs = deskLinks.map(function (a) { return a.getAttribute('href'); });
@@ -110,6 +139,7 @@ var t0=Date.now();(function p(){
   try {
     const dom = execFileSync(CHROME, [
       '--headless', '--disable-gpu', '--no-sandbox', '--hide-scrollbars', '--allow-file-access-from-files',
+      ...CHROME_PROCESS_FLAGS,
       // 視窗要塞得下 iframe（WIDE=900 那格用 560 會被夾住）；
       // 虛擬時間必須 > 父頁 9000ms 輪詢上限，否則 Chrome 先收工、父頁只會拿到 readyState=loading。
       `--window-size=${Math.max(width + 80, 600)},900`, '--virtual-time-budget=12000', '--dump-dom', `file://${outer}`,
@@ -140,11 +170,20 @@ for (const loc of LOCALES) {
   if (!r.btnExists || !r.btnVisible) { bad(`${loc.key}: 桌面導覽被隱藏，卻沒有可見的替代入口 —— 四個區塊無法跳轉`); continue; }
   ok(`${loc.key}: 有可見的選單按鈕`);
 
+  if (r.panelInitiallyHidden && r.panelInitialDisplay === 'none') ok(`${loc.key}: 初始面板真正隱藏，不會把 01–04 常駐在頁面上`);
+  else bad(`${loc.key}: 初始面板 hidden=${r.panelInitiallyHidden} 但 display=${r.panelInitialDisplay} —— 01–04 會常駐遮住內容`);
+
+  if (r.globeExists && r.langInitiallyClosed && r.langOpened && r.langClosedAgain && r.langHrefs.length === 3) {
+    ok(`${loc.key}: 地球選單可開啟、再次關閉，並提供三個語系入口`);
+  } else {
+    bad(`${loc.key}: 地球選單狀態異常（exists=${r.globeExists} initial=${r.langInitiallyClosed} open=${r.langOpened} close=${r.langClosedAgain} links=${JSON.stringify(r.langHrefs || [])}）`);
+  }
+
   if (r.btnW >= TAP_MIN && r.btnH >= TAP_MIN) ok(`${loc.key}: 按鈕 ${r.btnW}×${r.btnH} ≥ ${TAP_MIN}px 觸控下限`);
   else bad(`${loc.key}: 按鈕 ${r.btnW}×${r.btnH}，小於 ${TAP_MIN}px 觸控下限`);
 
-  if (r.panelOpen && r.ariaExpanded === 'true') ok(`${loc.key}: 點擊後面板開啟且 aria-expanded=true`);
-  else bad(`${loc.key}: 點擊後面板未開啟（panelOpen=${r.panelOpen} aria-expanded=${r.ariaExpanded}）`);
+  if (r.panelOpen && r.panelOpenDisplay !== 'none' && r.ariaExpanded === 'true') ok(`${loc.key}: 點擊後面板開啟且 aria-expanded=true`);
+  else bad(`${loc.key}: 點擊後面板未開啟（panelOpen=${r.panelOpen} display=${r.panelOpenDisplay} aria-expanded=${r.ariaExpanded}）`);
 
   // 面板連結必須「完整覆蓋」桌面導覽 —— 少一個就是窄視口的人到不了那個區塊。
   const panelHrefs = r.links.map((l) => l.href);
@@ -157,8 +196,8 @@ for (const loc of LOCALES) {
   else bad(`${loc.key}: 面板有 ${small.length} 個連結低於 ${TAP_MIN}px（${small.map((l) => l.text + '=' + l.h).join(', ')}）`);
 
   // 同頁錨點不觸發任何導航事件，面板不自己收就會蓋住剛捲到的區塊。
-  if (r.closedAfterClick) ok(`${loc.key}: 點連結後面板自動收起`);
-  else bad(`${loc.key}: 點連結後面板仍開著，會蓋住目標區塊`);
+  if (r.closedAfterClick && r.panelClosedDisplay === 'none') ok(`${loc.key}: 點連結後面板自動收起且不佔版面`);
+  else bad(`${loc.key}: 點連結後面板仍佔版面（hidden=${r.closedAfterClick} display=${r.panelClosedDisplay}）`);
 
   if (r.docW === r.winW) ok(`${loc.key}: 無水平溢出（${r.docW}）`);
   else bad(`${loc.key}: 水平溢出 ${r.docW - r.winW}px`);

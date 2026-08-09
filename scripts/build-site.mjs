@@ -33,7 +33,7 @@ const LOCALES = {
   en: {
     dir: '', base: '', htmlLang: 'en', ogLocale: 'en_US',
     title: 'Crealize — Transforming Imagination into Reality | Tokyo Product Studio',
-    desc: 'Crealize is a Tokyo-based independent product studio. We carry products from 0 to 1 — validate, build, ship, polish. Flutter, Next.js, TypeScript, AI.',
+    desc: 'Crealize is an independent product studio in Tokyo. We research, design, build, launch, and improve digital products.',
     stackLabel: 'Engineering principles',
     principles: ['Atomicity — one change, one meaning', 'Explicit dependencies', 'Module boundaries', 'Type-safe by default', 'Zero-dependency bias', 'Code as craft'],
     t: {
@@ -48,7 +48,7 @@ const LOCALES = {
     stackLabel: 'エンジニアリング原則',
     principles: ['原子性 — 1つの変更に1つの意味', '依存関係の明示', 'モジュール境界', '型安全がデフォルト', 'ゼロ依存志向', 'コードは工芸品'],
     title: 'Crealize — 想像を、現実に。| 東京のプロダクトスタジオ',
-    desc: 'Crealize は東京の独立系プロダクトスタジオ。プロダクトを 0 から 1 へ — 検証、構築、リリース、磨き込み。Flutter、Next.js、TypeScript、AI。',
+    desc: 'Crealize は東京の独立系プロダクトスタジオです。調査、設計、開発、リリース、その後の改善まで一貫して取り組みます。',
     t: {
       '<span class="nav__idx">01</span> Vision</a>': '<span class="nav__idx">01</span> 理念</a>',
       '<span class="nav__idx">02</span> Work</a>': '<span class="nav__idx">02</span> 制作実績</a>',
@@ -68,19 +68,19 @@ const LOCALES = {
       '<span class="foot__muted">Remote-first</span>': '<span class="foot__muted">リモートファースト</span>',
       '東京 / Tokyo — Independent Product Studio': '東京の独立系プロダクトスタジオ',
       'Transforming imagination into reality.': '想像を、現実に。',
-      'Creative <span class="x">×</span> Realize — ideas are vapor; we condense them to <b>1.0</b>.':
-        'Creative <span class="x">×</span> Realize — 曖昧なアイデアを、動く <b>1.0</b> に仕上げます。',
+      'Creative <span class="x">×</span> Realize — from first sketch to a product people can use.':
+        'Creative <span class="x">×</span> Realize — アイデアを、実際に使われるプロダクトへ。',
       'Scroll to materialize': 'スクロールすると、かたちになります',
-      '<span class="line">An idea weighs nothing <em>until it ships.</em></span>':
-        '<span class="line">アイデアは、<em>リリースされるまで</em>価値を持ちません。</span>',
-      '<span class="line">We carry products from <span class="accent">0&thinsp;→&thinsp;1</span> — validate, build, ship, polish.</span>':
-        '<span class="line">私たちはプロダクトを <span class="accent">0&thinsp;→&thinsp;1</span> へ — 検証し、つくり、世に出し、磨き上げます。</span>',
-      'Everything interesting happens between&nbsp;0&nbsp;and&nbsp;1.':
-        '面白いことはすべて、0 と 1 のあいだで起こる。',
-      'We hire <span class="accent">makers</span>,<br/>not résumés.':
-        '履歴書より、<br/><span class="accent">あなたがつくったもの</span>を見せてください。',
-      'A small constellation — remote-first, asynchronous, allergic to theater. Tokyo is our origin point; your timezone is whatever your terminal says. Bring one thing you shipped and still love.':
-        '私たちは少人数のリモートチームです。会議や形式より、動くものをつくることを大切にしています。拠点は東京、働く時間帯は自由。応募の際は、自分でつくって今も気に入っているものを、ひとつ見せてください。',
+      '<span class="line">We turn promising ideas into <em>useful products.</em></span>':
+        '<span class="line">着想を、<em>実際に役立つプロダクト</em>へ。</span>',
+      '<span class="line">Research, design, engineering, launch — then keep improving.</span>':
+        '<span class="line">調査、設計、開発、リリース。その後も改善を続けます。</span>',
+      'A clear path from idea to launch.':
+        'アイデアからリリースまで、明確な手順で進めます。',
+      'Show us what<br/><span class="accent">you\'ve made.</span>':
+        'これまでにつくったものを、<br/><span class="accent">見せてください。</span>',
+      'We\'re a small, remote-first team based in Tokyo. We value clear communication, thoughtful craft, and work that reaches real users. If you\'d like to work with us, send one project you\'re proud of and tell us what you contributed.':
+        '東京を拠点にする少人数のリモートチームです。わかりやすいコミュニケーション、丁寧なものづくり、実際に使われる成果を大切にしています。ご応募の際は、自信のあるプロジェクトをひとつ選び、担当したことを添えてお送りください。',
       '<span class="v">Remote-first · Tokyo HQ <span class="jp-accent" aria-hidden="true">東京</span></span>': '<span class="v">リモートファースト · 東京本社</span>',
       '<span class="v">Design · Engineering · Growth</span>': '<span class="v">デザイン · エンジニアリング · グロース</span>',
       '<span class="k">Base</span>': '<span class="k">拠点</span>',
@@ -96,7 +96,7 @@ const LOCALES = {
       'placeholder="What do you want to build with us?"': 'placeholder="私たちと何をつくりたいですか？"',
       '<span class="btn__label">Send message</span>': '<span class="btn__label">メッセージを送る</span>',
       'We reply within two working days · Tokyo (JST).': '2営業日以内に返信します · 東京 (JST)',
-      '>Start a project</a>': '>プロジェクトの相談</a>',
+      '>Contact</a>': '>相談する</a>',
     },
   },
   zh: {
@@ -104,7 +104,7 @@ const LOCALES = {
     stackLabel: '工程原則',
     principles: ['原子化 — 一個改動，一個意義', '依賴顯式化', '模組邊界', '型別安全為預設', '零依賴傾向', '程式碼即工藝'],
     title: 'Crealize — 把想像變成現實 | 東京獨立產品工作室',
-    desc: 'Crealize 是位於東京的獨立產品工作室。我們把產品從 0 帶到 1 — 驗證、打造、上線、打磨。Flutter、Next.js、TypeScript、AI。',
+    desc: 'Crealize 是位於東京的獨立產品工作室，從研究、設計、開發、上線到後續改進，全程參與數位產品製作。',
     t: {
       '<span class="nav__idx">01</span> Vision</a>': '<span class="nav__idx">01</span> 理念</a>',
       '<span class="nav__idx">02</span> Work</a>': '<span class="nav__idx">02</span> 作品</a>',
@@ -125,19 +125,19 @@ const LOCALES = {
       '<span class="jp-accent sec-head__jp" aria-hidden="true">創造 × 実現</span>': '<span class="jp-accent sec-head__jp" aria-hidden="true">創造 × 實現</span>',
       '東京 / Tokyo — Independent Product Studio': '東京・獨立產品工作室',
       'Transforming imagination into reality.': '把想像，變成現實。',
-      'Creative <span class="x">×</span> Realize — ideas are vapor; we condense them to <b>1.0</b>.':
-        'Creative <span class="x">×</span> Realize — 把還很模糊的點子，做成能上線的 <b>1.0</b>。',
+      'Creative <span class="x">×</span> Realize — from first sketch to a product people can use.':
+        'Creative <span class="x">×</span> Realize — 把點子做成真正有人使用的產品。',
       'Scroll to materialize': '往下捲動，看想像成形',
-      '<span class="line">An idea weighs nothing <em>until it ships.</em></span>':
-        '<span class="line">點子在上線之前，<em>都還不算數。</em></span>',
-      '<span class="line">We carry products from <span class="accent">0&thinsp;→&thinsp;1</span> — validate, build, ship, polish.</span>':
-        '<span class="line">我們把產品從 <span class="accent">0&thinsp;→&thinsp;1</span> — 驗證、打造、上線、打磨。</span>',
-      'Everything interesting happens between&nbsp;0&nbsp;and&nbsp;1.':
-        '所有有趣的事，都發生在 0 與 1 之間。',
-      'We hire <span class="accent">makers</span>,<br/>not résumés.':
-        '我們看<span class="accent">作品</span>，<br/>不看履歷。',
-      'A small constellation — remote-first, asynchronous, allergic to theater. Tokyo is our origin point; your timezone is whatever your terminal says. Bring one thing you shipped and still love.':
-        '我們是一支小而精的遠端團隊：重成果、輕形式，不開沒必要的會。據點在東京，工作時區由你自己決定。應徵時，請帶上一件你親手做過、至今仍引以為傲的作品。',
+      '<span class="line">We turn promising ideas into <em>useful products.</em></span>':
+        '<span class="line">把值得做的點子，變成<em>實用的產品。</em></span>',
+      '<span class="line">Research, design, engineering, launch — then keep improving.</span>':
+        '<span class="line">從研究、設計、開發到上線，之後持續改進。</span>',
+      'A clear path from idea to launch.':
+        '從點子到上線，每一步都清楚。',
+      'Show us what<br/><span class="accent">you\'ve made.</span>':
+        '讓我們看看<br/><span class="accent">你做過的作品。</span>',
+      'We\'re a small, remote-first team based in Tokyo. We value clear communication, thoughtful craft, and work that reaches real users. If you\'d like to work with us, send one project you\'re proud of and tell us what you contributed.':
+        '我們是以東京為據點的小型遠端團隊，重視清楚溝通、紮實的設計與工程，以及真正被使用的成果。如果想加入我們，請選一個你最有信心的專案，告訴我們你負責了什麼。',
       '<span class="v">Remote-first · Tokyo HQ <span class="jp-accent" aria-hidden="true">東京</span></span>': '<span class="v">遠端優先 · 東京總部</span>',
       '<span class="v">Design · Engineering · Growth</span>': '<span class="v">設計 · 工程 · 成長</span>',
       'Selected Work / 制作実績': '代表作品',
@@ -154,7 +154,7 @@ const LOCALES = {
       'placeholder="What do you want to build with us?"': 'placeholder="想跟我們一起做什麼？"',
       '<span class="btn__label">Send message</span>': '<span class="btn__label">送出訊息</span>',
       'We reply within two working days · Tokyo (JST).': '兩個工作天內回覆 · 東京 (JST)',
-      '>Start a project</a>': '>洽談專案</a>',
+      '>Contact</a>': '>聯絡我們</a>',
     },
   },
 };
@@ -407,9 +407,8 @@ ${alt}
   }
   const llms = `# Crealize
 
-> Crealize LLC is a Tokyo-based independent product studio. We carry products
-> from 0 to 1 — validate, build, ship, polish. Brand: "Creative × Realize —
-> transforming imagination into reality."
+> Crealize LLC is an independent product studio in Tokyo. We research, design,
+> build, launch, and improve digital products.
 
 Contact: support@crealize.llc
 Languages: English (/), 日本語 (/ja/), 繁體中文 (/zh/)
@@ -418,14 +417,14 @@ ${lines.join('\n')}
 
 ## Method
 
-Validate → Build → Ship → Polish.
+Research → Design → Build → Launch → Improve.
 Engineering principles: atomicity (one change, one meaning), explicit dependencies,
 module boundaries, type-safe by default, zero-dependency bias, code as craft.
 
 ## Hiring
 
 Remote-first, Tokyo HQ. Roles: Design, Engineering, Growth.
-Contact support@crealize.llc — tell us what you shipped, not what you studied.
+Contact support@crealize.llc with a project you are proud of and the part you contributed.
 `;
   writeFileSync(join(OUT, 'llms.txt'), llms);
   console.log(`✅ llms.txt (${WORK.length} 產品，依 registry 狀態分組)`);

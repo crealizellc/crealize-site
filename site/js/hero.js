@@ -26,7 +26,11 @@
   const ink = (a) => `rgba(${INK},${a})`;
   const PAPER = '#FAFAF8';
   const LOGO = new Image();
-  LOGO.src = 'assets/crealize-mark.png';
+  /* Reuse the locale-correct URL already emitted by build-site.mjs. A raw
+     `assets/...` path resolves under /ja/assets and /zh/assets on localized
+     pages, leaving the hero mark broken while the visible nav logo still works. */
+  const navLogo = document.querySelector('.nav__logo');
+  LOGO.src = navLogo ? navLogo.src : 'assets/crealize-mark.png';
   LOGO.onload = () => { buildAssembled(); render(performance.now()); };
   function accentA(a) {
     const h = S.accent.replace('#', '');

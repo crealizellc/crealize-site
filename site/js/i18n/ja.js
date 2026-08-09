@@ -4,7 +4,7 @@ window.CRZ_I18N = {
   work: [
     {
       name: 'PurityLens', featured: true, jp: '成分をひと目で', tag: 'AI・ヘルスケア',
-      line: '肌にのせる前に、成分表示を読み解く — <em>撮影すると、AI が安全性を判定します。</em>',
+      line: '化粧品のラベルを撮影し、成分と判定根拠を確認できます。',
       ph: 'PurityLens — スキャン結果 UI',
       img: '../assets/kv/puritylens.webp',
       alt: 'PurityLens アプリ — 成分スキャン結果画面',
@@ -13,7 +13,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Fudeto', featured: true, jp: '一筆書き', tag: 'パズル・毎日の習慣',
-      line: '毎朝ひとつの一筆書きパズル — <em>コーヒーの前の、ちいさな頭の体操。</em>',
+      line: '世界共通の一筆書きパズルを、毎日一問届けます。',
       ph: 'Fudeto — デイリーパズル UI',
       img: '../assets/kv/fudeto.webp',
       alt: 'Fudeto アプリ — 一筆書きパズル画面',
@@ -22,7 +22,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Kichitto', featured: true, jp: 'きちっと', tag: 'フィンテック・個人事業主',
-      line: '領収書は撮るだけ — <em>AI が読み取り、Drive と Sheets に自動で帳簿化。</em>経理の雑務をゼロに。',
+      line: '領収書を撮影すると、読み取った内容を自分の Drive と Sheets に保存します。',
       ph: 'Kichitto — 領収書キャプチャ UI',
       img: '../assets/kv/kichitto.webp',
       alt: 'Kichitto アプリ — 領収書撮影画面',
@@ -31,7 +31,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'QiFlux', featured: true, jp: '静かな記録', tag: 'ヘルスケア・プライバシー第一',
-      line: '静かな、プライバシー第一の周期トラッカー。<em>記録はすべて、あなたの端末の中だけに。</em>',
+      line: '記録を端末内に保存する、プライバシー重視の周期トラッカーです。',
       ph: 'QiFlux — トラッキング UI',
       img: '../assets/kv/qiflux.webp',
       alt: 'QiFlux アプリ — 周期カレンダー画面',
@@ -40,7 +40,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'moonpacket', featured: true, jp: '月へ、紅包を', tag: 'Web3・Telegram',
-      line: 'Telegram で贈るクリプト紅包 — <em>数秒で送って、すぐ受け取れる。</em>ノンカストディアルで USDT・TON・SOL・ETH に対応。',
+      line: 'Telegram で送れるノンカストディアルのクリプト紅包。USDT・TON・SOL・ETH に対応します。',
       ph: 'moonpacket — 紅包 UI',
       img: '../assets/kv/moonpacket.webp',
       alt: 'moonpacket — 濃紺のグラデーション上のブランドマーク',
@@ -49,7 +49,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'iDokuta', featured: true, jp: '言葉を越える診療', tag: '遠隔医療・多言語',
-      line: '言葉の壁を越えるオンライン診療 — <em>リアルタイム翻訳を介した診察を、</em>6 言語で。',
+      line: 'リアルタイム翻訳を備えた、6言語対応のオンライン診療サービスです。',
       ph: 'iDokuta — 診察 UI',
       img: '../assets/kv/idokuta.webp',
       alt: 'iDokuta アプリ — 翻訳診察画面',
@@ -58,7 +58,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Mairi', featured: true, jp: '毎日のカルテ', tag: 'ヘルスケア・病院連携',
-      line: '毎日の健康記録を、そのまま病院へ — <em>個人の記録を診療につなげます。</em>',
+      line: '毎日の健康記録を、受診時に活用できる多言語サービスです。',
       ph: 'Mairi — デイリーレコード UI',
       img: '../assets/kv/mairi.webp',
       alt: 'Mairi アプリ — ウェルカム画面',
@@ -67,7 +67,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Tendo', featured: true, jp: '一日一道', tag: 'パズル・毎日の習慣',
-      line: 'Fudeto の姉妹作 — <em>一日一題、すべての点を一本の道でつなぐ</em>パズル。',
+      line: 'すべての点を一度ずつ通る、毎日一問の経路パズルです。',
       ph: 'Tendo — デイリーパス UI',
       img: '../assets/kv/tendo.webp',
       alt: 'Tendo ウェブアプリ — ハミルトン路パズル画面',
@@ -76,7 +76,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Rythix 2048', featured: true, jp: '音で解く 2048', tag: 'ゲーム・音楽パズル',
-      line: 'ビートに乗って数字が重なる — <em>心臓にメトロノームを持つ 2048。</em>',
+      line: 'プレイに合わせて音楽が生成される、2048型の数字パズルです。',
       ph: 'Rythix 2048 — キービジュアル',
       img: '../assets/kv/rythix2048.webp',
       alt: 'Rythix 2048 — リズムのグリッド上で重なるパステルのタイル',
@@ -85,7 +85,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Meishitto', featured: true, jp: '名刺っと', tag: 'B2B・生産性',
-      line: '名刺が、そのままデータに — <em>連絡先の持ち主は、あなたのまま。</em>',
+      line: '名刺を端末内で読み取り、連絡先データを自分で管理できます。',
       ph: 'Meishitto — キービジュアル',
       img: '../assets/kv/meishitto.webp',
       alt: 'Meishitto — 一枚の名刺が構造化されたデータ列へ展開する',
@@ -94,7 +94,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'XunNi', featured: true, jp: '尋你', tag: 'AI・占星',
-      line: 'ふたつの命盤を、ひとつの読み解きに — <em>星が重なるところ。</em>',
+      line: '二人分の命盤をもとに、関係性を読み解くAIサービスです。',
       ph: 'XunNi — キービジュアル',
       img: '../assets/kv/xunni.webp',
       alt: 'XunNi — 一本の線で結ばれたふたつの星団',
@@ -103,7 +103,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Meguru', featured: true, jp: 'めぐる', tag: 'プラットフォーム・越境EC',
-      line: '店頭の裏側でめぐる仕組み — <em>出品、受注、精算がひと巡り。</em>',
+      line: '出品、受注、顧客対応、支払いを一つの運営基盤にまとめます。',
       ph: 'Meguru — キービジュアル',
       img: '../assets/kv/meguru.webp',
       alt: 'Meguru — マゼンタのグラデーション上のブランドマーク',
@@ -112,7 +112,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'YMY', featured: true, jp: '株式会社YMY商事', tag: 'ブランド · 企業まるごと設計',
-      line: '一社まるごと、端から端まで — <em>識別・サイト・事業・流通。</em>',
+      line: 'YMYの企業識別、多言語サイト、事業と流通の仕組みを設計しました。',
       ph: 'YMY — ブランド識別システム',
       img: '../assets/kv/ymy.webp',
       alt: 'YMY コーポレートアイデンティティ',
@@ -121,7 +121,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Kizuki', featured: true, jp: '気付き', tag: 'AI · ソーシャル運用OS',
-      line: 'あなたより先に会話に気付き、<em>返信を起草する。送るのは人。</em>',
+      line: '商品に関する会話を見つけ、文化に合う返信案を作成します。送信は人が確認して行います。',
       ph: 'Kizuki — 対応インボックス',
       img: '../assets/kv/kizuki.webp',
       alt: 'Kizuki ソーシャル運用OS',
@@ -130,7 +130,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'dramaflow', featured: true, jp: '短編ドラマ生産ライン', tag: 'AI · 短編ドラマ生産',
-      line: '憲法が先 — <em>世界が批准されるまで、何も生成しない。</em>',
+      line: '時代設定、衣装、連続性のルールを工程で守る短編ドラマ制作基盤です。',
       ph: 'dramaflow — 制作コンソール',
       img: '../assets/kv/dramaflow.webp',
       alt: 'dramaflow 短編ドラマ生産ライン',
@@ -139,7 +139,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Todoke', featured: true, jp: '届け', tag: 'AI · ナレーション動画生成',
-      line: '台本を一本 — <em>三言語のナレーション動画が出てくる。</em>',
+      line: '一つの台本から、字幕とナレーション付き動画を3言語で制作します。',
       ph: 'Todoke — パイプライン実行',
       img: '../assets/kv/todoke.webp',
       alt: 'Todoke ナレーション動画パイプライン',
@@ -148,10 +148,10 @@ window.CRZ_I18N = {
     },
   ],
   method: [
-    { n: '検証', jp: '', d: 'アイデアはすべて仮説として扱います。まず検証から — 答えはダッシュボードではなく、実際のユーザーから得ます。' },
-    { n: '構築', jp: '', d: '少数精鋭のチームが、最初から本番品質のコードを書きます。使い捨てのプロトタイプはつくりません。' },
-    { n: 'リリース', jp: '', d: 'できるだけ早く世に出します。本当に正直なフィードバックは、実際に使う人からしか得られないからです。' },
-    { n: '磨き込み', jp: '', d: '最後の数％に魂が宿ります — 速度、文言、アニメーション。その磨き込みが、使い続けたくなる理由になります。' },
+    { n: '検証', jp: '', d: 'つくる前に想定ユーザーへ話を聞き、前提を確かめ、成功の条件を決めます。' },
+    { n: '構築', jp: '', d: '少人数の経験あるチームが、設計から実装まで一貫して進めます。最初から運用を見据えた土台をつくります。' },
+    { n: 'リリース', jp: '', d: '必要な価値に絞った最初の版を公開し、実際の使われ方を確認して改善します。' },
+    { n: '改善', jp: '', d: '速度、アクセシビリティ、文言、操作性を、実際の利用状況に合わせて磨きます。' },
   ],
   ui: {
     wipBadge: '開発中',

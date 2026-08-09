@@ -1,5 +1,5 @@
 {
-  "$description": "Crealize 設計系統契約（DTCG）。真相源：docs/design-system/source/claude-design-export/css/tokens.css。跨 session / 跨 batch 送 Claude Design brief 前必須 cat 本檔並明令延用，禁止發明新色板／字體／radius。驗證：npm run check:design（呼叫全域 token-drift-lint.sh）。",
+  "$description": "Crealize 設計系統契約（DTCG）。真相源：site/css/tokens.css；禁止在契約外發明色板、字體或 radius。驗證：npm run check:design（執行 repository-owned scripts/audit-design-tokens.mjs）。",
   "$meta": {
     "extractedFrom": "site/css/tokens.css",
     "extractedAt": "2026-08-08",

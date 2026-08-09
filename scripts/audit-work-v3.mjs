@@ -19,11 +19,13 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SITE = join(ROOT, 'site');
 
 const CHROME_CANDIDATES = [
+  process.env.CHROME_BIN,
   '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
   '/Applications/Chromium.app/Contents/MacOS/Chromium',
   '/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary',
 ];
-const CHROME = CHROME_CANDIDATES.find((p) => existsSync(p));
+const CHROME = CHROME_CANDIDATES.filter(Boolean).find((p) => existsSync(p));
+const CHROME_PROCESS_FLAGS = process.env.CHROME_SINGLE_PROCESS === '1' ? ['--single-process', '--no-zygote'] : [];
 if (!CHROME) {
   console.error('❌ 找不到 Chrome —— 這是環境問題，不是 AC 失敗');
   process.exit(2);
@@ -112,6 +114,7 @@ window.addEventListener('load', function () {
   try {
     const dom = execFileSync(CHROME, [
       '--headless', '--disable-gpu', '--no-sandbox', '--hide-scrollbars',
+      ...CHROME_PROCESS_FLAGS,
       `--window-size=${width},${height}`,
       '--virtual-time-budget=4000',
       '--dump-dom',
@@ -183,6 +186,7 @@ window.addEventListener('load', function () {
   try {
     const dom = execFileSync(CHROME, [
       '--headless', '--disable-gpu', '--no-sandbox', '--hide-scrollbars',
+      ...CHROME_PROCESS_FLAGS,
       '--allow-file-access-from-files',
       `--window-size=${Math.max(width, WINDOW_MIN_W) + 40},${height + 40}`,
       '--virtual-time-budget=9000',
@@ -474,15 +478,10 @@ console.log('▶ AC-7 設計契約未漂移');
   else bad('AC-7', `WORK v3 區塊有契約外的色值：${uniq.join(', ')}`);
 }
 try {
-  execFileSync('bash', [
-    join(process.env.HOME, '.claude/scripts/token-drift-lint.sh'),
-    join(ROOT, 'docs/design-system/tokens'),
-    join(SITE, 'css/tokens.css'), join(SITE, 'css/site.css'),
-    join(SITE, 'css/sections.css'), join(SITE, 'css/work-modal.css'),
-  ], { stdio: 'pipe' });
-  ok('AC-7', 'token-drift-lint 無漂移');
+  execFileSync(process.execPath, [join(ROOT, 'scripts/audit-design-tokens.mjs')], { stdio: 'pipe' });
+  ok('AC-7', 'repository-owned design-token validator 無漂移');
 } catch (e) {
-  bad('AC-7', `token-drift-lint 回報漂移：\n${(e.stdout || e.stderr || '').toString().trim()}`);
+  bad('AC-7', `design-token validator 回報漂移：\n${(e.stderr || e.stdout || '').toString().trim()}`);
 }
 
 console.log('▶ AC-8 驗收自己不得留下殘留物');
@@ -545,6 +544,7 @@ console.log('▶ AC-9 modal 打開要有循環動態演示，且尊重 reduce-mo
   function runOnce(extraFlags) {
     const dom = execFileSync(CHROME, [
       '--headless', '--disable-gpu', '--no-sandbox', '--hide-scrollbars', '--allow-file-access-from-files',
+      ...CHROME_PROCESS_FLAGS,
       '--window-size=1440,1000', '--virtual-time-budget=6000', ...extraFlags, '--dump-dom', `file://${tmp}`,
     ], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, stdio: ['ignore', 'pipe', 'ignore'] });
     const m = /<pre id="__r">([\s\S]*?)<\/pre>/.exec(dom);
