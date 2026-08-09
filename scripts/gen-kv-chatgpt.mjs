@@ -48,6 +48,9 @@ const PRODUCTS = [
   { s: 'moonpacket', k: 'moonpacket', mech: 'The lunar-new-year red packet reimagined as Web3’s everyday gesture — non-custodial, dropped straight into a group chat.' },
   { s: 'idokuta', k: 'iDokuta', mech: 'You write how you feel in your own language and it comes back as clear medical Japanese, so you can simply hand the phone to the clinic staff.' },
   { s: 'mairi', k: 'Mairi', mech: 'What you record every day becomes usable on the day you are seen — handed over as a pass that expires in six hours and cannot be renewed.' },
+  { s: 'kizuki', k: 'Kizuki', mech: 'It watches for people talking about your product — on your own listings and out in the wild, in languages you do not read — drafts a reply that works in that culture, and hands it to you in Telegram. It never sends on its own.' },
+  { s: 'dramaflow', k: 'dramaflow', mech: 'A short-drama production line where a ratified world constitution comes first: era, lexicon, wardrobe rules and taboos are enforced before anything is generated, and each shot chains to the previous one so the last frame becomes the next first frame.' },
+  { s: 'todoke', k: 'Todoke', mech: 'One script becomes narrated short video in three languages — screen capture or motion graphics, TTS narration, word-level subtitles, then publishing, thumbnails and the numbers that come back.' },
   { s: 'ymy', k: 'YMY', mech: 'A whole-enterprise identity for a Japanese trading company that sources and fulfils for individual marketplace sellers — CI standard, logo vector masters, mascot, signage, uniforms, vehicles, a four-language corporate site, and the business and distribution design behind it.' },
   { s: 'meguru', k: 'Meguru', mech: 'Listing, order, support and payout closed into a single loop — forty microservices folded into one platform, with a human approving every reconciliation.' },
 ];

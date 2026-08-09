@@ -177,6 +177,9 @@ const PRODUCTS = [
   // 客戶案：株式会社YMY商事。schema.org 沒有「品牌識別專案」這個型別，
   // 用 CreativeWork 而不是硬套 SoftwareApplication —— 它不是一支 App。
   { name: 'YMY', cat: 'CreativeWork', os: 'Brand, Web', desc: { en: 'Whole-enterprise design for a Japanese trading company: CI standard, logo vector masters, mascot system, environmental graphics and a four-language corporate site.', ja: '株式会社YMY商事の企業まるごと設計 — CI規定、ロゴのベクター母版、マスコット体系、環境グラフィック、4言語コーポレートサイト。', zh: '株式会社YMY商事的全企業設計 — CI 規範、logo 向量母版、吉祥物體系、環境圖像與四語官網。' } },
+  { name: 'Kizuki', cat: 'BusinessApplication', os: 'Web, Telegram', desc: { en: 'Social engagement OS: AI notices conversations across cultures, drafts the reply, a human sends it.', ja: 'ソーシャル運用OS — AIが多文化の会話に気付き返信を起草、送信は人が行う。', zh: '社群經營 OS — AI 跨文化察覺對話並草擬回覆，送出的是人。' } },
+  { name: 'dramaflow', cat: 'CreativeWork', os: 'Internal', desc: { en: 'AI short-drama production line with a ratified world constitution and shot-chain continuity.', ja: '創作憲法とショット連鎖の連続性を持つAI短編ドラマ生産ライン。', zh: '以創作憲法與鏡頭連戲鏈運作的 AI 短劇生產線。' } },
+  { name: 'Todoke', cat: 'CreativeWork', os: 'Internal', desc: { en: 'Narrated short-video pipeline: script to captioned, multilingual video and publishing.', ja: '台本から字幕付き多言語ナレーション動画と公開までを通すパイプライン。', zh: '從腳本到多語字幕旁白影片與發佈的影音管線。' } },
   { name: 'Meguru', cat: 'BusinessApplication', os: 'Web', desc: { en: 'Cross-border commerce platform: listings, orders and settlement in one loop.', ja: '越境ECプラットフォーム — 出品・受注・精算をひと巡り。', zh: '跨境電商平台 — 上架、接單、對帳一路循環。' } },
 ];
 

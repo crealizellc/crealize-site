@@ -114,7 +114,7 @@ meguru:'<svg class="m" viewBox="0 0 320 240">'
 +'<path d="M112 158 V96 a22 22 0 0 1 22 -22 a22 22 0 0 1 22 22 v62"/>'
 +'<path d="M156 158 V96 a22 22 0 0 1 22 -22 a22 22 0 0 1 22 22 v50 l-14 12"/></g>'
 +'<g fill="#B51452"><circle class="mg-node" cx="160" cy="34" r="5"/><circle class="mg-node" style="animation-delay:1.4s" cx="246" cy="120" r="5"/><circle class="mg-node" style="animation-delay:2.8s" cx="160" cy="206" r="5"/></g></svg>'};
-Object.assign(M, {ymy:"<svg class=\"m\" viewBox=\"0 0 320 240\"><g class=\"ymy-marks\" fill=\"none\" stroke=\"#FFF9F7\" stroke-width=\"13\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M56 84 L80 118 L104 84 M80 118 V162\"/><path d=\"M132 162 V96 L160 130 L188 96 V162\"/><path d=\"M216 84 L240 118 L264 84 M240 118 V162\"/></g><path class=\"ymy-tape m-draw\" style=\"--len:210\" d=\"M196 72 L146 178\" fill=\"none\" stroke=\"#D52A5B\" stroke-width=\"22\" stroke-linecap=\"square\"/></svg>"});
+Object.assign(M, {ymy:"<svg class=\"m\" viewBox=\"0 0 320 240\"><g class=\"ymy-marks\" fill=\"none\" stroke=\"#FFF9F7\" stroke-width=\"13\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M56 84 L80 118 L104 84 M80 118 V162\"/><path d=\"M132 162 V96 L160 130 L188 96 V162\"/><path d=\"M216 84 L240 118 L264 84 M240 118 V162\"/></g><path class=\"ymy-tape m-draw\" style=\"--len:210\" d=\"M196 72 L146 178\" fill=\"none\" stroke=\"#D52A5B\" stroke-width=\"22\" stroke-linecap=\"square\"/></svg>",kizuki:"<svg class=\"m\" viewBox=\"0 0 320 240\"><g class=\"kz-ripple\" fill=\"none\" stroke=\"#FAFAF7\" stroke-width=\"2\" opacity=\".4\"><circle cx=\"160\" cy=\"116\" r=\"84\"/><circle cx=\"160\" cy=\"116\" r=\"112\"/><circle cx=\"160\" cy=\"116\" r=\"140\"/></g><path class=\"kz-bulb m-draw\" style=\"--len:300\" d=\"M160 44 a52 52 0 0 1 32 93 v20 h-64 v-20 a52 52 0 0 1 32 -93z\" fill=\"none\" stroke=\"#FAFAF7\" stroke-width=\"7\" stroke-linejoin=\"round\"/><path class=\"kz-spark\" d=\"M148 108 L160 78 L172 108 L160 130 Z\" fill=\"#DC322F\"/><g fill=\"#FAFAF7\" opacity=\".55\"><rect x=\"132\" y=\"182\" width=\"56\" height=\"7\" rx=\"3\"/><rect x=\"142\" y=\"198\" width=\"36\" height=\"7\" rx=\"3\"/></g></svg>",dramaflow:"<svg class=\"m\" viewBox=\"0 0 320 240\"><g class=\"df-frames\"><rect x=\"28\" y=\"84\" width=\"76\" height=\"58\" rx=\"6\" fill=\"none\" stroke=\"#5b8cff\" stroke-width=\"5\"/><rect x=\"122\" y=\"84\" width=\"76\" height=\"58\" rx=\"6\" fill=\"none\" stroke=\"#5b8cff\" stroke-width=\"5\"/><rect x=\"216\" y=\"84\" width=\"76\" height=\"58\" rx=\"6\" fill=\"none\" stroke=\"#5b8cff\" stroke-width=\"5\"/></g><path class=\"df-chain m-draw\" style=\"--len:200\" d=\"M104 113 H122 M198 113 H216\" fill=\"none\" stroke=\"#3ddc97\" stroke-width=\"7\" stroke-linecap=\"round\"/><g class=\"df-gate\" fill=\"#3ddc97\"><circle cx=\"160\" cy=\"48\" r=\"9\"/></g><path d=\"M160 57 V84\" stroke=\"#3ddc97\" stroke-width=\"4\" opacity=\".5\"/><g fill=\"#5b8cff\" opacity=\".35\"><rect x=\"28\" y=\"170\" width=\"264\" height=\"5\" rx=\"2\"/></g></svg>",todoke:"<svg class=\"m\" viewBox=\"0 0 320 240\"><rect x=\"112\" y=\"36\" width=\"96\" height=\"168\" rx=\"10\" fill=\"none\" stroke=\"#4059A6\" stroke-width=\"6\"/><g class=\"td-wave\" fill=\"#F2EDE4\"><rect x=\"128\" y=\"104\" width=\"7\" height=\"32\" rx=\"3\"/><rect x=\"142\" y=\"88\" width=\"7\" height=\"64\" rx=\"3\"/><rect x=\"156\" y=\"72\" width=\"7\" height=\"96\" rx=\"3\"/><rect x=\"170\" y=\"92\" width=\"7\" height=\"56\" rx=\"3\"/><rect x=\"184\" y=\"110\" width=\"7\" height=\"20\" rx=\"3\"/></g><g class=\"td-cap\" fill=\"#A79E90\"><rect x=\"124\" y=\"176\" width=\"72\" height=\"7\" rx=\"3\"/><rect x=\"134\" y=\"189\" width=\"52\" height=\"7\" rx=\"3\"/></g><g class=\"td-locales\" fill=\"#4059A6\"><circle cx=\"52\" cy=\"120\" r=\"11\"/><circle cx=\"52\" cy=\"84\" r=\"8\" opacity=\".6\"/><circle cx=\"52\" cy=\"156\" r=\"8\" opacity=\".6\"/></g></svg>"});
 
 /* ── 12 產品 × 三語（各自撰寫，非直譯；原樣自 canvas 切出） ── */
 var P=[
@@ -374,16 +374,16 @@ var P=[
    "Internal"
   ],
   "en": {
-   "p": "Listing, order, support and payout, closed into one loop.",
-   "b": "A resale business that grows fast ends up running on about forty microservices that nobody can hold in their head at once. Meguru folds that into a single platform. What makes it unusual isn't the consolidation, it's where we drew the line for automation: a reconciliation difference only ever produces a proposal, and a person approves it. Refunds, complaints and angry messages are never answered automatically. Human-in-the-loop here is structural, written into the system, not a promise in a deck."
+   "p": "The operations of an e-commerce fleet, running themselves.",
+   "b": "A commerce operation that grows fast ends up scattered across some forty microservices that nobody can hold in their head at once, each with its own idea of what an order is. Meguru consolidates that into one automated operating layer — listing, order, support and payout closed into a single loop. What makes it unusual is where we refused to automate: a reconciliation difference only ever produces a proposal, and a person approves it. Refunds, complaints and angry messages are never answered automatically. Human-in-the-loop here is a structural boundary written into the system, not a promise in a deck."
   },
   "ja": {
-   "p": "出品・受注・サポート・支払いを、ひと巡りに閉じる。",
-   "b": "リセール事業は伸びるほど、誰も全体を把握できない40ほどのマイクロサービスの上で回るようになります。Meguruはそれをひとつのプラットフォームに畳みました。特徴は統合そのものではなく、自動化の線をどこに引いたかです。対帳の差異は提案を出すだけで、承認するのは必ず人。返金・クレーム・強い怒りを含む連絡には、自動では返しません。human-in-the-loopは資料上の約束ではなく、システムの構造として組み込んであります。"
+   "p": "ECフリートの運営が、自分で回る。",
+   "b": "伸びるコマース事業はいつのまにか40ほどのマイクロサービスに散らばり、誰も全体を把握できなくなります。しかも「注文とは何か」の定義すら各サービスで違う。Meguruはそれをひとつの自動運営レイヤーに畳みました。出品・受注・サポート・支払いがひと巡りに閉じます。特徴は、どこを自動化しなかったかです。対帳の差異は提案を出すだけで、承認するのは必ず人。返金・クレーム・強い怒りを含む連絡には自動で返しません。human-in-the-loopは資料上の約束ではなく、システムに書き込まれた構造的な境界です。"
   },
   "zh": {
-   "p": "上架、接單、客服、撥款，收成一圈。",
-   "b": "轉售生意長得越快，最後就跑在大約四十個沒有人能同時掌握的微服務上。Meguru 把它們收斂成單一平台。真正特別的不是整合，而是我們把自動化的線畫在哪：對帳差異只會產生一份提案，動手核准的一定是人；退款、客訴與高怒氣訊息，絕不自動回覆。human-in-the-loop 在這裡是結構性的，寫進系統裡，不是簡報上的一句承諾。"
+   "p": "一支電商艦隊的營運，自己會跑。",
+   "b": "長得快的電商生意，最後會散在大約四十個沒有人能同時掌握的微服務上，而且連「一筆訂單是什麼」每個服務的定義都不一樣。Meguru 把它們收斂成單一的自動運營層：上架、接單、客服、撥款收成一圈。真正特別的是我們拒絕自動化的地方——對帳差異只產生提案，核准的一定是人；退款、客訴與高怒氣訊息，絕不自動回覆。human-in-the-loop 在這裡是寫進系統的結構性邊界，不是簡報上的一句承諾。"
   }
  },
  {
@@ -398,16 +398,83 @@ var P=[
   ],
   "border": 1,
   "en": {
-   "p": "One company, designed end to end.",
+   "p": "A full-stack platform for solo sellers and their suppliers — and the whole company around it.",
    "b": "YMY sources and fulfils for individual sellers on Japan's marketplaces — and it arrived with no identity at all. We designed the whole enterprise: the CI standard down to logo vector masters and safe-space rules, the mascot and its generation standard, the signage, uniforms, vehicles and merchandise, the four-language corporate site, and the way the business and its distribution actually work. The discipline is in the restraint. The magenta diagonal — taken from packing tape and the path goods travel — is the only accent in the entire identity, and the standard forbids adding a second one."
   },
   "ja": {
-   "p": "一社まるごと、端から端まで設計する。",
+   "p": "個人商店と仕入先をつなぐフルスタック基盤と、その会社まるごと。",
    "b": "YMYは日本のECモール上の個人商店に仕入れと物流を提供する会社で、依頼を受けた時点でアイデンティティは何もありませんでした。企業全体を設計しています。ロゴのベクター母版とアイソレーションまで定めたCI規定、マスコットとその生成基準、看板・制服・車輌・グッズ、4言語のコーポレートサイト、そして事業と流通の仕組みそのもの。要はどこまで我慢するかです。封函テープと物が流れる経路から取った洋紅の斜線は、この識別全体で唯一の強調で、規定は二つ目を足すことを禁じています。"
   },
   "zh": {
-   "p": "一整間公司，從頭到尾一次設計。",
+   "p": "個人電商與供應商的全棧整合平台，以及它整間公司。",
    "b": "YMY 為日本電商平台上的個人商家做採購與代發，接手時它沒有任何識別。我們設計的是整間企業：從 logo 向量母版與安全空間規則的 CI 規範、吉祥物與它的生成標準、招牌制服車輛周邊、四語官網，一直到事業與經銷制度本身怎麼運作。真正的功夫在克制——那道取自封箱膠帶與貨物流動路徑的洋紅斜線，是整套識別裡唯一的強調，而規範明文禁止再加第二個。"
+  }
+ },
+ {
+  "s": "kizuki",
+  "n": "Kizuki",
+  "jp": "気付き",
+  "tint": "#14100F",
+  "st": "dev",
+  "plat": [
+   "Web",
+   "Telegram"
+  ],
+  "en": {
+   "p": "It notices the conversation before you do.",
+   "b": "Somewhere right now a customer is asking about your product in a language you don't read, on a thread you'll never find. Kizuki watches for those moments — on your own listings and out in the wild — drafts a reply that works in that culture rather than a translated one, and puts it in front of you in Telegram. The line we drew: it never sends on its own. Every reply is a human tapping submit once, because an account that answers by itself is an account you will eventually regret."
+  },
+  "ja": {
+   "p": "あなたより先に、その会話に気付く。",
+   "b": "いまこの瞬間も、どこかで誰かが読めない言語であなたの商品について尋ねていて、そのスレッドをあなたが見つけることはありません。Kizukiはその瞬間を拾います。自社のリスティングでも、外の海でも。返信は翻訳ではなく、その文化で成立する文面として起草し、Telegramに差し出します。引いた線はここです。自動では送りません。送信は必ず人が一度タップする。ひとりでに返事をするアカウントは、いつか必ず後悔することになるからです。"
+  },
+  "zh": {
+   "p": "在你之前，先察覺到那段對話。",
+   "b": "此刻某個地方，有人正用你讀不懂的語言問你的產品，而那串討論你永遠不會找到。Kizuki 盯著那些瞬間——自家的商品頁，也包括外面的野生討論——草擬的回覆是在那個文化裡成立的說法，不是翻譯過來的句子，然後推到你的 Telegram。我們畫的線在這裡：它絕不自動送出。每一則回覆都要真人按一次送出，因為一個會自己回話的帳號，你早晚會後悔。"
+  }
+ },
+ {
+  "s": "dramaflow",
+  "n": "dramaflow",
+  "jp": "短編ドラマ生産ライン",
+  "tint": "#07080B",
+  "st": "ops",
+  "plat": [
+   "Internal"
+  ],
+  "en": {
+   "p": "A short-drama production line that refuses to break its own world.",
+   "b": "Serialised vertical drama burns through episodes faster than any writers' room can feed it, and generated footage drifts — a phone in a Qing dynasty scene, a costume that changes between cuts. dramaflow puts a ratified constitution first: era, lexicon, wardrobe rules, taboos. Nothing generates until it exists, and the pipeline enforces that physically rather than politely. Continuity is a real column, not a convention: each shot points at the one before it, so the last frame of one becomes the first frame of the next."
+  },
+  "ja": {
+   "p": "自分の世界観を壊さない、短編ドラマの生産ライン。",
+   "b": "縦型の連続ドラマは、どんな脚本チームより速く話数を食い尽くします。そして生成された映像は必ずずれていく。清朝の場面にスマートフォンが映り、カットの間に衣装が変わる。dramaflowはまず「創作憲法」を批准させます。時代、語彙、衣装規定、禁忌。それが存在しないうちは何も生成されず、そこは礼儀ではなくパイプラインが物理的に止めます。連続性も慣例ではなく実カラムです。各カットが前のカットを指し、前の末尾フレームが次の先頭フレームになります。"
+  },
+  "zh": {
+   "p": "一條不會弄壞自己世界觀的短劇生產線。",
+   "b": "直式連續短劇消耗集數的速度，比任何編劇團隊供得上的都快；而生成的畫面一定會漂——清朝的場景冒出手機，服裝在兩個鏡頭之間換了。dramaflow 先要一部批准生效的創作憲法：年代、詞彙、服裝規則、禁忌。憲法不存在就什麼都不生成，而且是流水線物理擋住，不是靠自律。連戲也是一個真的欄位、不是慣例：每個鏡頭指向它的前一鏡，前一鏡的末幀就是下一鏡的首幀。"
+  }
+ },
+ {
+  "s": "todoke",
+  "n": "Todoke",
+  "jp": "届け",
+  "tint": "#1A1714",
+  "st": "dev",
+  "plat": [
+   "Internal"
+  ],
+  "en": {
+   "p": "One script in, three languages of narrated video out.",
+   "b": "A studio with fifteen products has fifteen things worth explaining and no time to film any of them. Todoke takes a script and carries it all the way: screen capture or motion graphics, TTS narration, word-level subtitles, three locales, then publishing, thumbnails and the numbers that come back. It is built as a pipeline rather than an editor, because the expensive part was never the cutting — it was doing the same twelve steps again for the second language, and the third."
+  },
+  "ja": {
+   "p": "台本を一本入れると、三言語のナレーション動画が出てくる。",
+   "b": "15のプロダクトを持つスタジオには、説明すべきことが15あり、それを撮る時間はありません。Todokeは台本を受け取って最後まで運びます。画面収録またはモーショングラフィック、TTSのナレーション、単語単位の字幕、3言語、そして公開・サムネイル・戻ってくる数字まで。エディタではなくパイプラインとして作ったのは、高くつくのが編集ではなかったからです。二言語目、三言語目で同じ12工程をもう一度やること。それが高かった。"
+  },
+  "zh": {
+   "p": "丟進一份腳本，出來三種語言的旁白影片。",
+   "b": "一家有十五個產品的工作室，就有十五件值得講的事，以及零時間去拍。Todoke 接過腳本一路帶到底：錄屏或動效、TTS 旁白、逐字級字幕、三個語系，然後發佈、縮圖，以及回流的數字。它做成管線而不是剪輯器，因為真正貴的從來不是剪片——是為了第二種語言、第三種語言，把同樣的十二個步驟再做一遍。"
   }
  }
 ];

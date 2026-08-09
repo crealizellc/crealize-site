@@ -44,7 +44,7 @@ const KEY = {
   puritylens: 'PurityLens', fudeto: 'Fudeto', kichitto: 'Kichitto', qiflux: 'QiFlux',
   meishitto: 'Meishitto', rythix2048: 'Rythix2048', tendo: 'Tendo', xunni: 'XunNi',
   moonpacket: 'moonpacket', idokuta: 'iDokuta', mairi: 'Mairi', meguru: 'Meguru',
-  ymy: 'YMY',
+  ymy: 'YMY', kizuki: 'Kizuki', dramaflow: 'dramaflow', todoke: 'Todoke',
 };
 
 const HUE_TOL = 34;        // 色系家族容差（度）。底圖是氛圍層，比 UI 色寬鬆是刻意的

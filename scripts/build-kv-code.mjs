@@ -115,6 +115,31 @@ const P = {
             <path class="stroke" d="M180 640 H430 L500 480 L580 800 L660 600 H1240" fill="none"/>
             <rect class="qr" x="700" y="760" width="200" height="200" rx="20"/>`,
   },
+  kizuki: {
+    ink: '#14100F', a: '#DC322F', b: '#FAFAF7', c: '#B82420',
+    slogan: 'It notices before you do.',
+    motif: `<circle class="ring" cx="800" cy="560" r="330"/><circle class="ring" cx="800" cy="560" r="430"/>
+            <path class="stroke" d="M800 300 a170 170 0 0 1 104 304 v66 h-208 v-66 a170 170 0 0 1 104 -304z" fill="none"/>
+            <path class="spark" d="M760 520 L800 420 L840 520 L800 590 Z" fill="#DC322F"/>`,
+  },
+  dramaflow: {
+    ink: '#07080B', a: '#5b8cff', b: '#3ddc97', c: '#2C4A9E',
+    slogan: 'Constitution first.',
+    motif: `<g fill="none" stroke="#5b8cff" stroke-width="12">
+              <rect x="90" y="420" width="300" height="220" rx="20"/><rect x="440" y="420" width="300" height="220" rx="20"/>
+              <rect x="790" y="420" width="300" height="220" rx="20"/></g>
+            <path class="stroke" d="M390 530 H440 M740 530 H790" stroke="#3ddc97" stroke-width="20" fill="none"/>
+            <circle class="spark" cx="600" cy="220" r="34" fill="#3ddc97"/>`,
+  },
+  todoke: {
+    ink: '#1A1714', a: '#4059A6', b: '#F2EDE4', c: '#A79E90',
+    slogan: 'One script, three languages.',
+    motif: `<rect x="560" y="200" width="380" height="680" rx="34" fill="none" stroke="#4059A6" stroke-width="14"/>
+            <g class="bars" fill="#F2EDE4">
+              <rect x="620" y="480" width="26" height="130" rx="12"/><rect x="676" y="420" width="26" height="250" rx="12"/>
+              <rect x="732" y="360" width="26" height="370" rx="12"/><rect x="788" y="440" width="26" height="210" rx="12"/>
+              <rect x="844" y="500" width="26" height="90" rx="12"/></g>`,
+  },
   ymy: {
     ink: '#1A1418', a: '#D52A5B', b: '#FFF9F7', c: '#8A1338',
     slogan: 'Yes. Make Yours.',

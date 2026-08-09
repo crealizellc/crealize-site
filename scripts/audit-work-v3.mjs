@@ -62,6 +62,14 @@ window.addEventListener('load', function () {
       imgs: cards.map(function (c) { var e = c.querySelector('.stage__bg'); return e ? e.getAttribute('src') : null; }),
       icons: cards.map(function (c) { var e = c.querySelector('.stage__icon'); return e ? e.getAttribute('src') : null; }),
       lede: (document.getElementById('work-lede') || {}).textContent || '',
+      perCard: [].slice.call(document.querySelectorAll('#work-cards .card')).map(function (card) {
+        var s2 = {};
+        [].slice.call(card.querySelectorAll('*')).forEach(function (el) {
+          var c = el.getAttribute('class');
+          if (c) c.trim().split(/\\s+/).forEach(function (x) { if (x) s2[x] = 1; });
+        });
+        return Object.keys(s2);
+      }),
       classes: (function () {
         var set = {};
         [].slice.call(document.querySelectorAll('#work-cards *')).forEach(function (el) {
@@ -309,15 +317,16 @@ console.log('▶ AC-4 動畫存在且尊重 reduce-motion');
   if (!orphanKf.length) ok('AC-4', `全部 animation 都指向已宣告的 @keyframes`);
   else bad('AC-4', `這些 animation 指向未宣告的 @keyframes：${orphanKf.join(', ')}`);
 
-  // 每個產品至少要有一條屬於自己的動畫規則（用 motif class 前綴判定）
-  const PREFIX = { puritylens: 'pl', fudeto: 'fd', kichitto: 'ki', qiflux: 'qf', meishitto: 'me',
-                   rythix2048: 'rx', tendo: 'td', xunni: 'xn', moonpacket: 'mp', idokuta: 'id',
-                   mairi: 'mr', meguru: 'mg', ymy: 'ymy' };
-  const noAnim = Object.entries(PREFIX)
-    .filter(([, pre]) => !used.some((u) => u.cls.startsWith(pre + '-')))
-    .map(([slug]) => slug);
-  if (!noAnim.length) ok('AC-4', '12 個產品各有自己的動畫');
-  else bad('AC-4', `這些產品沒有自己的動畫：${noAnim.join(', ')}`);
+  /* 每張卡至少要有一條屬於自己的動畫。
+     原本用寫死的「產品 → class 前綴」對照表，新增產品不在表裡就靜默跳過 ——
+     2026-08-09 加 kizuki/dramaflow/todoke 時，三張卡一條動畫都沒有，AC-4 照樣全綠。
+     改為逐卡比對它自己的 DOM class 與 CSS 裡有動畫的 class 取交集。 */
+  const animated = new Set(used.map((u) => u.cls));
+  const still = (R.en.perCard || [])
+    .map((cls, i) => (cls.some((c) => animated.has(c)) ? null : R.en.names[i]))
+    .filter(Boolean);
+  if (!still.length) ok('AC-4', `${(R.en.perCard || []).length} 張卡各有自己的動畫`);
+  else bad('AC-4', `這些卡沒有任何動畫：${still.join(', ')}`);
 }
 
 console.log('▶ AC-5 registry 對帳：出貨狀態必須乾淨，且缺項時要大聲');

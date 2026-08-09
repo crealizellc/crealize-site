@@ -231,6 +231,56 @@
       "tone": "暖黑 + 暖紙白，唯一的洋紅斜線取自封箱膠帶與流通路徑 —— 全套識別裡唯一的『動作』。CI 明訂不走廉價促銷、大型倉儲或傳統貿易公司的沉重表達",
       "designRule": "洋紅斜線是唯一強調動作，不得增加第二個強調色；logo 生產一律用向量母版，不得從 PNG 或網頁截圖重描（CI 2.1）",
       "note": "客戶案（株式会社YMY商事 / YMY Trading Co., Ltd.，品牌語 Yes. Make Yours.）。與 Meguru 是不同的東西：Meguru 是內部平台，YMY 是對外的品牌與事業。"
+    },
+    "Kizuki": {
+      "provenance": "source-verified",
+      "palette": {
+        "vermillion": "#DC322F",
+        "warmWhite": "#FAFAF7",
+        "ink": "#0E0E10",
+        "vermillionStrong": "#B82420"
+      },
+      "$evidence": "/Users/yves/Projects/kizuki/docs/SITE_SPEC.md:142 → `--accent: #DC322F;       /* primary accent — \"the noticing spark\" */`；同檔 :40 註明「朱色，日本『批注／點睛』傳統色」",
+      "fonts": null,
+      "assets": {
+        "icon": null,
+        "note": "README 記載 logo 已選定為「Lightbulb 電球 + 朱紅芯」，但本機查無圖檔"
+      },
+      "tone": "暖白紙面上一點朱色 —— 那一點是「察覺」本身。刻意不用純白背景",
+      "status": "README 自述 prod worker live 但 /readyz degraded，Stripe/Telegram/Apify secrets 未設，送出回覆路徑尚未實作 → 卡片標開發中"
+    },
+    "dramaflow": {
+      "provenance": "source-verified",
+      "palette": {
+        "blue": "#5b8cff",
+        "mint": "#3ddc97",
+        "night": "#08090c",
+        "slate": "#5f6672"
+      },
+      "$evidence": "/Users/yves/Projects/dramaflow/worker/public/index.html:21 → `a{color:#5b8cff;…}`；同檔 :81 → `.btn-ok{background:#3ddc97;color:#08090c;…}`",
+      "fonts": null,
+      "assets": {
+        "icon512": "/Users/yves/Projects/dramaflow/worker/public/icon-512.png",
+        "iconSvg": "worker/public/icon.svg"
+      },
+      "tone": "深夜控制台 —— 近黑底、電光藍與薄荷綠兩個訊號色，像一條在跑的生產線",
+      "note": "操作介面就是 Claude Code；流水線有物理鎖（憲法未 ratified 就不生成任何內容）"
+    },
+    "Todoke": {
+      "provenance": "source-verified",
+      "palette": {
+        "primary": "#4059A6",
+        "paper": "#F2EDE4",
+        "ink": "#262320",
+        "taupe": "#A79E90"
+      },
+      "$evidence": "/Users/yves/Projects/todoke-codex/docs/design-system/tokens/todoke.tokens.json → `color.primary.500 = #4059A6`；#262320 / #F2EDE4 / #A79E90 為該 repo 內出現頻次最高的三個值（283/143/121 次）",
+      "fonts": "IBM Plex Mono（設計系統標註用）",
+      "assets": {
+        "icon": null
+      },
+      "tone": "暖灰紙 + 靛藍 —— 安靜的編輯台，不是社群平台的高飽和",
+      "status": "CLAUDE.md 自述「產品雛形」「自用（非產品）」→ 卡片標開發中"
     }
   }
 }
