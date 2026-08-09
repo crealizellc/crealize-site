@@ -164,10 +164,27 @@ const PRODUCTS = [
   { name: 'Fudeto', cat: 'GameApplication', os: 'iOS, Android', desc: { en: 'Daily one-stroke puzzle: one stroke, one graph, every morning.', ja: '一筆、一グラフ、毎朝の一筆書きパズル。', zh: '一筆、一圖、每個早晨的一筆畫謎題。' } },
   { name: 'Kichitto', cat: 'FinanceApplication', os: 'iOS', desc: { en: 'Receipt capture for solo founders: photo → AI OCR → auto-filed to Drive + Sheets.', ja: '領収書を撮影 → AI OCR → Drive + Sheets へ自動整理。', zh: '收據拍照 → AI OCR → 自動歸檔 Drive + Sheets。' } },
   { name: 'QiFlux', cat: 'HealthApplication', os: 'iOS', desc: { en: 'The quiet, privacy-first cycle tracker.', ja: '静かでプライバシー第一の周期トラッカー。', zh: '安靜、隱私優先的週期記錄。' } },
-  { name: 'iDokuta', cat: 'MedicalApplication', os: 'iOS, Android', desc: { en: 'Multilingual telehealth for foreigners in Japan (in development).', ja: '在日外国人向け多言語オンライン診療（開発中）。', zh: '在日外國人多語線上診療（開發中）。' } },
+  // 「telehealth / オンライン診療 / 線上診療」是錯的舊記載，2026-08-09 以產品自己的
+  // 線上站 https://idokuta.smartrich.ai/ 第一手推翻（HTTP 200）：該站三處一致寫
+  // 「5 Languages — Translate into Japanese and 4 more languages — English, Chinese,
+  // Korean, Vietnamese」「5 Supported languages」，JSON-LD description 亦為「5 languages」。
+  // 產品定位是「在日本就醫時把症狀寫成日文拿給對方看」的語言工具，不是線上診療服務 ——
+  // 本站 work-copy.json 的正文本來就寫著「這是語言工具，不是醫療建議」，等於同一個
+  // modal 裡上下兩段自相矛盾。宣稱看診有醫療廣告合規風險，一併改掉。
+  // 「六種語言」的來源是 app UI 的 6 個 locale（5 個使用者語言 + 日文），
+  // 被誤當成產品對外宣稱；stack 裡的 '6-locale i18n' 描述的是實作，維持不動。
+  // cat 原為 'MedicalApplication' —— 那是 schema.org 的 MedicalEntity 子型別，
+  // 不是 applicationCategory 的合法值；改用與其他健康類產品一致的 HealthApplication。
+  { name: 'iDokuta', cat: 'HealthApplication', os: 'iOS, Android', desc: { en: 'Medical language tool for foreign residents in Japan: write symptoms in your own language, show clear Japanese at the clinic. Five languages (in development).', ja: '在日外国人向けの医療言語支援 — 母語で書いた症状を、受付で見せられる日本語に。5言語対応（開発中）。', zh: '在日外國人的醫療語言工具 — 用母語寫下症狀，在診所拿出清楚的日文。支援五種語言（開發中）。' } },
   // 「病院連携」是舊記載；線上 mairi.smartrich.ai 的實際定位是日中英三語 PHR，
   // 醫療機構相關的只有 Phase 1.5 的マイナポータル連携，且受診 QR 標為「今後対応予定」。
-  { name: 'Mairi', cat: 'HealthApplication', os: 'iOS, Android', desc: { en: 'Trilingual personal health record (JA / 繁中 / EN): vitals, medication history and an AI symptom check that reads your own record.', ja: '日中英3言語のPHR — バイタル・薬歴と、自分の記録を文脈にしたAI症状チェック。', zh: '日中英三語 PHR — 生命徵象、用藥史，以及讀你自己紀錄的 AI 症狀速查。' } },
+  // 2026-08-09 第一手複驗：Google Play `health.mairi.app` HTTP 200、標題「Mairi - まいり」、
+  // 最終更新日 2026/07/29、更新說明「Mairi 初回リリース」、無「早期アクセス」標記 ——
+  // **已公開上架**，站上原本標 status:'wip'（開發中）是低報。三語 i18n 已改為 shipped。
+  // iOS 則確實沒有：itunes search「まいり」「Mairi」在 Crealize 名下 0 筆，
+  // lookup bundleId health.mairi.app / ai.smartrich.mairi / com.crealize.mairi 皆 resultCount=0，
+  // 故 os 從 'iOS, Android' 收斂為只寫已驗證的 Android（與 Tendo 同一處理）。
+  { name: 'Mairi', cat: 'HealthApplication', os: 'Android', desc: { en: 'Trilingual personal health record (JA / 繁中 / EN): vitals, medication history and an AI symptom check that reads your own record.', ja: '日中英3言語のPHR — バイタル・薬歴と、自分の記録を文脈にしたAI症状チェック。', zh: '日中英三語 PHR — 生命徵象、用藥史，以及讀你自己紀錄的 AI 症狀速查。' } },
   // os 原記 'Web' 且描述標「開發中」，但 2026-08-08 實測 Google Play com.kkdstudios.tendo
   // 已公開上架（developer=Crealize）；iOS id6781214609 lookup resultCount=0，確實未上架。
   // 未取得公開 Web 版網址的第一手證據，故 os 只寫已驗證的 Android。
