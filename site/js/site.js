@@ -185,6 +185,55 @@
     });
   }
 
+  // ---------- Compact nav (≤1080px) ----------
+  /* site.css 在 max-width:1080px 把 .nav__links 整組 display:none，卻沒有任何替代 ——
+     平板與全部手機上，四個區塊沒有任何跳轉方式，只能捲完五萬多像素。
+     nav 的 markup 來自 design export（builder 的 DOM 輸入），不動它；
+     這裡用 JS 生成按鈕與面板，連結直接複製自 .nav__links，所以三語自動跟著走。 */
+  const navLinksEl = document.querySelector('.nav__links');
+  const navRight = document.querySelector('.nav__right');
+  if (nav && navLinksEl && navRight && links.length) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'nav__menu';
+    btn.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('aria-controls', 'nav-panel');
+    btn.setAttribute('aria-label', navLinksEl.getAttribute('aria-label') || 'Menu');
+    btn.innerHTML = '<span aria-hidden="true"></span><span aria-hidden="true"></span>';
+    navRight.insertBefore(btn, navRight.firstChild);
+
+    const panel = document.createElement('div');
+    panel.className = 'nav__panel';
+    panel.id = 'nav-panel';
+    panel.hidden = true;
+    links.forEach((a) => {
+      const c = a.cloneNode(true);
+      c.classList.remove('is-active');
+      panel.appendChild(c);
+    });
+    nav.appendChild(panel);
+
+    const setNavOpen = (open) => {
+      nav.classList.toggle('is-menu-open', open);
+      btn.setAttribute('aria-expanded', String(open));
+      panel.hidden = !open;
+    };
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      setNavOpen(!nav.classList.contains('is-menu-open'));
+    });
+    /* 點連結後要自己收起來 —— 同頁錨點不會觸發任何導航事件，不收就會蓋住捲到的區塊。 */
+    panel.addEventListener('click', (e) => { if (e.target.closest('a')) setNavOpen(false); });
+    document.addEventListener('click', (e) => { if (!nav.contains(e.target)) setNavOpen(false); });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && nav.classList.contains('is-menu-open')) { setNavOpen(false); btn.focus(); }
+    });
+    /* 視窗放大回桌面寬度時，面板的 hidden 狀態要跟著重置，否則縮放過的頁面會留著 open class。 */
+    const mq = window.matchMedia('(min-width: 1081px)');
+    const syncMq = () => { if (mq.matches) setNavOpen(false); };
+    mq.addEventListener ? mq.addEventListener('change', syncMq) : mq.addListener(syncMq);
+  }
+
   // ---------- Footer build line ----------
   const buildLine = document.getElementById('build-line');
   if (buildLine) {
