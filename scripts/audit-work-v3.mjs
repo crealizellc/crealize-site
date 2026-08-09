@@ -149,13 +149,25 @@ window.addEventListener('load', function () {
 <style>html,body{margin:0;padding:0}iframe{width:${width}px;height:${height}px;border:0;display:block}</style>
 <iframe src="__audit-work-v3.html"></iframe><pre id="__ac_result"></pre>
 <script>
-setTimeout(function(){
+/* 原本是「固定 2500ms 抓一次」。16 張 KV 圖進來後內頁的 load 事件晚於那一刻，
+   父頁就取到空值並回報「iframe 內沒有量測結果」—— 量測時機的競態，不是版面缺陷。
+   改成輪詢到有結果為止；逾時才失敗，並回報 readyState 供判斷是誰慢。 */
+(function(){
   var out = document.getElementById('__ac_result');
-  try {
-    var inner = frames[0].document.getElementById('__ac_result');
-    out.textContent = inner ? inner.textContent : JSON.stringify({error:'iframe 內沒有量測結果'});
-  } catch (e) { out.textContent = JSON.stringify({error:'讀不到 iframe：'+e.message}); }
-}, 2500);
+  var t0 = Date.now(), DEADLINE = 8000;
+  (function poll(){
+    var doc = null;
+    try { doc = frames[0].document; }
+    catch (e) { out.textContent = JSON.stringify({error:'讀不到 iframe：'+e.message}); return; }
+    var inner = doc.getElementById('__ac_result');
+    if (inner && inner.textContent) { out.textContent = inner.textContent; return; }
+    if (Date.now() - t0 > DEADLINE) {
+      out.textContent = JSON.stringify({error:'iframe 內沒有量測結果（等了 '+(Date.now()-t0)+'ms，readyState='+doc.readyState+'）'});
+      return;
+    }
+    setTimeout(poll, 100);
+  })();
+})();
 </script>`);
   try {
     const dom = execFileSync(CHROME, [
