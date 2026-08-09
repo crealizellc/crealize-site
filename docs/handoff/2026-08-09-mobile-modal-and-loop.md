@@ -160,11 +160,28 @@ zh/  同上
 
 ## 已知未盡事項
 
-1. **iDokuta 的語言數仍自相矛盾。** 卡片與正文寫「Five languages / 五種語言」，
-   而 registry 的 `line`（`work-modal.js:243` 印進 `.work-modal__line`）寫
-   「six languages / 六種語言」——同一個 modal 裡上下兩段打架。
-   `/Users/yves/Projects/idokuta` 是空目錄，查不到哪個為真。**只有 Yves 知道正確
-   數字**，我不會挑一個填上去。給數字後一分鐘可改完重新部署。
+1. ~~iDokuta 的語言數自相矛盾~~ **已於 `0a8dfe9` 查清並修正，且查出的問題比數字大。**
+   產品自己的線上站 `https://idokuta.smartrich.ai/`（HTTP 200）三處一致寫
+   「5 Languages」「5 Supported languages」「Translate into Japanese and 4 more
+   languages — English, Chinese, Korean, Vietnamese」。**「六」的來源是 app UI 的
+   6 個 locale（5 個使用者語言 + 日文），被誤當成對外宣稱。**
+   同時發現整個定位寫錯：站上寫 telehealth / オンライン診療 / 線上診療服務，
+   實際是「就醫時把症狀寫成日文拿給對方看」的語言工具 —— 而本站正文自己就寫著
+   「這是語言工具，不是醫療建議」，同一個 modal 裡自相矛盾，且宣稱診療有醫療廣告
+   合規風險。已一併改掉，`applicationCategory` 也從非法值 `MedicalApplication`
+   改為 `HealthApplication`。
+   **教訓：查一個數字之前先問「這個數字在講什麼」——本例的兩個數字根本不是同一件事。**
+
+1b. **Mairi 曾被低報成「開發中」。** 同一次調查用 Google Play 複驗
+   `health.mairi.app`（HTTP 200、「Mairi - まいり」、最終更新日 2026/07/29、
+   更新說明「初回リリース」、無早期存取標記）→ 早就公開上架。已改為 shipped，
+   `os` 依 iTunes lookup 三次 `resultCount=0` 收斂為只寫 Android。
+
+1c. **有一支已上架產品不在 Selected Work 上**：Google Play
+   `com.jung.dicex3dx`「ダイスキング - 5種のサイコロゲーム」，與其他產品同一個
+   開發者帳號（`4841036895034202102`）。設計 canvas 內也有 `shots/dicex3d.png`，
+   顯然不是沒發現過。**要不要收進 16 張卡是策展判斷，不是我該替 Yves 決定的**
+   —— 加一張卡要新的主視覺、icon、三語文案（走 `product-card` skill）。
 2. **兩份 design export 已分岔**（`claude-design-export` vs `-v2`）。CLAUDE.md 第 4 條
    已於 `73edc13` 更正並寫明後果：從 Claude Design 重新 export 蓋掉 v1，會無聲吃掉
    Codex 那批文案改動，且沒有任何 gate 蓋得到 v2。
