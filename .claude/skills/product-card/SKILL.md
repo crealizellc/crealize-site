@@ -132,12 +132,48 @@ Hamiltonian path、Kichitto 是收據落下變成帳上一列），不是隨便�
 
 同一份 motif 定義也要進 `scripts/gen-work-v3.mjs` 的 `M`，那才是線上會動的那一層。
 
-⚠️ **motif 必須耐得住無限循環**。桌機是進場播一次（`animation: … both`），但
-**觸控裝置沒有 hover 可以重播**，所以卡片進入畫面中央帶時會被加上 `.is-looping`，
-把 `animation-iteration-count` 蓋成 `infinite`；modal 打開時也一樣。
-設計 motif 時要讓它**首尾接得起來**，否則手機上會看到一個突兀的跳接。
+#### 一張卡的動畫實際上長這樣（三層疊在同一個 `.stage` 裡）
+
+`gen-work-v3.mjs` 產生的 DOM：
+
+```html
+<div class="stage" style="--tint:…">
+  <img class="stage__bg">   ← AI 底圖（靜態）
+  <svg class="m">…</svg>    ← motif，會動的那層
+  <img class="stage__icon"> ← 官方 app icon
+</div>
+```
+
+觸發：卡片捲進視窗 → `.card` 加 `is-in`、`.stage` 加 `is-live` → motif 開始播。
+
+#### modal 打開時，是把卡片那個 `.stage` 整組複製過去，不是另做一套
+
+`work-modal.js` 的 `fill()`：
+
+```js
+const srcCard = document.querySelector('.card[data-work-index="' + i + '"] .stage');
+const clone = srcCard.cloneNode(true);
+clone.classList.add('is-live', 'is-looping');   // 直接開始播，而且無限循環
+```
+
+**所以做新卡時不必為 modal 另外準備任何東西** —— 同一份 DOM、同一組 `@keyframes`，
+不可能跟卡片畫得不一樣。這是刻意的：兩邊各做一套必然會分岔。
+
+⚠️ **由此推出一條 CSS 規則：`.stage` 這一層的結構樣式不准 scope 在 `#work` 底下。**
+modal 掛在 `<body>` 上、不在 `#work` 容器內，clone 過去就吃不到祖先受限的規則。
+`sections.css` 的 `.stage` / `.stage__bg` / `.m` / `.stage__icon` 都是**無前綴**的
+（`#work` 前綴只保留給 hover / focus 這類互動狀態）。2026-08-09 踩過：加了前綴後
+modal 整塊塌成純黑。`work-modal.css` 只補 modal 專屬的尺寸覆寫（`.work-modal__shot .stage`）。
+
+⚠️ **motif 必須耐得住無限循環**。桌機的卡片是進場播一次（`animation: … both`），
+靠 `mouseenter` 重播；但**觸控裝置沒有 hover**，所以卡片進入畫面中央帶時會被加上
+`.is-looping`，把 `animation-iteration-count` 蓋成 `infinite` —— modal 則是一打開就循環。
+設計 motif 時要讓它**首尾接得起來**，否則會看到一個突兀的跳接。
+
 `.is-looping` 的規則包在 `@media (prefers-reduced-motion: no-preference)` 內 ——
-**不要把它改成無條件規則**，那會反過來蓋掉 reduce-motion 的 `animation: none`。
+**不要把它改成無條件規則**。work-modal.css 在 sections.css 之後載入，無條件的
+`!important` 會靠「後載入贏」蓋掉 reduce-motion 的 `animation: none !important`，
+等於幫暈動症使用者把動畫重新打開。
 
 備援：AI 拿不到圖時，`node scripts/build-kv-code.mjs --only <slug>` 可以純程式產出整張底圖。
 
@@ -162,10 +198,17 @@ npm run check:all
 # → check:nav → check:prerender → check:mobile → check:design
 ```
 
-新產品最容易踩的三道：
-- `check:work` **AC-2b** —— `body` 沒有比 `pos` 長 1.5 倍
-- `check:prerender` —— 忘記跑 `prerender-work.mjs`，原始 HTML 少一張卡
-- `check:mobile` **M-5** —— motif 在 `.is-looping` 下沒有任何 `infinite` 元素
+新產品最容易踩的四道：
+
+| Gate | 會紅的原因 |
+|---|---|
+| `check:work` **AC-2b** | `body` 沒有比 `pos` 長 1.5 倍 |
+| `check:work` **AC-9** | modal 打開後找不到 `.stage.is-looping`（clone 沒發生）、`.stage__bg` 沒載入（結構層 CSS 又被 `#work` 鎖住了）、或 `no-preference` 下 0 個元素 `iteration=infinite` |
+| `check:prerender` | 忘記跑 `prerender-work.mjs`，原始 HTML 少一張卡 |
+| `check:mobile` **M-5** | 卡片本身在觸控裝置上沒循環（`COARSE` 分支或 `.is-looping` 選擇器被改壞） |
+
+AC-9 與 M-5 各自還有一次 `--force-prefers-reduced-motion` 的複驗：
+reduce-motion 下**必須 0 個元素在動**。這條是防止「為了讓動畫循環而蓋掉無障礙設定」。
 
 再用 Chrome headless 三語各拍一張目視，**而且要拍 390px 的手機版並實際點開 modal**。
 **不要只看 gate 綠燈就宣告完成** —— 2026-08-09 的獨立驗收證明過，七條 AC 裡有四條
