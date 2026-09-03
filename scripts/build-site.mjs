@@ -341,7 +341,24 @@ for (const [key, loc] of Object.entries(LOCALES)) {
 <script src="${loc.base}js/work-modal.js" defer></script>`
   );
 
-  // 6. nav logo asset path
+  // 6. nav / footer logo：改指 WebP 並補上內在尺寸
+  //    原本兩處 <img> 都指向 480×383 的 PNG（41,366 B），但 CSS 只把它畫成
+  //    21px（nav）與 26px（footer）高 —— 面積過剩約 200 倍，Lighthouse 線上實測
+  //    uses-responsive-images 可省 105 KiB、modern-image-formats 可省 34 KiB。
+  //    改成 120×96 的 WebP（1,940 B，-95.3%），對 26px 顯示仍有 3x retina 餘裕。
+  //    width/height 屬性給的是內在比例，CSS 的 height + width:auto 照舊覆蓋外觀，
+  //    但瀏覽器因此能在圖片抵達前預留正確空間（消掉 unsized-images 的 CLS 風險）。
+  //    favicon / apple-touch-icon / JSON-LD 的 logo 仍指 PNG —— Safari 的
+  //    apple-touch-icon 不吃 WebP，結構化資料也以 PNG 為準，兩者刻意不動。
+  html = html.replaceAll(
+    '<img class="nav__logo" src="assets/crealize-mark.png"',
+    `<img class="nav__logo" width="120" height="96" src="${loc.base}assets/crealize-mark.webp"`
+  );
+  html = html.replaceAll(
+    '<img class="foot__logo" src="assets/crealize-mark.png"',
+    `<img class="foot__logo" width="120" height="96" src="${loc.base}assets/crealize-mark.webp"`
+  );
+  // 其餘任何仍指向 PNG 的 <img>（未來新增的）至少要有正確的語系前綴
   html = html.replaceAll('src="assets/crealize-mark.png"', `src="${loc.base}assets/crealize-mark.png"`);
 
   // 6.5 common rewrites (all locales): products count + engineering principles strip

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* ============================================================
-   audit-critical-path.mjs — 三語頁的 <head> 不得讓 Google Fonts
-   擋住首次繪製。
+   audit-critical-path.mjs — 首屏成本守門：三語頁的 <head> 不得讓
+   Google Fonts 擋住首次繪製，且 logo <img> 不得回到過大的 PNG。
 
    為什麼要有這支：2026-09-04 之前，head 裡是一條普通的
    `<link rel="stylesheet" href="fonts.googleapis.com/...">`，把五個
@@ -90,9 +90,39 @@ for (const p of PAGES) {
   else bad(`${p.key}: preconnect 不完整（googleapis=${hasApi} gstatic+crossorigin=${hasStatic}）`);
 }
 
+/* ---- logo <img>：格式與內在尺寸 ----
+   2026-09-04 之前兩處 logo 都指向 480×383 的 PNG（41,366 B），但 CSS 只畫
+   21px（nav）／26px（footer）高 —— 像素密度 18x／15x，面積過剩約 200 倍。
+   換成 120×96 的 WebP（1,940 B，-95.3%）後密度降到 4.6x／3.7x，仍高於 3x
+   retina 所需；同時補上 width/height 讓瀏覽器能預留空間。
+   線上 Lighthouse 實測：unsized-images 50→100、modern-image-formats 0→100、
+   CLS 0.002→0、TBT 130ms→0ms。
+   favicon / apple-touch-icon / JSON-LD 仍用 PNG，這裡刻意不檢查它們。 */
+console.log('');
+console.log('▶ logo <img> 必須是 WebP 且帶內在尺寸');
+
+for (const p of PAGES) {
+  if (!existsSync(p.file)) continue;
+  const html = readFileSync(p.file, 'utf8');
+  const imgs = html.match(/<img[^>]*class="(?:nav|foot)__logo"[^>]*>/gi) || [];
+
+  if (imgs.length !== 2) {
+    bad(`${p.key}: 預期 2 個 logo <img>（nav + footer），實際 ${imgs.length} 個`);
+    continue;
+  }
+
+  const png = imgs.filter((t) => /src="[^"]*\.png"/i.test(t));
+  if (png.length === 0) ok(`${p.key}: 2 個 logo <img> 都不是 PNG`);
+  else bad(`${p.key}: ${png.length} 個 logo <img> 仍指向 PNG —— 41KB 換 1.9KB 的差別`);
+
+  const unsized = imgs.filter((t) => !/\swidth="\d+"/i.test(t) || !/\sheight="\d+"/i.test(t));
+  if (unsized.length === 0) ok(`${p.key}: 2 個 logo <img> 都有 width/height（無版面跳動風險）`);
+  else bad(`${p.key}: ${unsized.length} 個 logo <img> 缺 width/height —— 圖片抵達前無法預留空間`);
+}
+
 console.log('');
 if (fails.length) {
   console.error(`❌ audit-critical-path — ${fails.length} 項失敗`);
   process.exit(2);
 }
-console.log('✅ audit-critical-path — 三語頁的 Google Fonts 皆在關鍵路徑之外，且保有 noscript fallback');
+console.log('✅ audit-critical-path — Google Fonts 在關鍵路徑之外（含 noscript fallback），logo 為帶尺寸的 WebP');

@@ -85,19 +85,33 @@ npm run check:perf       # 關鍵渲染路徑：Google Fonts 不得擋住首次�
 
 ### 效能基線（2026-09-04 實測，Lighthouse 12.8.2 · mobile · 同機同本機 server）
 
-|  | 改前 | 改後 |
-|---|---|---|
-| Performance | 60 | **93** |
-| First Contentful Paint | 6.5 s | **1.7 s** |
-| Largest Contentful Paint | 7.4 s | **2.9 s** |
-| render-blocking 可省 | 5,125 ms | 235 ms |
-| CLS | 0.002 | 0.002（不變）|
+|  | 原始 | 字體修正 | ＋圖片修正 |
+|---|---|---|---|
+| Performance | 60 | 93 | **97** |
+| First Contentful Paint | 6.5 s | 1.7 s | **1.7 s** |
+| Largest Contentful Paint | 7.4 s | 2.9 s | **2.4 s** |
+| Total Blocking Time | 0 ms | 130 ms | **0 ms** |
+| CLS | 0.002 | 0.002 | **0** |
 
-根因是 Google Fonts 那條 `rel="stylesheet"` 擋住渲染，而其中 **Noto Sans JP 一家就是
-344 KB CSS / 372 個 `@font-face`**（其餘四個家族合計 15 KB）。現在拆成兩條、都以
-`media="print"` + `onload` 移出關鍵路徑，`<noscript>` 保留無 JS fallback。字體最終仍全部
-載入（改前改後 `document.fonts` 都是 405 faces / 5 個家族 / 各元素 computed font-family
-逐項相同），視覺不變。`check:perf` 與 `deploy-gh.sh` 都會擋住這件事回歸。
+**字體**：根因是 Google Fonts 那條 `rel="stylesheet"` 擋住渲染，而其中 **Noto Sans JP
+一家就是 344 KB CSS / 372 個 `@font-face`**（其餘四個家族合計 15 KB），瀏覽器得把 372 條
+unicode-range 全解析完才畫得出第一個字。現在拆成兩條、都以 `media="print"` + `onload`
+移出關鍵路徑，`<noscript>` 保留無 JS fallback。字體最終仍全部載入（改前改後
+`document.fonts` 都是 405 faces / 5 個家族 / 各元素 computed font-family 逐項相同）。
+
+**Logo**：兩處 `<img>` 都指向 480×383 的 PNG（41,366 B），但只畫成 21 px（nav）與
+26 px（footer）高 —— 像素密度 18x / 15x。換成 120×96 的 WebP（1,940 B，**-95.3%**）
+並補上 `width`/`height`：密度降到 4.6x / 3.7x（仍高於 3x retina 所需），渲染尺寸只差
+0.07 px。`favicon` / `apple-touch-icon` / JSON-LD 的 logo 仍用 PNG，刻意不動 —— Safari
+的 apple-touch-icon 不吃 WebP。
+
+⚠️ 本機 `python -m http.server` 沒有 gzip，所以它的 Lighthouse 會報「Enable text
+compression 910 ms」。**那是假象** —— 線上 GitHub Pages 實測三個資源都回
+`content-encoding: gzip`，`uses-text-compression` 在線上是滿分。同理
+`uses-long-cache-ttl` 的 `max-age=600` 是 GitHub Pages 的固定值，改不了。
+
+`check:perf` 與 `deploy-gh.sh` 都會擋住這兩件事回歸，兩項檢查都做過真實路徑的反向測試
+（把修正還原 → `exit 2`；改回來 → `exit 0`）。
 
 ⚠️ **`check:rules` 是假紅燈，不要照著它修**。它檢查的是已停用 Next.js 架構的目錄結構
 （`scripts/check-rules.js` 要求 `src/types` 存在）。它唯一的紅燈與線上站無關 ——

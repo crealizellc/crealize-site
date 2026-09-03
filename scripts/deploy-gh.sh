@@ -33,7 +33,7 @@ echo "▶ Prerendering Selected Work cards into static HTML (for AI crawlers)...
 node scripts/prerender-work.mjs
 
 echo "▶ Sanity checks..."
-for f in site/index.html site/ja/index.html site/zh/index.html site/404.html site/CNAME site/robots.txt site/sitemap.xml site/llms.txt site/assets/og.png; do
+for f in site/index.html site/ja/index.html site/zh/index.html site/404.html site/CNAME site/robots.txt site/sitemap.xml site/llms.txt site/assets/og.png site/assets/crealize-mark.webp site/assets/crealize-mark.png; do
   [ -f "$f" ] || { echo "❌ missing $f" >&2; exit 1; }
 done
 grep -q "application/ld+json" site/index.html || { echo "❌ JSON-LD missing" >&2; exit 1; }
