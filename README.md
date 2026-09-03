@@ -78,9 +78,26 @@ npm run check:nav        # 三語 × 窄/寬視口導覽
 npm run check:prerender  # 不執行 JS 的原始 HTML 必須含完整 16 張卡片與正文
 npm run check:mobile     # 390×844 真手機模擬：modal 關得掉、動態看得到、reduce-motion 正確
 npm run check:design     # design token drift lint（色系家族 + 字體白名單）
+npm run check:perf       # 關鍵渲染路徑：Google Fonts 不得擋住首次繪製
 ```
 
 `npm run check:all` 會把上面全部加上 `check:todo`、`check:rules` 一起跑。
+
+### 效能基線（2026-09-04 實測，Lighthouse 12.8.2 · mobile · 同機同本機 server）
+
+|  | 改前 | 改後 |
+|---|---|---|
+| Performance | 60 | **93** |
+| First Contentful Paint | 6.5 s | **1.7 s** |
+| Largest Contentful Paint | 7.4 s | **2.9 s** |
+| render-blocking 可省 | 5,125 ms | 235 ms |
+| CLS | 0.002 | 0.002（不變）|
+
+根因是 Google Fonts 那條 `rel="stylesheet"` 擋住渲染，而其中 **Noto Sans JP 一家就是
+344 KB CSS / 372 個 `@font-face`**（其餘四個家族合計 15 KB）。現在拆成兩條、都以
+`media="print"` + `onload` 移出關鍵路徑，`<noscript>` 保留無 JS fallback。字體最終仍全部
+載入（改前改後 `document.fonts` 都是 405 faces / 5 個家族 / 各元素 computed font-family
+逐項相同），視覺不變。`check:perf` 與 `deploy-gh.sh` 都會擋住這件事回歸。
 
 ⚠️ **`check:rules` 是假紅燈，不要照著它修**。它檢查的是已停用 Next.js 架構的目錄結構
 （`scripts/check-rules.js` 要求 `src/types` 存在）。它唯一的紅燈與線上站無關 ——

@@ -251,6 +251,12 @@ function jsonLd(loc, key) {
   return JSON.stringify({ '@context': 'https://schema.org', '@graph': [org, site, ...apps] });
 }
 
+// Google Fonts 拆成兩條：拉丁字體（15KB CSS）與 Noto Sans JP（344KB CSS / 372 faces）。
+// 拆開的理由是它們的體積差 23 倍 —— 綁在同一條 link 時，日文那 372 條 unicode-range
+// 會連帶拖住拉丁字體的可用時間。兩條都以 media=print + onload 移出關鍵路徑。
+const FONT_LATIN = "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Bricolage+Grotesque:wght@600;700&family=Newsreader:ital,opsz,wght@1,18,400;1,18,500;0,18,400&family=Space+Mono:wght@400;700&display=swap";
+const FONT_JP = "https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap";
+
 function headBlock(loc, key) {
   const path = loc.dir ? `/${loc.dir}/` : '/';
   const b = loc.base;
@@ -280,7 +286,15 @@ function headBlock(loc, key) {
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Bricolage+Grotesque:wght@600;700&family=Newsreader:ital,opsz,wght@1,18,400;1,18,500;0,18,400&family=Noto+Sans+JP:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<!-- 字體分兩條、皆非阻擋（2026-09-04）。改前：單一 rel=stylesheet 擋住渲染，
+     Lighthouse mobile FCP 6.4s / 分數 61，render-blocking 佔 5,110ms。
+     Noto Sans JP 一家就是 344KB CSS / 372 個 @font-face（其餘四家合計 15KB），
+     瀏覽器要把 372 條 unicode-range 全解析完才畫得出第一個字。
+     media=print + onload 讓它不進關鍵路徑；display=swap 本來就會先用 fallback，
+     所以視覺行為不變，只是首屏不再等它。noscript 為無 JS 環境保留原本的阻擋式載入。 -->
+<link rel="stylesheet" media="print" onload="this.media='all';this.onload=null" href="${FONT_LATIN}" />
+<link rel="stylesheet" media="print" onload="this.media='all';this.onload=null" href="${FONT_JP}" />
+<noscript><link rel="stylesheet" href="${FONT_LATIN}" /><link rel="stylesheet" href="${FONT_JP}" /></noscript>
 
 <link rel="icon" type="image/png" href="${b}assets/crealize-mark.png" />
 <link rel="apple-touch-icon" href="${b}assets/crealize-mark.png" />
