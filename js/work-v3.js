@@ -544,7 +544,7 @@ var P=[
        缺哪些由 audit-work-v3 的 AC-3 列名回報，等真的 icon 進來再補。 */
     var icon = (reg && p.hasIcon)
       ? '<img class="stage__icon" src="' + reg.img.replace(/assets\/kv\/[^/]+$/, 'assets/icons/' + p.s + '.webp') +
-        '" alt="' + p.n + ' icon" loading="lazy" decoding="async" width="256" height="256" />'
+        '" alt="' + p.n + ' icon" loading="lazy" decoding="async" width="144" height="144" />'
       : '';
     return '<article class="card work-card" data-work-index="' + idx + '" tabindex="0" role="button" aria-label="Open ' + p.n + '">'
       + '<div class="stage" style="--tint:' + p.tint + '"' + (p.flat ? ' data-flat="1"' : '') + (p.border ? ' data-border="1"' : '') + '>' + bg + M[p.s] + icon + '</div>'
