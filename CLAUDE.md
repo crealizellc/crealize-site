@@ -44,6 +44,25 @@ site/js/i18n/en.js（CRZ_I18N.work）                                          �
 ⚠️ 部署用 `-t/--dotfiles`（GitHub Pages 需要 `.nojekyll`），代價是 `site/` 內**任何** dotfile
 都會被公開發佈。`deploy-gh.sh` 已有白名單 guard（只允許 `.nojekyll`）+ 部署後 curl 驗證。
 
+## 分支與死碼（2026-09-04 第一手複驗）
+
+**只有 `site/` 會上線。** `src/`、`pages/`、`components/`、`i18n/`、`middleware.ts.bak` 與
+`package.json` 裡的 next / react / framer-motion 依賴，全部屬於 2025-09-10 之後就停用的
+Next.js 那套。證據：`grep -cE "src/|pages/" scripts/build-site.mjs` → **0**；全 repo 只有
+`scripts/dev-guide.js` 與 `scripts/check-rules.js` 讀 `src/`，兩者都是檢查腳本、不在產出鏈上。
+
+⚠️ **`npm run check:rules` 是假紅燈。** 它的唯一紅燈是「缺少目录: src/types」——在檢查一條
+已停用架構的目錄結構。不要為了讓它變綠而去補 `src/types`，那等於替死碼做保養。
+（命名檢查那段其實是通過的；總結訊息之所以說失敗，只因為目錄檢查 false。）
+
+**`fix/security-and-deploy-config` 是死分支，不要合併。** 7 個 commit（2026-04-14/15）落後
+`main` 83 個 commit，改的 23 個檔全在 `src/`、`pages/`、`public/`，對 gh-pages 零影響。
+它帶進來的 `public/llms.txt`、`public/ai.txt` 是手工舊版，已被 builder 生成的
+`site/llms.txt`（16 個產品，與線上逐 byte 相同）取代。對應的 PR #1 早在 2026-04-14 已 merge，
+之後推上去的這 7 個 commit 沒有再開 PR。
+
+**`public-main` 與 `main` 完全一致**（`git rev-list --count` 雙向皆 0），不需要合併。
+
 ## Claude Design URL
 Claude Design canvas: https://claude.ai/design/p/dbbc5234-c185-49b2-97b2-09bf8b59aaf0
 （2026-06-10 建立 — 「Materialize」概念重設計：desktop 1440 + mobile 390、tokens、atoms、hero scroll prototype）
