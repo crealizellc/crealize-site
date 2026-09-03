@@ -83,43 +83,50 @@ npm run check:perf       # 關鍵渲染路徑：Google Fonts 不得擋住首次�
 
 `npm run check:all` 會把上面全部加上 `check:todo`、`check:rules` 一起跑。
 
-### 效能基線（2026-09-04，Lighthouse 12.8.2 · mobile）
+### 效能基線（2026-09-04，線上實測，Lighthouse 12.8.2 · mobile）
 
-**先看這個警告**：同一份改動，換一種節流方法，結論從「+37 分」變成「+1 分」。
-所以下面四組數字全列，不挑好看的。
+**警告**：同一份改動，換一種節流方法結論會翻轉。兩種都列，不挑好看的。
 
-| | 模擬節流（Lighthouse 預設）| 實際節流（`--throttling-method=devtools`）|
-|---|---|---|
-| 本機 before | 60 · FCP 6.5 s | 85 · FCP 3.3 s |
-| 本機 after | 97 · FCP 1.7 s | 92 · FCP 2.7 s |
-| 線上 before | 61 · FCP 6.4 s | 未測（部署後已覆蓋）|
-| **線上 after** | **62 · FCP 6.2 s** | **98 · FCP 2.0 s** |
+| 線上 crealize.llc | before | 字體 + logo | ＋ icons（現況）|
+|---|---|---|---|
+| **模擬節流**（預設）| 61 · FCP 6.4 s | 62 · FCP 6.2 s | **77 · FCP 4.1 s** |
+| **實際節流**（devtools）| 未測¹ | 98 · FCP 2.0 s | **98 · FCP 1.9 s** |
+| CLS | 0.003 | 0.002 | **0** |
 
-**跨方法一致、可以當結論的**（皆為線上實測）：
-`render-blocking-resources` **5,112 ms → 0 ms**、`unsized-images` **50 → 100**、
-`modern-image-formats` **0 → 100**、CLS 0.003 → 0.002。
+¹ before 的實際節流數字取不到 —— 第一次部署後線上已被覆蓋。
 
-**不能當結論的**：線上模擬節流的 FCP 只從 6.4 s 動到 6.2 s，即使同一份報告說
-render-blocking 已是 0 ms。實際節流（2.0 s）與 Lighthouse 自己的 filmstrip 觀測
-（1943 ms 那格出現內容）互相印證，但與模擬值差三倍。**哪個更接近真實使用者，
-現有證據判定不了** —— 需要 CrUX field data，尚未取得。詳見
-`docs/perf-evidence/2026-09-04/README.md`。
+**診斷分數**（線上，100 = 通過）：`render-blocking-resources` 0 → **100**、
+`unsized-images` 50 → **100**、`modern-image-formats` 0 → **100**、
+`uses-text-compression` 維持 100。`uses-responsive-images` 仍 50 —— 剩下的唯一一項是
+`assets/kv/puritylens.webp`，而 KV 尺寸被 `audit-kv.mjs` 的 `SPEC` 綁死（1600×1200 母版），
+要處理需引入 `srcset` 多尺寸變體，是獨立的一件事。
 
-**改了什麼** —— 字體：Google Fonts 一條 `rel="stylesheet"` 綁五個家族，其中
-**Noto Sans JP 一家就是 344 KB CSS / 372 個 `@font-face`**（其餘四家合計 15 KB），
-連英文頁都得等它 372 條 unicode-range 解析完。拆成兩條、都以 `media="print"` +
-`onload` 移出關鍵路徑，`<noscript>` 保留無 JS fallback。字體最終仍全部載入
-（改前改後 `document.fonts` 都是 405 faces / 5 個家族 / 各元素 computed
-font-family 逐項相同）。Logo：兩處 `<img>` 指向 480×383 的 41 KB PNG 卻只畫成
-21 / 26 px，換成 120×96 的 WebP（1,940 B，-95.3%）並補上 `width`/`height`；
-`favicon` / `apple-touch-icon` / JSON-LD 仍用 PNG（Safari 的 apple-touch-icon 不吃 WebP）。
+**一個第一手觀察**：模擬節流對「非阻擋化」幾乎沒反應（字體那步只 +1 分，
+即使同一份報告說 render-blocking 已歸零），對「總位元數」才敏感（icon 省 31 KB 就 +15 分）。
+實際節流從第一步就是 98。Lighthouse 自己的 filmstrip（未經模型換算）顯示
+1943 ms 那格就出現內容，與實際節流相符。**哪個更接近真實使用者，現有證據判定不了** ——
+需要 CrUX field data。詳見 `docs/perf-evidence/2026-09-04/README.md`。
+
+**改了三件事**：
+1. **字體** —— Google Fonts 一條 `rel="stylesheet"` 綁五個家族，其中
+   **Noto Sans JP 一家就是 344 KB CSS / 372 個 `@font-face`**（其餘四家合計 15 KB），
+   連英文頁都得等它 372 條 unicode-range 解析完。拆成兩條、都以 `media="print"` +
+   `onload` 移出關鍵路徑，`<noscript>` 保留無 JS fallback。字體最終仍全部載入
+   （改前改後 `document.fonts` 都是 405 faces / 5 個家族 / 各元素 computed
+   font-family 逐項相同）。
+2. **Logo** —— 兩處 `<img>` 指向 480×383 的 41 KB PNG 卻只畫成 21 / 26 px，
+   換成 120×96 的 WebP（1,940 B，-95.3%）並補上 `width`/`height`。
+   `favicon` / `apple-touch-icon` / JSON-LD 仍用 PNG（Safari 的 apple-touch-icon 不吃 WebP）。
+3. **產品 icon** —— `.stage__icon` 的顯示尺寸寫死在 `sections.css:643` 是 `46px`，
+   但檔案是 256²（5.56x 密度）。`build-kv-assets.mjs` 的 `ICON_PX` 改為 **144**
+   （3.13x，完整覆蓋 3x retina），16 張合計 66,870 → 35,752 B（**-46%**）。
+   原始 PNG 在 `site-assets/icons/` 未動；KV 16 張 sha256 逐一比對位元未變。
 
 ⚠️ 本機 `python -m http.server` 沒有 gzip，它的 Lighthouse 會報「Enable text
-compression 910 ms」。**那是假象** —— 線上 GitHub Pages 實測三個資源都回
-`content-encoding: gzip`，`uses-text-compression` 在線上是滿分。同理
-`uses-long-cache-ttl` 的 `max-age=600` 是 GitHub Pages 固定值，改不了。
+compression 910 ms」。**那是假象** —— 線上實測三個資源都回 `content-encoding: gzip`。
+同理 `uses-long-cache-ttl` 的 `max-age=600` 是 GitHub Pages 固定值，改不了。
 
-`check:perf` 與 `deploy-gh.sh` 都會擋住這兩件事回歸，兩項檢查都做過真實路徑的反向測試
+`check:perf` 與 `deploy-gh.sh` 都會擋住這三件事回歸，每一條都做過真實路徑的反向測試
 （把修正還原 → `exit 2`；改回來 → `exit 0`）。
 
 ⚠️ **`check:rules` 是假紅燈，不要照著它修**。它檢查的是已停用 Next.js 架構的目錄結構
