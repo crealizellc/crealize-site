@@ -29,6 +29,7 @@
      build，這支必須 exit 2。
    ============================================================ */
 import { readFileSync, existsSync } from 'node:fs';
+import { webpSize } from './audit-kv.mjs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -120,9 +121,45 @@ for (const p of PAGES) {
   else bad(`${p.key}: ${unsized.length} 個 logo <img> 缺 width/height —— 圖片抵達前無法預留空間`);
 }
 
+/* ---- 產品 icon：屬性尺寸必須等於檔案真實尺寸 ----
+   `ICON_PX`（build-kv-assets.mjs）與 `width`/`height`（gen-work-v3.mjs）是兩個檔案裡
+   的同一個數字，改了一邊忘了另一邊，瀏覽器就會拿錯誤的比例預留空間，而且沒有任何
+   既有 gate 會發現。這裡不比對那兩個常數，直接比對**最終事實**：HTML 寫的尺寸
+   vs WebP 檔頭讀出來的尺寸。
+   2026-09-04：256² 降到 144²（.stage__icon 的顯示尺寸是固定 46px，144² 給 3.13x，
+   完整覆蓋 3x retina）。16 張合計 66,870 B → 35,752 B（-46%）。 */
+console.log('');
+console.log('▶ 產品 icon 的屬性尺寸必須等於檔案真實尺寸');
+
+{
+  const html = existsSync(PAGES[0].file) ? readFileSync(PAGES[0].file, 'utf8') : '';
+  const tags = html.match(/<img[^>]*class="stage__icon"[^>]*>/gi) || [];
+  if (tags.length === 0) {
+    bad('en: 找不到任何 stage__icon —— work-v3 的卡片沒被 prerender 進靜態 HTML？');
+  } else {
+    let mismatch = 0, missing = 0, checked = 0;
+    for (const t of tags) {
+      const src = (t.match(/src="([^"]+)"/) || [])[1];
+      const w = Number((t.match(/\swidth="(\d+)"/) || [])[1]);
+      const h = Number((t.match(/\sheight="(\d+)"/) || [])[1]);
+      if (!src || !w || !h) { missing++; continue; }
+      const file = join(ROOT, 'site', src.replace(/^\.\.\//, ''));
+      if (!existsSync(file)) { missing++; continue; }
+      const real = webpSize(readFileSync(file));
+      checked++;
+      if (real.w !== w || real.h !== h) {
+        bad(`${src.split('/').pop()}: HTML 寫 ${w}×${h}，檔案其實是 ${real.w}×${real.h}`);
+        mismatch++;
+      }
+    }
+    if (missing) bad(`${missing} 個 stage__icon 缺 src／width／height，或檔案不存在`);
+    if (!mismatch && !missing) ok(`${checked} 個產品 icon 的屬性尺寸與檔案真實尺寸相符`);
+  }
+}
+
 console.log('');
 if (fails.length) {
   console.error(`❌ audit-critical-path — ${fails.length} 項失敗`);
   process.exit(2);
 }
-console.log('✅ audit-critical-path — Google Fonts 在關鍵路徑之外（含 noscript fallback），logo 為帶尺寸的 WebP');
+console.log('✅ audit-critical-path — Google Fonts 在關鍵路徑之外、logo 為帶尺寸的 WebP、產品 icon 尺寸名實相符');
