@@ -27,7 +27,15 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Bricolage+Grotesque:wght@600;700&family=Newsreader:ital,opsz,wght@1,18,400;1,18,500;0,18,400&family=Noto+Sans+JP:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<!-- 字體分兩條、皆非阻擋（2026-09-04）。改前：單一 rel=stylesheet 擋住渲染，
+     Lighthouse mobile FCP 6.4s / 分數 61，render-blocking 佔 5,110ms。
+     Noto Sans JP 一家就是 344KB CSS / 372 個 @font-face（其餘四家合計 15KB），
+     瀏覽器要把 372 條 unicode-range 全解析完才畫得出第一個字。
+     media=print + onload 讓它不進關鍵路徑；display=swap 本來就會先用 fallback，
+     所以視覺行為不變，只是首屏不再等它。noscript 為無 JS 環境保留原本的阻擋式載入。 -->
+<link rel="stylesheet" media="print" onload="this.media='all';this.onload=null" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Bricolage+Grotesque:wght@600;700&family=Newsreader:ital,opsz,wght@1,18,400;1,18,500;0,18,400&family=Space+Mono:wght@400;700&display=swap" />
+<link rel="stylesheet" media="print" onload="this.media='all';this.onload=null" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" />
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Bricolage+Grotesque:wght@600;700&family=Newsreader:ital,opsz,wght@1,18,400;1,18,500;0,18,400&family=Space+Mono:wght@400;700&display=swap" /><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" /></noscript>
 
 <link rel="icon" type="image/png" href="../assets/crealize-mark.png" />
 <link rel="apple-touch-icon" href="../assets/crealize-mark.png" />
@@ -45,7 +53,7 @@
 <!-- ░░░ NAV ░░░ -->
 <header class="nav" id="nav" data-screen-label="nav">
   <a class="nav__brand" href="#hero" aria-label="Crealize home">
-    <img class="nav__logo" src="../assets/crealize-mark.png" alt="Crealize mark" />
+    <img class="nav__logo" width="120" height="96" src="../assets/crealize-mark.webp" alt="Crealize mark" />
     <span class="nav__word">Crealize</span>
     <span class="nav__tm">LLC</span>
   </a>
@@ -217,7 +225,7 @@
 <footer class="foot" data-screen-label="footer">
   <div class="wrap foot__grid">
     <div class="foot__brand">
-      <img class="foot__logo" src="../assets/crealize-mark.png" alt="Crealize mark" />
+      <img class="foot__logo" width="120" height="96" src="../assets/crealize-mark.webp" alt="Crealize mark" />
       <span class="foot__word">Crealize</span>
       <p class="foot__tag"><em>把想像，變成現實。</em></p>
     </div>
