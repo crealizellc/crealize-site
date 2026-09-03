@@ -26,24 +26,56 @@
 
 ---
 
-## Lighthouse 12.8.2 · mobile · 同一台機器 · 同一個本機 server
+## Lighthouse 量測 —— 兩種節流方法給出方向相反的結論
 
-`before` = `git archive HEAD~3 site`，`after` = 本 SHA 的 `site/`，兩者都由
-`python3 -m http.server` 服務，只有內容不同。
+**先講結論，因為這裡有一個容易誤導的地方**：本文件初版只報了「本機 + 模擬節流」的
+60 → 97，那個數字**不能代表線上**。部署後對線上實測，模擬節流只有 62 分。
+四組數字全列如下，沒有挑好看的。
 
-| | 原始 | 字體修正 | ＋圖片修正（本 SHA） |
-|---|---|---|---|
-| Performance | 60 | 93 | **97** |
-| First Contentful Paint | 6.5 s | 1.7 s | **1.7 s** |
-| Largest Contentful Paint | 7.4 s | 2.9 s | **2.4 s** |
-| Speed Index | 6.5 s | 1.7 s | **1.7 s** |
-| Total Blocking Time | 0 ms | 130 ms | **0 ms** |
-| CLS | 0.002 | 0.002 | **0** |
-| `unsized-images` | 50 | 50 | **100** |
-| `modern-image-formats` | 0 | 0 | **100** |
+| | 模擬節流（Lighthouse 預設） | | 實際節流（`--throttling-method=devtools`） | |
+|---|---|---|---|---|
+| | score | FCP / LCP | score | FCP / LCP |
+| 本機 before | 60 | 6.5 s / 7.4 s | 85 | 3.3 s / 3.3 s |
+| 本機 after | 97 | 1.7 s / 2.4 s | 92 | 2.7 s / 2.7 s |
+| 線上 before | 61 | 6.4 s / 6.8 s | — | 未測（部署後已被覆蓋，無法回頭補）|
+| **線上 after** | **62** | **6.2 s / 6.5 s** | **98** | **2.0 s / 2.0 s** |
 
-線上（`https://crealize.llc/`，修正前）獨立跑過一次，作為「本機不是唯一來源」的對照：
-Performance **61**、FCP **6.4 s**、LCP **6.8 s**、render-blocking **5,110 ms**、TBT 0 ms、CLS 0.003。
+### 跨方法一致、可以當結論的改善
+
+這四項在**線上**實測，且不依賴哪種節流模型：
+
+| | 線上 before | 線上 after |
+|---|---|---|
+| `render-blocking-resources` | 5,112 ms | **0 ms** |
+| `unsized-images` | 50 | **100** |
+| `modern-image-formats` | 0 | **100** |
+| CLS | 0.003 | **0.002** |
+
+### 不能當結論的部分，以及為什麼
+
+線上模擬節流下 FCP 只從 6.4 s 動到 6.2 s，**即使同一份報告自己說 render-blocking
+已經是 0 ms**。這在該模型內部並不自洽，我沒有把它逆向工程到底，所以只陳述觀測到的事：
+
+- **實際節流**（真的限速限 CPU，不是推算）：線上 after 是 **98 分 / FCP 2.0 s**。
+- **filmstrip 觀測值**（Lighthouse 自己拍的畫面時間軸，未經模型換算）：
+  486 / 972 / 1457 ms 三格空白，**1943 ms 那格出現內容**，之後穩定。
+- LCP 階段分解：TTFB 780 ms（12%）、Load Delay 0 ms、Load Time 0 ms、
+  **Render Delay 5,723 ms（88%）** —— 而所有網路請求在 **565 ms** 就結束了。
+
+實際節流與 filmstrip 互相印證（2.0 s vs 1.9 s）；模擬節流的 6.2 s 與這兩者都對不上。
+**哪一個更接近真實使用者，手上的證據判定不了** —— 那需要 CrUX field data，
+本站流量是否足以進入 CrUX 未知，PSI API 的免費配額當天已用罄，沒有取得。
+在拿到 field data 之前，不應該用任何單一數字宣稱「站變快了幾倍」。
+
+### 方法學教訓（寫下來免得下次再犯）
+
+1. **本機 server 的絕對分數不能外推到線上**。本機 after 在實際節流下是 92，
+   線上 after 是 98 —— 線上反而更好，因為 GitHub Pages 有 gzip 與 HTTP/2，
+   `python -m http.server` 兩者皆無。
+2. **同一份改動，換個節流方法就從 +37 分變成 +1 分**。報效能數字必須連同
+   「哪個環境、哪種節流方法」一起講，否則等於沒講。
+3. 本機 A/B 仍然有用 —— 它證明了改動的**方向**與 render-blocking 的歸零；
+   它不能證明**幅度**。
 
 ### 字體家族體積（`curl "fonts.googleapis.com/css2?family=<單一家族>&display=swap" | wc -c`）
 
