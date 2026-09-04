@@ -186,3 +186,25 @@ SP=/tmp/kvproof BASE=http://127.0.0.1:8814 OUT=/tmp/kvproof \
 ## 誠實邊界
 - 320 的驗證是 headless Chrome 排版；真機 Safari 的字體度量可能略有差異（文節法對此不敏感，因為它只限制「在哪裡可以換行」）。
 - Join 標題在 1280 桌機仍是 5 行（原本 5 行含「い。」孤字），因為該欄寬只容 7 字；沒有改字級或版型。
+
+
+---
+
+# 四批全部上線後的 Lighthouse（線上 · mobile · 12.8.2）—— 一次取樣不能當回歸
+
+部署 gh-pages `e82fb28`（= PR #4 `f16cf38` 的 `site/`）後先跑一次模擬節流得 **63**（FCP 5.8 s），比第三批後的 77 差，
+`render-blocking-resources` 也從 100 掉到 50。追查：兩版部署的 `<head>` link/script **位元相同**、LCP 元素相同、
+唯一新增請求是 lazy 的 kv-800 圖；被列為阻擋的 `tokens.css` / `sections.css` 一直都是阻擋式 stylesheet，
+只是這次的 Lantern 估計跨過了列出門檻。於是對**同一份部署**再連跑三次：
+
+| run | score | FCP | LCP | render-blocking 列出 |
+|---|---|---|---|---|
+| 第三批後（`24f0d11f`） | 77 | 4.1 s | 4.1 s | — |
+| 現在 #0 | 63 | 5.8 s | 6.1 s | sections.css, tokens.css |
+| 現在 #1 | **100** | 0.9 s | 1.6 s | tokens.css |
+| 現在 #2 | **100** | 0.9 s | 1.1 s | tokens.css |
+| 現在 #3 | **100** | 1.0 s | 1.1 s | tokens.css |
+| 實際節流（devtools） | 98 | 1.9 s | 1.9 s | — |
+
+同一份位元，模擬節流在 63 與 100 之間跳。結論：**沒有回歸，也不改任何程式**；模擬節流的單次取樣在這個站上
+不能當證據，要看 ≥3 次的分布，並用實際節流交叉。`uses-responsive-images` 現在是 100（KV 800 變體生效）。
