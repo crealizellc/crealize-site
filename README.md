@@ -1,137 +1,170 @@
-# Crealize 项目开发代码
+# Crealize Corporate Site
 
-## 项目说明
+線上：**https://crealize.llc** — 三語（`/` en · `/ja/` · `/zh/`），Tokyo product studio 形象站。
 
-这是 Crealize 项目的私有开发仓库，包含完整的开发代码和文档。
+---
 
-## 开发规范
+## 先讀這段：repo 裡有兩套程式碼，只有一套會上線
 
-- 遵循 `.cursorrules` 中的开发规范
-- 保持代码风格一致
-- 及时更新文档
-- 定期提交代码
+| | 上線的 | 已停用的 |
+|---|---|---|
+| 路徑 | `site/`（手工靜態站，66 檔） | `src/` `pages/` `components/` `i18n/` `middleware.ts.bak` |
+| 技術 | 純 HTML + CSS + vanilla JS | Next.js 14 + React + next-intl |
+| 最後改動 | 2026-08-09 | **2025-09-10** |
+| 上線路徑 | `site/` → `gh-pages` 分支 → GitHub Pages → crealize.llc | 無 |
 
-## 目录结构
+**驗證方式（隨時可重跑）**
 
-```
-src/                    # 源代码
-├── app/               # 应用入口
-├── components/        # 组件目录
-├── lib/              # 工具函数
-├── styles/           # 样式文件
-└── types/            # 类型定义
+```bash
+# 1) crealize.llc 由哪個分支服務
+gh api repos/crealizellc/crealize-site/pages   # → source.branch=gh-pages, cname=crealize.llc
 
-docs/                  # 文档
-├── development/      # 开发文档
-├── architecture/     # 架构文档
-└── design-system/    # 设计系统
-```
+# 2) 線上內容 = 本機 site/（三語逐 byte 相同）
+for p in "" ja/ zh/; do
+  echo "$p $(curl -sL https://crealize.llc/$p | shasum -a256 | cut -d' ' -f1)"
+  echo "  local $(shasum -a256 site/${p}index.html | cut -d' ' -f1)"
+done
 
-## 开发流程
-
-1. 在私有仓库进行开发
-2. 完成功能后测试
-3. 构建项目生成静态文件
-4. 将稳定版本推送到公开仓库
-
-## 注意事项
-
-1. 保持代码安全性
-2. 定期备份代码
-3. 及时更新文档
-4. 遵循提交规范
-
-# 项目设计规范
-
-## 项目结构
-
-```
-src/
-  ├── app/                    # Next.js 应用路由
-  ├── components/             # 组件
-  │   ├── ui/                # 基础 UI 组件
-  │   ├── layout/            # 布局组件
-  │   ├── animations/        # 动画组件
-  │   └── features/          # 功能组件
-  ├── styles/                # 样式
-  │   ├── themes/            # 主题
-  │   ├── animations/        # 动画
-  │   └── globals.css        # 全局样式
-  ├── lib/                   # 工具函数
-  ├── hooks/                 # 自定义 Hooks
-  ├── types/                 # TypeScript 类型
-  └── public/                # 静态资源
-
-docs/
-  └── design-system/         # 设计系统文档
-      ├── DESIGN_SYSTEM.md   # 设计系统规范
-      ├── ANIMATION_GUIDELINES.md  # 动画设计规范
-      └── COMPONENT_GUIDELINES.md  # 组件设计规范
-
-# 项目文档
-
-## 文档结构
+# 3) 建置鏈完全不碰 Next.js 那套
+grep -cE "src/|pages/" scripts/build-site.mjs   # → 0
 ```
 
-docs/
-├── design-system/ # 设计系统文档
-│ ├── DESIGN_SYSTEM.md # 设计系统规范
-│ ├── ANIMATION_GUIDELINES.md # 动画设计规范
-│ └── COMPONENT_GUIDELINES.md # 组件设计规范
-├── development/ # 开发文档
-│ └── PAGE_PLAN.md # 页面开发计划
-├── architecture/ # 架构文档
-│ ├── TECH_STACK.md # 技术栈说明
-│ ├── CODE_STANDARDS.md # 代码规范
-│ └── DOCUMENT_RELATIONS.md # 文档关系图
-└── deployment/ # 部署文档
-└── GITHUB_PAGES.md # GitHub Pages部署指南
+`package.json` 仍留著 `next` / `react` / `framer-motion` 依賴與 `build`、`dev` 腳本 —— 它們對應的是
+已停用的那套，**跑了不會改變線上任何東西**。要改網站請改 `site/` 與其上游（見下）。
+
+> `docs/_legacy-README-nextjs.md` 是這份 README 的前一版，整份在描述 Next.js 架構。留檔備查，
+> 但它描述的不是現在的線上站。
+
+---
+
+## 建置與部署鏈
 
 ```
-
-## 设计规范文档
-- [设计系统规范](./docs/design-system/DESIGN_SYSTEM.md)
-- [动画设计规范](./docs/design-system/ANIMATION_GUIDELINES.md)
-- [组件设计规范](./docs/design-system/COMPONENT_GUIDELINES.md)
-
-## 开发指南
-1. 请先阅读 `docs/design-system/` 下的设计系统文档
-2. 参考 `docs/development/PAGE_PLAN.md` 进行页面开发
-3. 遵循 `docs/architecture/CODE_STANDARDS.md` 的代码规范
-4. 部署前查看 `docs/deployment/GITHUB_PAGES.md`
-
-## 相关文档
-- [设计系统规范](docs/design-system/DESIGN_SYSTEM.md)
-- [动画设计规范](docs/design-system/ANIMATION_GUIDELINES.md)
-- [组件设计规范](docs/design-system/COMPONENT_GUIDELINES.md)
-- [页面开发计划](docs/development/PAGE_PLAN.md)
-- [技术栈说明](docs/architecture/TECH_STACK.md)
-- [代码规范](docs/architecture/CODE_STANDARDS.md)
-- [GitHub Pages部署指南](docs/deployment/GITHUB_PAGES.md)
-
-## 技术栈
-- Next.js 14
-- React
-- TypeScript
-- Tailwind CSS
-- Framer Motion
-
-## 开发流程
-1. 遵循组件化开发原则
-2. 使用 Git Flow 工作流
-3. 编写单元测试
-4. 进行代码审查
-5. 持续集成/持续部署
-
-## 性能优化
-1. 使用 Next.js 的图片优化
-2. 实现组件懒加载
-3. 优化动画性能
-4. 减少不必要的重渲染
-
-## 可访问性
-1. 遵循 WCAG 2.1 标准
-2. 确保键盘可访问性
-3. 提供适当的 ARIA 属性
-4. 支持屏幕阅读器
+docs/design-system/source/claude-design-export/Crealize Corporate Site.html   ← 輸入 1：DOM 結構
+site/js/i18n/en.js（CRZ_I18N.work）                                           ← 輸入 2：產品清單（16 個）
+      │
+      ├─ scripts/gen-work-v3.mjs      → site/js/work-v3.js
+      ├─ scripts/build-site.mjs       → site/{index,ja/index,zh/index}.html + sitemap.xml + llms.txt
+      └─ scripts/prerender-work.mjs   → 把 16 張卡片預渲染進靜態 HTML（給不執行 JS 的 AI 爬蟲）
+      │
+      └─ scripts/deploy-gh.sh → gh-pages 分支 → crealize.llc
 ```
+
+**順序不可換**：`build-site` 每次整份重寫 `index.html`，所以 `prerender-work` 必須排在它之後。
+`deploy-gh.sh` 已把順序寫死，直接跑它即可。
+
+```bash
+npm run deploy:gh          # 建置 + 部署 + 部署後驗證（需 .env.local 內的 GH_TOKEN）
+bash scripts/rollback-gh.sh --dry-run   # 先看退回哪一版
+bash scripts/rollback-gh.sh             # 退回 gh-pages 前一個 commit
+```
+
+`deploy-gh.sh` 部署**後**會自己驗三件事，任一失敗即 exit 非 0：
+gh-pages 上除 `.nojekyll` 外無 dotfile 外洩 · 三語 HTTP 200 且線上 sha256 = 本次 build 產物 · 主視覺資產位元相同。
+
+**手工維護、builder 不產生的 8 個檔**：`site/css/{sections,site,tokens,work-modal}.css` 與
+`site/js/{atmosphere,hero,site,work-modal}.js`（同目錄的 `site/js/work-v3.js` 是 `gen-work-v3.mjs`
+的產物，不算手工檔）。8 個之中 7 個已與 design export 分岔，只有 `site/js/atmosphere.js` 仍與
+export 逐 byte 相同。**不要整包覆蓋 `site/js/`** —— 會毀掉手工的 hero / site / work-modal / i18n。
+
+---
+
+## 稽核
+
+```bash
+npm run check:kv         # 主視覺母版規格 + 三語 registry 對帳
+npm run check:work       # Selected Work v3 資料完整性
+npm run check:nav        # 三語 × 窄/寬視口導覽
+npm run check:prerender  # 不執行 JS 的原始 HTML 必須含完整 16 張卡片與正文
+npm run check:mobile     # 390×844 真手機模擬：modal 關得掉、動態看得到、reduce-motion 正確
+npm run check:design     # design token drift lint（色系家族 + 字體白名單）
+npm run check:perf       # 關鍵渲染路徑：Google Fonts 不得擋住首次繪製
+```
+
+`npm run check:all` 會把上面全部加上 `check:todo`、`check:rules` 一起跑。
+
+### 效能基線（2026-09-04，線上實測，Lighthouse 12.8.2 · mobile）
+
+**警告**：同一份改動，換一種節流方法結論會翻轉。兩種都列，不挑好看的。
+
+| 線上 crealize.llc | before | 字體 + logo | ＋ icons（現況）|
+|---|---|---|---|
+| **模擬節流**（預設）| 61 · FCP 6.4 s | 62 · FCP 6.2 s | **77 · FCP 4.1 s** |
+| **實際節流**（devtools）| 未測¹ | 98 · FCP 2.0 s | **98 · FCP 1.9 s** |
+| CLS | 0.003 | 0.002 | **0** |
+
+¹ before 的實際節流數字取不到 —— 第一次部署後線上已被覆蓋。
+
+**診斷分數**（線上，100 = 通過）：`render-blocking-resources` 0 → **100**、
+`unsized-images` 50 → **100**、`modern-image-formats` 0 → **100**、
+`uses-text-compression` 維持 100。`uses-responsive-images` 仍 50 —— 剩下的唯一一項是
+`assets/kv/puritylens.webp`，而 KV 尺寸被 `audit-kv.mjs` 的 `SPEC` 綁死（1600×1200 母版），
+要處理需引入 `srcset` 多尺寸變體，是獨立的一件事。
+
+**一個第一手觀察**：模擬節流對「非阻擋化」幾乎沒反應（字體那步只 +1 分，
+即使同一份報告說 render-blocking 已歸零），對「總位元數」才敏感（icon 省 31 KB 就 +15 分）。
+實際節流從第一步就是 98。Lighthouse 自己的 filmstrip（未經模型換算）顯示
+1943 ms 那格就出現內容，與實際節流相符。**哪個更接近真實使用者，現有證據判定不了** ——
+需要 CrUX field data。詳見 `docs/perf-evidence/2026-09-04/README.md`。
+
+**改了三件事**：
+1. **字體** —— Google Fonts 一條 `rel="stylesheet"` 綁五個家族，其中
+   **Noto Sans JP 一家就是 344 KB CSS / 372 個 `@font-face`**（其餘四家合計 15 KB），
+   連英文頁都得等它 372 條 unicode-range 解析完。拆成兩條、都以 `media="print"` +
+   `onload` 移出關鍵路徑，`<noscript>` 保留無 JS fallback。字體最終仍全部載入
+   （改前改後 `document.fonts` 都是 405 faces / 5 個家族 / 各元素 computed
+   font-family 逐項相同）。
+2. **Logo** —— 兩處 `<img>` 指向 480×383 的 41 KB PNG 卻只畫成 21 / 26 px，
+   換成 120×96 的 WebP（1,940 B，-95.3%）並補上 `width`/`height`。
+   `favicon` / `apple-touch-icon` / JSON-LD 仍用 PNG（Safari 的 apple-touch-icon 不吃 WebP）。
+3. **產品 icon** —— `.stage__icon` 的顯示尺寸寫死在 `sections.css:643` 是 `46px`，
+   但檔案是 256²（5.56x 密度）。`build-kv-assets.mjs` 的 `ICON_PX` 改為 **144**
+   （3.13x，完整覆蓋 3x retina），16 張合計 66,870 → 35,752 B（**-46%**）。
+   原始 PNG 在 `site-assets/icons/` 未動；KV 16 張 sha256 逐一比對位元未變。
+
+⚠️ 本機 `python -m http.server` 沒有 gzip，它的 Lighthouse 會報「Enable text
+compression 910 ms」。**那是假象** —— 線上實測三個資源都回 `content-encoding: gzip`。
+同理 `uses-long-cache-ttl` 的 `max-age=600` 是 GitHub Pages 固定值，改不了。
+
+`check:perf` 與 `deploy-gh.sh` 都會擋住這三件事回歸，每一條都做過真實路徑的反向測試
+（把修正還原 → `exit 2`；改回來 → `exit 0`）。
+
+⚠️ **`check:rules` 是假紅燈，不要照著它修**。它檢查的是已停用 Next.js 架構的目錄結構
+（`scripts/check-rules.js` 要求 `src/types` 存在）。它唯一的紅燈與線上站無關 ——
+`src/` 底下的東西沒有任何一行會上線。同理 `scripts/dev-guide.js` 也只認得那套舊架構。
+
+---
+
+## 設計系統
+
+真相源：`docs/design-system/tokens/crealize.tokens.json`（DTCG，自 `tokens.css` 機械萃取）。
+Claude Design canvas：https://claude.ai/design/p/dbbc5234-c185-49b2-97b2-09bf8b59aaf0
+
+送任何 Claude Design brief 前先把契約原文嵌進 brief 開頭並明令延用；改完視覺檔跑
+`npm run check:design` 與 `npm run check:kv`。細節見 `CLAUDE.md`。
+
+---
+
+## 文檔
+
+| 路徑 | 內容 |
+|---|---|
+| `CLAUDE.md` | **動手前必讀** —— 架構真相、五個踩坑、DesignSync 取件法、設計系統契約 |
+| `docs/architecture/` | 技術棧、程式碼規範、文檔關係 |
+| `docs/design-system/` | 設計系統（210 檔，含 Claude Design export 原始碼） |
+| `docs/deployment/` | GitHub Pages 部署說明 |
+| `docs/development/` | 開發計畫 |
+| `docs/handoff/`、`handoffs/` | 跨 session / 跨 agent 交接包 |
+| `docs/website-content.md` | 站內文案 |
+| `docs/CHANGELOG.md` | 變更紀錄 |
+
+---
+
+## 分支
+
+| 分支 | 狀態 |
+|---|---|
+| `main` | 開發真相源 |
+| `gh-pages` | 部署產物，由 `deploy-gh.sh` 寫入，**不要手改** |
+| `public-main` | 與 `main` 完全一致（雙向 0 commit 差異），無需合併 |
+| `fix/security-and-deploy-config` | **死分支** —— 2026-04 的 Next.js 時代產物，落後 `main` 83 個 commit，7 個 commit 改的 23 個檔全在已停用的 `src/`/`pages/`/`public/`，對線上站零影響。它帶的 `public/llms.txt` 是手工舊版，已被 builder 生成的 `site/llms.txt`（16 產品）取代。**合併它沒有價值，只會攪亂死碼路徑。** 其對應的 PR #1 早在 2026-04-14 已 merge。 |

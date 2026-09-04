@@ -37,7 +37,12 @@ const SLUGS = [
 ];
 
 const KV_W = 1600, KV_H = 1200;      // 4:3 母版
-const ICON_PX = 256;
+/* 144² 而非 256²：卡片上的 .stage__icon 是固定 46px（sections.css，modal 無覆寫），
+   256² 等於 5.56x 密度。144² 給 3.13x —— 完整覆蓋 3x retina（iPhone 的上限），
+   視覺零損失，單檔約 8.9KB → 3.7KB。原始 PNG 在 site-assets/icons/ 不動，
+   要調回去只需改這個數字重跑。（2026-09-04，線上 Lighthouse
+   uses-responsive-images 點名 icons/puritylens.webp 浪費 90%） */
+const ICON_PX = 144;
 const KV_MAX_KB = 200;               // audit-kv.mjs 的上限
 
 try { execFileSync('cwebp', ['-version'], { stdio: 'ignore' }); }

@@ -11,6 +11,10 @@
   const WORK = I18N.work;
   const METHOD = I18N.method;
   const UI = I18N.ui;
+  /* a11y (2026-09-04)：i18n 的 jp 欄位在 en 頁是日文、在 zh 頁是中文（zh.js 給的是譯名）。
+     不能依頁面語言硬標 lang="ja"，改用假名偵測：有平假名/片假名就一定是日文；
+     純漢字字串分不出日/中，不標（寧可不宣稱，也不錯標）。回傳可直接塞進模板的屬性字串。 */
+  const jaLang = (s) => (/[぀-ヿ]/.test(String(s || '')) ? ' lang="ja"' : '');
 
   // ---------- WORK : 產品卡 ----------
   // 2026-08-09：產品卡改由 js/work-v3.js 渲染進 #work-cards（Claude Design 的 Work v3
@@ -37,7 +41,7 @@
           data-haystack="${(w.name + ' ' + w.jp + ' ' + w.tag + ' ' + w.stack.join(' ')).toLowerCase()}">
         <span class="index-row__no">${String(i + 1).padStart(3, '0')}</span>
         <span class="index-row__name">${w.name}</span>
-        <span class="index-row__jp jp-accent">${w.jp}</span>
+        <span class="index-row__jp jp-accent"${jaLang(w.jp)}>${w.jp}</span>
         <span class="index-row__cat">${w.tag}</span>
         ${st}
         <span class="index-row__stack">${w.stack.map(token).join(' · ')}</span>
@@ -115,7 +119,7 @@
       <div class="method-step reveal">
         <i class="method-step__bar" aria-hidden="true"></i>
         <span class="method-step__idx">0${i + 1}${i < 3 ? ' →' : ''}</span>
-        <h3 class="method-step__name">${m.n}${m.jp ? ` <span class="method-step__jp jp-accent">${m.jp}</span>` : ''}</h3>
+        <h3 class="method-step__name">${m.n}${m.jp ? ` <span class="method-step__jp jp-accent"${jaLang(m.jp)}>${m.jp}</span>` : ''}</h3>
         <p class="method-step__desc">${m.d}</p>
       </div>
     `).join('');
@@ -198,7 +202,9 @@
     btn.className = 'nav__menu';
     btn.setAttribute('aria-expanded', 'false');
     btn.setAttribute('aria-controls', 'nav-panel');
-    btn.setAttribute('aria-label', navLinksEl.getAttribute('aria-label') || 'Menu');
+    /* a11y (2026-09-04)：原本抄 nav landmark 的 aria-label="Primary"，無障礙樹裡變成
+       navigation "Primary" + button "Primary" 同名，沒說出這顆按鈕做什麼。字串走 i18n。 */
+    btn.setAttribute('aria-label', (UI && UI.menuLabel) || navLinksEl.getAttribute('aria-label') || 'Menu');
     btn.innerHTML = '<span aria-hidden="true"></span><span aria-hidden="true"></span>';
     navRight.insertBefore(btn, navRight.firstChild);
 
@@ -265,6 +271,12 @@
     const note = document.getElementById('f-note');
     const submit = document.getElementById('f-submit');
     const defaultNote = note ? note.textContent : '';
+    /* a11y (2026-09-04)：.is-error 只是視覺；螢幕閱讀器要靠 aria-invalid 才知道哪一欄錯，
+       aria-describedby 讓聚焦到欄位時朗讀 #f-note 的說明（WCAG 3.3.1）。 */
+    form.querySelectorAll('[required]').forEach((input) => {
+      input.setAttribute('aria-describedby', 'f-note');
+      input.setAttribute('aria-invalid', 'false');
+    });
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       let valid = true;
@@ -273,6 +285,7 @@
         const bad = !input.value.trim() ||
           (input.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value));
         field.classList.toggle('is-error', bad);
+        input.setAttribute('aria-invalid', bad ? 'true' : 'false');
         if (bad) valid = false;
       });
       if (!valid) {

@@ -33,10 +33,22 @@ echo "▶ Prerendering Selected Work cards into static HTML (for AI crawlers)...
 node scripts/prerender-work.mjs
 
 echo "▶ Sanity checks..."
-for f in site/index.html site/ja/index.html site/zh/index.html site/404.html site/CNAME site/robots.txt site/sitemap.xml site/llms.txt site/assets/og.png; do
+for f in site/index.html site/ja/index.html site/zh/index.html site/404.html site/CNAME site/robots.txt site/sitemap.xml site/llms.txt site/assets/og.png site/assets/crealize-mark.webp site/assets/crealize-mark.png; do
   [ -f "$f" ] || { echo "❌ missing $f" >&2; exit 1; }
 done
 grep -q "application/ld+json" site/index.html || { echo "❌ JSON-LD missing" >&2; exit 1; }
+
+# 關鍵渲染路徑：Google Fonts 不得擋住首次繪製。放這裡（build 之後、部署之前）
+# 是因為 head 由 build-site.mjs 的字串模板產生 —— 任何一次重新 export 或
+# 「把兩條 link 合回一條」都會把 5 秒 FCP 加回去，而其他 gate 測的是執行 JS
+# 之後的 DOM，那時字體早載完了，一道都不會紅。set -e 會讓它的 exit 2 中止部署。
+echo "▶ Critical-path audit (Google Fonts 非阻擋)..."
+node scripts/audit-critical-path.mjs
+
+# 無障礙：skip link / lang="ja" / aria-current / 語言選單 visibility / aria-invalid / 選單按鈕名稱。
+# 與 critical-path 同理 —— head 與 nav 都是 builder 字串模板，re-export 會靜靜還原。
+echo "▶ A11y audit（skip link · lang=ja · aria-current · langmenu visibility）..."
+node scripts/audit-a11y.mjs
 
 echo "▶ Key-visual audit (母版規格 + 三語 registry 對帳)..."
 node scripts/audit-kv.mjs

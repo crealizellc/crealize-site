@@ -29,6 +29,10 @@ const SRC = join(ROOT, 'docs/design-system/source/claude-design-export/Crealize 
 const OUT = join(ROOT, 'site');
 const ORIGIN = 'https://crealize.llc';
 
+// skip link 文字（builder 注入，不在 export 也不在 i18n/*.js —— 那兩處都在執行期才可用，
+// 而 skip link 必須是原始 HTML 就存在的第一個可聚焦元素）
+const SKIP_LABEL = { en: 'Skip to content', ja: 'メインコンテンツへ', zh: '跳至主要內容' };
+
 const LOCALES = {
   en: {
     dir: '', base: '', htmlLang: 'en', ogLocale: 'en_US',
@@ -251,6 +255,12 @@ function jsonLd(loc, key) {
   return JSON.stringify({ '@context': 'https://schema.org', '@graph': [org, site, ...apps] });
 }
 
+// Google Fonts 拆成兩條：拉丁字體（15KB CSS）與 Noto Sans JP（344KB CSS / 372 faces）。
+// 拆開的理由是它們的體積差 23 倍 —— 綁在同一條 link 時，日文那 372 條 unicode-range
+// 會連帶拖住拉丁字體的可用時間。兩條都以 media=print + onload 移出關鍵路徑。
+const FONT_LATIN = "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Bricolage+Grotesque:wght@600;700&family=Newsreader:ital,opsz,wght@1,18,400;1,18,500;0,18,400&family=Space+Mono:wght@400;700&display=swap";
+const FONT_JP = "https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap";
+
 function headBlock(loc, key) {
   const path = loc.dir ? `/${loc.dir}/` : '/';
   const b = loc.base;
@@ -280,7 +290,15 @@ function headBlock(loc, key) {
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Bricolage+Grotesque:wght@600;700&family=Newsreader:ital,opsz,wght@1,18,400;1,18,500;0,18,400&family=Noto+Sans+JP:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<!-- 字體分兩條、皆非阻擋（2026-09-04）。改前：單一 rel=stylesheet 擋住渲染，
+     Lighthouse mobile FCP 6.4s / 分數 61，render-blocking 佔 5,110ms。
+     Noto Sans JP 一家就是 344KB CSS / 372 個 @font-face（其餘四家合計 15KB），
+     瀏覽器要把 372 條 unicode-range 全解析完才畫得出第一個字。
+     media=print + onload 讓它不進關鍵路徑；display=swap 本來就會先用 fallback，
+     所以視覺行為不變，只是首屏不再等它。noscript 為無 JS 環境保留原本的阻擋式載入。 -->
+<link rel="stylesheet" media="print" onload="this.media='all';this.onload=null" href="${FONT_LATIN}" />
+<link rel="stylesheet" media="print" onload="this.media='all';this.onload=null" href="${FONT_JP}" />
+<noscript><link rel="stylesheet" href="${FONT_LATIN}" /><link rel="stylesheet" href="${FONT_JP}" /></noscript>
 
 <link rel="icon" type="image/png" href="${b}assets/crealize-mark.png" />
 <link rel="apple-touch-icon" href="${b}assets/crealize-mark.png" />
@@ -302,6 +320,13 @@ for (const [key, loc] of Object.entries(LOCALES)) {
   // 2. html lang attr (drop canvas-only data-jp)
   html = html.replace(/<html lang="en" data-jp="on">/, `<html lang="${loc.htmlLang}" data-jp="on">`);
 
+  // 2.5 a11y（2026-09-04）：skip link + <main> 落點
+  //     export HTML 的 <body> 底下沒有 skip link，首屏 59 個可聚焦元素要全部 Tab 過才到內容
+  //     （WCAG 2.4.1）。在這裡注入而不是改 export，re-export 才不會把它弄丟。
+  //     <main> 加 tabindex="-1"：Safari 對純 id 錨點不會移動焦點，-1 讓 focus() 在各瀏覽器都成立。
+  html = html.replace('<body>', `<body>\n<a class="skip-link" href="#main">${SKIP_LABEL[key]}</a>`);
+  html = html.replace('<main>', '<main id="main" tabindex="-1">');
+
   // 3. strip design-canvas-only pieces (tweaks mount div + React island), keep core scripts
   html = html.replace(/<!-- Tweaks mount -->\s*<div id="tweaks-root"><\/div>\s*/, '');
   html = html.replace(/<!-- React island : Tweaks only -->[\s\S]*?(?=<\/body>)/, '');
@@ -310,9 +335,9 @@ for (const [key, loc] of Object.entries(LOCALES)) {
   html = html.replace(
     /<div class="nav__langmenu" role="menu">[\s\S]*?<\/div>/,
     `<div class="nav__langmenu" role="menu">
-        <a role="menuitem" class="${key === 'en' ? 'is-active' : ''}" href="${loc.base || './'}" hreflang="en" lang="en">English</a>
-        <a role="menuitem" class="${key === 'ja' ? 'is-active' : ''}" href="${loc.base}ja/" hreflang="ja" lang="ja">日本語</a>
-        <a role="menuitem" class="${key === 'zh' ? 'is-active' : ''}" href="${loc.base}zh/" hreflang="zh-Hant" lang="zh-Hant">繁體中文</a>
+        <a role="menuitem" class="${key === 'en' ? 'is-active' : ''}"${key === 'en' ? ' aria-current="true"' : ''} href="${loc.base || './'}" hreflang="en" lang="en">English</a>
+        <a role="menuitem" class="${key === 'ja' ? 'is-active' : ''}"${key === 'ja' ? ' aria-current="true"' : ''} href="${loc.base}ja/" hreflang="ja" lang="ja">日本語</a>
+        <a role="menuitem" class="${key === 'zh' ? 'is-active' : ''}"${key === 'zh' ? ' aria-current="true"' : ''} href="${loc.base}zh/" hreflang="zh-Hant" lang="zh-Hant">繁體中文</a>
       </div>`
   );
 
@@ -327,7 +352,24 @@ for (const [key, loc] of Object.entries(LOCALES)) {
 <script src="${loc.base}js/work-modal.js" defer></script>`
   );
 
-  // 6. nav logo asset path
+  // 6. nav / footer logo：改指 WebP 並補上內在尺寸
+  //    原本兩處 <img> 都指向 480×383 的 PNG（41,366 B），但 CSS 只把它畫成
+  //    21px（nav）與 26px（footer）高 —— 面積過剩約 200 倍，Lighthouse 線上實測
+  //    uses-responsive-images 可省 105 KiB、modern-image-formats 可省 34 KiB。
+  //    改成 120×96 的 WebP（1,940 B，-95.3%），對 26px 顯示仍有 3x retina 餘裕。
+  //    width/height 屬性給的是內在比例，CSS 的 height + width:auto 照舊覆蓋外觀，
+  //    但瀏覽器因此能在圖片抵達前預留正確空間（消掉 unsized-images 的 CLS 風險）。
+  //    favicon / apple-touch-icon / JSON-LD 的 logo 仍指 PNG —— Safari 的
+  //    apple-touch-icon 不吃 WebP，結構化資料也以 PNG 為準，兩者刻意不動。
+  html = html.replaceAll(
+    '<img class="nav__logo" src="assets/crealize-mark.png"',
+    `<img class="nav__logo" width="120" height="96" src="${loc.base}assets/crealize-mark.webp"`
+  );
+  html = html.replaceAll(
+    '<img class="foot__logo" src="assets/crealize-mark.png"',
+    `<img class="foot__logo" width="120" height="96" src="${loc.base}assets/crealize-mark.webp"`
+  );
+  // 其餘任何仍指向 PNG 的 <img>（未來新增的）至少要有正確的語系前綴
   html = html.replaceAll('src="assets/crealize-mark.png"', `src="${loc.base}assets/crealize-mark.png"`);
 
   // 6.5 common rewrites (all locales): products count + engineering principles strip

@@ -1,0 +1,305 @@
+# check:all @ 2003500a917345c85610be67efce3fa7beda695c
+# 2026-09-03T18:19:31Z  node v25.8.2
+
+
+> crealize-site@0.1.0 check:all
+> npm run check:todo && npm run check:rules && npm run check:kv && npm run check:work && npm run check:nav && npm run check:prerender && npm run check:mobile && npm run check:design && npm run check:perf
+
+
+> crealize-site@0.1.0 check:todo
+> node scripts/check-todo.js
+
+TODO.md 自动检查与勾选完成！
+
+> crealize-site@0.1.0 check:rules
+> node scripts/check-rules.js
+
+--- 目录结构检查 ---
+[√] 目录存在: src
+[√] 目录存在: src/app
+[√] 目录存在: src/components
+[√] 目录存在: src/lib
+[√] 目录存在: src/styles
+[x] 缺少目录: src/types
+[√] 目录存在: docs
+[√] 目录存在: docs/development
+[√] 目录存在: docs/architecture
+[√] 目录存在: docs/design-system
+--- 组件命名规范检查 ---
+存在不符合规范的项目，请根据 .cursorrules 修正！
+
+> crealize-site@0.1.0 check:kv
+> node scripts/audit-kv.mjs && node scripts/audit-kv-registry.mjs && node scripts/audit-kv-quality.mjs
+
+✅ audit-kv — 主視覺全數符合母版規格
+✅ audit-kv-registry — 三語 registry 對稱，素材齊備
+   ✓ AC-0 來源底圖全為橫向生成圖
+   ✓ AC-1 dramaflow    亮度標準差 30.1（四角落差 84.7）
+   ✓ AC-2 dramaflow    平均亮度 46.5
+   ✓ AC-3 dramaflow    主色 224° 距品牌色系 1°
+   ✓ AC-4 dramaflow    左下細節 11.1 / 全圖 22.3
+   ✓ AC-1 fudeto       亮度標準差 41.4（四角落差 48）
+   ✓ AC-2 fudeto       平均亮度 222.1
+   ✓ AC-3 fudeto       主色 40° 距品牌色系 5°
+   ✓ AC-4 fudeto       左下細節 22.7 / 全圖 37.7
+   ✓ AC-1 idokuta      亮度標準差 45.6（四角落差 122）
+   ✓ AC-2 idokuta      平均亮度 168.2
+   ✓ AC-3 idokuta      主色 184° 距品牌色系 6°
+   ✓ AC-4 idokuta      左下細節 18.4 / 全圖 25.8
+   ✓ AC-1 kichitto     亮度標準差 21.7（四角落差 75）
+   ✓ AC-2 kichitto     平均亮度 219.9
+   ✓ AC-3 kichitto     主色 24° 距品牌色系 5°
+   ✓ AC-4 kichitto     左下細節 18.5 / 全圖 16.5
+   ✓ AC-1 kizuki       亮度標準差 65.9（四角落差 189）
+   ✓ AC-2 kizuki       平均亮度 177.8
+   ✓ AC-3 kizuki       主色 32° 距品牌色系 28°
+   ✓ AC-4 kizuki       左下細節 11.3 / 全圖 27.6
+   ✓ AC-1 mairi        亮度標準差 24（四角落差 110.7）
+   ✓ AC-2 mairi        平均亮度 208.8
+   ✓ AC-3 mairi        主色 160° 距品牌色系 8°
+   ✓ AC-4 mairi        左下細節 16.4 / 全圖 20.6
+   ✓ AC-1 meguru       亮度標準差 67.6（四角落差 88.3）
+   ✓ AC-2 meguru       平均亮度 162.1
+   ✓ AC-3 meguru       主色 344° 距品牌色系 7°
+   ✓ AC-4 meguru       左下細節 23.2 / 全圖 39.5
+   ✓ AC-1 meishitto    亮度標準差 36.4（四角落差 110.3）
+   ✓ AC-2 meishitto    平均亮度 148.4
+   ✓ AC-3 meishitto    主色 240° 距品牌色系 0°
+   ✓ AC-4 meishitto    左下細節 13.6 / 全圖 25.3
+   ✓ AC-1 moonpacket   亮度標準差 32.6（四角落差 11）
+   ✓ AC-2 moonpacket   平均亮度 37.1
+   ✓ AC-3 moonpacket   主色 224° 距品牌色系 7°
+   ✓ AC-4 moonpacket   左下細節 26.3 / 全圖 35
+   ✓ AC-1 puritylens   亮度標準差 25.9（四角落差 119.7）
+   ✓ AC-2 puritylens   平均亮度 195.7
+   ✓ AC-3 puritylens   主色 208° 距品牌色系 2°
+   ✓ AC-4 puritylens   左下細節 23 / 全圖 24.3
+   ✓ AC-1 qiflux       亮度標準差 36.7（四角落差 158）
+   ✓ AC-2 qiflux       平均亮度 94.1
+   ✓ AC-3 qiflux       主色 280° 距品牌色系 0°
+   ✓ AC-4 qiflux       左下細節 9.7 / 全圖 20.1
+   ✓ AC-1 rythix2048   亮度標準差 16.4（四角落差 56）
+   ✓ AC-2 rythix2048   平均亮度 206.6
+   ✓ AC-3 rythix2048   主色 272° 距品牌色系 32°
+   ✓ AC-4 rythix2048   左下細節 10 / 全圖 16.4
+   ✓ AC-1 tendo        亮度標準差 15.8（四角落差 2.7）
+   ✓ AC-2 tendo        平均亮度 22.1
+   ✓ AC-3 tendo        主色 32° 距品牌色系 1°
+   ✓ AC-4 tendo        左下細節 4 / 全圖 12.8
+   ✓ AC-1 todoke       亮度標準差 41.9（四角落差 44）
+   ✓ AC-2 todoke       平均亮度 69.4
+   ✓ AC-3 todoke       主色 224° 距品牌色系 1°
+   ✓ AC-4 todoke       左下細節 17.8 / 全圖 37.2
+   ✓ AC-1 xunni        亮度標準差 18.5（四角落差 2.7）
+   ✓ AC-2 xunni        平均亮度 14.6
+   ✓ AC-3 xunni        主色 32° 距品牌色系 6°
+   ✓ AC-4 xunni        左下細節 14.6 / 全圖 18.4
+   ✓ AC-1 ymy          亮度標準差 52.1（四角落差 14.3）
+   ✓ AC-2 ymy          平均亮度 61.4
+   ✓ AC-3 ymy          主色 8° 距品牌色系 7°
+   ✓ AC-4 ymy          左下細節 23.1 / 全圖 25.9
+
+✅ audit-kv-quality — 16 張底圖全數通過（有層次 · 曝光 · 品牌色系 · 左下留白）
+
+> crealize-site@0.1.0 check:work
+> node scripts/audit-work-v3.mjs
+
+▶ AC-1 產品齊全 + data-work-index 唯一
+   ✓ AC-1 en: 16 張，index 0..15 皆唯一
+   ✓ AC-1 ja: 16 張，index 0..15 皆唯一
+   ✓ AC-1 zh: 16 張，index 0..15 皆唯一
+▶ AC-2 三語真的不同
+   ✓ AC-2 PurityLens
+   ✓ AC-2 Fudeto
+   ✓ AC-2 Kichitto
+   ✓ AC-2 QiFlux
+   ✓ AC-2 Meishitto
+   ✓ AC-2 Rythix 2048
+   ✓ AC-2 Tendo
+   ✓ AC-2 XunNi
+   ✓ AC-2 moonpacket
+   ✓ AC-2 iDokuta
+   ✓ AC-2 Mairi
+   ✓ AC-2 Meguru
+   ✓ AC-2 YMY
+   ✓ AC-2 Kizuki
+   ✓ AC-2 dramaflow
+   ✓ AC-2 Todoke
+   ✓ AC-2 lede 三語各異
+   ✓ AC-2 en: lede 產品數 16 與卡片數一致
+   ✓ AC-2 ja: lede 產品數 16 與卡片數一致
+   ✓ AC-2 zh: lede 產品數 16 與卡片數一致
+▶ AC-2b 點開要比卡片講得多
+   ✓ AC-2b en: 16 張卡點開後內容量皆 ≥1.5×（最低 3.8×）
+   ✓ AC-2b ja: 16 張卡點開後內容量皆 ≥1.5×（最低 2.5×）
+   ✓ AC-2b zh: 16 張卡點開後內容量皆 ≥1.5×（最低 2.1×）
+▶ AC-3 圖片實際存在
+   ✓ AC-3 en: 16 張圖皆存在且為 webp
+   ✓ AC-3 ja: 16 張圖皆存在且為 webp
+   ✓ AC-3 zh: 16 張圖皆存在且為 webp
+   ✓ AC-3 16 張卡都有官方 icon
+   ✓ AC-3 icon 路徑全部解析得到檔案
+   ✓ AC-3 puritylens.webp 1600×1200 ratio=1.333
+   ✓ AC-3 fudeto.webp 1600×1200 ratio=1.333
+   ✓ AC-3 kichitto.webp 1600×1200 ratio=1.333
+   ✓ AC-3 qiflux.webp 1600×1200 ratio=1.333
+   ✓ AC-3 meishitto.webp 1600×1200 ratio=1.333
+   ✓ AC-3 rythix2048.webp 1600×1200 ratio=1.333
+   ✓ AC-3 tendo.webp 1600×1200 ratio=1.333
+   ✓ AC-3 xunni.webp 1600×1200 ratio=1.333
+   ✓ AC-3 moonpacket.webp 1600×1200 ratio=1.333
+   ✓ AC-3 idokuta.webp 1600×1200 ratio=1.333
+   ✓ AC-3 mairi.webp 1600×1200 ratio=1.333
+   ✓ AC-3 meguru.webp 1600×1200 ratio=1.333
+   ✓ AC-3 ymy.webp 1600×1200 ratio=1.333
+   ✓ AC-3 kizuki.webp 1600×1200 ratio=1.333
+   ✓ AC-3 dramaflow.webp 1600×1200 ratio=1.333
+   ✓ AC-3 todoke.webp 1600×1200 ratio=1.333
+▶ AC-4 動畫存在且尊重 reduce-motion
+   ✓ AC-4 reduce-motion 區塊內含 animation:none（區塊 455 字元）
+   ✓ AC-4 40 條 .is-live 動畫規則
+   ✓ AC-4 全部動畫都綁到 DOM 內實際存在的 class
+   ✓ AC-4 全部 animation 都指向已宣告的 @keyframes
+   ✓ AC-4 16 張卡各有自己的動畫
+▶ AC-5 registry 對帳：出貨狀態必須乾淨，且缺項時要大聲
+   ✓ AC-5 en: 出貨狀態 console 無錯誤
+   ✓ AC-5 ja: 出貨狀態 console 無錯誤
+   ✓ AC-5 zh: 出貨狀態 console 無錯誤
+   ✓ AC-5 缺一個產品時有大聲失敗（卡片數 16）
+▶ AC-6 四個寬度無水平溢出
+   ✓ AC-6 1440px: scrollWidth=1440 = innerWidth
+   ✓ AC-6 1100px: scrollWidth=1100 = innerWidth
+   ✓ AC-6 640px: scrollWidth=640 = innerWidth
+   ✓ AC-6 390px: scrollWidth=390 = innerWidth
+▶ AC-7 設計契約未漂移
+   ✓ AC-7 WORK v3 區塊的色彩全部是 var() 或契約 rgba
+   ✓ AC-7 repository-owned design-token validator 無漂移
+▶ AC-8 驗收自己不得留下殘留物
+   ✓ AC-8 site/ 下無驗收暫存物
+   ✓ AC-8 site/js/i18n/en.js 已完整還原
+▶ AC-9 modal 打開要有循環動態演示，且尊重 reduce-motion
+   ✓ AC-9 modal 打開後 .stage.is-looping 存在（不是空的 shot）
+   ✓ AC-9 底圖真的載入了（不是塌成黑塊）
+   ✓ AC-9 shot 367×568px（沒有塌成 0）
+   ✓ AC-9 6 個動畫元素在 no-preference 下 iteration=infinite（真的在循環）
+   ✓ AC-9 reduce-motion 下 modal 內 0 個元素在動（正確關閉）
+
+✅ Selected Work v3 — 全部 AC 通過
+
+> crealize-site@0.1.0 check:nav
+> node scripts/audit-nav.mjs
+
+▶ 窄視口（390px）導覽必須可用
+   ✓ en: 有可見的選單按鈕
+   ✓ en: 初始面板真正隱藏，不會把 01–04 常駐在頁面上
+   ✓ en: 地球選單可開啟、再次關閉，並提供三個語系入口
+   ✓ en: 按鈕 44×44 ≥ 44px 觸控下限
+   ✓ en: 點擊後面板開啟且 aria-expanded=true
+   ✓ en: 面板覆蓋全部 4 個區塊 ["01 Vision","02 Work","03 Method","04 Join"]
+   ✓ en: 面板連結全部 ≥ 44px 高
+   ✓ en: 點連結後面板自動收起且不佔版面
+   ✓ en: 無水平溢出（390）
+   ✓ ja: 有可見的選單按鈕
+   ✓ ja: 初始面板真正隱藏，不會把 01–04 常駐在頁面上
+   ✓ ja: 地球選單可開啟、再次關閉，並提供三個語系入口
+   ✓ ja: 按鈕 44×44 ≥ 44px 觸控下限
+   ✓ ja: 點擊後面板開啟且 aria-expanded=true
+   ✓ ja: 面板覆蓋全部 4 個區塊 ["01 理念","02 制作実績","03 進め方","04 採用"]
+   ✓ ja: 面板連結全部 ≥ 44px 高
+   ✓ ja: 點連結後面板自動收起且不佔版面
+   ✓ ja: 無水平溢出（390）
+   ✓ zh: 有可見的選單按鈕
+   ✓ zh: 初始面板真正隱藏，不會把 01–04 常駐在頁面上
+   ✓ zh: 地球選單可開啟、再次關閉，並提供三個語系入口
+   ✓ zh: 按鈕 44×44 ≥ 44px 觸控下限
+   ✓ zh: 點擊後面板開啟且 aria-expanded=true
+   ✓ zh: 面板覆蓋全部 4 個區塊 ["01 理念","02 作品","03 方法","04 加入"]
+   ✓ zh: 面板連結全部 ≥ 44px 高
+   ✓ zh: 點連結後面板自動收起且不佔版面
+   ✓ zh: 無水平溢出（390）
+▶ 寬視口（900px）不得把放得下的導覽收進選單
+   ✓ en: 900px 維持 inline 導覽（4 個連結）
+   ✓ en: 900px 無水平溢出
+   ✓ ja: 900px 維持 inline 導覽（4 個連結）
+   ✓ ja: 900px 無水平溢出
+   ✓ zh: 900px 維持 inline 導覽（4 個連結）
+   ✓ zh: 900px 無水平溢出
+
+✅ audit-nav — 三語 × 窄/寬視口導覽皆正確
+
+> crealize-site@0.1.0 check:prerender
+> node scripts/audit-prerender.mjs
+
+▶ 不執行 JS 的原始 HTML 必須含完整 Selected Work 內容
+   ✓ en: 16 張卡片在原始 HTML 裡
+   ✓ en: 16 段完整正文在原始 HTML 裡
+   ✓ en: 純文字擷取讀得到完整正文（非 JSON-LD 摘要）
+   ✓ ja: 16 張卡片在原始 HTML 裡
+   ✓ ja: 16 段完整正文在原始 HTML 裡
+   ✓ ja: 純文字擷取讀得到完整正文（非 JSON-LD 摘要）
+   ✓ zh: 16 張卡片在原始 HTML 裡
+   ✓ zh: 16 段完整正文在原始 HTML 裡
+   ✓ zh: 純文字擷取讀得到完整正文（非 JSON-LD 摘要）
+
+✅ audit-prerender — 三語 Selected Work 對不執行 JS 的爬蟲皆可見
+
+> crealize-site@0.1.0 check:mobile
+> node scripts/audit-mobile-modal.mjs
+
+▶ 真手機模擬（390×844, mobile=true）—— modal 必須關得掉、動態必須看得到
+   ✓ en: 關閉鈕在畫面內且點得到（315,13）
+   ✓ en: 關閉鈕 63×44 ≥ 44px
+   ✓ en: 卡片 844px 不超過視窗 844px
+   ✓ en: 正文在內部捲動（overflow-y:auto）
+   ✓ en: 點關閉鈕真的關得掉
+   ✓ en: 畫面中央 1 張卡片都在循環
+   ✓ en: 6 個 motif 元素 iteration=infinite（手機看得到動態）
+   ✓ ja: 關閉鈕在畫面內且點得到（315,13）
+   ✓ ja: 關閉鈕 63×44 ≥ 44px
+   ✓ ja: 卡片 844px 不超過視窗 844px
+   ✓ ja: 正文在內部捲動（overflow-y:auto）
+   ✓ ja: 點關閉鈕真的關得掉
+   ✓ ja: 畫面中央 1 張卡片都在循環
+   ✓ ja: 6 個 motif 元素 iteration=infinite（手機看得到動態）
+   ✓ zh: 關閉鈕在畫面內且點得到（315,13）
+   ✓ zh: 關閉鈕 63×44 ≥ 44px
+   ✓ zh: 卡片 844px 不超過視窗 844px
+   ✓ zh: 正文在內部捲動（overflow-y:auto）
+   ✓ zh: 點關閉鈕真的關得掉
+   ✓ zh: 畫面中央 1 張卡片都在循環
+   ✓ zh: 6 個 motif 元素 iteration=infinite（手機看得到動態）
+   ✓ reduce-motion: 卡片 0 個元素在動（循環沒有蓋掉無障礙設定）
+
+✅ audit-mobile-modal — 三語窄視口 modal 可關閉、動態可見、reduce-motion 正確
+
+> crealize-site@0.1.0 check:design
+> node scripts/audit-design-tokens.mjs
+
+✅ audit-design-tokens — 47 contract tokens match shipped CSS; consumer palette/fonts are bounded
+
+> crealize-site@0.1.0 check:perf
+> node scripts/audit-critical-path.mjs
+
+▶ Google Fonts 不得進入關鍵渲染路徑（三語頁）
+   ✓ en: 2 條 Google Fonts link 皆非阻擋（media=print + onload）
+   ✓ en: Noto Sans JP 與拉丁字體分屬不同 link
+   ✓ en: <noscript> 保留了無 JS 環境的字體 fallback
+   ✓ en: preconnect 到 googleapis + gstatic(crossorigin) 都在
+   ✓ ja: 2 條 Google Fonts link 皆非阻擋（media=print + onload）
+   ✓ ja: Noto Sans JP 與拉丁字體分屬不同 link
+   ✓ ja: <noscript> 保留了無 JS 環境的字體 fallback
+   ✓ ja: preconnect 到 googleapis + gstatic(crossorigin) 都在
+   ✓ zh: 2 條 Google Fonts link 皆非阻擋（media=print + onload）
+   ✓ zh: Noto Sans JP 與拉丁字體分屬不同 link
+   ✓ zh: <noscript> 保留了無 JS 環境的字體 fallback
+   ✓ zh: preconnect 到 googleapis + gstatic(crossorigin) 都在
+
+▶ logo <img> 必須是 WebP 且帶內在尺寸
+   ✓ en: 2 個 logo <img> 都不是 PNG
+   ✓ en: 2 個 logo <img> 都有 width/height（無版面跳動風險）
+   ✓ ja: 2 個 logo <img> 都不是 PNG
+   ✓ ja: 2 個 logo <img> 都有 width/height（無版面跳動風險）
+   ✓ zh: 2 個 logo <img> 都不是 PNG
+   ✓ zh: 2 個 logo <img> 都有 width/height（無版面跳動風險）
+
+✅ audit-critical-path — Google Fonts 在關鍵路徑之外（含 noscript fallback），logo 為帶尺寸的 WebP
