@@ -45,6 +45,7 @@
           <span class="work-modal__jp jp-accent"></span>
           <span class="work-modal__tag"></span>
           <p class="work-modal__line"></p>
+          <a class="btn btn--accent work-modal__cta" target="_blank" rel="noopener" hidden></a>
           <p class="work-modal__prose"></p>
           <ul class="work-modal__stack"></ul>
           <span class="work-modal__ok"></span>
@@ -69,6 +70,7 @@
     jp: modal.querySelector('.work-modal__jp'),
     tag: modal.querySelector('.work-modal__tag'),
     line: modal.querySelector('.work-modal__line'),
+    cta: modal.querySelector('.work-modal__cta'),
     prose: modal.querySelector('.work-modal__prose'),
     stack: modal.querySelector('.work-modal__stack'),
     ok: modal.querySelector('.work-modal__ok'),
@@ -245,6 +247,16 @@
     if (/[぀-ヿ]/.test(String(w.jp || ''))) els.jp.lang = 'ja'; else els.jp.removeAttribute('lang');
     els.tag.textContent = w.tag;
     els.line.innerHTML = w.line;
+    /* 對外連結（2026-09-04）：registry 有 url 才顯示；wip / 內部產品沒有 url 就不放。
+       文字走 i18n（ui.ctaLabel + 產品名），新分頁 + noopener。 */
+    if (w.url) {
+      els.cta.href = w.url;
+      els.cta.textContent = ((window.CRZ_I18N && window.CRZ_I18N.ui.ctaLabel) || 'Open') + ' ' + w.name + ' ↗';
+      els.cta.hidden = false;
+    } else {
+      els.cta.hidden = true;
+      els.cta.removeAttribute('href');
+    }
     /* 完整正文（work-v3.js 依當前語言送過來）。沒有它，modal 就只剩一句 registry line
        ——「點開比卡片上看到的還少」，等於這個 modal 沒有存在理由。 */
     const copy = (window.CRZ_WORK_COPY || [])[i];

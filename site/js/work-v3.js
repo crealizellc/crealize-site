@@ -526,10 +526,12 @@ var P=[
     console.error('[work-v3] registry 對帳失敗 — P 缺:', missing, '/ registry 多:', extra);
   }
 
+  function jpLangAttr(txt) { return /[぀-ヿ]/.test(String(txt || '')) ? ' lang="ja"' : ''; }
   function cardHTML(p) {
     var t = p[L];
     var idx = byIndex[p.s];
     var reg = idx === undefined ? null : REG[idx];
+    var jpText = (reg && reg.jp) || p.jp;
     var plat = p.plat.length
       ? p.plat.map(function (b) { return '<b>' + b + '</b>'; }).join('')
       : '<b class="none">' + UNRELEASED[L] + '</b>';
@@ -549,9 +551,10 @@ var P=[
     return '<article class="card work-card" data-work-index="' + idx + '" tabindex="0" role="button" aria-label="Open ' + p.n + '">'
       + '<div class="stage" style="--tint:' + p.tint + '"' + (p.flat ? ' data-flat="1"' : '') + (p.border ? ' data-border="1"' : '') + '>' + bg + M[p.s] + icon + '</div>'
       + '<div class="card__meta"><h3 class="card__name"><em>' + p.n + '</em><i class="dot dot--' + p.st + '"></i></h3>'
-      /* a11y (2026-09-04)：p.jp 來自 work-copy.json，是 locale 無關的日文副名 —— 三語頁都是日文。
-         en / zh 頁不標 lang="ja" 的話，VoiceOver / NVDA 會用英文或中文發音規則唸它（WCAG 3.1.2）。 */
-      + '<span class="card__jp" lang="ja">' + p.jp + '</span>'
+      /* 副名（2026-09-04）：優先取本頁 i18n registry 的 jp（zh 頁有 10/16 是中文譯名），
+         沒有才退回 work-copy.json 的日文。這樣卡片與 modal（都讀 registry）不會一個日文一個中文。
+         lang="ja" 依假名偵測：有假名一定是日文；純漢字分不出日／中，不宣稱（WCAG 3.1.2）。 */
+      + '<span class="card__jp"' + jpLangAttr(jpText) + '>' + jpText + '</span>'
       + '<p class="card__pos">' + t.p + '</p>'
       + '<div class="plat">' + plat + '</div>'
       + '<span class="card__more">' + MORE[L] + ' <i aria-hidden="true">→</i></span>'

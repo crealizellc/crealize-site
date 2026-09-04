@@ -30,8 +30,9 @@
     W = window.innerWidth; H = window.innerHeight;
     canvas.width = W * DPR; canvas.height = H * DPR;
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-    if (prefersReduced) render(0); // static single frame
   }
+  /* resize 只重設尺寸；重播種與重繪合併在下面 L179 的單一監聽 —— 原本兩個監聽依註冊順序
+     先 render(0)（舊種子）再 seed（新種子不重繪），新種子要等下一次 resize 才出現。 */
   window.addEventListener('resize', resize);
 
   // ---- pseudo-noise flow field (layered sines — smooth, cheap) ----
@@ -176,7 +177,10 @@
   resize();
   seedRibbons();
   seedMotes();
-  window.addEventListener('resize', () => { seedRibbons(); seedMotes(); });
+  window.addEventListener('resize', () => {
+    seedRibbons(); seedMotes();
+    if (prefersReduced) render(0); // 減少動態：重播種後立刻畫出這一幀，不留到下一次 resize
+  });
 
   render(16); // initial frame even where rAF is throttled
   if (!prefersReduced) {

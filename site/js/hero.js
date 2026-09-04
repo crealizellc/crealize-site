@@ -424,7 +424,12 @@
     }
     if (barEl) barEl.style.width = (p * 100).toFixed(1) + '%';
     if (pEl) pEl.textContent = 'p=' + p.toFixed(2);
-    if (scrollLabel) scrollLabel.style.opacity = p > 0.92 ? 0.25 : 1;
+    /* 減少動態時 p 恆為 1（上方），「Scroll to materialize」對這群使用者永久為假 —— 直接不顯示。
+       右側的 p= 讀數與 phase 標籤仍在（它們反映的是真實狀態）。 */
+    if (scrollLabel) {
+      if (prefersReduced) scrollLabel.hidden = true;
+      else scrollLabel.style.opacity = p > 0.92 ? 0.25 : 1;
+    }
     let ph = PHASES[0][1];
     for (const [th, label] of PHASES) if (p >= th) ph = label;
     if (ph !== lastPhase && phaseEl) { phaseEl.textContent = ph; lastPhase = ph; }

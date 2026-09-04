@@ -284,3 +284,8 @@
 @media (max-width: 720px) {
   .work-modal__img { max-height: 38vh; }
 }
+
+/* 對外連結 CTA（2026-09-04）：沿用 .btn.btn--accent，只補與上方 line 的間距；
+   registry 沒有 url 的產品由 work-modal.js 設 hidden，不會出現在版面。 */
+.work-modal__cta { margin-top: 18px; align-self: flex-start; }
+.work-modal__cta[hidden] { display: none; }
