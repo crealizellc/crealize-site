@@ -29,6 +29,10 @@ const SRC = join(ROOT, 'docs/design-system/source/claude-design-export/Crealize 
 const OUT = join(ROOT, 'site');
 const ORIGIN = 'https://crealize.llc';
 
+// skip link 文字（builder 注入，不在 export 也不在 i18n/*.js —— 那兩處都在執行期才可用，
+// 而 skip link 必須是原始 HTML 就存在的第一個可聚焦元素）
+const SKIP_LABEL = { en: 'Skip to content', ja: 'メインコンテンツへ', zh: '跳至主要內容' };
+
 const LOCALES = {
   en: {
     dir: '', base: '', htmlLang: 'en', ogLocale: 'en_US',
@@ -316,6 +320,13 @@ for (const [key, loc] of Object.entries(LOCALES)) {
   // 2. html lang attr (drop canvas-only data-jp)
   html = html.replace(/<html lang="en" data-jp="on">/, `<html lang="${loc.htmlLang}" data-jp="on">`);
 
+  // 2.5 a11y（2026-09-04）：skip link + <main> 落點
+  //     export HTML 的 <body> 底下沒有 skip link，首屏 59 個可聚焦元素要全部 Tab 過才到內容
+  //     （WCAG 2.4.1）。在這裡注入而不是改 export，re-export 才不會把它弄丟。
+  //     <main> 加 tabindex="-1"：Safari 對純 id 錨點不會移動焦點，-1 讓 focus() 在各瀏覽器都成立。
+  html = html.replace('<body>', `<body>\n<a class="skip-link" href="#main">${SKIP_LABEL[key]}</a>`);
+  html = html.replace('<main>', '<main id="main" tabindex="-1">');
+
   // 3. strip design-canvas-only pieces (tweaks mount div + React island), keep core scripts
   html = html.replace(/<!-- Tweaks mount -->\s*<div id="tweaks-root"><\/div>\s*/, '');
   html = html.replace(/<!-- React island : Tweaks only -->[\s\S]*?(?=<\/body>)/, '');
@@ -324,9 +335,9 @@ for (const [key, loc] of Object.entries(LOCALES)) {
   html = html.replace(
     /<div class="nav__langmenu" role="menu">[\s\S]*?<\/div>/,
     `<div class="nav__langmenu" role="menu">
-        <a role="menuitem" class="${key === 'en' ? 'is-active' : ''}" href="${loc.base || './'}" hreflang="en" lang="en">English</a>
-        <a role="menuitem" class="${key === 'ja' ? 'is-active' : ''}" href="${loc.base}ja/" hreflang="ja" lang="ja">日本語</a>
-        <a role="menuitem" class="${key === 'zh' ? 'is-active' : ''}" href="${loc.base}zh/" hreflang="zh-Hant" lang="zh-Hant">繁體中文</a>
+        <a role="menuitem" class="${key === 'en' ? 'is-active' : ''}"${key === 'en' ? ' aria-current="true"' : ''} href="${loc.base || './'}" hreflang="en" lang="en">English</a>
+        <a role="menuitem" class="${key === 'ja' ? 'is-active' : ''}"${key === 'ja' ? ' aria-current="true"' : ''} href="${loc.base}ja/" hreflang="ja" lang="ja">日本語</a>
+        <a role="menuitem" class="${key === 'zh' ? 'is-active' : ''}"${key === 'zh' ? ' aria-current="true"' : ''} href="${loc.base}zh/" hreflang="zh-Hant" lang="zh-Hant">繁體中文</a>
       </div>`
   );
 

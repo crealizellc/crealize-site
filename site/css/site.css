@@ -181,9 +181,17 @@ main, .nav, .foot { position: relative; z-index: 1; }
   filter: blur(calc(6px * var(--motion)));
   transform: translateY(calc(-6px * var(--motion)));
   pointer-events: none;
-  transition: opacity .3s var(--ease-cond), filter .3s var(--ease-cond), transform .3s var(--ease-cond);
+  /* a11y (2026-09-04)：opacity:0 不會把三個連結移出 Tab 序列 —— 鍵盤使用者會停在看不見的
+     語言連結上（WCAG 2.4.3 / 2.4.7）。visibility:hidden 才會；延遲 .3s 讓淡出跑完再隱藏。
+     對照 .nav__panel 用 display:none 的做法，機制正確，這裡不能照抄只因為要保留 transition。 */
+  visibility: hidden;
+  transition: opacity .3s var(--ease-cond), filter .3s var(--ease-cond), transform .3s var(--ease-cond), visibility 0s linear .3s;
 }
-.nav__lang.is-open .nav__langmenu { opacity: 1; filter: none; transform: none; pointer-events: auto; }
+.nav__lang.is-open .nav__langmenu {
+  opacity: 1; filter: none; transform: none; pointer-events: auto;
+  visibility: visible;
+  transition: opacity .3s var(--ease-cond), filter .3s var(--ease-cond), transform .3s var(--ease-cond), visibility 0s;
+}
 .nav__langmenu button, .nav__langmenu a {
   appearance: none;
   display: flex;
@@ -405,3 +413,21 @@ main, .nav, .foot { position: relative; z-index: 1; }
 
 /* a11y: small accent text uses the AA-compliant deep variant */
 .nav__idx { color: var(--accent-deep); }
+
+/* a11y: skip link — WCAG 2.4.1 Bypass Blocks。視覺隱藏，鍵盤聚焦時才滑入。
+   由 build-site.mjs 注入在 <body> 第一個子節點，目標是 <main id="main" tabindex="-1">。 */
+.skip-link {
+  position: fixed; top: 10px; left: 10px; z-index: 1000;
+  padding: 10px 14px;
+  background: var(--ink); color: var(--paper);
+  font-family: var(--font-display); font-size: 14px; font-weight: 500;
+  border-radius: var(--r-3); text-decoration: none;
+  transform: translateY(-200%); opacity: 0;
+  transition: transform .2s var(--ease-cond), opacity .2s var(--ease-cond);
+}
+/* :focus 而非 :focus-visible —— skip link 在畫面外、滑鼠點不到，只可能經鍵盤聚焦，
+   :focus-visible 的啟發式在某些 AT／合成事件下不成立，:focus 沒有這個歧義。 */
+.skip-link:focus {
+  transform: none; opacity: 1;
+  outline: 2px solid var(--accent); outline-offset: 2px;
+}

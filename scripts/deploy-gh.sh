@@ -45,6 +45,11 @@ grep -q "application/ld+json" site/index.html || { echo "❌ JSON-LD missing" >&
 echo "▶ Critical-path audit (Google Fonts 非阻擋)..."
 node scripts/audit-critical-path.mjs
 
+# 無障礙：skip link / lang="ja" / aria-current / 語言選單 visibility / aria-invalid / 選單按鈕名稱。
+# 與 critical-path 同理 —— head 與 nav 都是 builder 字串模板，re-export 會靜靜還原。
+echo "▶ A11y audit（skip link · lang=ja · aria-current · langmenu visibility）..."
+node scripts/audit-a11y.mjs
+
 echo "▶ Key-visual audit (母版規格 + 三語 registry 對帳)..."
 node scripts/audit-kv.mjs
 node scripts/audit-kv-registry.mjs

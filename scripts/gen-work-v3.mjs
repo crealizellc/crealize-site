@@ -221,7 +221,9 @@ ${P}
     return '<article class="card work-card" data-work-index="' + idx + '" tabindex="0" role="button" aria-label="Open ' + p.n + '">'
       + '<div class="stage" style="--tint:' + p.tint + '"' + (p.flat ? ' data-flat="1"' : '') + (p.border ? ' data-border="1"' : '') + '>' + bg + M[p.s] + icon + '</div>'
       + '<div class="card__meta"><h3 class="card__name"><em>' + p.n + '</em><i class="dot dot--' + p.st + '"></i></h3>'
-      + '<span class="card__jp">' + p.jp + '</span>'
+      /* a11y (2026-09-04)：p.jp 來自 work-copy.json，是 locale 無關的日文副名 —— 三語頁都是日文。
+         en / zh 頁不標 lang="ja" 的話，VoiceOver / NVDA 會用英文或中文發音規則唸它（WCAG 3.1.2）。 */
+      + '<span class="card__jp" lang="ja">' + p.jp + '</span>'
       + '<p class="card__pos">' + t.p + '</p>'
       + '<div class="plat">' + plat + '</div>'
       + '<span class="card__more">' + MORE[L] + ' <i aria-hidden="true">→</i></span>'

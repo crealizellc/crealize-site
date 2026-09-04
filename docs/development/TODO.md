@@ -156,7 +156,9 @@
 
 ## 中
 
-- [ ] **英文頁與繁中頁的日文片段缺 `lang="ja"`** `[實測]` — WCAG 2.1 SC 3.1.2 (AA)
+- [x] **英文頁與繁中頁的日文片段缺 `lang="ja"`** `[實測]` — WCAG 2.1 SC 3.1.2 (AA)
+      ✅ **已修（2026-09-04）**：`gen-work-v3.mjs:224` 的 `card__jp` 一律 `lang="ja"`（內容來自 work-copy.json，三語皆日文）；執行期的 `index-row__jp` / `method-step__jp`（site.js）與 modal 的 `.work-modal__jp`（work-modal.js）改為**假名偵測**才標 —— 因為 zh.js 的 `jp` 有 10 個是中文譯名，硬標會錯。瀏覽器實測：en 頁 card 16/16、index row 13/16（其餘 3 個是純漢字，規則刻意不宣稱）、modal `lang=ja`；zh 頁 index row 6/16 標 ja —— 核對 zh.js 那 6 個確實含假名（音で解く 2048／名刺っと／めぐる／気付き／短編ドラマ生産ライン／届け）。
+      ⚠️ 修正原條目的計數：原本說「15 個元素缺 lang」，其中 2 個 `jp-accent`（創造と実現／日本・東京）在 export 就帶 `aria-hidden="true"`，是裝飾、螢幕閱讀器本來就不唸 —— 真正的缺口是 13 個 `card__jp`，加上靜態掃描看不到的執行期元素（index rows / method / modal）。
       `site/index.html`（`lang="en"`）內含平假名/片假名的元素 **15 個，`lang` 屬性 0 個**；
       `site/zh/index.html`（`lang="zh-Hant"`）同樣 **15 個 / 0 個**。
       日文頁本身是 `lang="ja"`，繼承正確、無此問題。
@@ -167,7 +169,8 @@
       修法在 builder（`scripts/build-site.mjs`）或 `gen-work-v3.mjs` 產生時補 `lang="ja"`，
       不要手改產物。
 
-- [ ] **語言選單關閉時，其三個連結仍可被聚焦** `[實測 + CSS]` — WCAG 2.4.3 / 2.4.7
+- [x] **語言選單關閉時，其三個連結仍可被聚焦** `[實測 + CSS]` — WCAG 2.4.3 / 2.4.7
+      ✅ **已修（2026-09-04）**：`site.css` `.nav__langmenu` 關閉態加 `visibility: hidden`（transition 加 `visibility 0s linear .3s` 讓淡出先跑完），`.is-open` 態 `visibility: visible`。瀏覽器實測（killing test）：關閉時對 `a[hreflang=ja]` 呼叫 `.focus()` → `activeElement` **不再**是它（修正前是）；打開後 `.focus()` 成功。
       `.nav__langmenu` 關閉狀態是 `opacity: 0; visibility: visible; display: flex;
       pointer-events: none`（`site/css/site.css:180` 附近）。
       `opacity:0` **不會**把元素移出循序焦點順序（`display:none` / `visibility:hidden` /
@@ -179,11 +182,15 @@
       修法：關閉時加 `visibility: hidden`（配合既有 transition）或 `inert`。
       對照組：`.nav__panel` 用 `display:none`，實測程式化 focus **失敗**，處理正確 —— 可照抄。
 
-- [ ] **沒有 skip link** `[實測]` — WCAG 2.1 SC 2.4.1 Bypass Blocks (A)
+- [x] **沒有 skip link** `[實測]` — WCAG 2.1 SC 2.4.1 Bypass Blocks (A)
+      ✅ **已修（2026-09-04）**：`build-site.mjs` 在 `<body>` 第一個子節點注入 `<a class="skip-link" href="#main">`（三語文字 Skip to content／メインコンテンツへ／跳至主要內容），`<main>` 改為 `<main id="main" tabindex="-1">`（Safari 對純 id 錨點不移焦點）；樣式在 `site.css` 以 `:focus` 顯示（skip link 在畫面外、只可能經鍵盤聚焦，`:focus-visible` 的啟發式在部分 AT／合成事件下不成立）。
+      瀏覽器實測：從 `.nav__brand` Shift+Tab → 焦點落在 `a.skip-link`（DOM 順序正確）；程式化 `.click()` → `location.hash=#main` 且 `activeElement === main#main`；再 Tab → 焦點進入 `#main` 內第一張卡片（跳過整個導覽）。
+      ⚠️ 誠實邊界：聚焦時的滑入動畫在 Browser pane 觀察不到（`document.hidden === true`，隱藏分頁不推進 CSS transition，computed 值停在起點）；把元素的 `transition` 暫時設為 none 後讀到 opacity 1 / transform none / top 10px，證明 cascade 正確。真機的視覺呈現未親眼確認。
       桌面版首屏可聚焦元素 **59 個**，`a[class*=skip]` / `.skip-link` / `#skip` 皆不存在。
       鍵盤使用者每次載入都得穿過整個導覽才能到主內容。
 
-- [ ] **表單驗證錯誤沒有標到欄位上** `[實測]` — WCAG 2.1 SC 3.3.1
+- [x] **表單驗證錯誤沒有標到欄位上** `[實測]` — WCAG 2.1 SC 3.3.1
+      ✅ **已修（2026-09-04）**：`site.js` 初始化時每個 `[required]` 設 `aria-invalid="false"` + `aria-describedby="f-note"`；submit 驗證時與 `.is-error` 同步設 `aria-invalid`。瀏覽器實測：空表單 `requestSubmit()` 後 f-name / f-email / f-msg 全部 `aria-invalid="true"`，`#f-note` 顯示 formErr。
       `site/js/site.js:268-282` 驗證失敗時只加 `.is-error` class（純視覺）。
       `grep -c aria-invalid site/index.html` → **0**。
       `#f-note` 有 `aria-live="polite"`（這點正確），但它只講「有錯」，
@@ -199,9 +206,20 @@
       修法擇一：`action="mailto:support@crealize.llc" method="post"`（陽春但可用）、
       或在 `<noscript>` 明示「請直接寄信到 support@crealize.llc」。
 
+- [ ] **zh 頁同一產品：卡片顯示日文副名、modal 顯示中文譯名** `[實測]` —— 需你決定
+      卡片的 `card__jp` 取自 `docs/design-system/work-copy.json` 的 `p.jp`（locale 無關，永遠日文）；
+      modal 與 Index 列取自 `site/js/i18n/zh.js` 的 `work[].jp`（中文譯名）。
+      實測 zh 頁 PurityLens：卡片「成分をひと目で」、點開 modal「成分一目了然」—— 同一欄位兩種語言。
+      而且 `zh.js` 只譯了 10/16：音で解く 2048／名刺っと／めぐる／気付き／短編ドラマ生産ライン／届け 仍是日文。
+      三條路都站得住，選錯代價低，但這是品牌／文案決策：① 全站把日文副名當品牌識別（zh.js 的 jp 改回日文）
+      ② zh 頁全部用中文譯名（work-copy.json 加 zh 欄位、gen-work-v3 依 locale 取）③ 維持現狀。
+      我的建議是 ①：`card__jp` 這個 class 名、export 設計稿、與 en 頁的行為都表明它是「日文副名」這個品牌元素，
+      zh.js 的譯名看起來是翻譯時順手譯過頭。
+
 ## 低
 
-- [ ] **語言選單沒有 `aria-current`** `[實測]`
+- [x] **語言選單沒有 `aria-current`** `[實測]`
+      ✅ **已修（2026-09-04）**：`build-site.mjs` 的語言選單模板在 `is-active` 那一筆同時輸出 `aria-current="true"`。三語產物各恰好 1 個，且 hreflang 與頁面語言一致（gate 檢查）；瀏覽器實測 en 頁 `[aria-current]` → hreflang=en，zh 頁 → zh-Hant。
       目前語言只用 `class="is-active"` 標示（純視覺），
       `grep -c aria-current site/index.html` → **0**。
       螢幕閱讀器使用者無法得知目前在哪個語言。
@@ -209,7 +227,8 @@
       （其餘 ARIA 是對的：`aria-haspopup`、`aria-expanded` 由 `site.js:174` 正確切換，
       三個連結都有 `hreflang` + `lang`。）
 
-- [ ] **行動導覽切換鈕的無障礙名稱是 "Primary"** `[實測]`
+- [x] **行動導覽切換鈕的無障礙名稱是 "Primary"** `[實測]`
+      ✅ **已修（2026-09-04）**：`site.js:201` 改讀 `UI.menuLabel`，三語 i18n 各加 `ui.menuLabel`（Menu／メニュー／選單）。瀏覽器實測 390px：en 頁按鈕 aria-label=Menu、ja 頁=メニュー；landmark 仍是 Primary，兩者不再同名。
       無障礙樹同時出現 `navigation "Primary"` 與 `button "Primary"`（兩者同名）。
       該按鈕由 `site.js` 動態產生，`aria-label` 取自 nav landmark。
       「Primary」描述的是地標，不是這顆按鈕的動作。
