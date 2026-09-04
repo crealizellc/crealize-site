@@ -19,7 +19,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const LOCALES = [
-  { key: 'en', file: join(ROOT, 'site/index.html'), probe: 'reads the label and tells you' },
+  { key: 'en', file: join(ROOT, 'site/index.html'), probe: 'photographs the label and tells you' },
   { key: 'ja', file: join(ROOT, 'site/ja/index.html'), probe: '成分表は規制のために書かれていて' },
   { key: 'zh', file: join(ROOT, 'site/zh/index.html'), probe: '成分表是寫給主管機關看的' },
 ];
