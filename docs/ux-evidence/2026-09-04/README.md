@@ -190,21 +190,51 @@ SP=/tmp/kvproof BASE=http://127.0.0.1:8814 OUT=/tmp/kvproof \
 
 ---
 
-# 四批全部上線後的 Lighthouse（線上 · mobile · 12.8.2）—— 一次取樣不能當回歸
+# 四批全部上線後的 Lighthouse（線上 · mobile · 12.8.2）—— 未重現穩定退化
 
-部署 gh-pages `e82fb28`（= PR #4 `f16cf38` 的 `site/`）後先跑一次模擬節流得 **63**（FCP 5.8 s），比第三批後的 77 差，
-`render-blocking-resources` 也從 100 掉到 50。追查：兩版部署的 `<head>` link/script **位元相同**、LCP 元素相同、
-唯一新增請求是 lazy 的 kv-800 圖；被列為阻擋的 `tokens.css` / `sections.css` 一直都是阻擋式 stylesheet，
-只是這次的 Lantern 估計跨過了列出門檻。於是對**同一份部署**再連跑三次：
+**先講清楚比較基準**：表中的 77 是**舊部署** `24f0d11f`（第三批，KV 之前）的單次取樣，不是現行部署。
+現行部署 gh-pages `e82fb28`（= PR #4 `f16cf38` 的 `site/`）的四次取樣是 **63 / 100 / 100 / 100**。
+首跑 63（FCP 5.8 s、`render-blocking-resources` 50）看起來像退化，追查：兩版部署的 `<head>` link/script
+**位元相同**、LCP 元素相同、唯一新增請求是 lazy 的 kv-800 圖；被列為阻擋的 `tokens.css` / `sections.css`
+一直都是阻擋式 stylesheet，只是那次的 Lantern 估計跨過了列出門檻。於是對同一份部署再連跑三次：
 
 | run | score | FCP | LCP | render-blocking 列出 |
 |---|---|---|---|---|
-| 第三批後（`24f0d11f`） | 77 | 4.1 s | 4.1 s | — |
-| 現在 #0 | 63 | 5.8 s | 6.1 s | sections.css, tokens.css |
-| 現在 #1 | **100** | 0.9 s | 1.6 s | tokens.css |
-| 現在 #2 | **100** | 0.9 s | 1.1 s | tokens.css |
-| 現在 #3 | **100** | 1.0 s | 1.1 s | tokens.css |
+| **舊部署** `24f0d11f`（第三批，KV 之前）單次 | 77 | 4.1 s | 4.1 s | — |
+| 現行部署 `e82fb28` #0 | 63 | 5.8 s | 6.1 s | sections.css, tokens.css |
+| 現行部署 #1 | **100** | 0.9 s | 1.6 s | tokens.css |
+| 現行部署 #2 | **100** | 0.9 s | 1.1 s | tokens.css |
+| 現行部署 #3 | **100** | 1.0 s | 1.1 s | tokens.css |
 | 實際節流（devtools） | 98 | 1.9 s | 1.9 s | — |
 
-同一份位元，模擬節流在 63 與 100 之間跳。結論：**沒有回歸，也不改任何程式**；模擬節流的單次取樣在這個站上
-不能當證據，要看 ≥3 次的分布，並用實際節流交叉。`uses-responsive-images` 現在是 100（KV 800 變體生效）。
+同一份位元，模擬節流在 63 與 100 之間跳。結論：**未重現穩定退化**——四次取樣裡三次 100，首跑 63 沒有再出現；
+這**不等於**已證明完全無回歸（模擬模型本身就不穩定，樣本也只有四次）。據此不改程式。
+單次模擬取樣在這個站上不能當證據，要看 ≥3 次的分布，並用實際節流交叉。`uses-responsive-images` 現在是 100（KV 800 變體生效）。
+
+
+---
+
+# 現行部署的互動狀態證據（對 `https://crealize.llc` 直接拍，gh-pages `e82fb28`）
+
+Codex 要求補：選單／語系／modal／表單驗證狀態。全部用既有 CDP 路徑對**真站**操作並拍下落定畫面，
+每張附 DOM 探針（`probes.json`）。表單只走「空欄位送出」路徑——`site.js` 驗證失敗即 return，
+不會走到 mailto；探針確認 `location.href` 未變。**沒有送出任何真表單。**
+
+絕對路徑：`/Users/crealize-00/Projects/crealize-site/docs/ux-evidence/2026-09-04/states/`（腳本 `capture-states.mjs` 可重跑）
+
+| 狀態 | 檔 | 探針（現行部署）|
+|---|---|---|
+| 行動選單開啟（ja 390@2x） | `ja-390-menu-open.webp` | `aria-expanded=true`、按鈕名「メニュー」、面板 `display:grid`、連結 4 個；Escape 後 `aria-expanded=false`、面板 hidden、焦點回到按鈕 = True |
+| 語系選單開啟（en 1280） | `en-1280-lang-open.webp` | `aria-expanded=true`、`visibility:visible`、項目 English(en,current) / 日本語(ja) / 繁體中文(zh-Hant)；Escape 後 `visibility:hidden`、ja 連結可聚焦 = False（開啟時 = True）|
+| Modal 開啟（zh 1280，現行文案） | `zh-1280-modal-open.webp` | PurityLens／副名「成分一目了然」／CTA「前往 PurityLens ↗」→ `https://puritylens.smartrich.ai/`（`target=_blank rel=noopener`）；Escape 後 hidden = True |
+| 表單驗證錯誤（en 1280） | `en-1280-form-invalid.webp` | 空欄位送出 → f-name:true, f-email:true, f-msg:true；`.is-error` 3 個；`#f-note`（aria-live=polite）「Please fill the required fields marked in orange.」；href 未變 = True |
+| 表單驗證錯誤（ja 390@2x） | `ja-390-form-invalid.webp` | f-name:true, f-email:true, f-msg:true；`.is-error` 3；「オレンジ色の必須項目をご記入ください。」；href 未變 = True |
+
+## 已有、直接引用（不重跑）
+- skip link / 語系選單焦點 / `aria-invalid` 的鍵盤實測、logo／icon 尺寸機械比對：PR #2 留言與本 README 第一段（`9ff825d` 時期，對應機制未變，且上表對現行部署重驗了語系選單與 aria-invalid）。
+- Modal CTA 三張（`modal-cta-*.webp`，`37d2efc` 時期）：CTA 版面證據；文案已在 PR #4 改版，現行文案見上表 zh modal。
+- KV srcset 選圖／bytes（`kv-proof-live.json`，`24f0d11f` 時期）：機制未變；現行部署 Lighthouse `uses-responsive-images` = 100。
+- 日文文節／320 header：`copy/after-cjk-fix/`（`f16cf38` 的 site/ = 現行部署位元）。
+
+## 邊界
+局部狀態證據，不是全站互動／真機總驗收；三語 × 各狀態未全部組合拍（各取一語代表）。
