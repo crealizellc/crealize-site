@@ -241,7 +241,8 @@ Codex 接受的是**驗證方案**，像素待其獨立驗收後才勾。`captur
 - 每語 7 條斷言，任一失敗 exit 1：href 不變 · scrollY／焦點不變 · labelClearOfNav 且 label／送出鈕／note 同在視口 · 3 欄 `aria-invalid=true` · `.is-error` ×3 · `#f-note` = `CRZ_I18N.ui.formErr` 且 aria-live=polite · 負對照 C 必被遮。
 - 只重跑表單段（其餘檔不動）：`SP=<輸出根目錄> node docs/ux-evidence/2026-09-04/states/capture-states.mjs form`，探針合併進 `probes.json`。
 - 殺測試（2026-09-04 實跑）：把負對照斷言反相（`===false` → `===true`）→ 兩語各一條 ✗、exit 1。
-- 未實作、已記 TODO 子項：輸入一字後 `.is-error` 清除但 `aria-invalid` 留 true（`docs/development/TODO.md` 表單條目下）。
+- 輸入後 `.is-error` 與 `aria-invalid` 不一致：已在本機修正並加 gate `scripts/audit-form-state.mjs`（`npm run check:form`），**未部署**——本目錄的表單截圖對應的是修前的部署（空欄送出狀態本身修前修後相同）。
+- 全欄有效後 `#f-note` 仍為 formErr 的恢復缺口記在 `docs/development/TODO.md`，未驗收，不把本項說成完整表單 UX PASS。
 
 ## 已有、直接引用（不重跑）
 - skip link / 語系選單焦點 / `aria-invalid` 的鍵盤實測、logo／icon 尺寸機械比對：PR #2 留言與本 README 第一段（`9ff825d` 時期，對應機制未變，且上表對現行部署重驗了語系選單與 aria-invalid）。

@@ -204,10 +204,15 @@
       不講**哪一欄**錯。修法：驗證時同步設 `aria-invalid="true"` 並用
       `aria-describedby` 指向錯誤訊息。
 
-- [ ] **表單：輸入後 `.is-error` 清除但 `aria-invalid` 留 `true`（承上條的子項，暫不實作）** `[實測]` — WCAG 2.1 SC 4.1.2
+- [x] **表單：輸入後 `.is-error` 清除但 `aria-invalid` 留 `true`（承上條的子項）** `[實測]` — WCAG 2.1 SC 4.1.2
+      ✅ **已修（2026-09-04，本機 commit、未部署）**：`site.js` 抽出 `isBad(input)` 與 `mark(input, bad)`，input 監聽只掛 `[required]` 且 `if (submitted) mark(input, isBad(input))`。不變量＝錯誤可見 = aria-invalid = submitted && invalid(value)：送出前不提前報錯，送出後每次輸入按真實有效性重驗（email「a@」「a@b」「a b@c.d」維持錯誤；再次清空重新標錯）。
+      gate：`scripts/audit-form-state.mjs`（`npm run check:form`，已入 `check:all`），三語 × 9 步、期望值寫死不呼叫產品謂詞、不送有效表單。RED 對修前程式碼紅 15 項（S2/S2b/S2c/S3/S4 × 三語）；GREEN 0 項；三個突變各紅在對的位置：M1 監聽改回只 remove class → 15（S2–S4）、M2 拿掉 submitted 閘 → 6（S0b/S0c 提前報錯）、M3 mark 不設 aria → 15（S1/S2/S2b/S2c/S4）。
       2026-09-04 對現行部署（gh-pages `e82fb28`）量到：空欄送出後在 f-name 輸入一字 → `.is-error` = false、`aria-invalid` 仍 = "true"，直到下次送出才同步（`site/js/site.js:315` 只移除 class）。視覺說沒錯、螢幕閱讀器說有錯。en 與 ja 皆同。
       Codex 對齊（2026-09-04）：先記錄、不實作。之後修時要**按欄位真實有效性**同步兩者（空值／email 格式重新驗），不能任意一字就清除錯誤——尤其無效 email 不該在打第一個字時就被判為正確。
       驗證方法：`docs/ux-evidence/2026-09-04/states/capture-states.mjs form` 之後補一步「輸入一字 → 讀 `.is-error` 與 `aria-invalid`」；修前應不一致，修後兩者皆依有效性一致（空值→皆錯、`a@` →皆錯、合法 email→皆對）。
+
+- [ ] **表單：全欄修正有效後 `#f-note` 仍顯示 formErr，直到下次送出** `[實測]` — 恢復流程缺口，未驗收
+      2026-09-04 `audit-form-state.mjs` S3 量到（三語同）：三欄皆有效後 note 仍為「Please fill the required fields marked in orange.」。gate 只印資訊不驗收（Codex 對齊：上一條只管欄位狀態一致，不宣稱完整表單 UX PASS）。note 是 aria-live=polite 區，改文字會觸發朗讀；恢復成什麼（回預設／改「可以送出了」）是另一個決策，先不展開。
 
 - [x] **關閉 JS 時聯絡表單會靜默吞掉輸入** `[程式碼]`
       ✅ **已修（2026-09-04，PR #3 `feat/product-links-and-remaining-fixes`）**：`build-site.mjs` 注入 `action="mailto:support@crealize.llc" method="post" enctype="text/plain"`（無 JS 時瀏覽器直接開郵件程式帶入欄位；有 JS 時 `preventDefault` 照舊接手）＋ `<noscript>` 三語說明。反向測試拿掉注入並重建 → exit 2（三語）。
