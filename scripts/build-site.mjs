@@ -155,7 +155,7 @@ const LOCALES = {
       'Show us what<br/><span class="accent">you\'ve made.</span>':
         '讓我們看看<br/><span class="accent">你做過的作品。</span>',
       'We\'re a small, remote-first team based in Tokyo. We value clear communication, thoughtful craft, and work that reaches real users. If you\'d like to work with us, send one project you\'re proud of and tell us what you contributed.':
-        '我們是一個在東京的小團隊，平常多半遠端工作。我們喜歡把話講清楚，也在意做出來的東西真的有人用。想加入的話，挑一個你最有把握的專案寄給我們，告訴我們哪些部分是你做的。',
+        '我們是一個在東京的小團隊，平常多半遠端工作。我們喜歡把話講清楚，也在意做出來的東西真的有人用。想加入的話，挑一個你最有把握的專案寄給我們，告訴我們哪些是你做的。',
       '<span class="v">Remote-first · Tokyo HQ <span class="jp-accent" aria-hidden="true">東京</span></span>': '<span class="v">遠端優先 · 東京總部</span>',
       '<span class="v">Design · Engineering · Growth</span>': '<span class="v">設計 · 工程 · 成長</span>',
       'Selected Work / 制作実績': '代表作品',
