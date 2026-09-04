@@ -272,6 +272,13 @@
       ⚠️ 這**可能是刻意的**無障礙取捨（跳過動畫、直接給結果），所以列為低優先、
       需要設計決策而非直接改。若要改：至少讓提示文字在 `p===1` 時換掉。
 
+- [x] **KV 主視覺 `uses-responsive-images` 50 分（首屏 `kv/puritylens.webp` 浪費 84%）** `[實測]`
+      這一項原本不在本清單（列在 `docs/perf-evidence/2026-09-04/README.md` 的「已知未處理」），此處補記以免遺漏。
+      ✅ **已修（2026-09-04，PR #3 `cbe14ee`，gh-pages `24f0d11f`）**：800×600 變體放 `site/assets/kv-800/`（母版 16 張 sha256 不變 `d9968599d97105a2`），
+      `stage__bg` 加 `srcset`/`sizes`；新 gate `audit-kv-variants.mjs`（存在／檔頭 800×600／bytes<母版／母版目錄純淨／三語 srcset+sizes）。
+      線上 CDP 實測 7 個視口×DPR 選圖全對、modal 3/3 足夠、真實 bytes 變體 ≈30.5 KB vs 母版 ≈70.6 KB、390@2x 並排 PSNR 41.4 dB。
+      證據：`docs/ux-evidence/2026-09-04/`。Lighthouse 分數未重跑。
+
 ## 稽核中確認為「正確」的項目（避免下次重測）
 
 - 三語切換：9 種組合（3 頁 × 3 語）的相對路徑全部解析正確，**線上 curl 全 HTTP 200** `[實測]`
