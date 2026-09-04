@@ -32,8 +32,8 @@ Products: 16
 ## Method
 
 Research → Design → Build → Launch → Improve.
-Engineering principles: atomicity (one change, one meaning), explicit dependencies,
-module boundaries, type-safe by default, zero-dependency bias, code as craft.
+How we write code: one change does one thing; no hidden dependencies; clear module
+boundaries; type checks on by default; few third-party libraries; code others can read.
 
 ## Hiring
 
