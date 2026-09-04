@@ -50,10 +50,15 @@ node scripts/audit-critical-path.mjs
 echo "▶ A11y audit（skip link · lang=ja · aria-current · langmenu visibility）..."
 node scripts/audit-a11y.mjs
 
+# 產品對外連結：逐一打真實 URL，200 且本文含產品名。需網路，只在部署前跑。
+echo "▶ Links audit（13 個產品頁 200 + 含產品名）..."
+node scripts/audit-links.mjs
+
 echo "▶ Key-visual audit (母版規格 + 三語 registry 對帳)..."
 node scripts/audit-kv.mjs
 node scripts/audit-kv-registry.mjs
 node scripts/audit-kv-quality.mjs
+node scripts/audit-kv-variants.mjs
 
 echo "▶ Selected Work v3 驗收 (AC 見 .claude/ac.md)..."
 node scripts/audit-work-v3.mjs

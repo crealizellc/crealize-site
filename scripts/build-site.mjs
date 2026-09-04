@@ -33,6 +33,12 @@ const ORIGIN = 'https://crealize.llc';
 // 而 skip link 必須是原始 HTML 就存在的第一個可聚焦元素）
 const SKIP_LABEL = { en: 'Skip to content', ja: 'メインコンテンツへ', zh: '跳至主要內容' };
 
+const NOJS_NOTE = {
+  en: 'JavaScript is off — submitting opens your mail app, or write to support@crealize.llc directly.',
+  ja: 'JavaScript が無効です — 送信するとメールアプリが開きます。直接 support@crealize.llc 宛でも構いません。',
+  zh: 'JavaScript 已關閉 — 送出會開啟郵件程式，或直接寫信到 support@crealize.llc。',
+};
+
 const LOCALES = {
   en: {
     dir: '', base: '', htmlLang: 'en', ogLocale: 'en_US',
@@ -326,6 +332,15 @@ for (const [key, loc] of Object.entries(LOCALES)) {
   //     <main> 加 tabindex="-1"：Safari 對純 id 錨點不會移動焦點，-1 讓 focus() 在各瀏覽器都成立。
   html = html.replace('<body>', `<body>\n<a class="skip-link" href="#main">${SKIP_LABEL[key]}</a>`);
   html = html.replace('<main>', '<main id="main" tabindex="-1">');
+
+  // 2.6 無 JS 的聯絡表單（2026-09-04）：export 的 <form> 沒有 action 且 novalidate，
+  //     關掉 JS 按送出 = 對同頁發 GET，輸入全部消失且無提示。
+  //     加 action=mailto + method=post + enctype=text/plain：無 JS 時瀏覽器直接開郵件程式帶入欄位；
+  //     有 JS 時 site.js 的 preventDefault 照舊接手（行為不變）。<noscript> 再補一句說明。
+  html = html.replace(
+    '<form class="join__form" id="join-form" novalidate>',
+    `<form class="join__form" id="join-form" novalidate action="mailto:support@crealize.llc" method="post" enctype="text/plain">\n<noscript><p class="join__formnote">${NOJS_NOTE[key]}</p></noscript>`
+  );
 
   // 3. strip design-canvas-only pieces (tweaks mount div + React island), keep core scripts
   html = html.replace(/<!-- Tweaks mount -->\s*<div id="tweaks-root"><\/div>\s*/, '');

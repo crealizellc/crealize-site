@@ -180,7 +180,7 @@ npm run check:all                      # 期待 exit 0，九項全綠
 
 ## 已知未處理（有量測依據，刻意不混進這次交付）
 
-- `uses-responsive-images` 目前 50 分，剩餘來自 `assets/kv/*.webp`（16 張、1.1 MB）與 `og.png`。
+- `uses-responsive-images`：**已於 PR #3 `cbe14ee` 處理**（800×600 變體 + srcset，母版不動），證據在 `docs/ux-evidence/2026-09-04/`。`og.png` 未動。
 - `unminified-css` / `unminified-javascript`：線上有 gzip，收益是解析時間而非傳輸量，需另評估。
 - `uses-long-cache-ttl` 50 分：`max-age=600` 是 GitHub Pages 固定值，站方改不了。
 - 本機 server 報的「Enable text compression 910 ms」是**假象** —— 線上實測

@@ -44,11 +44,16 @@ const KV_W = 1600, KV_H = 1200;      // 4:3 母版
    uses-responsive-images 點名 icons/puritylens.webp 浪費 90%） */
 const ICON_PX = 144;
 const KV_MAX_KB = 200;               // audit-kv.mjs 的上限
+/* 800×600 響應式變體（2026-09-04）：放獨立目錄，audit-kv.mjs 的 SPEC 掃描不會碰到母版以外的東西。
+   合格與否由 scripts/audit-kv-variants.mjs 另外檢查（尺寸／位元／HTML srcset），不以「掃不到」當合格。
+   同一條 sips 裁切→縮放→cwebp 路徑、同母版最後採用的 q，母版本身不動。 */
+const KV_VAR_OUT = join(ROOT, 'site/assets/kv-800');
+const KV_VAR_W = 800, KV_VAR_H = 600;
 
 try { execFileSync('cwebp', ['-version'], { stdio: 'ignore' }); }
 catch { console.error('❌ 找不到 cwebp（brew install webp）'); process.exit(2); }
 
-for (const d of [KV_OUT, ICON_OUT]) if (!existsSync(d)) mkdirSync(d, { recursive: true });
+for (const d of [KV_OUT, ICON_OUT, KV_VAR_OUT]) if (!existsSync(d)) mkdirSync(d, { recursive: true });
 
 function dims(f) {
   const out = execFileSync('sips', ['-g', 'pixelWidth', '-g', 'pixelHeight', f], { encoding: 'utf8' });
@@ -98,6 +103,8 @@ for (const slug of SLUGS) {
   } while (r.kb > KV_MAX_KB && q >= 50);
   const flag = r.kb > KV_MAX_KB ? ' ⚠️ 仍超過上限' : '';
   console.log(`   ✓ ${slug.padEnd(12)} [${kvKind(slug)}] ${r.srcW}×${r.srcH} → ${KV_W}×${KV_H} q${q + 8}, ${r.kb.toFixed(0)} KB${flag}`);
+  const v = toWebp(kvSrc(slug), join(KV_VAR_OUT, `${slug}.webp`), KV_VAR_W, KV_VAR_H, q + 8);
+  console.log(`     ↳ ${KV_VAR_W}×${KV_VAR_H} 變體 q${q + 8}, ${v.kb.toFixed(0)} KB`);
 }
 
 console.log('▶ 產品 icon → site/assets/icons/');

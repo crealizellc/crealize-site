@@ -5,11 +5,12 @@
   "scripts": {
     "check:todo": "node scripts/check-todo.js",
     "check:rules": "node scripts/check-rules.js",
-    "check:kv": "node scripts/audit-kv.mjs && node scripts/audit-kv-registry.mjs && node scripts/audit-kv-quality.mjs",
+    "check:kv": "node scripts/audit-kv.mjs && node scripts/audit-kv-registry.mjs && node scripts/audit-kv-quality.mjs && node scripts/audit-kv-variants.mjs",
     "check:work": "node scripts/audit-work-v3.mjs",
     "check:design": "node scripts/audit-design-tokens.mjs",
     "check:perf": "node scripts/audit-critical-path.mjs",
     "check:a11y": "node scripts/audit-a11y.mjs",
+    "check:links": "node scripts/audit-links.mjs",
     "check:all": "npm run check:todo && npm run check:rules && npm run check:kv && npm run check:work && npm run check:nav && npm run check:prerender && npm run check:mobile && npm run check:design && npm run check:perf && npm run check:a11y",
     "dev:guide": "node scripts/dev-guide.js",
     "auto:dev": "node scripts/auto-dev.js --dev",

@@ -37,7 +37,7 @@
       : `<span class="index-row__status" data-status="shipped">${UI.statusShipped}</span>`;
     return `
       <li class="index-row" data-work-index="${i}" tabindex="0" role="button"
-          aria-label="Open ${w.name}" style="--d:${Math.min(i * 24, 360)}ms"
+          aria-label="${(UI.ctaLabel || 'Open {name}').replace('{name}', w.name)}" style="--d:${Math.min(i * 24, 360)}ms"
           data-haystack="${(w.name + ' ' + w.jp + ' ' + w.tag + ' ' + w.stack.join(' ')).toLowerCase()}">
         <span class="index-row__no">${String(i + 1).padStart(3, '0')}</span>
         <span class="index-row__name">${w.name}</span>

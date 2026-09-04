@@ -147,7 +147,9 @@
 
 ## 高
 
-- [ ] **16 個產品沒有任何對外連結** `[實測]`
+- [x] **16 個產品沒有任何對外連結** `[實測]`
+      ✅ **已修（2026-09-04，PR #3 `feat/product-links-and-remaining-fixes`）**：registry（`site/js/i18n/{en,ja,zh}.js`）新增 `url`，modal 有 url 才顯示 `.work-modal__cta`（新分頁 + noopener，文字走 `ui.ctaLabel`：Open／開く／前往）。**連結目標選自家產品頁而非商店**：13 個都有 200 且標題含產品名的公開頁（10 個 `*.smartrich.ai`、moonpacket.com、xunni.xyz、ymytrade.jp），地區中立、我們可控、頁內再導向各商店。App Store 經 iTunes Search 另查到 6 個 Crealize LLC 上架（PurityLens id6762415650 / Fudeto id6772628821 / QiFlux id6770532808 / Mairi id6771640651 / Rythix 2048 id6784661615 / Meishitto id6792575822），未採用為主連結。**無連結（我決定）**：Meguru（無公開頁，`meguru.smartrich.ai` 000）、dramaflow（`dramaflow.smartrich.ai` 是內部審核台）、Todoke（console 登入頁）。
+      新 gate `scripts/audit-links.mjs`（`check:links`，需網路；掛在 `deploy-gh.sh`）：三語 url 一致、https、HTTP 200、本文含產品名 —— 13/13 通過。瀏覽器實測：en 開 PurityLens → CTA 可見可聚焦、href 正確、`target=_blank rel=noopener`；Meguru → CTA hidden 且無 href；ja「開く Meishitto ↗」、zh「前往 PurityLens ↗」。
       形象站列出 16 個產品，訪客無法前往其中任何一個（App Store / Play / 官網皆無）。
       證據：`grep -o 'href=' site/js/work-v3.js | wc -l` → **0**；
       `grep -oE 'href|mailto|<a ' site/js/work-modal.js` → **無任何命中**（modal 內也沒有）。
@@ -197,7 +199,8 @@
       不講**哪一欄**錯。修法：驗證時同步設 `aria-invalid="true"` 並用
       `aria-describedby` 指向錯誤訊息。
 
-- [ ] **關閉 JS 時聯絡表單會靜默吞掉輸入** `[程式碼]`
+- [x] **關閉 JS 時聯絡表單會靜默吞掉輸入** `[程式碼]`
+      ✅ **已修（2026-09-04，PR #3 `feat/product-links-and-remaining-fixes`）**：`build-site.mjs` 注入 `action="mailto:support@crealize.llc" method="post" enctype="text/plain"`（無 JS 時瀏覽器直接開郵件程式帶入欄位；有 JS 時 `preventDefault` 照舊接手）＋ `<noscript>` 三語說明。反向測試拿掉注入並重建 → exit 2（三語）。
       `<form class="join__form" id="join-form" novalidate>` —— **無 `action`**，
       且 `novalidate` 關掉了瀏覽器原生驗證。唯一的處理是 `site.js` 的
       `submit` + `preventDefault`。無 JS 時按下送出 = 對同一 URL 發 GET，
@@ -206,7 +209,8 @@
       修法擇一：`action="mailto:support@crealize.llc" method="post"`（陽春但可用）、
       或在 `<noscript>` 明示「請直接寄信到 support@crealize.llc」。
 
-- [ ] **zh 頁同一產品：卡片顯示日文副名、modal 顯示中文譯名** `[實測]` —— 需你決定
+- [x] **zh 頁同一產品：卡片顯示日文副名、modal 顯示中文譯名** `[實測]` —— 需你決定
+      ✅ **已修（2026-09-04，PR #3 `feat/product-links-and-remaining-fixes`）**：走非破壞路線 ②：`gen-work-v3.mjs` 的 `card__jp` 改為優先讀本頁 registry 的 `jp`（zh 的 10 個譯名生效），沒有才退回 work-copy.json 的日文；`lang="ja"` 改依假名偵測。**不動任何人已寫的譯文**。瀏覽器實測 zh PurityLens：卡片「成分一目了然」== modal「成分一目了然」，皆無 `lang`（中文，繼承 zh-Hant）；6 個未譯者（音で解く 2048 等）維持日文並標 `lang=ja`。gate 改為「含假名者必標、不含者不得標」，三語 en 13/16、ja 13/16、zh 6/16。若要改採「日文副名全站當品牌識別」，只需把 `zh.js` 那 10 個 `jp` 改回日文，其餘不用動。
       卡片的 `card__jp` 取自 `docs/design-system/work-copy.json` 的 `p.jp`（locale 無關，永遠日文）；
       modal 與 Index 列取自 `site/js/i18n/zh.js` 的 `work[].jp`（中文譯名）。
       實測 zh 頁 PurityLens：卡片「成分をひと目で」、點開 modal「成分一目了然」—— 同一欄位兩種語言。
@@ -235,14 +239,16 @@
       修法：改成三語各自的「開啟選單 / メニューを開く / 開啟選單」，
       字串走既有的 `CRZ_I18N`。
 
-- [ ] **404 頁只有英文** `[實測]`
+- [x] **404 頁只有英文** `[實測]`
+      ✅ **已修（2026-09-04，PR #3 `feat/product-links-and-remaining-fixes`）**：`site/404.html` 三語同檔：三個 `<p lang data-l>` 段落，內嵌腳本依 `location.pathname` 的 `/ja/` `/zh/` 前綴切換 `<html lang>` 與可見段落並指回各語首頁；`<noscript>` 三段全顯。瀏覽器實測（`replaceState` 到 `/ja/no-such-page` 後重跑腳本）：`lang=ja`、只顯示 ja 段、連結 `/ja/`；`/zh/x` → `zh-Hant`。線上實測見部署後複驗。
       `site/404.html` 是 `lang="en"`，且不存在 `site/ja/404.html`、`site/zh/404.html`。
       GitHub Pages 對所有路徑（含 `/ja/*`、`/zh/*`）都回這一份。
       線上實測 `https://crealize.llc/no-such-page-xyz` → HTTP **404**（狀態碼正確），
       頁面有 `<a href="/">return to reality` 可回首頁。
       修法成本低但需決定要不要為 404 做三語（GitHub Pages 不支援依路徑分流 404）。
 
-- [ ] **`atmosphere.js` 的兩個 resize 監聽順序錯置** `[程式碼]`
+- [x] **`atmosphere.js` 的兩個 resize 監聽順序錯置** `[程式碼]`
+      ✅ **已修（2026-09-04，PR #3 `feat/product-links-and-remaining-fixes`）**：`resize()` 只重設尺寸；重播種監聽改為 `seedRibbons(); seedMotes(); if (prefersReduced) render(0);` —— 新種子立刻畫出，不再等下一次 resize。gate 檢查單一重播種監聽 + 重播種後重繪 + `resize()` 內不得先用舊種子 render；反向測試拿掉 `render(0)` → exit 2。使用者端可見程度仍未量測（同原條目）。
       `site/js/atmosphere.js:35` 註冊 `resize()` —— 它會重設 canvas 尺寸並在
       `prefersReduced` 時呼叫 `render(0)` 重繪；
       `:179` 另外註冊 `() => { seedRibbons(); seedMotes(); }` —— 重新隨機化種子
@@ -253,7 +259,8 @@
       ⚠️ 誠實邊界：**使用者端可見程度未量測**。行動裝置捲動時網址列收合會觸發 resize，
       推測會看到背景跳動，但未在真機或模擬器上確認。
 
-- [ ] **reduced-motion 下 hero 永遠停在結尾狀態，但「SCROLL TO MATERIALIZE」提示還在** `[實測]`
+- [x] **reduced-motion 下 hero 永遠停在結尾狀態，但「SCROLL TO MATERIALIZE」提示還在** `[實測]`
+      ✅ **已修（2026-09-04，PR #3 `feat/product-links-and-remaining-fixes`）**：`hero.js`：`prefersReduced` 時 `scrollLabel.hidden = true`（只藏「Scroll to materialize」那個 span，右側 `p=` 讀數與 phase 標籤保留，它們反映真實狀態）。敘事本身（直接給結果）維持原設計。反向測試拿掉該行 → exit 2。
       `site/js/hero.js:442` `const p = prefersReduced ? 1 : ...`、
       `:461` `choreographType(prefersReduced ? 1 : progress)` ——
       `p` 對 reduced-motion 使用者恆為 1，捲動不會改變它。
@@ -264,6 +271,13 @@
       ② 「SCROLL TO MATERIALIZE」這個提示對他們永久為假（已經 materialize 完了）。
       ⚠️ 這**可能是刻意的**無障礙取捨（跳過動畫、直接給結果），所以列為低優先、
       需要設計決策而非直接改。若要改：至少讓提示文字在 `p===1` 時換掉。
+
+- [x] **KV 主視覺 `uses-responsive-images` 50 分（首屏 `kv/puritylens.webp` 浪費 84%）** `[實測]`
+      這一項原本不在本清單（列在 `docs/perf-evidence/2026-09-04/README.md` 的「已知未處理」），此處補記以免遺漏。
+      ✅ **已修（2026-09-04，PR #3 `cbe14ee`，gh-pages `24f0d11f`）**：800×600 變體放 `site/assets/kv-800/`（母版 16 張 sha256 不變 `d9968599d97105a2`），
+      `stage__bg` 加 `srcset`/`sizes`；新 gate `audit-kv-variants.mjs`（存在／檔頭 800×600／bytes<母版／母版目錄純淨／三語 srcset+sizes）。
+      線上 CDP 實測 7 個視口×DPR 選圖全對、modal 3/3 足夠、真實 bytes 變體 ≈30.5 KB vs 母版 ≈70.6 KB、390@2x 並排 PSNR 41.4 dB。
+      證據：`docs/ux-evidence/2026-09-04/`。Lighthouse 分數未重跑。
 
 ## 稽核中確認為「正確」的項目（避免下次重測）
 
