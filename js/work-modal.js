@@ -251,7 +251,8 @@
        文字走 i18n（ui.ctaLabel + 產品名），新分頁 + noopener。 */
     if (w.url) {
       els.cta.href = w.url;
-      els.cta.textContent = ((window.CRZ_I18N && window.CRZ_I18N.ui.ctaLabel) || 'Open') + ' ' + w.name + ' ↗';
+      /* {name} 模板：日文語序是「Meishitto を開く」，動詞在後 —— 不能用「動詞 + 名字」硬拼。 */
+      els.cta.textContent = ((window.CRZ_I18N && window.CRZ_I18N.ui.ctaLabel) || 'Open {name}').replace('{name}', w.name) + ' ↗';
       els.cta.hidden = false;
     } else {
       els.cta.hidden = true;

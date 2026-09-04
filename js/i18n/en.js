@@ -187,6 +187,6 @@ window.CRZ_I18N = {
     formOpened: 'Your mail app should be open — or write us directly: support@crealize.llc',
     mailSubject: 'Crealize — project inquiry',
     menuLabel: 'Menu',
-    ctaLabel: 'Open',
+    ctaLabel: 'Open {name}',
   },
 };
