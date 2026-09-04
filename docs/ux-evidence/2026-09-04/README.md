@@ -227,8 +227,21 @@ Codex 要求補：選單／語系／modal／表單驗證狀態。全部用既有
 | 行動選單開啟（ja 390@2x） | `ja-390-menu-open.webp` | `aria-expanded=true`、按鈕名「メニュー」、面板 `display:grid`、連結 4 個；Escape 後 `aria-expanded=false`、面板 hidden、焦點回到按鈕 = True |
 | 語系選單開啟（en 1280） | `en-1280-lang-open.webp` | `aria-expanded=true`、`visibility:visible`、項目 English(en,current) / 日本語(ja) / 繁體中文(zh-Hant)；Escape 後 `visibility:hidden`、ja 連結可聚焦 = False（開啟時 = True）|
 | Modal 開啟（zh 1280，現行文案） | `zh-1280-modal-open.webp` | PurityLens／副名「成分一目了然」／CTA「前往 PurityLens ↗」→ `https://puritylens.smartrich.ai/`（`target=_blank rel=noopener`）；Escape 後 hidden = True |
-| 表單驗證錯誤（en 1280） | `en-1280-form-invalid.webp` | 空欄位送出 → f-name:true, f-email:true, f-msg:true；`.is-error` 3 個；`#f-note`（aria-live=polite）「Please fill the required fields marked in orange.」；href 未變 = True |
-| 表單驗證錯誤（ja 390@2x） | `ja-390-form-invalid.webp` | f-name:true, f-email:true, f-msg:true；`.is-error` 3；「オレンジ色の必須項目をご記入ください。」；href 未變 = True |
+| 表單驗證錯誤（en 1280，A2 取景） | `en-1280-form-invalid.webp` | 送出鈕與 `#f-note` 同框後空欄送出 → f-name:true, f-email:true, f-msg:true；`.is-error` 3；`#f-note`（aria-live=polite）「Please fill the required fields marked in orange.」；href 未變 = True；scrollY 8581→8581、焦點 BODY→BODY；NAME 標籤 top 293 ≥ nav bottom 72（labelClearOfNav = True）；note 761–776 在 800 視口內 |
+| 表單驗證錯誤（ja 390@2x，A2 取景） | `ja-390-form-invalid.webp` | 同上路徑 → 三欄 true；`.is-error` 3；「オレンジ色の必須項目をご記入ください。」；href 未變 = True；scrollY 14659→14659、BODY→BODY；label top 337 ≥ nav bottom 60；note 805–820 在 844 視口內 |
+| 診斷（負對照）：舊 C 取景 en 1280 | `en-1280-form-invalid-diag-c-framing.webp` | `e5f5c59` 原拍保留。`#join-form` 頂端捲到 y=0 → NAME 標籤 top 35 < nav bottom 72，被固定 nav 遮住——**取景造成，不是站的缺陷**：站內沒有路徑會這樣捲（錨點目標是 `#join` 區塊，其 padding-top ≥ 100px > nav 72px；送出 handler 不捲動、不聚焦，探針 scrollY 不變）。腳本把它保留為負對照，斷言「必被遮」，證明 labelClearOfNav 這條斷言真的會紅 |
+| 診斷（負對照）：舊 C 取景 ja 390@2x | `ja-390-form-invalid-diag-c-framing.webp` | 同上，label top 23 < nav bottom 60 |
+
+### 表單狀態：取景與可執行斷言（2026-09-04，Codex 對齊後）
+
+Codex 接受的是**驗證方案**，像素待其獨立驗收後才勾。`capture-states.mjs` 表單段改為：
+
+- **A2 取景**（正式證據）：`#f-note` 底緣對齊視口底 −24px，讓 NAME 標籤、送出鈕、錯誤訊息同框——使用者按送出前的真實位置。
+- **C 取景**（負對照，`*-diag-c-framing.webp`）：`#join-form` 頂端捲到 y=0，固定 nav 必遮住 NAME 標籤。
+- 每語 7 條斷言，任一失敗 exit 1：href 不變 · scrollY／焦點不變 · labelClearOfNav 且 label／送出鈕／note 同在視口 · 3 欄 `aria-invalid=true` · `.is-error` ×3 · `#f-note` = `CRZ_I18N.ui.formErr` 且 aria-live=polite · 負對照 C 必被遮。
+- 只重跑表單段（其餘檔不動）：`SP=<輸出根目錄> node docs/ux-evidence/2026-09-04/states/capture-states.mjs form`，探針合併進 `probes.json`。
+- 殺測試（2026-09-04 實跑）：把負對照斷言反相（`===false` → `===true`）→ 兩語各一條 ✗、exit 1。
+- 未實作、已記 TODO 子項：輸入一字後 `.is-error` 清除但 `aria-invalid` 留 true（`docs/development/TODO.md` 表單條目下）。
 
 ## 已有、直接引用（不重跑）
 - skip link / 語系選單焦點 / `aria-invalid` 的鍵盤實測、logo／icon 尺寸機械比對：PR #2 留言與本 README 第一段（`9ff825d` 時期，對應機制未變，且上表對現行部署重驗了語系選單與 aria-invalid）。
@@ -237,4 +250,4 @@ Codex 要求補：選單／語系／modal／表單驗證狀態。全部用既有
 - 日文文節／320 header：`copy/after-cjk-fix/`（`f16cf38` 的 site/ = 現行部署位元）。
 
 ## 邊界
-局部狀態證據，不是全站互動／真機總驗收；三語 × 各狀態未全部組合拍（各取一語代表）。
+局部狀態證據，不是全站互動／真機總驗收；三語 × 各狀態未全部組合拍（各取一語代表，表單未拍 zh）。表單證據為 headless Chrome 對現行部署的 DOM 量測與截圖；aria-live 是否真被朗讀、真機呈現未驗。

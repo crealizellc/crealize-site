@@ -52,7 +52,37 @@
   }
  },
  "en-1280-form-invalid": {
-  "hrefUnchanged": true,
+  "framing": "A2 #f-note 底緣對齊視口底 −24px（送出鈕與錯誤訊息同框）後空欄送出",
+  "before": {
+   "href": "https://crealize.llc/",
+   "scrollY": 8581,
+   "active": "BODY",
+   "navBottom": 72,
+   "labelTop": 293,
+   "labelBottom": 309,
+   "labelClearOfNav": true,
+   "labelInViewport": true,
+   "submitInViewport": true,
+   "noteTop": 761,
+   "noteBottom": 776,
+   "innerH": 800,
+   "noteInViewport": true
+  },
+  "after": {
+   "href": "https://crealize.llc/",
+   "scrollY": 8581,
+   "active": "BODY",
+   "navBottom": 72,
+   "labelTop": 293,
+   "labelBottom": 309,
+   "labelClearOfNav": true,
+   "labelInViewport": true,
+   "submitInViewport": true,
+   "noteTop": 761,
+   "noteBottom": 776,
+   "innerH": 800,
+   "noteInViewport": true
+  },
   "invalid": [
    "f-name:true",
    "f-email:true",
@@ -61,11 +91,60 @@
   "isError": 3,
   "note": "Please fill the required fields marked in orange.",
   "noteLive": "polite",
+  "formErr": "Please fill the required fields marked in orange.",
+  "hrefUnchanged": true,
+  "scrollYUnchanged": true,
   "vis": "visible",
-  "anim": 10
+  "anim": 1,
+  "diagC": {
+   "framing": "C 表單頂端捲到 y=0（舊取景，僅診斷／負對照）",
+   "href": "https://crealize.llc/",
+   "scrollY": 8839,
+   "active": "BODY",
+   "navBottom": 72,
+   "labelTop": 35,
+   "labelBottom": 51,
+   "labelClearOfNav": false,
+   "labelInViewport": true,
+   "submitInViewport": true,
+   "noteTop": 503,
+   "noteBottom": 518,
+   "innerH": 800,
+   "noteInViewport": true
+  }
  },
  "ja-390-form-invalid": {
-  "hrefUnchanged": true,
+  "framing": "A2 #f-note 底緣對齊視口底 −24px（送出鈕與錯誤訊息同框）後空欄送出",
+  "before": {
+   "href": "https://crealize.llc/ja/",
+   "scrollY": 14659,
+   "active": "BODY",
+   "navBottom": 60,
+   "labelTop": 337,
+   "labelBottom": 353,
+   "labelClearOfNav": true,
+   "labelInViewport": true,
+   "submitInViewport": true,
+   "noteTop": 805,
+   "noteBottom": 820,
+   "innerH": 844,
+   "noteInViewport": true
+  },
+  "after": {
+   "href": "https://crealize.llc/ja/",
+   "scrollY": 14659,
+   "active": "BODY",
+   "navBottom": 60,
+   "labelTop": 337,
+   "labelBottom": 353,
+   "labelClearOfNav": true,
+   "labelInViewport": true,
+   "submitInViewport": true,
+   "noteTop": 805,
+   "noteBottom": 820,
+   "innerH": 844,
+   "noteInViewport": true
+  },
   "invalid": [
    "f-name:true",
    "f-email:true",
@@ -74,7 +153,26 @@
   "isError": 3,
   "note": "オレンジ色の必須項目をご記入ください。",
   "noteLive": "polite",
+  "formErr": "オレンジ色の必須項目をご記入ください。",
+  "hrefUnchanged": true,
+  "scrollYUnchanged": true,
   "vis": "visible",
-  "anim": 6
+  "anim": 1,
+  "diagC": {
+   "framing": "C 表單頂端捲到 y=0（舊取景，僅診斷／負對照）",
+   "href": "https://crealize.llc/ja/",
+   "scrollY": 14973,
+   "active": "BODY",
+   "navBottom": 60,
+   "labelTop": 23,
+   "labelBottom": 39,
+   "labelClearOfNav": false,
+   "labelInViewport": true,
+   "submitInViewport": true,
+   "noteTop": 491,
+   "noteBottom": 506,
+   "innerH": 844,
+   "noteInViewport": true
+  }
  }
 }
