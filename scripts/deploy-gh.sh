@@ -50,6 +50,9 @@ node scripts/audit-critical-path.mjs
 echo "▶ A11y audit（skip link · lang=ja · aria-current · langmenu visibility）..."
 node scripts/audit-a11y.mjs
 
+echo "▶ CJK line-break audit（ja 文節 320/375/390 不拆行）..."
+node scripts/audit-cjk-linebreak.mjs
+
 # 產品對外連結：逐一打真實 URL，200 且本文含產品名。需網路，只在部署前跑。
 echo "▶ Links audit（13 個產品頁 200 + 含產品名）..."
 node scripts/audit-links.mjs

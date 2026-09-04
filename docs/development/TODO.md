@@ -22,8 +22,10 @@
 
 ## 需人工确认
 
-- [ ] 配置 GitHub Pages 部署 <!-- auto:manual;tip=请参考 docs/deployment/GITHUB_PAGES.md 完成部署 -->
-- [ ] 完善文档内容 <!-- auto:manual;tip=请补充 docs/README.md、docs/website-content.md 等文档内容 -->
+- [x] 配置 GitHub Pages 部署 <!-- auto:manual;tip=请参考 docs/deployment/GITHUB_PAGES.md 完成部署 -->
+  ✅ 已驗證（2026-09-04）：`gh api repos/crealizellc/crealize-site/pages` → status=built、cname=crealize.llc、source=gh-pages:/、https_enforced=true、憑證 approved；`https://crealize.llc/` HTTP 200（server: GitHub.com）。部署腳本 `scripts/deploy-gh.sh`，回退 `scripts/rollback-gh.sh`。
+- [x] 完善文档内容 <!-- auto:manual;tip=请补充 docs/README.md、docs/website-content.md 等文档内容 -->
+  ✅ 已完成（2026-09-04）：README.md / CLAUDE.md 對齊線上實況（之前整份在描述已停用的 Next.js）；證據包 `docs/perf-evidence/2026-09-04/`、`docs/ux-evidence/2026-09-04/`；文案對照 `docs/copy-review/2026-09-04-de-ai.md`。
 
 ---
 
@@ -115,6 +117,9 @@
 7. 保持两个仓库的文档同步
 
 ## 当前进度
+
+> ⚠️ 下列「第一步～第七步」是 2025 年 Next.js 版的計畫，該架構 2025-09-10 起停用；線上站的實際狀態見本檔下方「線上站 UX / 無障礙缺陷清單」（13/13 已修）。此清單保留作歷史，不再更新。
+
 
 - [ ] 第一步：创建仓库
   - [x] 创建公开仓库 crealize

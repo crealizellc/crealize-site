@@ -155,3 +155,34 @@ SP=/tmp/kvproof BASE=http://127.0.0.1:8814 OUT=/tmp/kvproof \
 - 線上 HTML 含 `srcset="assets/kv-800/puritylens.webp 800w, assets/kv/puritylens.webp 1600w"`；ja 頁 `aria-label="PurityLens を開く"`。
 
 未證明：真機；Lighthouse 分數（未重跑）。
+
+
+---
+
+# 文案改版的視覺確認 + 日文文節斷行修正（第四批）
+
+## 絕對路徑
+
+| | 路徑 |
+|---|---|
+| 文案改版後 12 張（三語 × 桌機 1280／手機 390 × method／join／卡片列／modal；zh-m390 兩張為修孤字後重拍）| `/Users/crealize-00/Projects/crealize-site/docs/ux-evidence/2026-09-04/copy/before-cjk-fix/` |
+| 文節修正後（ja × 320／375／390／1280 × join／method；en／zh 320 header）| `/Users/crealize-00/Projects/crealize-site/docs/ux-evidence/2026-09-04/copy/after-cjk-fix/` |
+| PNG 原檔（未進 repo）| `/private/tmp/claude-501/-Users-crealize-00-Projects/72731612-787b-41e9-a7f7-df2f26060532/scratchpad/copyshots/`、`…/scratchpad/cjk/`、`…/scratchpad/cjk2/` |
+| 文案逐條對照 | `/Users/crealize-00/Projects/crealize-site/docs/copy-review/2026-09-04-de-ai.md` |
+
+## 修了什麼（文案一字不改）
+
+1. **日文文節斷行**：CJK 沒有空格，瀏覽器在任何字之間都能換行。實拍看到 390px 的 Join 標題「つくっ／た」、Method 開場句「リリ／ース」；拍更多視口後又看到 Join 強調行「見せてくださ／い。」（320／375／**1280 桌機**都會）、拠点列「東京本／社」、職種列「グロー／ス」。
+   修法是日文網頁的標準手法：每個文節包 `<span class="jw">`（`display:inline-block`，`site.css`），瀏覽器只能在文節之間換行。由 `build-site.mjs` 的 ja 覆寫加標籤，共 15 個文節；en／zh 不受影響（gate 檢查無殘留）。
+2. **320px 的 header**：「Crealize LLC ＋ 選單 ＋ 語言 ＋ CTA」一列擠不下，CTA「相談する」被 flex 壓成直排四行。修法：`.nav__cta` 永不折行、不被壓縮（`white-space: nowrap; flex-shrink: 0`），≤400px 縮間距、藏「LLC」小字、按鈕 padding 18→12。字級不動（12px 已是下限）。
+
+## Gate：`scripts/audit-cjk-linebreak.mjs`（`check:cjk`，進 `check:all` 與 `deploy-gh.sh`）
+
+用既有 CDP 路徑實際排版：ja 頁 320／375／390／1280 每個 `.jw` 的 `getClientRects().length === 1` 且無水平溢出；三語 320 的 `.nav__cta` 單行、高 ≤44px、右緣不出視口；en／zh 無 `.jw` 殘留。
+
+反向測試（真實路徑）：拿掉 `.jw` 規則 → 320 三個文節被拆（「リリースまで、」「つくった」「ものを、」）、375／390／1280 各兩個 → `exit 2`；拿掉 nav 的 nowrap＋≤400 收緊 → `exit 2`：en「CTA 右緣 343 超出視口 320」、ja「相談する」文字佔 4 個行框、zh「聯絡我們」4 個行框。
+**記錄兩個測試缺陷**：① 第一次只拿掉 nowrap，gate 仍綠 —— ≤400 收緊單獨就已讓 CTA 放得下；殺得掉的測試必須拿掉整組修正。② 拿掉整組後 gate 只紅 en：pill 固定高 34px，文字折行時溢出框外，元素的 rect 數與高度都不變。改為量文字本身的行框（`Range.getClientRects()`）後，ja／zh 才如實紅在「4 個行框」。
+
+## 誠實邊界
+- 320 的驗證是 headless Chrome 排版；真機 Safari 的字體度量可能略有差異（文節法對此不敏感，因為它只限制「在哪裡可以換行」）。
+- Join 標題在 1280 桌機仍是 5 行（原本 5 行含「い。」孤字），因為該欄寬只容 7 字；沒有改字級或版型。

@@ -94,13 +94,13 @@ const LOCALES = {
       '<span class="line">Research, design, engineering, launch — then keep improving.</span>':
         '<span class="line">調査、設計、開発、リリース。その後も改善を続けます。</span>',
       'A clear path from idea to launch.':
-        'アイデアからリリースまで、明確な手順で進めます。',
+        '<span class="jw">アイデアから</span><span class="jw">リリースまで、</span><span class="jw">明確な</span><span class="jw">手順で</span><span class="jw">進めます。</span>',
       'Show us what<br/><span class="accent">you\'ve made.</span>':
-        'これまでにつくったものを、<br/><span class="accent">見せてください。</span>',
+        '<span class="jw">これまでに</span><span class="jw">つくった</span><span class="jw">ものを、</span><br/><span class="accent"><span class="jw">見せて</span><span class="jw">ください。</span></span>',
       'We\'re a small, remote-first team based in Tokyo. We value clear communication, thoughtful craft, and work that reaches real users. If you\'d like to work with us, send one project you\'re proud of and tell us what you contributed.':
         '東京を拠点にした少人数のチームで、ふだんはリモートで働いています。飾らないやり取りと、つくったものが実際に使われることを大事にしています。応募のときは、自信のあるプロジェクトを一つ選んで、自分が担当した部分を教えてください。',
-      '<span class="v">Remote-first · Tokyo HQ <span class="jp-accent" aria-hidden="true">東京</span></span>': '<span class="v">リモートファースト · 東京本社</span>',
-      '<span class="v">Design · Engineering · Growth</span>': '<span class="v">デザイン · エンジニアリング · グロース</span>',
+      '<span class="v">Remote-first · Tokyo HQ <span class="jp-accent" aria-hidden="true">東京</span></span>': '<span class="v"><span class="jw">リモートファースト</span> · <span class="jw">東京本社</span></span>',
+      '<span class="v">Design · Engineering · Growth</span>': '<span class="v"><span class="jw">デザイン</span> · <span class="jw">エンジニアリング</span> · <span class="jw">グロース</span></span>',
       '<span class="k">Base</span>': '<span class="k">拠点</span>',
       '<span class="k">Roles</span>': '<span class="k">職種</span>',
       '<span class="k">Contact</span>': '<span class="k">連絡先</span>',

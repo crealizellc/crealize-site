@@ -219,7 +219,10 @@ main, .nav, .foot { position: relative; z-index: 1; }
   border-radius: 50%;
   background: var(--accent);
 }
-.nav__cta { height: 40px; padding: 0 18px; }
+.nav__cta { height: 40px; padding: 0 18px;
+  /* 320px 實測：header 一列放不下時，CTA 被 flex 壓扁、文字「相談する」直排成四行。
+     按鈕永遠不折行、也不被壓縮；寬度不夠時由 ≤400px 的規則縮小間距，而不是折字。 */
+  white-space: nowrap; flex-shrink: 0; }
 
 /* 精簡導覽。按鈕與面板由 site.js 生成，桌面寬度完全不出現。
    斷點 860px 是量出來的，不是猜的：三語 nav 在不隱藏 links 時實際需要
@@ -269,6 +272,14 @@ main, .nav, .foot { position: relative; z-index: 1; }
 @media (max-width: 720px) {
   .nav__cta { height: 34px; padding: 0 14px; font-size: 12px; }
   :root { --nav-h: 60px; }
+}
+/* ≤400px（320 實測）：Crealize LLC + 選單 + 語言 + CTA 一列擠不下。
+   不折字、不縮按鈕字級（12px 已是下限），改縮間距、藏 LLC 小字。 */
+@media (max-width: 400px) {
+  .nav__right { gap: var(--s-2); }
+  .nav__brand { gap: 6px; }
+  .nav__tm { display: none; }  /* 「LLC」小字讓位給按鈕 */
+  .nav__cta { padding: 0 12px; }
 }
 
 /* =====================  HERO  ===================== */
@@ -431,3 +442,10 @@ main, .nav, .foot { position: relative; z-index: 1; }
   transform: none; opacity: 1;
   outline: 2px solid var(--accent); outline-offset: 2px;
 }
+
+/* 日文文節斷行（2026-09-04）：CJK 沒有空格，瀏覽器會在任何字之間換行，390px 時
+   Join 標題斷成「つくっ／た」、Method 開場句斷成「リリ／ース」。標準解法是把每個文節包成
+   inline-block —— 只能在文節之間換行，文節內不斷；文案一字不改。由 build-site.mjs 的 ja
+   覆寫加 <span class="jw">，gate 是 scripts/audit-cjk-linebreak.mjs（每個 .jw 只能佔一個 rect）。 */
+.jw { display: inline-block; }
+
