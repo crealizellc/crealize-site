@@ -169,6 +169,11 @@ const out = `/* ============================================================
      「那還有必要打開嗎」。現在卡片＝鉤子，modal＝完整內容，所以卡片要說得出
      「裡面還有東西」，否則沒人會點。 */
   var MORE = { en: 'Read the full story', ja: '詳しく読む', zh: '看完整說明' };
+  /* 卡片 aria-label 與 modal CTA 共用同一組語序模板：日文動詞在後（{name} を開く），不是英式「開く X」。 */
+  var OPEN = { en: 'Open {name}', ja: '{name} を開く', zh: '前往 {name}' };
+  /* stage__bg 的 sizes：對應 sections.css 的 #work-cards 欄數（≥1101 三欄、≥641 兩欄、其餘一欄），
+     數值由 2026-09-04 CDP 量測校準：1440→419、1280→372（29vw）；1080→482、768→341（44.5vw）；390→350（90vw）。 */
+  var SIZES = '(min-width: 1101px) 29vw, (min-width: 641px) 44.5vw, 90vw';
 
 /* ── motifs：canvas 的原樣切出，加上 work-copy.json 帶進來的新產品 ── */
 ${M}
@@ -213,14 +218,16 @@ ${P}
          角落 該產品官方 app icon —— 統一尺寸與位置
        **不放手機或任何裝置外框**（Yves 講過兩次：那是十年前的設計）。
        slogan 不燒進圖裡，留在下面的 meta，否則 ja/zh 頁會變成英文圖 + 本地化字的重複。 */
-    var bg = reg ? '<img class="stage__bg" src="' + reg.img + '" alt="" loading="lazy" decoding="async" width="1600" height="1200" />' : '';
+    var bg = reg ? '<img class="stage__bg" src="' + reg.img
+      + '" srcset="' + reg.img.replace('assets/kv/', 'assets/kv-800/') + ' 800w, ' + reg.img + ' 1600w" sizes="' + SIZES
+      + '" alt="" loading="lazy" decoding="async" width="1600" height="1200" />' : '';
     /* 沒有官方 icon 的產品就不放標記 —— 不自己生一個。
        缺哪些由 audit-work-v3 的 AC-3 列名回報，等真的 icon 進來再補。 */
     var icon = (reg && p.hasIcon)
       ? '<img class="stage__icon" src="' + reg.img.replace(/assets\\/kv\\/[^/]+$/, 'assets/icons/' + p.s + '.webp') +
         '" alt="' + p.n + ' icon" loading="lazy" decoding="async" width="144" height="144" />'
       : '';
-    return '<article class="card work-card" data-work-index="' + idx + '" tabindex="0" role="button" aria-label="Open ' + p.n + '">'
+    return '<article class="card work-card" data-work-index="' + idx + '" tabindex="0" role="button" aria-label="' + OPEN[L].replace('{name}', p.n) + '">'
       + '<div class="stage" style="--tint:' + p.tint + '"' + (p.flat ? ' data-flat="1"' : '') + (p.border ? ' data-border="1"' : '') + '>' + bg + M[p.s] + icon + '</div>'
       + '<div class="card__meta"><h3 class="card__name"><em>' + p.n + '</em><i class="dot dot--' + p.st + '"></i></h3>'
       /* 副名（2026-09-04）：優先取本頁 i18n registry 的 jp（zh 頁有 10/16 是中文譯名），

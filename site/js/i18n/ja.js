@@ -187,6 +187,6 @@ window.CRZ_I18N = {
     formOpened: 'メールアプリが開きます — または直接ご連絡ください: support@crealize.llc',
     mailSubject: 'Crealize — お問い合わせ',
     menuLabel: 'メニュー',
-    ctaLabel: '開く',
+    ctaLabel: '{name} を開く',
   },
 };

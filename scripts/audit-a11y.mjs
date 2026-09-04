@@ -168,8 +168,19 @@ console.log('\n▶ [原始碼] work-modal.js：有 url 才顯示對外連結，�
   for (const l of ['en', 'ja', 'zh']) {
     const t = read(join(ROOT, `site/js/i18n/${l}.js`));
     const m = t.match(/ctaLabel:\s*'([^']*)'/);
-    if (!m || !m[1].trim()) bad(`i18n/${l}.js: 缺 ui.ctaLabel`); else ok(`i18n/${l}.js: ctaLabel「${m[1]}」`);
+    if (!m || !m[1].includes('{name}')) bad(`i18n/${l}.js: ui.ctaLabel 必須含 {name} 佔位（各語言語序不同，不能「動詞 + 名字」硬拼）`);
+    else ok(`i18n/${l}.js: ctaLabel「${m[1]}」`);
   }
+}
+
+console.log('\n▶ [產物] 卡片 aria-label 必須走各語言語序模板，不得殘留硬編英文「Open …」');
+for (const p of PAGES) {
+  const html = read(p.file);
+  const hard = (html.match(/aria-label="Open [^"]*"/g) || []).length;
+  const expect = { en: 'aria-label="Open PurityLens"', ja: 'aria-label="PurityLens を開く"', zh: 'aria-label="前往 PurityLens"' }[p.key];
+  if (p.key !== 'en' && hard) bad(`${p.key}: 仍有 ${hard} 個硬編英文 aria-label="Open …"`);
+  else if (!html.includes(expect)) bad(`${p.key}: 找不到 ${expect}`);
+  else ok(`${p.key}: ${expect}`);
 }
 
 console.log('');

@@ -53,3 +53,91 @@ for p in "" ja/ zh/; do curl -sL https://crealize.llc/$p | shasum -a256; shasum 
 
 Browser pane 隱藏分頁（`document.hidden === true`）不推進 CSS transition，modal 開啟動畫停在半途，畫面是模糊中間態。
 已撤下，未當證據。這次改走 headless CDP（分頁為 visible），並以探針把關。
+
+
+---
+
+# KV 800×600 `srcset`（第三批，Yves 已授權；本段證據皆為本機 harness，線上數字見下方「線上複驗」）
+
+## 改了什麼（母版與風格不動）
+
+- `scripts/build-kv-assets.mjs`：同一條 sips 裁切→縮放→cwebp 路徑、同母版最後採用的 q，多產一份
+  `site/assets/kv-800/<slug>.webp`（800×600）。**母版 16 張合併 sha256 前後皆 `d9968599d97105a2`，icon 亦未動。**
+- `scripts/gen-work-v3.mjs`：`stage__bg` 加 `srcset="…kv-800/… 800w, …kv/… 1600w"`、
+  `sizes="(min-width: 1101px) 29vw, (min-width: 641px) 44.5vw, 90vw"`（對應 `sections.css` `#work-cards` 三欄／兩欄／一欄），`src` 仍指母版。
+- 新 gate `scripts/audit-kv-variants.mjs`（掛 `check:kv` 與 `deploy-gh.sh`）：每個變體存在、WebP 檔頭恰 800×600、位元小於母版、
+  母版目錄純淨、三語 HTML 的 `srcset/sizes/src` 逐一相符。**「audit-kv 掃不到」不是合格理由，這支才是。**
+
+位元（檔案）：16 張母版 1,125,590 B → 變體 **447,818 B（40%）**；先前提案用母版降採樣估的 56% 偏保守，
+實際由原始 PNG 走同一條路徑產出更小。
+
+## 選圖與解碼（CDP，快取關閉，`prove-kv-srcset.mjs`，本機 server 服務本 commit 的 `site/`）
+
+第一張卡（PurityLens）。`expected` = `stage 寬 × DPR ≤ 800 → 800，否則 1600`；`filePx` 由 `fetch(currentSrc)` → `createImageBitmap` 解碼實測
+（`naturalWidth` 在 srcset 下是密度校正值，不能拿來當檔案尺寸 —— 這是本次踩到並修正的量測錯誤）；`netBytes` 是 `Network.loadingFinished.encodedDataLength`。
+
+| 視口 | DPR | `.stage` CSS px | 需要 px | 預期 | 實選 | 解碼 px | 網路 bytes |
+|---|---|---|---|---|---|---|---|
+| 390 | 2 | 350 | 700 | 800 | **800** | 800×600 | **30,437** |
+| 390 | 3 | 350 | 1050 | 1600 | 1600 | 1600×1200 | 70,505 |
+| 768 | 2 | 341 | 682 | 800 | **800** | 800×600 | 30,437 |
+| 1080 | 2 | 482 | 964 | 1600 | 1600 | 1600×1200 | 70,505 |
+| 1280 | 1 | 372 | 372 | 800 | **800** | 800×600 | 30,437 |
+| 1280 | 2 | 372 | 744 | 800 | **800** | 800×600 | 30,437 |
+| 1440 | 2 | 419 | 838 | 1600 | 1600 | 1600×1200 | 70,505 |
+
+7/7 與預期一致。1080@2、1440@2、390@3 拿 1600 是**正確**選擇，不是浪費。
+
+Modal 把卡片的 `.stage` 整組 clone 進 `.work-modal__shot`，沿用同一個 `sizes`；量測結果它也選得夠用，**不需另設 sizes**：
+
+| 視口 | DPR | 槽寬 CSS px | 需要 px | 實選 | 檔案 px | 足夠 |
+|---|---|---|---|---|---|---|
+| 390 | 2 | 354 | 708 | 800 | 800 | ✓ |
+| 1280 | 2 | 380 | 760 | 800 | 800 | ✓ |
+| 1440 | 2 | 380 | 760 | 1600 | 1600 | ✓ |
+
+## 視覺並排（390@2x，同一張卡、同一裁切框，`kv-390x2-srcset-800.png` vs `kv-390x2-master-1600.png`，PNG 無損）
+
+| 指標 | 值 |
+|---|---|
+| 尺寸 | 700×524（350×262 CSS @2x） |
+| 平均絕對色差 | 1.26 / 255 |
+| PSNR | 41.4 dB |
+| 色差 >8 / >16 / >32 的像素 | 2.27% / 0.07% / 0.00% |
+| 最大色差 | 29 |
+| 非紙色像素（防拍到透明卡） | 90.0% / 89.9% |
+
+兩張裁圖拍前都確認 `.card` computed opacity = 1（第一版曾拍到 reveal 前的透明卡，已修：捲到卡片本身並等 `.is-in`；
+`Page.captureScreenshot` 的 clip 是頁面座標，需加 `scrollX/Y`）。
+
+## 反向測試（每項紅在對應理由，還原後 exit 0）
+
+| 拿掉 | 結果 |
+|---|---|
+| 刪 `kv-800/puritylens.webp` | `exit 2`「缺 site/assets/kv-800/puritylens.webp」|
+| 變體換成 144² icon | `exit 2`「變體尺寸 144×144，須為 800×600」|
+| 產生器拿掉 `srcset`（重建） | `exit 2` 三語「16/16 個 stage__bg 的 srcset/sizes/src 不符」|
+| ja `ctaLabel` 去掉 `{name}` | `exit 2`「必須含 {name} 佔位」|
+| 產生器 aria-label 改回硬編英文（重建） | `exit 2` ja/zh「仍有 16 個硬編英文 aria-label」|
+
+## 文案（Codex 兩項觀察的處置）
+
+1. **英文 modal 副名「成分をひと目で」是契約，不是漏譯，不改。** 證據：`i18n/en.js` `indexHead` 第三欄叫 `aka`、`ja.js` 叫 `和名`；
+   `work-copy.json` 根本沒有 `jp` 欄位 —— 這些日文副名由 `docs/design-system/source/claude-design-export-v2/js/site.js` 從英文 canvas 帶出來。
+   它是「產品的日文名」這個品牌元素。zh 的 10 個中文譯名（`副名` 欄）維持不動；若要全站回到設計源，改 `zh.js` 那 10 個值即可。
+2. **日文 CTA 改為「Meishitto を開く」**：`ctaLabel` 改成 `{name}` 模板（en `Open {name}` / ja `{name} を開く` / zh `前往 {name}`），
+   `work-modal.js` 與 `site.js` 套用同一模板；順手修掉 ja/zh 頁 16 張卡片硬編英文 `aria-label="Open …"`（gate 檢查 `aria-label="PurityLens を開く"`）。
+
+## 重新擷取
+
+```bash
+cd /Users/crealize-00/Projects/crealize-site/site && python3 -m http.server 8814 &   # 服務本 commit 的 site/
+SP=/tmp/kvproof BASE=http://127.0.0.1:8814 OUT=/tmp/kvproof \
+  node /Users/crealize-00/Projects/crealize-site/docs/ux-evidence/2026-09-04/prove-kv-srcset.mjs   # JSON 到 stdout，兩張裁圖到 OUT
+```
+本機結果原檔：`kv-proof-local.json`。線上：`BASE=https://crealize.llc`（見下方）。
+
+## 尚未證明（誠實邊界）
+
+- 真機 Safari／Android Chrome 的實際選圖與渲染（headless Chrome 只證明規格行為）。
+- Lighthouse 分數未重跑（重活時段限制）；本段的「節省」是**逐圖網路 bytes**，不是分數。
