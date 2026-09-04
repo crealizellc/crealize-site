@@ -155,3 +155,100 @@ SP=/tmp/kvproof BASE=http://127.0.0.1:8814 OUT=/tmp/kvproof \
 - 線上 HTML 含 `srcset="assets/kv-800/puritylens.webp 800w, assets/kv/puritylens.webp 1600w"`；ja 頁 `aria-label="PurityLens を開く"`。
 
 未證明：真機；Lighthouse 分數（未重跑）。
+
+
+---
+
+# 文案改版的視覺確認 + 日文文節斷行修正（第四批）
+
+## 絕對路徑
+
+| | 路徑 |
+|---|---|
+| 文案改版後 12 張（三語 × 桌機 1280／手機 390 × method／join／卡片列／modal；zh-m390 兩張為修孤字後重拍）| `/Users/crealize-00/Projects/crealize-site/docs/ux-evidence/2026-09-04/copy/before-cjk-fix/` |
+| 文節修正後（ja × 320／375／390／1280 × join／method；en／zh 320 header）| `/Users/crealize-00/Projects/crealize-site/docs/ux-evidence/2026-09-04/copy/after-cjk-fix/` |
+| PNG 原檔（未進 repo）| `/private/tmp/claude-501/-Users-crealize-00-Projects/72731612-787b-41e9-a7f7-df2f26060532/scratchpad/copyshots/`、`…/scratchpad/cjk/`、`…/scratchpad/cjk2/` |
+| 文案逐條對照 | `/Users/crealize-00/Projects/crealize-site/docs/copy-review/2026-09-04-de-ai.md` |
+
+## 修了什麼（文案一字不改）
+
+1. **日文文節斷行**：CJK 沒有空格，瀏覽器在任何字之間都能換行。實拍看到 390px 的 Join 標題「つくっ／た」、Method 開場句「リリ／ース」；拍更多視口後又看到 Join 強調行「見せてくださ／い。」（320／375／**1280 桌機**都會）、拠点列「東京本／社」、職種列「グロー／ス」。
+   修法是日文網頁的標準手法：每個文節包 `<span class="jw">`（`display:inline-block`，`site.css`），瀏覽器只能在文節之間換行。由 `build-site.mjs` 的 ja 覆寫加標籤，共 15 個文節；en／zh 不受影響（gate 檢查無殘留）。
+2. **320px 的 header**：「Crealize LLC ＋ 選單 ＋ 語言 ＋ CTA」一列擠不下，CTA「相談する」被 flex 壓成直排四行。修法：`.nav__cta` 永不折行、不被壓縮（`white-space: nowrap; flex-shrink: 0`），≤400px 縮間距、藏「LLC」小字、按鈕 padding 18→12。字級不動（12px 已是下限）。
+
+## Gate：`scripts/audit-cjk-linebreak.mjs`（`check:cjk`，進 `check:all` 與 `deploy-gh.sh`）
+
+用既有 CDP 路徑實際排版：ja 頁 320／375／390／1280 每個 `.jw` 的 `getClientRects().length === 1` 且無水平溢出；三語 320 的 `.nav__cta` 單行、高 ≤44px、右緣不出視口；en／zh 無 `.jw` 殘留。
+
+反向測試（真實路徑）：拿掉 `.jw` 規則 → 320 三個文節被拆（「リリースまで、」「つくった」「ものを、」）、375／390／1280 各兩個 → `exit 2`；拿掉 nav 的 nowrap＋≤400 收緊 → `exit 2`：en「CTA 右緣 343 超出視口 320」、ja「相談する」文字佔 4 個行框、zh「聯絡我們」4 個行框。
+**記錄兩個測試缺陷**：① 第一次只拿掉 nowrap，gate 仍綠 —— ≤400 收緊單獨就已讓 CTA 放得下；殺得掉的測試必須拿掉整組修正。② 拿掉整組後 gate 只紅 en：pill 固定高 34px，文字折行時溢出框外，元素的 rect 數與高度都不變。改為量文字本身的行框（`Range.getClientRects()`）後，ja／zh 才如實紅在「4 個行框」。
+
+## 誠實邊界
+- 320 的驗證是 headless Chrome 排版；真機 Safari 的字體度量可能略有差異（文節法對此不敏感，因為它只限制「在哪裡可以換行」）。
+- Join 標題在 1280 桌機仍是 5 行（原本 5 行含「い。」孤字），因為該欄寬只容 7 字；沒有改字級或版型。
+
+
+---
+
+# 四批全部上線後的 Lighthouse（線上 · mobile · 12.8.2）—— 未重現穩定退化
+
+**先講清楚比較基準**：表中的 77 是**舊部署** `24f0d11f`（第三批，KV 之前）的單次取樣，不是現行部署。
+現行部署 gh-pages `e82fb28`（= PR #4 `f16cf38` 的 `site/`）的四次取樣是 **63 / 100 / 100 / 100**。
+首跑 63（FCP 5.8 s、`render-blocking-resources` 50）看起來像退化，追查：兩版部署的 `<head>` link/script
+**位元相同**、LCP 元素相同、唯一新增請求是 lazy 的 kv-800 圖；被列為阻擋的 `tokens.css` / `sections.css`
+一直都是阻擋式 stylesheet，只是那次的 Lantern 估計跨過了列出門檻。於是對同一份部署再連跑三次：
+
+| run | score | FCP | LCP | render-blocking 列出 |
+|---|---|---|---|---|
+| **舊部署** `24f0d11f`（第三批，KV 之前）單次 | 77 | 4.1 s | 4.1 s | — |
+| 現行部署 `e82fb28` #0 | 63 | 5.8 s | 6.1 s | sections.css, tokens.css |
+| 現行部署 #1 | **100** | 0.9 s | 1.6 s | tokens.css |
+| 現行部署 #2 | **100** | 0.9 s | 1.1 s | tokens.css |
+| 現行部署 #3 | **100** | 1.0 s | 1.1 s | tokens.css |
+| 實際節流（devtools） | 98 | 1.9 s | 1.9 s | — |
+
+同一份位元，模擬節流在 63 與 100 之間跳。結論：**未重現穩定退化**——四次取樣裡三次 100，首跑 63 沒有再出現；
+這**不等於**已證明完全無回歸（模擬模型本身就不穩定，樣本也只有四次）。據此不改程式。
+單次模擬取樣在這個站上不能當證據，要看 ≥3 次的分布，並用實際節流交叉。`uses-responsive-images` 現在是 100（KV 800 變體生效）。
+
+
+---
+
+# 現行部署的互動狀態證據（對 `https://crealize.llc` 直接拍，gh-pages `e82fb28`）
+
+Codex 要求補：選單／語系／modal／表單驗證狀態。全部用既有 CDP 路徑對**真站**操作並拍下落定畫面，
+每張附 DOM 探針（`probes.json`）。表單只走「空欄位送出」路徑——`site.js` 驗證失敗即 return，
+不會走到 mailto；探針確認 `location.href` 未變。**沒有送出任何真表單。**
+
+絕對路徑：`/Users/crealize-00/Projects/crealize-site/docs/ux-evidence/2026-09-04/states/`（腳本 `capture-states.mjs` 可重跑）
+
+| 狀態 | 檔 | 探針（現行部署）|
+|---|---|---|
+| 行動選單開啟（ja 390@2x） | `ja-390-menu-open.webp` | `aria-expanded=true`、按鈕名「メニュー」、面板 `display:grid`、連結 4 個；Escape 後 `aria-expanded=false`、面板 hidden、焦點回到按鈕 = True |
+| 語系選單開啟（en 1280） | `en-1280-lang-open.webp` | `aria-expanded=true`、`visibility:visible`、項目 English(en,current) / 日本語(ja) / 繁體中文(zh-Hant)；Escape 後 `visibility:hidden`、ja 連結可聚焦 = False（開啟時 = True）|
+| Modal 開啟（zh 1280，現行文案） | `zh-1280-modal-open.webp` | PurityLens／副名「成分一目了然」／CTA「前往 PurityLens ↗」→ `https://puritylens.smartrich.ai/`（`target=_blank rel=noopener`）；Escape 後 hidden = True |
+| 表單驗證錯誤（en 1280，A2 取景） | `en-1280-form-invalid.webp` | 送出鈕與 `#f-note` 同框後空欄送出 → f-name:true, f-email:true, f-msg:true；`.is-error` 3；`#f-note`（aria-live=polite）「Please fill the required fields marked in orange.」；href 未變 = True；scrollY 8581→8581、焦點 BODY→BODY；NAME 標籤 top 293 ≥ nav bottom 72（labelClearOfNav = True）；note 761–776 在 800 視口內 |
+| 表單驗證錯誤（ja 390@2x，A2 取景） | `ja-390-form-invalid.webp` | 同上路徑 → 三欄 true；`.is-error` 3；「オレンジ色の必須項目をご記入ください。」；href 未變 = True；scrollY 14659→14659、BODY→BODY；label top 337 ≥ nav bottom 60；note 805–820 在 844 視口內 |
+| 診斷（負對照）：舊 C 取景 en 1280 | `en-1280-form-invalid-diag-c-framing.webp` | `e5f5c59` 原拍保留。`#join-form` 頂端捲到 y=0 → NAME 標籤 top 35 < nav bottom 72，被固定 nav 遮住——**取景造成，不是站的缺陷**：站內沒有路徑會這樣捲（錨點目標是 `#join` 區塊，其 padding-top ≥ 100px > nav 72px；送出 handler 不捲動、不聚焦，探針 scrollY 不變）。腳本把它保留為負對照，斷言「必被遮」，證明 labelClearOfNav 這條斷言真的會紅 |
+| 診斷（負對照）：舊 C 取景 ja 390@2x | `ja-390-form-invalid-diag-c-framing.webp` | 同上，label top 23 < nav bottom 60 |
+
+### 表單狀態：取景與可執行斷言（2026-09-04，Codex 對齊後）
+
+Codex 接受的是**驗證方案**，像素待其獨立驗收後才勾。`capture-states.mjs` 表單段改為：
+
+- **A2 取景**（正式證據）：`#f-note` 底緣對齊視口底 −24px，讓 NAME 標籤、送出鈕、錯誤訊息同框——使用者按送出前的真實位置。
+- **C 取景**（負對照，`*-diag-c-framing.webp`）：`#join-form` 頂端捲到 y=0，固定 nav 必遮住 NAME 標籤。
+- 每語 7 條斷言，任一失敗 exit 1：href 不變 · scrollY／焦點不變 · labelClearOfNav 且 label／送出鈕／note 同在視口 · 3 欄 `aria-invalid=true` · `.is-error` ×3 · `#f-note` = `CRZ_I18N.ui.formErr` 且 aria-live=polite · 負對照 C 必被遮。
+- 只重跑表單段（其餘檔不動）：`SP=<輸出根目錄> node docs/ux-evidence/2026-09-04/states/capture-states.mjs form`，探針合併進 `probes.json`。
+- 殺測試（2026-09-04 實跑）：把負對照斷言反相（`===false` → `===true`）→ 兩語各一條 ✗、exit 1。
+- 輸入後 `.is-error` 與 `aria-invalid` 不一致：已在本機修正並加 gate `scripts/audit-form-state.mjs`（`npm run check:form`），**未部署**——本目錄的表單截圖對應的是修前的部署（空欄送出狀態本身修前修後相同）。
+- 全欄有效後 `#f-note` 仍為 formErr 的恢復缺口記在 `docs/development/TODO.md`，未驗收，不把本項說成完整表單 UX PASS。
+
+## 已有、直接引用（不重跑）
+- skip link / 語系選單焦點 / `aria-invalid` 的鍵盤實測、logo／icon 尺寸機械比對：PR #2 留言與本 README 第一段（`9ff825d` 時期，對應機制未變，且上表對現行部署重驗了語系選單與 aria-invalid）。
+- Modal CTA 三張（`modal-cta-*.webp`，`37d2efc` 時期）：CTA 版面證據；文案已在 PR #4 改版，現行文案見上表 zh modal。
+- KV srcset 選圖／bytes（`kv-proof-live.json`，`24f0d11f` 時期）：機制未變；現行部署 Lighthouse `uses-responsive-images` = 100。
+- 日文文節／320 header：`copy/after-cjk-fix/`（`f16cf38` 的 site/ = 現行部署位元）。
+
+## 邊界
+局部狀態證據，不是全站互動／真機總驗收；三語 × 各狀態未全部組合拍（各取一語代表，表單未拍 zh）。表單證據為 headless Chrome 對現行部署的 DOM 量測與截圖；aria-live 是否真被朗讀、真機呈現未驗。

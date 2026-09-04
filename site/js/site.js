@@ -272,20 +272,29 @@
     const submit = document.getElementById('f-submit');
     const defaultNote = note ? note.textContent : '';
     /* a11y (2026-09-04)：.is-error 只是視覺；螢幕閱讀器要靠 aria-invalid 才知道哪一欄錯，
-       aria-describedby 讓聚焦到欄位時朗讀 #f-note 的說明（WCAG 3.3.1）。 */
+       aria-describedby 讓聚焦到欄位時朗讀 #f-note 的說明（WCAG 3.3.1）。
+       狀態一致（TODO.md:207）：錯誤可見 = aria-invalid = submitted && invalid(value)。
+       送出前不提前報錯；送出後每次輸入按真實有效性重驗——改了一個字但仍無效（email「a@」）不清除。
+       gate：scripts/audit-form-state.mjs。 */
+    const isBad = (input) => !input.value.trim() ||
+      (input.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value));
+    const mark = (input, bad) => {
+      input.closest('.field').classList.toggle('is-error', bad);
+      input.setAttribute('aria-invalid', bad ? 'true' : 'false');
+    };
+    let submitted = false;
     form.querySelectorAll('[required]').forEach((input) => {
       input.setAttribute('aria-describedby', 'f-note');
       input.setAttribute('aria-invalid', 'false');
+      input.addEventListener('input', () => { if (submitted) mark(input, isBad(input)); });
     });
     form.addEventListener('submit', (e) => {
       e.preventDefault();
+      submitted = true;
       let valid = true;
       form.querySelectorAll('[required]').forEach((input) => {
-        const field = input.closest('.field');
-        const bad = !input.value.trim() ||
-          (input.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value));
-        field.classList.toggle('is-error', bad);
-        input.setAttribute('aria-invalid', bad ? 'true' : 'false');
+        const bad = isBad(input);
+        mark(input, bad);
         if (bad) valid = false;
       });
       if (!valid) {
@@ -310,9 +319,6 @@
         note.classList.add('is-sent');
         setTimeout(() => { note.textContent = defaultNote; note.classList.remove('is-sent'); }, 8000);
       }, 600);
-    });
-    form.querySelectorAll('input, textarea').forEach((input) => {
-      input.addEventListener('input', () => input.closest('.field').classList.remove('is-error'));
     });
   }
 })();

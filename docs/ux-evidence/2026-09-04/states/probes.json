@@ -1,0 +1,178 @@
+{
+ "menu_ja_390": {
+  "ariaExpanded": "true",
+  "ariaLabel": "メニュー",
+  "panelHidden": false,
+  "panelDisplay": "grid",
+  "links": [
+   "01 理念",
+   "02 制作実績",
+   "03 進め方",
+   "04 採用"
+  ],
+  "vis": "visible",
+  "anim": 1,
+  "afterEscape": {
+   "ariaExpanded": "false",
+   "panelHidden": true,
+   "focusOnButton": true
+  }
+ },
+ "lang_en_1280": {
+  "ariaExpanded": "true",
+  "menuVisibility": "visible",
+  "menuOpacity": "1",
+  "items": [
+   "English(en,current)",
+   "日本語(ja)",
+   "繁體中文(zh-Hant)"
+  ],
+  "jaFocusableWhileOpen": true,
+  "vis": "visible",
+  "anim": 1,
+  "afterEscape": {
+   "ariaExpanded": "false",
+   "menuVisibility": "hidden",
+   "jaFocusableWhileClosed": false
+  }
+ },
+ "modal_zh_1280": {
+  "modalHidden": false,
+  "name": "PurityLens",
+  "jp": "成分一目了然",
+  "cta": "前往 PurityLens ↗",
+  "href": "https://puritylens.smartrich.ai/",
+  "target": "_blank",
+  "rel": "noopener",
+  "bodyStart": "01 / 16\n            開發中\n          \n     ",
+  "vis": "visible",
+  "anim": 1,
+  "afterEscape": {
+   "modalHidden": true
+  }
+ },
+ "en-1280-form-invalid": {
+  "framing": "A2 #f-note 底緣對齊視口底 −24px（送出鈕與錯誤訊息同框）後空欄送出",
+  "before": {
+   "href": "https://crealize.llc/",
+   "scrollY": 8581,
+   "active": "BODY",
+   "navBottom": 72,
+   "labelTop": 293,
+   "labelBottom": 309,
+   "labelClearOfNav": true,
+   "labelInViewport": true,
+   "submitInViewport": true,
+   "noteTop": 761,
+   "noteBottom": 776,
+   "innerH": 800,
+   "noteInViewport": true
+  },
+  "after": {
+   "href": "https://crealize.llc/",
+   "scrollY": 8581,
+   "active": "BODY",
+   "navBottom": 72,
+   "labelTop": 293,
+   "labelBottom": 309,
+   "labelClearOfNav": true,
+   "labelInViewport": true,
+   "submitInViewport": true,
+   "noteTop": 761,
+   "noteBottom": 776,
+   "innerH": 800,
+   "noteInViewport": true
+  },
+  "invalid": [
+   "f-name:true",
+   "f-email:true",
+   "f-msg:true"
+  ],
+  "isError": 3,
+  "note": "Please fill the required fields marked in orange.",
+  "noteLive": "polite",
+  "formErr": "Please fill the required fields marked in orange.",
+  "hrefUnchanged": true,
+  "scrollYUnchanged": true,
+  "vis": "visible",
+  "anim": 1,
+  "diagC": {
+   "framing": "C 表單頂端捲到 y=0（舊取景，僅診斷／負對照）",
+   "href": "https://crealize.llc/",
+   "scrollY": 8839,
+   "active": "BODY",
+   "navBottom": 72,
+   "labelTop": 35,
+   "labelBottom": 51,
+   "labelClearOfNav": false,
+   "labelInViewport": true,
+   "submitInViewport": true,
+   "noteTop": 503,
+   "noteBottom": 518,
+   "innerH": 800,
+   "noteInViewport": true
+  }
+ },
+ "ja-390-form-invalid": {
+  "framing": "A2 #f-note 底緣對齊視口底 −24px（送出鈕與錯誤訊息同框）後空欄送出",
+  "before": {
+   "href": "https://crealize.llc/ja/",
+   "scrollY": 14659,
+   "active": "BODY",
+   "navBottom": 60,
+   "labelTop": 337,
+   "labelBottom": 353,
+   "labelClearOfNav": true,
+   "labelInViewport": true,
+   "submitInViewport": true,
+   "noteTop": 805,
+   "noteBottom": 820,
+   "innerH": 844,
+   "noteInViewport": true
+  },
+  "after": {
+   "href": "https://crealize.llc/ja/",
+   "scrollY": 14659,
+   "active": "BODY",
+   "navBottom": 60,
+   "labelTop": 337,
+   "labelBottom": 353,
+   "labelClearOfNav": true,
+   "labelInViewport": true,
+   "submitInViewport": true,
+   "noteTop": 805,
+   "noteBottom": 820,
+   "innerH": 844,
+   "noteInViewport": true
+  },
+  "invalid": [
+   "f-name:true",
+   "f-email:true",
+   "f-msg:true"
+  ],
+  "isError": 3,
+  "note": "オレンジ色の必須項目をご記入ください。",
+  "noteLive": "polite",
+  "formErr": "オレンジ色の必須項目をご記入ください。",
+  "hrefUnchanged": true,
+  "scrollYUnchanged": true,
+  "vis": "visible",
+  "anim": 1,
+  "diagC": {
+   "framing": "C 表單頂端捲到 y=0（舊取景，僅診斷／負對照）",
+   "href": "https://crealize.llc/ja/",
+   "scrollY": 14973,
+   "active": "BODY",
+   "navBottom": 60,
+   "labelTop": 23,
+   "labelBottom": 39,
+   "labelClearOfNav": false,
+   "labelInViewport": true,
+   "submitInViewport": true,
+   "noteTop": 491,
+   "noteBottom": 506,
+   "innerH": 844,
+   "noteInViewport": true
+  }
+ }
+}

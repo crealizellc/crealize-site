@@ -4,7 +4,7 @@ window.CRZ_I18N = {
   work: [
     {
       name: 'PurityLens', featured: true, jp: '成分をひと目で', tag: 'AI · Consumer Health',
-      line: 'Photograph a cosmetic label to check its ingredients and the evidence behind each assessment.',
+      line: 'Photograph a cosmetic label to check its ingredients and the evidence behind each rating.',
       ph: 'PurityLens — scan result UI',
       img: 'assets/kv/puritylens.webp',
       url: 'https://puritylens.smartrich.ai/',
@@ -44,7 +44,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'moonpacket', featured: true, jp: '月へ、紅包を', tag: 'Web3 · Telegram',
-      line: 'Send non-custodial crypto red packets in Telegram using USDT, TON, SOL, or ETH.',
+      line: 'Send crypto red packets in Telegram with USDT, TON, SOL or ETH, with no custodian.',
       ph: 'moonpacket — red packet UI',
       img: 'assets/kv/moonpacket.webp',
       url: 'https://moonpacket.com/',
@@ -114,7 +114,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Meguru', featured: true, jp: 'めぐる', tag: 'Platform · Cross-border commerce',
-      line: 'One operating layer for listings, orders, customer support, and payouts.',
+      line: 'One platform for listings, orders, customer support and payouts.',
       ph: 'Meguru — key visual',
       img: 'assets/kv/meguru.webp',
       // url: 無 —— 無公開頁（meguru.smartrich.ai 000）（2026-09-04）
@@ -134,7 +134,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Kizuki', featured: true, jp: '気付き', tag: 'AI · Social engagement OS',
-      line: 'Find relevant product conversations and prepare culturally appropriate reply drafts for human approval.',
+      line: 'Finds conversations about your products and drafts replies for a person to approve.',
       ph: 'Kizuki — engagement inbox',
       img: 'assets/kv/kizuki.webp',
       url: 'https://kizuki.smartrich.ai/',
@@ -144,7 +144,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'dramaflow', featured: true, jp: '短編ドラマ生産ライン', tag: 'AI · Short-drama pipeline',
-      line: 'A short-drama production pipeline with enforced rules for setting, wardrobe, and shot continuity.',
+      line: 'A production pipeline for short drama that enforces rules for era, wardrobe and shot continuity.',
       ph: 'dramaflow — production console',
       img: 'assets/kv/dramaflow.webp',
       // url: 無 —— 內部審核台（2026-09-04）
@@ -154,7 +154,7 @@ window.CRZ_I18N = {
     },
     {
       name: 'Todoke', featured: true, jp: '届け', tag: 'AI · Narrated video pipeline',
-      line: 'Turn one script into narrated videos with subtitles in three languages.',
+      line: 'Turn one script into narrated, subtitled videos in three languages.',
       ph: 'Todoke — pipeline run',
       img: 'assets/kv/todoke.webp',
       // url: 無 —— 內部 console（2026-09-04）
@@ -164,10 +164,10 @@ window.CRZ_I18N = {
     },
   ],
   method: [
-    { n: 'Validate', jp: '検証', d: 'We talk to potential users, check assumptions, and define what success looks like before we build.' },
-    { n: 'Build', jp: '構築', d: 'A small senior team designs and builds the working product, using production-ready foundations from the start.' },
-    { n: 'Ship', jp: '出荷', d: 'We release a focused first version, observe how it performs, and fix what gets in the way.' },
-    { n: 'Polish', jp: '研磨', d: 'We improve speed, accessibility, copy, and interaction based on real use.' },
+    { n: 'Validate', jp: '検証', d: 'Before we build, we talk to the people who might use it, check our assumptions, and agree on what success looks like.' },
+    { n: 'Build', jp: '構築', d: 'A small, experienced team designs and builds the working product, on foundations that can go straight to production.' },
+    { n: 'Ship', jp: '出荷', d: 'We release a first version that does one thing well, watch how it\'s used, and fix what gets in the way.' },
+    { n: 'Polish', jp: '研磨', d: 'We keep improving speed, accessibility, wording and interaction based on real use.' },
   ],
   ui: {
     wipBadge: 'in development',

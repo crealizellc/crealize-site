@@ -44,19 +44,27 @@ const LOCALES = {
     dir: '', base: '', htmlLang: 'en', ogLocale: 'en_US',
     title: 'Crealize — Transforming Imagination into Reality | Tokyo Product Studio',
     desc: 'Crealize is an independent product studio in Tokyo. We research, design, build, launch, and improve digital products.',
-    stackLabel: 'Engineering principles',
-    principles: ['Atomicity — one change, one meaning', 'Explicit dependencies', 'Module boundaries', 'Type-safe by default', 'Zero-dependency bias', 'Code as craft'],
+    stackLabel: 'How we write code',
+    // 這排是 nowrap 的短標籤（sections.css:365），只能放短語；解釋留給 llms.txt 那段。
+    principles: ['One change, one purpose', 'No hidden dependencies', 'Clear module boundaries', 'Type checks on by default', 'Few third-party libraries', 'Code others can read'],
     t: {
       '<h2 class="sec-head__kicker">Vision / 理念</h2>': '<h2 class="sec-head__kicker">Vision</h2>',
       '<h2 class="sec-head__kicker">Selected Work / 制作実績</h2>': '<h2 class="sec-head__kicker">Selected Work</h2>',
       '<h2 class="sec-head__kicker">Method / 進め方</h2>': '<h2 class="sec-head__kicker">Method</h2>',
       '<h2 class="sec-head__kicker">Join / Contact — 採用・お問い合わせ</h2>': '<h2 class="sec-head__kicker">Join / Contact</h2>',
-    }, // EN: strip JP halves from functional labels
+      // 2026-09-04 去 AI 化（Yves）：平話、不堆三連詞、不放金句
+      '<span class="line">We turn promising ideas into <em>useful products.</em></span>':
+        '<span class="line">We turn ideas into <em>products people actually use.</em></span>',
+      '<span class="line">Research, design, engineering, launch — then keep improving.</span>':
+        '<span class="line">Research, design, build, launch, and keep improving after that.</span>',
+      'We\'re a small, remote-first team based in Tokyo. We value clear communication, thoughtful craft, and work that reaches real users. If you\'d like to work with us, send one project you\'re proud of and tell us what you contributed.':
+        'We\'re a small team in Tokyo, and most of us work remotely. We like plain communication, and we care that what we build gets used. If you\'d like to work with us, send one project you\'re proud of and tell us which parts you did.',
+    }, // EN: strip JP halves from functional labels + plain-language rewrites
   },
   ja: {
     dir: 'ja', base: '../', htmlLang: 'ja', ogLocale: 'ja_JP',
-    stackLabel: 'エンジニアリング原則',
-    principles: ['原子性 — 1つの変更に1つの意味', '依存関係の明示', 'モジュール境界', '型安全がデフォルト', 'ゼロ依存志向', 'コードは工芸品'],
+    stackLabel: 'コードの書き方',
+    principles: ['一つの変更に一つの目的', '隠れた依存関係なし', 'モジュールの境界を明確に', '型チェックは標準でオン', '外部ライブラリは最小限', '他の人が読めるコード'],
     title: 'Crealize — 想像を、現実に。| 東京のプロダクトスタジオ',
     desc: 'Crealize は東京の独立系プロダクトスタジオです。調査、設計、開発、リリース、その後の改善まで一貫して取り組みます。',
     t: {
@@ -82,17 +90,17 @@ const LOCALES = {
         'Creative <span class="x">×</span> Realize — アイデアを、実際に使われるプロダクトへ。',
       'Scroll to materialize': 'スクロールすると、かたちになります',
       '<span class="line">We turn promising ideas into <em>useful products.</em></span>':
-        '<span class="line">着想を、<em>実際に役立つプロダクト</em>へ。</span>',
+        '<span class="line">アイデアを、<em>実際に使われるプロダクト</em>に。</span>',
       '<span class="line">Research, design, engineering, launch — then keep improving.</span>':
         '<span class="line">調査、設計、開発、リリース。その後も改善を続けます。</span>',
       'A clear path from idea to launch.':
-        'アイデアからリリースまで、明確な手順で進めます。',
+        '<span class="jw">アイデアから</span><span class="jw">リリースまで、</span><span class="jw">明確な</span><span class="jw">手順で</span><span class="jw">進めます。</span>',
       'Show us what<br/><span class="accent">you\'ve made.</span>':
-        'これまでにつくったものを、<br/><span class="accent">見せてください。</span>',
+        '<span class="jw">これまでに</span><span class="jw">つくった</span><span class="jw">ものを、</span><br/><span class="accent"><span class="jw">見せて</span><span class="jw">ください。</span></span>',
       'We\'re a small, remote-first team based in Tokyo. We value clear communication, thoughtful craft, and work that reaches real users. If you\'d like to work with us, send one project you\'re proud of and tell us what you contributed.':
-        '東京を拠点にする少人数のリモートチームです。わかりやすいコミュニケーション、丁寧なものづくり、実際に使われる成果を大切にしています。ご応募の際は、自信のあるプロジェクトをひとつ選び、担当したことを添えてお送りください。',
-      '<span class="v">Remote-first · Tokyo HQ <span class="jp-accent" aria-hidden="true">東京</span></span>': '<span class="v">リモートファースト · 東京本社</span>',
-      '<span class="v">Design · Engineering · Growth</span>': '<span class="v">デザイン · エンジニアリング · グロース</span>',
+        '東京を拠点にした少人数のチームで、ふだんはリモートで働いています。飾らないやり取りと、つくったものが実際に使われることを大事にしています。応募のときは、自信のあるプロジェクトを一つ選んで、自分が担当した部分を教えてください。',
+      '<span class="v">Remote-first · Tokyo HQ <span class="jp-accent" aria-hidden="true">東京</span></span>': '<span class="v"><span class="jw">リモートファースト ·</span> <span class="jw">東京本社</span></span>',
+      '<span class="v">Design · Engineering · Growth</span>': '<span class="v"><span class="jw">デザイン ·</span> <span class="jw">エンジニアリング ·</span> <span class="jw">グロース</span></span>',
       '<span class="k">Base</span>': '<span class="k">拠点</span>',
       '<span class="k">Roles</span>': '<span class="k">職種</span>',
       '<span class="k">Contact</span>': '<span class="k">連絡先</span>',
@@ -111,8 +119,8 @@ const LOCALES = {
   },
   zh: {
     dir: 'zh', base: '../', htmlLang: 'zh-Hant', ogLocale: 'zh_TW',
-    stackLabel: '工程原則',
-    principles: ['原子化 — 一個改動，一個意義', '依賴顯式化', '模組邊界', '型別安全為預設', '零依賴傾向', '程式碼即工藝'],
+    stackLabel: '我們怎麼寫程式',
+    principles: ['一次改動一個目的', '沒有隱藏的依賴', '模組界線清楚', '型別檢查預設開', '少用第三方套件', '別人讀得懂的程式碼'],
     title: 'Crealize — 把想像變成現實 | 東京獨立產品工作室',
     desc: 'Crealize 是位於東京的獨立產品工作室，從研究、設計、開發、上線到後續改進，全程參與數位產品製作。',
     t: {
@@ -139,7 +147,7 @@ const LOCALES = {
         'Creative <span class="x">×</span> Realize — 把點子做成真正有人使用的產品。',
       'Scroll to materialize': '往下捲動，看想像成形',
       '<span class="line">We turn promising ideas into <em>useful products.</em></span>':
-        '<span class="line">把值得做的點子，變成<em>實用的產品。</em></span>',
+        '<span class="line">把點子做成<em>真的有人在用的產品。</em></span>',
       '<span class="line">Research, design, engineering, launch — then keep improving.</span>':
         '<span class="line">從研究、設計、開發到上線，之後持續改進。</span>',
       'A clear path from idea to launch.':
@@ -147,7 +155,7 @@ const LOCALES = {
       'Show us what<br/><span class="accent">you\'ve made.</span>':
         '讓我們看看<br/><span class="accent">你做過的作品。</span>',
       'We\'re a small, remote-first team based in Tokyo. We value clear communication, thoughtful craft, and work that reaches real users. If you\'d like to work with us, send one project you\'re proud of and tell us what you contributed.':
-        '我們是以東京為據點的小型遠端團隊，重視清楚溝通、紮實的設計與工程，以及真正被使用的成果。如果想加入我們，請選一個你最有信心的專案，告訴我們你負責了什麼。',
+        '我們是一個在東京的小團隊，平常多半遠端工作。我們喜歡把話講清楚，也在意做出來的東西真的有人用。想加入的話，挑一個你最有把握的專案寄給我們，告訴我們哪些是你做的。',
       '<span class="v">Remote-first · Tokyo HQ <span class="jp-accent" aria-hidden="true">東京</span></span>': '<span class="v">遠端優先 · 東京總部</span>',
       '<span class="v">Design · Engineering · Growth</span>': '<span class="v">設計 · 工程 · 成長</span>',
       'Selected Work / 制作実績': '代表作品',
@@ -492,8 +500,8 @@ ${lines.join('\n')}
 ## Method
 
 Research → Design → Build → Launch → Improve.
-Engineering principles: atomicity (one change, one meaning), explicit dependencies,
-module boundaries, type-safe by default, zero-dependency bias, code as craft.
+How we write code: one change does one thing; no hidden dependencies; clear module
+boundaries; type checks on by default; few third-party libraries; code others can read.
 
 ## Hiring
 
