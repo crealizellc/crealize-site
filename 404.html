@@ -20,6 +20,22 @@
 </head>
 <body>
   <h1>404</h1>
-  <p>[err] this page never materialized · <a href="/">return to reality</a></p>
+  <!-- 三語同檔：GitHub Pages 對所有路徑只回這一份 404，無法依 /ja/ /zh/ 分流。
+       預設顯示英文；下方腳本依路徑前綴切換 <html lang> 與可見段落。無 JS 時三段全部顯示。 -->
+  <p lang="en" data-l="en">[err] this page never materialized · <a href="/">return to reality</a></p>
+  <p lang="ja" data-l="ja" hidden>[err] このページは実体化しませんでした · <a href="/ja/">現実に戻る</a></p>
+  <p lang="zh-Hant" data-l="zh" hidden>[err] 這個頁面沒有實現 · <a href="/zh/">回到現實</a></p>
+  <noscript><style>p[data-l]{display:block}</style></noscript>
+  <script>
+    (function () {
+      var m = /^\/(ja|zh)(\/|$)/.exec(location.pathname);
+      if (!m) return;
+      var l = m[1];
+      document.documentElement.lang = l === 'zh' ? 'zh-Hant' : 'ja';
+      document.title = l === 'ja' ? '404 — Crealize' : '404 — Crealize';
+      var ps = document.querySelectorAll('p[data-l]');
+      for (var i = 0; i < ps.length; i++) ps[i].hidden = ps[i].getAttribute('data-l') !== l;
+    })();
+  </script>
 </body>
 </html>
