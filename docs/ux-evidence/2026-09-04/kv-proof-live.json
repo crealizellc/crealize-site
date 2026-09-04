@@ -1,0 +1,148 @@
+{
+ "rows": [
+  {
+   "viewport": 390,
+   "dpr": 2,
+   "stageCss": 350,
+   "neededPx": 700,
+   "expected": "kv-800",
+   "picked": "kv-800",
+   "match": true,
+   "naturalCssCorrected": "351x263",
+   "decodedFilePx": "800x600",
+   "decodeOk": true,
+   "networkBytes": 30469,
+   "sizes": "(min-width: 1101px) 29vw, (min-width: 641px) 44.5vw, 90vw"
+  },
+  {
+   "viewport": 390,
+   "dpr": 3,
+   "stageCss": 350,
+   "neededPx": 1050,
+   "expected": "kv",
+   "picked": "kv",
+   "match": true,
+   "naturalCssCorrected": "351x263",
+   "decodedFilePx": "1600x1200",
+   "decodeOk": true,
+   "networkBytes": 70681,
+   "sizes": "(min-width: 1101px) 29vw, (min-width: 641px) 44.5vw, 90vw"
+  },
+  {
+   "viewport": 768,
+   "dpr": 2,
+   "stageCss": 341,
+   "neededPx": 682,
+   "expected": "kv-800",
+   "picked": "kv-800",
+   "match": true,
+   "naturalCssCorrected": "341x256",
+   "decodedFilePx": "800x600",
+   "decodeOk": true,
+   "networkBytes": 30468,
+   "sizes": "(min-width: 1101px) 29vw, (min-width: 641px) 44.5vw, 90vw"
+  },
+  {
+   "viewport": 1080,
+   "dpr": 2,
+   "stageCss": 482,
+   "neededPx": 964,
+   "expected": "kv",
+   "picked": "kv",
+   "match": true,
+   "naturalCssCorrected": "480x360",
+   "decodedFilePx": "1600x1200",
+   "decodeOk": true,
+   "networkBytes": 70577,
+   "sizes": "(min-width: 1101px) 29vw, (min-width: 641px) 44.5vw, 90vw"
+  },
+  {
+   "viewport": 1280,
+   "dpr": 1,
+   "stageCss": 372,
+   "neededPx": 372,
+   "expected": "kv-800",
+   "picked": "kv-800",
+   "match": true,
+   "naturalCssCorrected": "371x278",
+   "decodedFilePx": "800x600",
+   "decodeOk": true,
+   "networkBytes": 30574,
+   "sizes": "(min-width: 1101px) 29vw, (min-width: 641px) 44.5vw, 90vw"
+  },
+  {
+   "viewport": 1280,
+   "dpr": 2,
+   "stageCss": 372,
+   "neededPx": 744,
+   "expected": "kv-800",
+   "picked": "kv-800",
+   "match": true,
+   "naturalCssCorrected": "371x278",
+   "decodedFilePx": "800x600",
+   "decodeOk": true,
+   "networkBytes": 30483,
+   "sizes": "(min-width: 1101px) 29vw, (min-width: 641px) 44.5vw, 90vw"
+  },
+  {
+   "viewport": 1440,
+   "dpr": 2,
+   "stageCss": 419,
+   "neededPx": 838,
+   "expected": "kv",
+   "picked": "kv",
+   "match": true,
+   "naturalCssCorrected": "417x313",
+   "decodedFilePx": "1600x1200",
+   "decodeOk": true,
+   "networkBytes": 70681,
+   "sizes": "(min-width: 1101px) 29vw, (min-width: 641px) 44.5vw, 90vw"
+  }
+ ],
+ "modal": [
+  {
+   "viewport": 390,
+   "dpr": 2,
+   "shotCss": 354,
+   "neededPx": 708,
+   "picked": "kv-800",
+   "filePx": 800,
+   "adequate": true,
+   "sizes": "(min-width: 1101px) 29vw, (min-width: 641px) 44.5vw, 90vw"
+  },
+  {
+   "viewport": 1280,
+   "dpr": 2,
+   "shotCss": 380,
+   "neededPx": 760,
+   "picked": "kv-800",
+   "filePx": 800,
+   "adequate": true,
+   "sizes": "(min-width: 1101px) 29vw, (min-width: 641px) 44.5vw, 90vw"
+  },
+  {
+   "viewport": 1440,
+   "dpr": 2,
+   "shotCss": 380,
+   "neededPx": 760,
+   "picked": "kv",
+   "filePx": 1600,
+   "adequate": true,
+   "sizes": "(min-width: 1101px) 29vw, (min-width: 641px) 44.5vw, 90vw"
+  }
+ ],
+ "visual": {
+  "cardOpacityBeforeCrop": "1",
+  "masterAfterSwap": {
+   "currentSrc": "assets/kv/puritylens.webp",
+   "naturalWidth": 351,
+   "cardOpacity": "1"
+  },
+  "clip": {
+   "x": 20,
+   "y": 3804.15625,
+   "width": 350,
+   "height": 262.5
+  }
+ }
+}

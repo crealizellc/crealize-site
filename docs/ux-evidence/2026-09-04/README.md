@@ -141,3 +141,17 @@ SP=/tmp/kvproof BASE=http://127.0.0.1:8814 OUT=/tmp/kvproof \
 
 - 真機 Safari／Android Chrome 的實際選圖與渲染（headless Chrome 只證明規格行為）。
 - Lighthouse 分數未重跑（重活時段限制）；本段的「節省」是**逐圖網路 bytes**，不是分數。
+
+## 線上複驗（部署後，`https://crealize.llc`，同一支 `prove-kv-srcset.mjs`，原檔 `kv-proof-live.json`）
+
+| 來源 HEAD | 已部署 gh-pages | 部署時間 (+0900) | 樹比對 | rollback 目標 |
+|---|---|---|---|---|
+| `cbe14eecfdf20c0fdd98fcbdd326f03c633795b1` | **`24f0d11f0d4d80ade8b46d940330a3e0314e8df3`** | 11:58:00 | **83 檔 blob 相同**（含 16 張 kv-800） | `12706ccf9e2fc178cca2d83a040767481de73fb2` |
+
+- 三語 HTML sha256 == 本機：en `3003f5cc104562ce…`、ja `5d66f5c5d55a834b…`、zh `e9eb5a9d9fb6fcb6…`；16 張變體 `curl | cmp` 16/16 位元相同。
+- 選圖 7/7 與預期一致、modal 3/3 足夠（表格同上，數值一致）。
+- **真實網路 bytes（CDP `encodedDataLength`，快取關閉，含標頭）**：變體 30,469–30,574 B vs 母版 70,577–70,681 B。
+  獨立第二量測 `curl -w %{size_download}`：30,248 B vs 70,316 B（= 檔案大小，WebP 不再被 gzip 壓縮）。
+- 線上 HTML 含 `srcset="assets/kv-800/puritylens.webp 800w, assets/kv/puritylens.webp 1600w"`；ja 頁 `aria-label="PurityLens を開く"`。
+
+未證明：真機；Lighthouse 分數（未重跑）。
