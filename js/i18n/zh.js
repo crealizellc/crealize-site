@@ -170,5 +170,6 @@ window.CRZ_I18N = {
     formOpening: '正在開啟郵件程式…',
     formOpened: '郵件程式應已開啟 — 或直接來信：support@crealize.llc',
     mailSubject: 'Crealize — 專案洽詢',
+    menuLabel: '選單',
   },
 };

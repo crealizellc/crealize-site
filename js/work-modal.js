@@ -241,6 +241,8 @@
     els.badge.textContent = (window.CRZ_I18N && window.CRZ_I18N.ui.wipBadge) || 'in development';
     els.name.textContent = w.name;
     els.jp.textContent = w.jp;
+    /* a11y (2026-09-04)：同 site.js 的 jaLang —— 有假名才標 ja；zh 頁的中文譯名不誤標。 */
+    if (/[぀-ヿ]/.test(String(w.jp || ''))) els.jp.lang = 'ja'; else els.jp.removeAttribute('lang');
     els.tag.textContent = w.tag;
     els.line.innerHTML = w.line;
     /* 完整正文（work-v3.js 依當前語言送過來）。沒有它，modal 就只剩一句 registry line
